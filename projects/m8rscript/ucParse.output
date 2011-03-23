@@ -1,0 +1,4262 @@
+State 201 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: source_elements
+
+    2 source_elements: source_element
+    3                | source_elements source_element
+
+    4 source_element: statement
+    5               | function_declaration
+
+    6 primary_expression: T_IDENTIFIER
+    7                   | K_THIS
+    8                   | K_NULL
+    9                   | K_TRUE
+   10                   | K_FALSE
+   11                   | T_FLOAT
+   12                   | T_INTEGER
+   13                   | T_STRING
+   14                   | objectLiteral
+   15                   | '(' expression ')'
+
+   16 postfix_expression: primary_expression
+   17                   | postfix_expression '[' expression ']'
+   18                   | postfix_expression '(' ')'
+   19                   | postfix_expression '(' argument_expression_list ')'
+   20                   | postfix_expression objectLiteral
+   21                   | postfix_expression T_STRING
+   22                   | postfix_expression '.' T_IDENTIFIER
+   23                   | postfix_expression O_INC
+   24                   | postfix_expression O_DEC
+
+   25 argument_expression_list: assignment_expression
+   26                         | argument_expression_list ',' assignment_expression
+
+   27 unary_expression: postfix_expression
+   28                 | unary_operator unary_expression
+
+   29 unary_operator: '+'
+   30               | '-'
+   31               | '~'
+   32               | '!'
+   33               | K_DELETE
+   34               | K_TYPEOF
+   35               | O_INC
+   36               | O_DEC
+   37               | K_NEW
+
+   38 multiplicative_expression: unary_expression
+   39                          | multiplicative_expression '*' unary_expression
+   40                          | multiplicative_expression '/' unary_expression
+   41                          | multiplicative_expression '%' unary_expression
+
+   42 additive_expression: multiplicative_expression
+   43                    | additive_expression '+' multiplicative_expression
+   44                    | additive_expression '-' multiplicative_expression
+
+   45 shift_expression: additive_expression
+   46                 | shift_expression O_LSHIFT additive_expression
+   47                 | shift_expression O_RSHIFT additive_expression
+   48                 | shift_expression O_RSHIFTFILL additive_expression
+
+   49 relational_expression: shift_expression
+   50                      | relational_expression K_IN shift_expression
+   51                      | relational_expression '<' shift_expression
+   52                      | relational_expression '>' shift_expression
+   53                      | relational_expression O_LE shift_expression
+   54                      | relational_expression O_GE shift_expression
+
+   55 equality_expression: relational_expression
+   56                    | equality_expression O_EQ relational_expression
+   57                    | equality_expression O_NE relational_expression
+
+   58 and_expression: equality_expression
+   59               | and_expression '&' equality_expression
+
+   60 exclusive_or_expression: and_expression
+   61                        | exclusive_or_expression '^' and_expression
+
+   62 inclusive_or_expression: exclusive_or_expression
+   63                        | inclusive_or_expression '|' exclusive_or_expression
+
+   64 logical_and_expression: inclusive_or_expression
+   65                       | logical_and_expression O_LAND inclusive_or_expression
+
+   66 logical_or_expression: logical_and_expression
+   67                      | logical_or_expression O_LOR logical_and_expression
+
+   68 conditional_expression: logical_or_expression
+   69                       | logical_or_expression '?' expression ':' conditional_expression
+
+   70 assignment_expression: conditional_expression
+   71                      | unary_expression assignment_operator assignment_expression
+
+   72 assignment_operator: '='
+   73                    | O_MULEQ
+   74                    | O_DIVEQ
+   75                    | O_MODEQ
+   76                    | O_ADDEQ
+   77                    | O_SUBEQ
+   78                    | O_LSHIFTEQ
+   79                    | O_RSHIFTEQ
+   80                    | O_RSHIFTFILLEQ
+   81                    | O_ANDEQ
+   82                    | O_XOREQ
+   83                    | O_OREQ
+
+   84 expression: assignment_expression
+   85           | expression ',' assignment_expression
+
+   86 declaration_statement: K_VAR variable_declaration_list ';'
+
+   87 variable_declaration_list: variable_declaration
+   88                          | variable_declaration_list ',' variable_declaration
+
+   89 variable_declaration: T_IDENTIFIER
+   90                     | T_IDENTIFIER initializer
+
+   91 initializer: '=' assignment_expression
+
+   92 statement: compound_statement
+   93          | declaration_statement
+   94          | expression_statement
+   95          | selection_statement
+   96          | switch_statement
+   97          | iteration_statement
+   98          | jump_statement
+
+   99 compound_statement: O_BLOCK_START '}'
+  100                   | O_BLOCK_START statement_list '}'
+
+  101 statement_list: statement
+  102               | statement_list statement
+
+  103 expression_statement: ';'
+  104                     | expression ';'
+
+  105 selection_statement: K_IF '(' expression ')' statement
+  106                    | K_IF '(' expression ')' statement K_ELSE statement
+
+  107 switch_statement: K_SWITCH '(' expression ')' case_block
+
+  108 case_block: O_BLOCK_START case_clauses_opt '}'
+  109           | O_BLOCK_START case_clauses_opt default_clause case_clauses_opt '}'
+
+  110 case_clauses_opt: case_clauses
+  111                 | /* empty */
+
+  112 case_clauses: case_clause
+  113             | case_clauses case_clause
+
+  114 case_clause: K_CASE expression ':' statement
+
+  115 default_clause: K_DEFAULT ':' statement
+
+  116 iteration_statement: K_WHILE '(' expression ')' statement
+  117                    | K_DO statement K_WHILE '(' expression ')' ';'
+  118                    | K_FOR '(' expression_statement expression_statement expression ')' statement
+
+  119 jump_statement: K_CONTINUE ';'
+  120               | K_BREAK ';'
+  121               | K_RETURN ';'
+  122               | K_RETURN expression ';'
+
+  123 function_declaration: K_FUNCTION function_definition
+
+  124 function_definition: T_IDENTIFIER '(' ')' compound_statement
+  125                    | T_IDENTIFIER '(' formal_parameter_list ')' compound_statement
+
+  126 formal_parameter_list: T_IDENTIFIER
+  127                      | formal_parameter_list ',' T_IDENTIFIER
+
+  128 objectLiteral: O_OBJ_START propertyNameAndValueList ']'
+
+  129 propertyNameAndValueList: /* empty */
+  130                         | property
+  131                         | propertyNameAndValueList ',' property
+
+  132 property: assignment_expression
+  133         | T_IDENTIFIER ':' assignment_expression
+  134         | T_STRING ':' assignment_expression
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+K_FUNCTION (1) 123
+K_NEW (2) 37
+K_DELETE (3) 33
+K_TYPEOF (4) 34
+K_IN (5) 50
+K_VAR (6) 86
+K_TRUE (7) 9
+K_FALSE (8) 10
+K_NULL (9) 8
+K_DO (10) 117
+K_WHILE (11) 116 117
+K_FOR (12) 118
+K_IF (13) 105 106
+K_ELSE (14) 106
+K_SWITCH (15) 107
+K_CASE (16) 114
+K_DEFAULT (17) 115
+K_BREAK (18) 120
+K_CONTINUE (19) 119
+K_RETURN (20) 121 122
+K_THIS (21) 7
+'!' (33) 32
+'%' (37) 41
+'&' (38) 59
+'(' (40) 15 18 19 105 106 107 116 117 118 124 125
+')' (41) 15 18 19 105 106 107 116 117 118 124 125
+'*' (42) 39
+'+' (43) 29 43
+',' (44) 26 85 88 127 131
+'-' (45) 30 44
+'.' (46) 22
+'/' (47) 40
+T_FLOAT (48) 11
+T_IDENTIFIER (49) 6 22 89 90 124 125 126 127 133
+T_STRING (50) 13 21 134
+T_INTEGER (51) 12
+':' (58) 69 114 115 133 134
+';' (59) 86 103 104 117 119 120 121 122
+'<' (60) 51
+'=' (61) 72 91
+'>' (62) 52
+'?' (63) 69
+O_RSHIFTEQ (65) 79
+O_RSHIFTFILLEQ (66) 80
+O_LSHIFTEQ (67) 78
+O_ADDEQ (68) 76
+O_SUBEQ (69) 77
+O_MULEQ (70) 73
+O_DIVEQ (71) 74
+O_MODEQ (72) 75
+O_ANDEQ (73) 81
+O_XOREQ (74) 82
+O_OREQ (75) 83
+O_RSHIFT (76) 47
+O_RSHIFTFILL (77) 48
+O_LSHIFT (78) 46
+O_INC (79) 23 35
+O_DEC (80) 24 36
+O_LAND (81) 65
+O_LOR (82) 67
+O_LE (83) 53
+O_GE (84) 54
+O_EQ (85) 56
+O_NE (86) 57
+O_BLOCK_START (87) 99 100 108 109
+O_OBJ_START (88) 128
+'[' (91) 17
+']' (93) 17 128
+'^' (94) 61
+'|' (124) 63
+'}' (125) 99 100 108 109
+'~' (126) 31
+error (256)
+
+
+Nonterminals, with rules where they appear
+
+$accept (75)
+    on left: 0
+program (76)
+    on left: 1, on right: 0
+source_elements (77)
+    on left: 2 3, on right: 1 3
+source_element (78)
+    on left: 4 5, on right: 2 3
+primary_expression (79)
+    on left: 6 7 8 9 10 11 12 13 14 15, on right: 16
+postfix_expression (80)
+    on left: 16 17 18 19 20 21 22 23 24, on right: 17 18 19 20 21 22
+    23 24 27
+argument_expression_list (81)
+    on left: 25 26, on right: 19 26
+unary_expression (82)
+    on left: 27 28, on right: 28 38 39 40 41 71
+unary_operator (83)
+    on left: 29 30 31 32 33 34 35 36 37, on right: 28
+multiplicative_expression (84)
+    on left: 38 39 40 41, on right: 39 40 41 42 43 44
+additive_expression (85)
+    on left: 42 43 44, on right: 43 44 45 46 47 48
+shift_expression (86)
+    on left: 45 46 47 48, on right: 46 47 48 49 50 51 52 53 54
+relational_expression (87)
+    on left: 49 50 51 52 53 54, on right: 50 51 52 53 54 55 56 57
+equality_expression (88)
+    on left: 55 56 57, on right: 56 57 58 59
+and_expression (89)
+    on left: 58 59, on right: 59 60 61
+exclusive_or_expression (90)
+    on left: 60 61, on right: 61 62 63
+inclusive_or_expression (91)
+    on left: 62 63, on right: 63 64 65
+logical_and_expression (92)
+    on left: 64 65, on right: 65 66 67
+logical_or_expression (93)
+    on left: 66 67, on right: 67 68 69
+conditional_expression (94)
+    on left: 68 69, on right: 69 70
+assignment_expression (95)
+    on left: 70 71, on right: 25 26 71 84 85 91 132 133 134
+assignment_operator (96)
+    on left: 72 73 74 75 76 77 78 79 80 81 82 83, on right: 71
+expression (97)
+    on left: 84 85, on right: 15 17 69 85 104 105 106 107 114 116 117
+    118 122
+declaration_statement (98)
+    on left: 86, on right: 93
+variable_declaration_list (99)
+    on left: 87 88, on right: 86 88
+variable_declaration (100)
+    on left: 89 90, on right: 87 88
+initializer (101)
+    on left: 91, on right: 90
+statement (102)
+    on left: 92 93 94 95 96 97 98, on right: 4 101 102 105 106 114
+    115 116 117 118
+compound_statement (103)
+    on left: 99 100, on right: 92 124 125
+statement_list (104)
+    on left: 101 102, on right: 100 102
+expression_statement (105)
+    on left: 103 104, on right: 94 118
+selection_statement (106)
+    on left: 105 106, on right: 95
+switch_statement (107)
+    on left: 107, on right: 96
+case_block (108)
+    on left: 108 109, on right: 107
+case_clauses_opt (109)
+    on left: 110 111, on right: 108 109
+case_clauses (110)
+    on left: 112 113, on right: 110 113
+case_clause (111)
+    on left: 114, on right: 112 113
+default_clause (112)
+    on left: 115, on right: 109
+iteration_statement (113)
+    on left: 116 117 118, on right: 97
+jump_statement (114)
+    on left: 119 120 121 122, on right: 98
+function_declaration (115)
+    on left: 123, on right: 5
+function_definition (116)
+    on left: 124 125, on right: 123
+formal_parameter_list (117)
+    on left: 126 127, on right: 125 127
+objectLiteral (118)
+    on left: 128, on right: 14 20
+propertyNameAndValueList (119)
+    on left: 129 130 131, on right: 128 131
+property (120)
+    on left: 132 133 134, on right: 130 131
+
+
+state 0
+
+    0 $accept: . program $end
+
+    K_FUNCTION     shift, and go to state 1
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    program                    go to state 32
+    source_elements            go to state 33
+    source_element             go to state 34
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 53
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    function_declaration       go to state 60
+    objectLiteral              go to state 61
+
+
+state 1
+
+  123 function_declaration: K_FUNCTION . function_definition
+
+    T_IDENTIFIER  shift, and go to state 62
+
+    function_definition  go to state 63
+
+
+state 2
+
+   37 unary_operator: K_NEW .
+
+    $default  reduce using rule 37 (unary_operator)
+
+
+state 3
+
+   33 unary_operator: K_DELETE .
+
+    $default  reduce using rule 33 (unary_operator)
+
+
+state 4
+
+   34 unary_operator: K_TYPEOF .
+
+    $default  reduce using rule 34 (unary_operator)
+
+
+state 5
+
+   86 declaration_statement: K_VAR . variable_declaration_list ';'
+
+    T_IDENTIFIER  shift, and go to state 64
+
+    variable_declaration_list  go to state 65
+    variable_declaration       go to state 66
+
+
+state 6
+
+    9 primary_expression: K_TRUE .
+
+    $default  reduce using rule 9 (primary_expression)
+
+
+state 7
+
+   10 primary_expression: K_FALSE .
+
+    $default  reduce using rule 10 (primary_expression)
+
+
+state 8
+
+    8 primary_expression: K_NULL .
+
+    $default  reduce using rule 8 (primary_expression)
+
+
+state 9
+
+  117 iteration_statement: K_DO . statement K_WHILE '(' expression ')' ';'
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 67
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 10
+
+  116 iteration_statement: K_WHILE . '(' expression ')' statement
+
+    '('  shift, and go to state 68
+
+
+state 11
+
+  118 iteration_statement: K_FOR . '(' expression_statement expression_statement expression ')' statement
+
+    '('  shift, and go to state 69
+
+
+state 12
+
+  105 selection_statement: K_IF . '(' expression ')' statement
+  106                    | K_IF . '(' expression ')' statement K_ELSE statement
+
+    '('  shift, and go to state 70
+
+
+state 13
+
+  107 switch_statement: K_SWITCH . '(' expression ')' case_block
+
+    '('  shift, and go to state 71
+
+
+state 14
+
+  120 jump_statement: K_BREAK . ';'
+
+    ';'  shift, and go to state 72
+
+
+state 15
+
+  119 jump_statement: K_CONTINUE . ';'
+
+    ';'  shift, and go to state 73
+
+
+state 16
+
+  121 jump_statement: K_RETURN . ';'
+  122               | K_RETURN . expression ';'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+    ';'           shift, and go to state 74
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 75
+    objectLiteral              go to state 61
+
+
+state 17
+
+    7 primary_expression: K_THIS .
+
+    $default  reduce using rule 7 (primary_expression)
+
+
+state 18
+
+   11 primary_expression: T_FLOAT .
+
+    $default  reduce using rule 11 (primary_expression)
+
+
+state 19
+
+    6 primary_expression: T_IDENTIFIER .
+
+    $default  reduce using rule 6 (primary_expression)
+
+
+state 20
+
+   13 primary_expression: T_STRING .
+
+    $default  reduce using rule 13 (primary_expression)
+
+
+state 21
+
+   12 primary_expression: T_INTEGER .
+
+    $default  reduce using rule 12 (primary_expression)
+
+
+state 22
+
+   35 unary_operator: O_INC .
+
+    $default  reduce using rule 35 (unary_operator)
+
+
+state 23
+
+   36 unary_operator: O_DEC .
+
+    $default  reduce using rule 36 (unary_operator)
+
+
+state 24
+
+   99 compound_statement: O_BLOCK_START . '}'
+  100                   | O_BLOCK_START . statement_list '}'
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+    '}'            shift, and go to state 76
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 77
+    compound_statement         go to state 54
+    statement_list             go to state 78
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 25
+
+  128 objectLiteral: O_OBJ_START . propertyNameAndValueList ']'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 79
+    T_STRING      shift, and go to state 80
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    $default  reduce using rule 129 (propertyNameAndValueList)
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 81
+    objectLiteral              go to state 61
+    propertyNameAndValueList   go to state 82
+    property                   go to state 83
+
+
+state 26
+
+   15 primary_expression: '(' . expression ')'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 84
+    objectLiteral              go to state 61
+
+
+state 27
+
+   29 unary_operator: '+' .
+
+    $default  reduce using rule 29 (unary_operator)
+
+
+state 28
+
+   30 unary_operator: '-' .
+
+    $default  reduce using rule 30 (unary_operator)
+
+
+state 29
+
+   31 unary_operator: '~' .
+
+    $default  reduce using rule 31 (unary_operator)
+
+
+state 30
+
+   32 unary_operator: '!' .
+
+    $default  reduce using rule 32 (unary_operator)
+
+
+state 31
+
+  103 expression_statement: ';' .
+
+    $default  reduce using rule 103 (expression_statement)
+
+
+state 32
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 85
+
+
+state 33
+
+    1 program: source_elements .
+    3 source_elements: source_elements . source_element
+
+    K_FUNCTION     shift, and go to state 1
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    $default  reduce using rule 1 (program)
+
+    source_element             go to state 86
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 53
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    function_declaration       go to state 60
+    objectLiteral              go to state 61
+
+
+state 34
+
+    2 source_elements: source_element .
+
+    $default  reduce using rule 2 (source_elements)
+
+
+state 35
+
+   16 postfix_expression: primary_expression .
+
+    $default  reduce using rule 16 (postfix_expression)
+
+
+state 36
+
+   17 postfix_expression: postfix_expression . '[' expression ']'
+   18                   | postfix_expression . '(' ')'
+   19                   | postfix_expression . '(' argument_expression_list ')'
+   20                   | postfix_expression . objectLiteral
+   21                   | postfix_expression . T_STRING
+   22                   | postfix_expression . '.' T_IDENTIFIER
+   23                   | postfix_expression . O_INC
+   24                   | postfix_expression . O_DEC
+   27 unary_expression: postfix_expression .
+
+    T_STRING     shift, and go to state 87
+    O_INC        shift, and go to state 88
+    O_DEC        shift, and go to state 89
+    O_OBJ_START  shift, and go to state 25
+    '('          shift, and go to state 90
+    '['          shift, and go to state 91
+    '.'          shift, and go to state 92
+
+    $default  reduce using rule 27 (unary_expression)
+
+    objectLiteral  go to state 93
+
+
+state 37
+
+   38 multiplicative_expression: unary_expression .
+   71 assignment_expression: unary_expression . assignment_operator assignment_expression
+
+    O_RSHIFTEQ      shift, and go to state 94
+    O_RSHIFTFILLEQ  shift, and go to state 95
+    O_LSHIFTEQ      shift, and go to state 96
+    O_ADDEQ         shift, and go to state 97
+    O_SUBEQ         shift, and go to state 98
+    O_MULEQ         shift, and go to state 99
+    O_DIVEQ         shift, and go to state 100
+    O_MODEQ         shift, and go to state 101
+    O_ANDEQ         shift, and go to state 102
+    O_XOREQ         shift, and go to state 103
+    O_OREQ          shift, and go to state 104
+    '='             shift, and go to state 105
+
+    $default  reduce using rule 38 (multiplicative_expression)
+
+    assignment_operator  go to state 106
+
+
+state 38
+
+   28 unary_expression: unary_operator . unary_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression  go to state 35
+    postfix_expression  go to state 36
+    unary_expression    go to state 107
+    unary_operator      go to state 38
+    objectLiteral       go to state 61
+
+
+state 39
+
+   39 multiplicative_expression: multiplicative_expression . '*' unary_expression
+   40                          | multiplicative_expression . '/' unary_expression
+   41                          | multiplicative_expression . '%' unary_expression
+   42 additive_expression: multiplicative_expression .
+
+    '*'  shift, and go to state 108
+    '/'  shift, and go to state 109
+    '%'  shift, and go to state 110
+
+    $default  reduce using rule 42 (additive_expression)
+
+
+state 40
+
+   43 additive_expression: additive_expression . '+' multiplicative_expression
+   44                    | additive_expression . '-' multiplicative_expression
+   45 shift_expression: additive_expression .
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 45 (shift_expression)
+
+
+state 41
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   49 relational_expression: shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 49 (relational_expression)
+
+
+state 42
+
+   50 relational_expression: relational_expression . K_IN shift_expression
+   51                      | relational_expression . '<' shift_expression
+   52                      | relational_expression . '>' shift_expression
+   53                      | relational_expression . O_LE shift_expression
+   54                      | relational_expression . O_GE shift_expression
+   55 equality_expression: relational_expression .
+
+    K_IN  shift, and go to state 116
+    O_LE  shift, and go to state 117
+    O_GE  shift, and go to state 118
+    '<'   shift, and go to state 119
+    '>'   shift, and go to state 120
+
+    $default  reduce using rule 55 (equality_expression)
+
+
+state 43
+
+   56 equality_expression: equality_expression . O_EQ relational_expression
+   57                    | equality_expression . O_NE relational_expression
+   58 and_expression: equality_expression .
+
+    O_EQ  shift, and go to state 121
+    O_NE  shift, and go to state 122
+
+    $default  reduce using rule 58 (and_expression)
+
+
+state 44
+
+   59 and_expression: and_expression . '&' equality_expression
+   60 exclusive_or_expression: and_expression .
+
+    '&'  shift, and go to state 123
+
+    $default  reduce using rule 60 (exclusive_or_expression)
+
+
+state 45
+
+   61 exclusive_or_expression: exclusive_or_expression . '^' and_expression
+   62 inclusive_or_expression: exclusive_or_expression .
+
+    '^'  shift, and go to state 124
+
+    $default  reduce using rule 62 (inclusive_or_expression)
+
+
+state 46
+
+   63 inclusive_or_expression: inclusive_or_expression . '|' exclusive_or_expression
+   64 logical_and_expression: inclusive_or_expression .
+
+    '|'  shift, and go to state 125
+
+    $default  reduce using rule 64 (logical_and_expression)
+
+
+state 47
+
+   65 logical_and_expression: logical_and_expression . O_LAND inclusive_or_expression
+   66 logical_or_expression: logical_and_expression .
+
+    O_LAND  shift, and go to state 126
+
+    $default  reduce using rule 66 (logical_or_expression)
+
+
+state 48
+
+   67 logical_or_expression: logical_or_expression . O_LOR logical_and_expression
+   68 conditional_expression: logical_or_expression .
+   69                       | logical_or_expression . '?' expression ':' conditional_expression
+
+    O_LOR  shift, and go to state 127
+    '?'    shift, and go to state 128
+
+    $default  reduce using rule 68 (conditional_expression)
+
+
+state 49
+
+   70 assignment_expression: conditional_expression .
+
+    $default  reduce using rule 70 (assignment_expression)
+
+
+state 50
+
+   84 expression: assignment_expression .
+
+    $default  reduce using rule 84 (expression)
+
+
+state 51
+
+   85 expression: expression . ',' assignment_expression
+  104 expression_statement: expression . ';'
+
+    ','  shift, and go to state 129
+    ';'  shift, and go to state 130
+
+
+state 52
+
+   93 statement: declaration_statement .
+
+    $default  reduce using rule 93 (statement)
+
+
+state 53
+
+    4 source_element: statement .
+
+    $default  reduce using rule 4 (source_element)
+
+
+state 54
+
+   92 statement: compound_statement .
+
+    $default  reduce using rule 92 (statement)
+
+
+state 55
+
+   94 statement: expression_statement .
+
+    $default  reduce using rule 94 (statement)
+
+
+state 56
+
+   95 statement: selection_statement .
+
+    $default  reduce using rule 95 (statement)
+
+
+state 57
+
+   96 statement: switch_statement .
+
+    $default  reduce using rule 96 (statement)
+
+
+state 58
+
+   97 statement: iteration_statement .
+
+    $default  reduce using rule 97 (statement)
+
+
+state 59
+
+   98 statement: jump_statement .
+
+    $default  reduce using rule 98 (statement)
+
+
+state 60
+
+    5 source_element: function_declaration .
+
+    $default  reduce using rule 5 (source_element)
+
+
+state 61
+
+   14 primary_expression: objectLiteral .
+
+    $default  reduce using rule 14 (primary_expression)
+
+
+state 62
+
+  124 function_definition: T_IDENTIFIER . '(' ')' compound_statement
+  125                    | T_IDENTIFIER . '(' formal_parameter_list ')' compound_statement
+
+    '('  shift, and go to state 131
+
+
+state 63
+
+  123 function_declaration: K_FUNCTION function_definition .
+
+    $default  reduce using rule 123 (function_declaration)
+
+
+state 64
+
+   89 variable_declaration: T_IDENTIFIER .
+   90                     | T_IDENTIFIER . initializer
+
+    '='  shift, and go to state 132
+
+    $default  reduce using rule 89 (variable_declaration)
+
+    initializer  go to state 133
+
+
+state 65
+
+   86 declaration_statement: K_VAR variable_declaration_list . ';'
+   88 variable_declaration_list: variable_declaration_list . ',' variable_declaration
+
+    ','  shift, and go to state 134
+    ';'  shift, and go to state 135
+
+
+state 66
+
+   87 variable_declaration_list: variable_declaration .
+
+    $default  reduce using rule 87 (variable_declaration_list)
+
+
+state 67
+
+  117 iteration_statement: K_DO statement . K_WHILE '(' expression ')' ';'
+
+    K_WHILE  shift, and go to state 136
+
+
+state 68
+
+  116 iteration_statement: K_WHILE '(' . expression ')' statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 137
+    objectLiteral              go to state 61
+
+
+state 69
+
+  118 iteration_statement: K_FOR '(' . expression_statement expression_statement expression ')' statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+    ';'           shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    expression_statement       go to state 138
+    objectLiteral              go to state 61
+
+
+state 70
+
+  105 selection_statement: K_IF '(' . expression ')' statement
+  106                    | K_IF '(' . expression ')' statement K_ELSE statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 139
+    objectLiteral              go to state 61
+
+
+state 71
+
+  107 switch_statement: K_SWITCH '(' . expression ')' case_block
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 140
+    objectLiteral              go to state 61
+
+
+state 72
+
+  120 jump_statement: K_BREAK ';' .
+
+    $default  reduce using rule 120 (jump_statement)
+
+
+state 73
+
+  119 jump_statement: K_CONTINUE ';' .
+
+    $default  reduce using rule 119 (jump_statement)
+
+
+state 74
+
+  121 jump_statement: K_RETURN ';' .
+
+    $default  reduce using rule 121 (jump_statement)
+
+
+state 75
+
+   85 expression: expression . ',' assignment_expression
+  122 jump_statement: K_RETURN expression . ';'
+
+    ','  shift, and go to state 129
+    ';'  shift, and go to state 141
+
+
+state 76
+
+   99 compound_statement: O_BLOCK_START '}' .
+
+    $default  reduce using rule 99 (compound_statement)
+
+
+state 77
+
+  101 statement_list: statement .
+
+    $default  reduce using rule 101 (statement_list)
+
+
+state 78
+
+  100 compound_statement: O_BLOCK_START statement_list . '}'
+  102 statement_list: statement_list . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+    '}'            shift, and go to state 142
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 143
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 79
+
+    6 primary_expression: T_IDENTIFIER .
+  133 property: T_IDENTIFIER . ':' assignment_expression
+
+    ':'  shift, and go to state 144
+
+    $default  reduce using rule 6 (primary_expression)
+
+
+state 80
+
+   13 primary_expression: T_STRING .
+  134 property: T_STRING . ':' assignment_expression
+
+    ':'  shift, and go to state 145
+
+    $default  reduce using rule 13 (primary_expression)
+
+
+state 81
+
+  132 property: assignment_expression .
+
+    $default  reduce using rule 132 (property)
+
+
+state 82
+
+  128 objectLiteral: O_OBJ_START propertyNameAndValueList . ']'
+  131 propertyNameAndValueList: propertyNameAndValueList . ',' property
+
+    ']'  shift, and go to state 146
+    ','  shift, and go to state 147
+
+
+state 83
+
+  130 propertyNameAndValueList: property .
+
+    $default  reduce using rule 130 (propertyNameAndValueList)
+
+
+state 84
+
+   15 primary_expression: '(' expression . ')'
+   85 expression: expression . ',' assignment_expression
+
+    ')'  shift, and go to state 148
+    ','  shift, and go to state 129
+
+
+state 85
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 86
+
+    3 source_elements: source_elements source_element .
+
+    $default  reduce using rule 3 (source_elements)
+
+
+state 87
+
+   21 postfix_expression: postfix_expression T_STRING .
+
+    $default  reduce using rule 21 (postfix_expression)
+
+
+state 88
+
+   23 postfix_expression: postfix_expression O_INC .
+
+    $default  reduce using rule 23 (postfix_expression)
+
+
+state 89
+
+   24 postfix_expression: postfix_expression O_DEC .
+
+    $default  reduce using rule 24 (postfix_expression)
+
+
+state 90
+
+   18 postfix_expression: postfix_expression '(' . ')'
+   19                   | postfix_expression '(' . argument_expression_list ')'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    ')'           shift, and go to state 149
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    argument_expression_list   go to state 150
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 151
+    objectLiteral              go to state 61
+
+
+state 91
+
+   17 postfix_expression: postfix_expression '[' . expression ']'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 152
+    objectLiteral              go to state 61
+
+
+state 92
+
+   22 postfix_expression: postfix_expression '.' . T_IDENTIFIER
+
+    T_IDENTIFIER  shift, and go to state 153
+
+
+state 93
+
+   20 postfix_expression: postfix_expression objectLiteral .
+
+    $default  reduce using rule 20 (postfix_expression)
+
+
+state 94
+
+   79 assignment_operator: O_RSHIFTEQ .
+
+    $default  reduce using rule 79 (assignment_operator)
+
+
+state 95
+
+   80 assignment_operator: O_RSHIFTFILLEQ .
+
+    $default  reduce using rule 80 (assignment_operator)
+
+
+state 96
+
+   78 assignment_operator: O_LSHIFTEQ .
+
+    $default  reduce using rule 78 (assignment_operator)
+
+
+state 97
+
+   76 assignment_operator: O_ADDEQ .
+
+    $default  reduce using rule 76 (assignment_operator)
+
+
+state 98
+
+   77 assignment_operator: O_SUBEQ .
+
+    $default  reduce using rule 77 (assignment_operator)
+
+
+state 99
+
+   73 assignment_operator: O_MULEQ .
+
+    $default  reduce using rule 73 (assignment_operator)
+
+
+state 100
+
+   74 assignment_operator: O_DIVEQ .
+
+    $default  reduce using rule 74 (assignment_operator)
+
+
+state 101
+
+   75 assignment_operator: O_MODEQ .
+
+    $default  reduce using rule 75 (assignment_operator)
+
+
+state 102
+
+   81 assignment_operator: O_ANDEQ .
+
+    $default  reduce using rule 81 (assignment_operator)
+
+
+state 103
+
+   82 assignment_operator: O_XOREQ .
+
+    $default  reduce using rule 82 (assignment_operator)
+
+
+state 104
+
+   83 assignment_operator: O_OREQ .
+
+    $default  reduce using rule 83 (assignment_operator)
+
+
+state 105
+
+   72 assignment_operator: '=' .
+
+    $default  reduce using rule 72 (assignment_operator)
+
+
+state 106
+
+   71 assignment_expression: unary_expression assignment_operator . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 154
+    objectLiteral              go to state 61
+
+
+state 107
+
+   28 unary_expression: unary_operator unary_expression .
+
+    $default  reduce using rule 28 (unary_expression)
+
+
+state 108
+
+   39 multiplicative_expression: multiplicative_expression '*' . unary_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression  go to state 35
+    postfix_expression  go to state 36
+    unary_expression    go to state 155
+    unary_operator      go to state 38
+    objectLiteral       go to state 61
+
+
+state 109
+
+   40 multiplicative_expression: multiplicative_expression '/' . unary_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression  go to state 35
+    postfix_expression  go to state 36
+    unary_expression    go to state 156
+    unary_operator      go to state 38
+    objectLiteral       go to state 61
+
+
+state 110
+
+   41 multiplicative_expression: multiplicative_expression '%' . unary_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression  go to state 35
+    postfix_expression  go to state 36
+    unary_expression    go to state 157
+    unary_operator      go to state 38
+    objectLiteral       go to state 61
+
+
+state 111
+
+   43 additive_expression: additive_expression '+' . multiplicative_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 159
+    objectLiteral              go to state 61
+
+
+state 112
+
+   44 additive_expression: additive_expression '-' . multiplicative_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 160
+    objectLiteral              go to state 61
+
+
+state 113
+
+   47 shift_expression: shift_expression O_RSHIFT . additive_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 161
+    objectLiteral              go to state 61
+
+
+state 114
+
+   48 shift_expression: shift_expression O_RSHIFTFILL . additive_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 162
+    objectLiteral              go to state 61
+
+
+state 115
+
+   46 shift_expression: shift_expression O_LSHIFT . additive_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 163
+    objectLiteral              go to state 61
+
+
+state 116
+
+   50 relational_expression: relational_expression K_IN . shift_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 164
+    objectLiteral              go to state 61
+
+
+state 117
+
+   53 relational_expression: relational_expression O_LE . shift_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 165
+    objectLiteral              go to state 61
+
+
+state 118
+
+   54 relational_expression: relational_expression O_GE . shift_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 166
+    objectLiteral              go to state 61
+
+
+state 119
+
+   51 relational_expression: relational_expression '<' . shift_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 167
+    objectLiteral              go to state 61
+
+
+state 120
+
+   52 relational_expression: relational_expression '>' . shift_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 168
+    objectLiteral              go to state 61
+
+
+state 121
+
+   56 equality_expression: equality_expression O_EQ . relational_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 169
+    objectLiteral              go to state 61
+
+
+state 122
+
+   57 equality_expression: equality_expression O_NE . relational_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 170
+    objectLiteral              go to state 61
+
+
+state 123
+
+   59 and_expression: and_expression '&' . equality_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 171
+    objectLiteral              go to state 61
+
+
+state 124
+
+   61 exclusive_or_expression: exclusive_or_expression '^' . and_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 172
+    objectLiteral              go to state 61
+
+
+state 125
+
+   63 inclusive_or_expression: inclusive_or_expression '|' . exclusive_or_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 173
+    objectLiteral              go to state 61
+
+
+state 126
+
+   65 logical_and_expression: logical_and_expression O_LAND . inclusive_or_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 174
+    objectLiteral              go to state 61
+
+
+state 127
+
+   67 logical_or_expression: logical_or_expression O_LOR . logical_and_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 175
+    objectLiteral              go to state 61
+
+
+state 128
+
+   69 conditional_expression: logical_or_expression '?' . expression ':' conditional_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 176
+    objectLiteral              go to state 61
+
+
+state 129
+
+   85 expression: expression ',' . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 177
+    objectLiteral              go to state 61
+
+
+state 130
+
+  104 expression_statement: expression ';' .
+
+    $default  reduce using rule 104 (expression_statement)
+
+
+state 131
+
+  124 function_definition: T_IDENTIFIER '(' . ')' compound_statement
+  125                    | T_IDENTIFIER '(' . formal_parameter_list ')' compound_statement
+
+    T_IDENTIFIER  shift, and go to state 178
+    ')'           shift, and go to state 179
+
+    formal_parameter_list  go to state 180
+
+
+state 132
+
+   91 initializer: '=' . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 181
+    objectLiteral              go to state 61
+
+
+state 133
+
+   90 variable_declaration: T_IDENTIFIER initializer .
+
+    $default  reduce using rule 90 (variable_declaration)
+
+
+state 134
+
+   88 variable_declaration_list: variable_declaration_list ',' . variable_declaration
+
+    T_IDENTIFIER  shift, and go to state 64
+
+    variable_declaration  go to state 182
+
+
+state 135
+
+   86 declaration_statement: K_VAR variable_declaration_list ';' .
+
+    $default  reduce using rule 86 (declaration_statement)
+
+
+state 136
+
+  117 iteration_statement: K_DO statement K_WHILE . '(' expression ')' ';'
+
+    '('  shift, and go to state 183
+
+
+state 137
+
+   85 expression: expression . ',' assignment_expression
+  116 iteration_statement: K_WHILE '(' expression . ')' statement
+
+    ')'  shift, and go to state 184
+    ','  shift, and go to state 129
+
+
+state 138
+
+  118 iteration_statement: K_FOR '(' expression_statement . expression_statement expression ')' statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+    ';'           shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    expression_statement       go to state 185
+    objectLiteral              go to state 61
+
+
+state 139
+
+   85 expression: expression . ',' assignment_expression
+  105 selection_statement: K_IF '(' expression . ')' statement
+  106                    | K_IF '(' expression . ')' statement K_ELSE statement
+
+    ')'  shift, and go to state 186
+    ','  shift, and go to state 129
+
+
+state 140
+
+   85 expression: expression . ',' assignment_expression
+  107 switch_statement: K_SWITCH '(' expression . ')' case_block
+
+    ')'  shift, and go to state 187
+    ','  shift, and go to state 129
+
+
+state 141
+
+  122 jump_statement: K_RETURN expression ';' .
+
+    $default  reduce using rule 122 (jump_statement)
+
+
+state 142
+
+  100 compound_statement: O_BLOCK_START statement_list '}' .
+
+    $default  reduce using rule 100 (compound_statement)
+
+
+state 143
+
+  102 statement_list: statement_list statement .
+
+    $default  reduce using rule 102 (statement_list)
+
+
+state 144
+
+  133 property: T_IDENTIFIER ':' . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 188
+    objectLiteral              go to state 61
+
+
+state 145
+
+  134 property: T_STRING ':' . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 189
+    objectLiteral              go to state 61
+
+
+state 146
+
+  128 objectLiteral: O_OBJ_START propertyNameAndValueList ']' .
+
+    $default  reduce using rule 128 (objectLiteral)
+
+
+state 147
+
+  131 propertyNameAndValueList: propertyNameAndValueList ',' . property
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 79
+    T_STRING      shift, and go to state 80
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 81
+    objectLiteral              go to state 61
+    property                   go to state 190
+
+
+state 148
+
+   15 primary_expression: '(' expression ')' .
+
+    $default  reduce using rule 15 (primary_expression)
+
+
+state 149
+
+   18 postfix_expression: postfix_expression '(' ')' .
+
+    $default  reduce using rule 18 (postfix_expression)
+
+
+state 150
+
+   19 postfix_expression: postfix_expression '(' argument_expression_list . ')'
+   26 argument_expression_list: argument_expression_list . ',' assignment_expression
+
+    ')'  shift, and go to state 191
+    ','  shift, and go to state 192
+
+
+state 151
+
+   25 argument_expression_list: assignment_expression .
+
+    $default  reduce using rule 25 (argument_expression_list)
+
+
+state 152
+
+   17 postfix_expression: postfix_expression '[' expression . ']'
+   85 expression: expression . ',' assignment_expression
+
+    ']'  shift, and go to state 193
+    ','  shift, and go to state 129
+
+
+state 153
+
+   22 postfix_expression: postfix_expression '.' T_IDENTIFIER .
+
+    $default  reduce using rule 22 (postfix_expression)
+
+
+state 154
+
+   71 assignment_expression: unary_expression assignment_operator assignment_expression .
+
+    $default  reduce using rule 71 (assignment_expression)
+
+
+state 155
+
+   39 multiplicative_expression: multiplicative_expression '*' unary_expression .
+
+    $default  reduce using rule 39 (multiplicative_expression)
+
+
+state 156
+
+   40 multiplicative_expression: multiplicative_expression '/' unary_expression .
+
+    $default  reduce using rule 40 (multiplicative_expression)
+
+
+state 157
+
+   41 multiplicative_expression: multiplicative_expression '%' unary_expression .
+
+    $default  reduce using rule 41 (multiplicative_expression)
+
+
+state 158
+
+   38 multiplicative_expression: unary_expression .
+
+    $default  reduce using rule 38 (multiplicative_expression)
+
+
+state 159
+
+   39 multiplicative_expression: multiplicative_expression . '*' unary_expression
+   40                          | multiplicative_expression . '/' unary_expression
+   41                          | multiplicative_expression . '%' unary_expression
+   43 additive_expression: additive_expression '+' multiplicative_expression .
+
+    '*'  shift, and go to state 108
+    '/'  shift, and go to state 109
+    '%'  shift, and go to state 110
+
+    $default  reduce using rule 43 (additive_expression)
+
+
+state 160
+
+   39 multiplicative_expression: multiplicative_expression . '*' unary_expression
+   40                          | multiplicative_expression . '/' unary_expression
+   41                          | multiplicative_expression . '%' unary_expression
+   44 additive_expression: additive_expression '-' multiplicative_expression .
+
+    '*'  shift, and go to state 108
+    '/'  shift, and go to state 109
+    '%'  shift, and go to state 110
+
+    $default  reduce using rule 44 (additive_expression)
+
+
+state 161
+
+   43 additive_expression: additive_expression . '+' multiplicative_expression
+   44                    | additive_expression . '-' multiplicative_expression
+   47 shift_expression: shift_expression O_RSHIFT additive_expression .
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 47 (shift_expression)
+
+
+state 162
+
+   43 additive_expression: additive_expression . '+' multiplicative_expression
+   44                    | additive_expression . '-' multiplicative_expression
+   48 shift_expression: shift_expression O_RSHIFTFILL additive_expression .
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 48 (shift_expression)
+
+
+state 163
+
+   43 additive_expression: additive_expression . '+' multiplicative_expression
+   44                    | additive_expression . '-' multiplicative_expression
+   46 shift_expression: shift_expression O_LSHIFT additive_expression .
+
+    '+'  shift, and go to state 111
+    '-'  shift, and go to state 112
+
+    $default  reduce using rule 46 (shift_expression)
+
+
+state 164
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   50 relational_expression: relational_expression K_IN shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 50 (relational_expression)
+
+
+state 165
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   53 relational_expression: relational_expression O_LE shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 53 (relational_expression)
+
+
+state 166
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   54 relational_expression: relational_expression O_GE shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 54 (relational_expression)
+
+
+state 167
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   51 relational_expression: relational_expression '<' shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 51 (relational_expression)
+
+
+state 168
+
+   46 shift_expression: shift_expression . O_LSHIFT additive_expression
+   47                 | shift_expression . O_RSHIFT additive_expression
+   48                 | shift_expression . O_RSHIFTFILL additive_expression
+   52 relational_expression: relational_expression '>' shift_expression .
+
+    O_RSHIFT      shift, and go to state 113
+    O_RSHIFTFILL  shift, and go to state 114
+    O_LSHIFT      shift, and go to state 115
+
+    $default  reduce using rule 52 (relational_expression)
+
+
+state 169
+
+   50 relational_expression: relational_expression . K_IN shift_expression
+   51                      | relational_expression . '<' shift_expression
+   52                      | relational_expression . '>' shift_expression
+   53                      | relational_expression . O_LE shift_expression
+   54                      | relational_expression . O_GE shift_expression
+   56 equality_expression: equality_expression O_EQ relational_expression .
+
+    K_IN  shift, and go to state 116
+    O_LE  shift, and go to state 117
+    O_GE  shift, and go to state 118
+    '<'   shift, and go to state 119
+    '>'   shift, and go to state 120
+
+    $default  reduce using rule 56 (equality_expression)
+
+
+state 170
+
+   50 relational_expression: relational_expression . K_IN shift_expression
+   51                      | relational_expression . '<' shift_expression
+   52                      | relational_expression . '>' shift_expression
+   53                      | relational_expression . O_LE shift_expression
+   54                      | relational_expression . O_GE shift_expression
+   57 equality_expression: equality_expression O_NE relational_expression .
+
+    K_IN  shift, and go to state 116
+    O_LE  shift, and go to state 117
+    O_GE  shift, and go to state 118
+    '<'   shift, and go to state 119
+    '>'   shift, and go to state 120
+
+    $default  reduce using rule 57 (equality_expression)
+
+
+state 171
+
+   56 equality_expression: equality_expression . O_EQ relational_expression
+   57                    | equality_expression . O_NE relational_expression
+   59 and_expression: and_expression '&' equality_expression .
+
+    O_EQ  shift, and go to state 121
+    O_NE  shift, and go to state 122
+
+    $default  reduce using rule 59 (and_expression)
+
+
+state 172
+
+   59 and_expression: and_expression . '&' equality_expression
+   61 exclusive_or_expression: exclusive_or_expression '^' and_expression .
+
+    '&'  shift, and go to state 123
+
+    $default  reduce using rule 61 (exclusive_or_expression)
+
+
+state 173
+
+   61 exclusive_or_expression: exclusive_or_expression . '^' and_expression
+   63 inclusive_or_expression: inclusive_or_expression '|' exclusive_or_expression .
+
+    '^'  shift, and go to state 124
+
+    $default  reduce using rule 63 (inclusive_or_expression)
+
+
+state 174
+
+   63 inclusive_or_expression: inclusive_or_expression . '|' exclusive_or_expression
+   65 logical_and_expression: logical_and_expression O_LAND inclusive_or_expression .
+
+    '|'  shift, and go to state 125
+
+    $default  reduce using rule 65 (logical_and_expression)
+
+
+state 175
+
+   65 logical_and_expression: logical_and_expression . O_LAND inclusive_or_expression
+   67 logical_or_expression: logical_or_expression O_LOR logical_and_expression .
+
+    O_LAND  shift, and go to state 126
+
+    $default  reduce using rule 67 (logical_or_expression)
+
+
+state 176
+
+   69 conditional_expression: logical_or_expression '?' expression . ':' conditional_expression
+   85 expression: expression . ',' assignment_expression
+
+    ','  shift, and go to state 129
+    ':'  shift, and go to state 194
+
+
+state 177
+
+   85 expression: expression ',' assignment_expression .
+
+    $default  reduce using rule 85 (expression)
+
+
+state 178
+
+  126 formal_parameter_list: T_IDENTIFIER .
+
+    $default  reduce using rule 126 (formal_parameter_list)
+
+
+state 179
+
+  124 function_definition: T_IDENTIFIER '(' ')' . compound_statement
+
+    O_BLOCK_START  shift, and go to state 24
+
+    compound_statement  go to state 195
+
+
+state 180
+
+  125 function_definition: T_IDENTIFIER '(' formal_parameter_list . ')' compound_statement
+  127 formal_parameter_list: formal_parameter_list . ',' T_IDENTIFIER
+
+    ')'  shift, and go to state 196
+    ','  shift, and go to state 197
+
+
+state 181
+
+   91 initializer: '=' assignment_expression .
+
+    $default  reduce using rule 91 (initializer)
+
+
+state 182
+
+   88 variable_declaration_list: variable_declaration_list ',' variable_declaration .
+
+    $default  reduce using rule 88 (variable_declaration_list)
+
+
+state 183
+
+  117 iteration_statement: K_DO statement K_WHILE '(' . expression ')' ';'
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 198
+    objectLiteral              go to state 61
+
+
+state 184
+
+  116 iteration_statement: K_WHILE '(' expression ')' . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 199
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 185
+
+  118 iteration_statement: K_FOR '(' expression_statement expression_statement . expression ')' statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 200
+    objectLiteral              go to state 61
+
+
+state 186
+
+  105 selection_statement: K_IF '(' expression ')' . statement
+  106                    | K_IF '(' expression ')' . statement K_ELSE statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 201
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 187
+
+  107 switch_statement: K_SWITCH '(' expression ')' . case_block
+
+    O_BLOCK_START  shift, and go to state 202
+
+    case_block  go to state 203
+
+
+state 188
+
+  133 property: T_IDENTIFIER ':' assignment_expression .
+
+    $default  reduce using rule 133 (property)
+
+
+state 189
+
+  134 property: T_STRING ':' assignment_expression .
+
+    $default  reduce using rule 134 (property)
+
+
+state 190
+
+  131 propertyNameAndValueList: propertyNameAndValueList ',' property .
+
+    $default  reduce using rule 131 (propertyNameAndValueList)
+
+
+state 191
+
+   19 postfix_expression: postfix_expression '(' argument_expression_list ')' .
+
+    $default  reduce using rule 19 (postfix_expression)
+
+
+state 192
+
+   26 argument_expression_list: argument_expression_list ',' . assignment_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 204
+    objectLiteral              go to state 61
+
+
+state 193
+
+   17 postfix_expression: postfix_expression '[' expression ']' .
+
+    $default  reduce using rule 17 (postfix_expression)
+
+
+state 194
+
+   69 conditional_expression: logical_or_expression '?' expression ':' . conditional_expression
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 158
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 205
+    objectLiteral              go to state 61
+
+
+state 195
+
+  124 function_definition: T_IDENTIFIER '(' ')' compound_statement .
+
+    $default  reduce using rule 124 (function_definition)
+
+
+state 196
+
+  125 function_definition: T_IDENTIFIER '(' formal_parameter_list ')' . compound_statement
+
+    O_BLOCK_START  shift, and go to state 24
+
+    compound_statement  go to state 206
+
+
+state 197
+
+  127 formal_parameter_list: formal_parameter_list ',' . T_IDENTIFIER
+
+    T_IDENTIFIER  shift, and go to state 207
+
+
+state 198
+
+   85 expression: expression . ',' assignment_expression
+  117 iteration_statement: K_DO statement K_WHILE '(' expression . ')' ';'
+
+    ')'  shift, and go to state 208
+    ','  shift, and go to state 129
+
+
+state 199
+
+  116 iteration_statement: K_WHILE '(' expression ')' statement .
+
+    $default  reduce using rule 116 (iteration_statement)
+
+
+state 200
+
+   85 expression: expression . ',' assignment_expression
+  118 iteration_statement: K_FOR '(' expression_statement expression_statement expression . ')' statement
+
+    ')'  shift, and go to state 209
+    ','  shift, and go to state 129
+
+
+state 201
+
+  105 selection_statement: K_IF '(' expression ')' statement .
+  106                    | K_IF '(' expression ')' statement . K_ELSE statement
+
+    K_ELSE  shift, and go to state 210
+
+    K_ELSE    [reduce using rule 105 (selection_statement)]
+    $default  reduce using rule 105 (selection_statement)
+
+
+state 202
+
+  108 case_block: O_BLOCK_START . case_clauses_opt '}'
+  109           | O_BLOCK_START . case_clauses_opt default_clause case_clauses_opt '}'
+
+    K_CASE  shift, and go to state 211
+
+    $default  reduce using rule 111 (case_clauses_opt)
+
+    case_clauses_opt  go to state 212
+    case_clauses      go to state 213
+    case_clause       go to state 214
+
+
+state 203
+
+  107 switch_statement: K_SWITCH '(' expression ')' case_block .
+
+    $default  reduce using rule 107 (switch_statement)
+
+
+state 204
+
+   26 argument_expression_list: argument_expression_list ',' assignment_expression .
+
+    $default  reduce using rule 26 (argument_expression_list)
+
+
+state 205
+
+   69 conditional_expression: logical_or_expression '?' expression ':' conditional_expression .
+
+    $default  reduce using rule 69 (conditional_expression)
+
+
+state 206
+
+  125 function_definition: T_IDENTIFIER '(' formal_parameter_list ')' compound_statement .
+
+    $default  reduce using rule 125 (function_definition)
+
+
+state 207
+
+  127 formal_parameter_list: formal_parameter_list ',' T_IDENTIFIER .
+
+    $default  reduce using rule 127 (formal_parameter_list)
+
+
+state 208
+
+  117 iteration_statement: K_DO statement K_WHILE '(' expression ')' . ';'
+
+    ';'  shift, and go to state 215
+
+
+state 209
+
+  118 iteration_statement: K_FOR '(' expression_statement expression_statement expression ')' . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 216
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 210
+
+  106 selection_statement: K_IF '(' expression ')' statement K_ELSE . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 217
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 211
+
+  114 case_clause: K_CASE . expression ':' statement
+
+    K_NEW         shift, and go to state 2
+    K_DELETE      shift, and go to state 3
+    K_TYPEOF      shift, and go to state 4
+    K_TRUE        shift, and go to state 6
+    K_FALSE       shift, and go to state 7
+    K_NULL        shift, and go to state 8
+    K_THIS        shift, and go to state 17
+    T_FLOAT       shift, and go to state 18
+    T_IDENTIFIER  shift, and go to state 19
+    T_STRING      shift, and go to state 20
+    T_INTEGER     shift, and go to state 21
+    O_INC         shift, and go to state 22
+    O_DEC         shift, and go to state 23
+    O_OBJ_START   shift, and go to state 25
+    '('           shift, and go to state 26
+    '+'           shift, and go to state 27
+    '-'           shift, and go to state 28
+    '~'           shift, and go to state 29
+    '!'           shift, and go to state 30
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 218
+    objectLiteral              go to state 61
+
+
+state 212
+
+  108 case_block: O_BLOCK_START case_clauses_opt . '}'
+  109           | O_BLOCK_START case_clauses_opt . default_clause case_clauses_opt '}'
+
+    K_DEFAULT  shift, and go to state 219
+    '}'        shift, and go to state 220
+
+    default_clause  go to state 221
+
+
+state 213
+
+  110 case_clauses_opt: case_clauses .
+  113 case_clauses: case_clauses . case_clause
+
+    K_CASE  shift, and go to state 211
+
+    $default  reduce using rule 110 (case_clauses_opt)
+
+    case_clause  go to state 222
+
+
+state 214
+
+  112 case_clauses: case_clause .
+
+    $default  reduce using rule 112 (case_clauses)
+
+
+state 215
+
+  117 iteration_statement: K_DO statement K_WHILE '(' expression ')' ';' .
+
+    $default  reduce using rule 117 (iteration_statement)
+
+
+state 216
+
+  118 iteration_statement: K_FOR '(' expression_statement expression_statement expression ')' statement .
+
+    $default  reduce using rule 118 (iteration_statement)
+
+
+state 217
+
+  106 selection_statement: K_IF '(' expression ')' statement K_ELSE statement .
+
+    $default  reduce using rule 106 (selection_statement)
+
+
+state 218
+
+   85 expression: expression . ',' assignment_expression
+  114 case_clause: K_CASE expression . ':' statement
+
+    ','  shift, and go to state 129
+    ':'  shift, and go to state 223
+
+
+state 219
+
+  115 default_clause: K_DEFAULT . ':' statement
+
+    ':'  shift, and go to state 224
+
+
+state 220
+
+  108 case_block: O_BLOCK_START case_clauses_opt '}' .
+
+    $default  reduce using rule 108 (case_block)
+
+
+state 221
+
+  109 case_block: O_BLOCK_START case_clauses_opt default_clause . case_clauses_opt '}'
+
+    K_CASE  shift, and go to state 211
+
+    $default  reduce using rule 111 (case_clauses_opt)
+
+    case_clauses_opt  go to state 225
+    case_clauses      go to state 213
+    case_clause       go to state 214
+
+
+state 222
+
+  113 case_clauses: case_clauses case_clause .
+
+    $default  reduce using rule 113 (case_clauses)
+
+
+state 223
+
+  114 case_clause: K_CASE expression ':' . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 226
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 224
+
+  115 default_clause: K_DEFAULT ':' . statement
+
+    K_NEW          shift, and go to state 2
+    K_DELETE       shift, and go to state 3
+    K_TYPEOF       shift, and go to state 4
+    K_VAR          shift, and go to state 5
+    K_TRUE         shift, and go to state 6
+    K_FALSE        shift, and go to state 7
+    K_NULL         shift, and go to state 8
+    K_DO           shift, and go to state 9
+    K_WHILE        shift, and go to state 10
+    K_FOR          shift, and go to state 11
+    K_IF           shift, and go to state 12
+    K_SWITCH       shift, and go to state 13
+    K_BREAK        shift, and go to state 14
+    K_CONTINUE     shift, and go to state 15
+    K_RETURN       shift, and go to state 16
+    K_THIS         shift, and go to state 17
+    T_FLOAT        shift, and go to state 18
+    T_IDENTIFIER   shift, and go to state 19
+    T_STRING       shift, and go to state 20
+    T_INTEGER      shift, and go to state 21
+    O_INC          shift, and go to state 22
+    O_DEC          shift, and go to state 23
+    O_BLOCK_START  shift, and go to state 24
+    O_OBJ_START    shift, and go to state 25
+    '('            shift, and go to state 26
+    '+'            shift, and go to state 27
+    '-'            shift, and go to state 28
+    '~'            shift, and go to state 29
+    '!'            shift, and go to state 30
+    ';'            shift, and go to state 31
+
+    primary_expression         go to state 35
+    postfix_expression         go to state 36
+    unary_expression           go to state 37
+    unary_operator             go to state 38
+    multiplicative_expression  go to state 39
+    additive_expression        go to state 40
+    shift_expression           go to state 41
+    relational_expression      go to state 42
+    equality_expression        go to state 43
+    and_expression             go to state 44
+    exclusive_or_expression    go to state 45
+    inclusive_or_expression    go to state 46
+    logical_and_expression     go to state 47
+    logical_or_expression      go to state 48
+    conditional_expression     go to state 49
+    assignment_expression      go to state 50
+    expression                 go to state 51
+    declaration_statement      go to state 52
+    statement                  go to state 227
+    compound_statement         go to state 54
+    expression_statement       go to state 55
+    selection_statement        go to state 56
+    switch_statement           go to state 57
+    iteration_statement        go to state 58
+    jump_statement             go to state 59
+    objectLiteral              go to state 61
+
+
+state 225
+
+  109 case_block: O_BLOCK_START case_clauses_opt default_clause case_clauses_opt . '}'
+
+    '}'  shift, and go to state 228
+
+
+state 226
+
+  114 case_clause: K_CASE expression ':' statement .
+
+    $default  reduce using rule 114 (case_clause)
+
+
+state 227
+
+  115 default_clause: K_DEFAULT ':' statement .
+
+    $default  reduce using rule 115 (default_clause)
+
+
+state 228
+
+  109 case_block: O_BLOCK_START case_clauses_opt default_clause case_clauses_opt '}' .
+
+    $default  reduce using rule 109 (case_block)
