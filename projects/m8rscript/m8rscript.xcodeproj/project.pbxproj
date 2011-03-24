@@ -7,15 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4955B38C133AB6E3001EDD20 /* ucLexer.ll in Sources */ = {isa = PBXBuildFile; fileRef = 4955B38B133AB6E3001EDD20 /* ucLexer.ll */; };
-		4955B399133AB790001EDD20 /* ucLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4955B398133AB790001EDD20 /* ucLexer.cpp */; };
-		4955B3A5133AB92B001EDD20 /* ucParse.yy in Sources */ = {isa = PBXBuildFile; fileRef = 4955B39E133AB879001EDD20 /* ucParse.yy */; };
-		498C92EA0DABB6E7001BB343 /* ucMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498C92E80DABB6E7001BB343 /* ucMemory.cpp */; };
-		499B2BB80DAE4DA900C523A5 /* ucAtomList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 499B2BB60DAE4DA900C523A5 /* ucAtomList.cpp */; };
-		49C545080DB79269001524D0 /* ucScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49C545060DB79269001524D0 /* ucScanner.cpp */; };
-		49DF59DC0DB598A200E75159 /* ucParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49DF59DB0DB598A200E75159 /* ucParser.cpp */; };
+		4955B38C133AB6E3001EDD20 /* lexer.ll in Sources */ = {isa = PBXBuildFile; fileRef = 4955B38B133AB6E3001EDD20 /* lexer.ll */; };
+		4955B399133AB790001EDD20 /* lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4955B398133AB790001EDD20 /* lexer.cpp */; };
+		4955B3A5133AB92B001EDD20 /* parse.yy in Sources */ = {isa = PBXBuildFile; fileRef = 4955B39E133AB879001EDD20 /* parse.yy */; };
+		49DF59DC0DB598A200E75159 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49DF59DB0DB598A200E75159 /* parser.cpp */; };
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
-		8DD76F6A0486A84900D96B5E /* ucscript.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* ucscript.1 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -43,36 +39,15 @@
 		};
 /* End PBXBuildRule section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		8DD76F690486A84900D96B5E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-				8DD76F6A0486A84900D96B5E /* ucscript.1 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4955B38B133AB6E3001EDD20 /* ucLexer.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; path = ucLexer.ll; sourceTree = "<group>"; };
-		4955B398133AB790001EDD20 /* ucLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucLexer.cpp; sourceTree = "<group>"; };
-		4955B39E133AB879001EDD20 /* ucParse.yy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ucParse.yy; sourceTree = "<group>"; };
-		498C92E80DABB6E7001BB343 /* ucMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucMemory.cpp; sourceTree = "<group>"; };
-		498C92E90DABB6E7001BB343 /* ucMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucMemory.h; sourceTree = "<group>"; };
-		498C92ED0DABB9D6001BB343 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		499B2BB60DAE4DA900C523A5 /* ucAtomList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucAtomList.cpp; sourceTree = "<group>"; };
-		499B2BB70DAE4DA900C523A5 /* ucAtomList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucAtomList.h; sourceTree = "<group>"; };
+		4955B38B133AB6E3001EDD20 /* lexer.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; path = lexer.ll; sourceTree = "<group>"; };
+		4955B398133AB790001EDD20 /* lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lexer.cpp; path = ucLexer.cpp; sourceTree = "<group>"; };
+		4955B39E133AB879001EDD20 /* parse.yy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = parse.yy; sourceTree = "<group>"; };
 		499B2BFE0DAE503100C523A5 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		49C545060DB79269001524D0 /* ucScanner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucScanner.cpp; sourceTree = "<group>"; };
-		49C545070DB79269001524D0 /* ucScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucScanner.h; sourceTree = "<group>"; };
-		49DF59DA0DB598A200E75159 /* ucParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucParser.h; sourceTree = "<group>"; };
-		49DF59DB0DB598A200E75159 /* ucParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucParser.cpp; sourceTree = "<group>"; };
-		8DD76F6C0486A84900D96B5E /* ucscript */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ucscript; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6859E8B029090EE04C91782 /* ucscript.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = ucscript.1; sourceTree = "<group>"; };
+		49DF59DA0DB598A200E75159 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
+		49DF59DB0DB598A200E75159 /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
+		8DD76F6C0486A84900D96B5E /* m8rscript */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = m8rscript; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,33 +61,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		08FB7794FE84155DC02AAC07 /* ucscript */ = {
+		08FB7794FE84155DC02AAC07 /* m8rscript */ = {
 			isa = PBXGroup;
 			children = (
 				08FB7795FE84155DC02AAC07 /* Source */,
 				49E6E5160DA80ABB0065F568 /* Derived Files */,
-				C6859E8C029090F304C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 			);
-			name = ucscript;
+			name = m8rscript;
 			sourceTree = "<group>";
 		};
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4955B38B133AB6E3001EDD20 /* ucLexer.ll */,
-				4955B39E133AB879001EDD20 /* ucParse.yy */,
-				4955B398133AB790001EDD20 /* ucLexer.cpp */,
+				4955B38B133AB6E3001EDD20 /* lexer.ll */,
+				4955B39E133AB879001EDD20 /* parse.yy */,
+				4955B398133AB790001EDD20 /* lexer.cpp */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
-				49DF59DA0DB598A200E75159 /* ucParser.h */,
-				49DF59DB0DB598A200E75159 /* ucParser.cpp */,
-				498C92E80DABB6E7001BB343 /* ucMemory.cpp */,
-				498C92E90DABB6E7001BB343 /* ucMemory.h */,
-				499B2BB60DAE4DA900C523A5 /* ucAtomList.cpp */,
-				499B2BB70DAE4DA900C523A5 /* ucAtomList.h */,
-				49C545060DB79269001524D0 /* ucScanner.cpp */,
-				49C545070DB79269001524D0 /* ucScanner.h */,
-				498C92ED0DABB9D6001BB343 /* config.h */,
+				49DF59DA0DB598A200E75159 /* parser.h */,
+				49DF59DB0DB598A200E75159 /* parser.cpp */,
 				499B2BFE0DAE503100C523A5 /* Makefile */,
 			);
 			name = Source;
@@ -121,7 +88,7 @@
 		1AB674ADFE9D54B511CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8DD76F6C0486A84900D96B5E /* ucscript */,
+				8DD76F6C0486A84900D96B5E /* m8rscript */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,14 +98,6 @@
 			children = (
 			);
 			name = "Derived Files";
-			sourceTree = "<group>";
-		};
-		C6859E8C029090F304C91782 /* Documentation */ = {
-			isa = PBXGroup;
-			children = (
-				C6859E8B029090EE04C91782 /* ucscript.1 */,
-			);
-			name = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,13 +132,12 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
-		8DD76F620486A84900D96B5E /* ucscript */ = {
+		8DD76F620486A84900D96B5E /* m8rscript */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "ucscript" */;
+			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "m8rscript" */;
 			buildPhases = (
 				8DD76F640486A84900D96B5E /* Sources */,
 				8DD76F660486A84900D96B5E /* Frameworks */,
-				8DD76F690486A84900D96B5E /* CopyFiles */,
 			);
 			buildRules = (
 				49E6E3FA0DA5E1450065F568 /* PBXBuildRule */,
@@ -187,10 +145,10 @@
 			);
 			dependencies = (
 			);
-			name = ucscript;
+			name = m8rscript;
 			productInstallPath = "$(HOME)/bin";
-			productName = ucscript;
-			productReference = 8DD76F6C0486A84900D96B5E /* ucscript */;
+			productName = m8rscript;
+			productReference = 8DD76F6C0486A84900D96B5E /* m8rscript */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -198,7 +156,7 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ucscript" */;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "m8rscript" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -208,11 +166,11 @@
 				French,
 				German,
 			);
-			mainGroup = 08FB7794FE84155DC02AAC07 /* ucscript */;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* m8rscript */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8DD76F620486A84900D96B5E /* ucscript */,
+				8DD76F620486A84900D96B5E /* m8rscript */,
 				499B2BF00DAE4FD100C523A5 /* Make AVR */,
 				499B2CEF0DB15C7F00C523A5 /* Program AVR */,
 			);
@@ -224,14 +182,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4955B38C133AB6E3001EDD20 /* ucLexer.ll in Sources */,
-				4955B3A5133AB92B001EDD20 /* ucParse.yy in Sources */,
+				4955B38C133AB6E3001EDD20 /* lexer.ll in Sources */,
+				4955B3A5133AB92B001EDD20 /* parse.yy in Sources */,
 				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
-				498C92EA0DABB6E7001BB343 /* ucMemory.cpp in Sources */,
-				499B2BB80DAE4DA900C523A5 /* ucAtomList.cpp in Sources */,
-				49DF59DC0DB598A200E75159 /* ucParser.cpp in Sources */,
-				49C545080DB79269001524D0 /* ucScanner.cpp in Sources */,
-				4955B399133AB790001EDD20 /* ucLexer.cpp in Sources */,
+				49DF59DC0DB598A200E75159 /* parser.cpp in Sources */,
+				4955B399133AB790001EDD20 /* lexer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +206,7 @@
 					"_GLIBCXX_DEBUG_PEDANTIC=1",
 				);
 				INSTALL_PATH = /usr/local/bin;
-				PRODUCT_NAME = ucscript;
+				PRODUCT_NAME = m8rscript;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -262,7 +217,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
-				PRODUCT_NAME = ucscript;
+				PRODUCT_NAME = m8rscript;
 			};
 			name = Release;
 		};
@@ -344,7 +299,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "ucscript" */ = {
+		1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "m8rscript" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB923208733DC60010E9CD /* Debug */,
@@ -353,7 +308,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "ucscript" */ = {
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "m8rscript" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB923608733DC60010E9CD /* Debug */,
