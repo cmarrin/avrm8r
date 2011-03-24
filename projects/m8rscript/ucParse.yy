@@ -2,8 +2,8 @@
  _______________________________________________________________________
  |
  |
- |   Description:
- |	This file contains the bison rules for the ucscript Parser
+ |  Description:
+ |	This file contains the bison rules for the m8rscript Parser
  |
  |   Author(s)		: Chris Marrin
  |
@@ -12,7 +12,6 @@
 
 %{
 #include "config.h"
-#include "ucParser.h"
 #include "ucParse.hpp"
 
 #ifndef alloca
@@ -50,7 +49,7 @@ int yylex (YYSTYPE * yylval_param , void* yyscanner)
 %token K_DELETE			3
 %token K_TYPEOF			4
 %token K_IN				5
-%token K_VAR			6
+%token K_GLOBAL			6
 %token K_TRUE			7
 %token K_FALSE			8
 %token K_NULL			9
@@ -102,9 +101,6 @@ int yylex (YYSTYPE * yylval_param , void* yyscanner)
 %token O_EQ				85
 %token O_NE				86
 
-%token O_BLOCK_START	87
-%token O_OBJ_START		88
-
 /*  we expect if..then..else to produce a shift/reduce conflict */
 %expect 1
 %pure_parser
@@ -112,16 +108,18 @@ int yylex (YYSTYPE * yylval_param , void* yyscanner)
 %start program
 %%
 
-program:	source_elements
+program
+    : source_elements
     ;
 
-source_elements:	source_element
-    |			source_elements source_element
+source_elements
+    : source_element
+    | source_elements source_element
     ;
 
-source_element:
-		statement
-    |	function_declaration
+source_element
+    : statement
+    | function_declaration
     ;
 	
 primary_expression
@@ -133,26 +131,49 @@ primary_expression
     | T_FLOAT
 	| T_INTEGER
     | T_STRING
-    |	objectLiteral
+    | object_literal
 	| '(' expression ')'
 	;
 	
-postfix_expression
+member_expression
 	: primary_expression
-	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
-	| postfix_expression objectLiteral
-	| postfix_expression T_STRING
-	| postfix_expression '.' T_IDENTIFIER
-	| postfix_expression O_INC
-	| postfix_expression O_DEC
+	| function_expression
+	| member_expression '[' expression ']'
+	| member_expression '.' T_IDENTIFIER
+    | K_NEW member_expression arguments
     ;
+
+new_expression
+	: member_expression
+	| K_NEW new_expression
 	;
 
-argument_expression_list
+call_expression
+	: member_expression arguments
+	| call_expression arguments
+    | call_expression '[' expression ']'
+    | call_expression '.' T_IDENTIFIER
+	;
+
+left_hand_side_expression
+	: new_expression
+	| call_expression
+	;
+
+postfix_expression
+	: left_hand_side_expression
+	| left_hand_side_expression O_INC
+	| left_hand_side_expression O_DEC
+    ;
+
+arguments
+    : '(' ')'
+    | '(' argument_list ')'
+    ;
+    
+argument_list
 	: assignment_expression
-	| argument_expression_list ',' assignment_expression
+	| argument_list ',' assignment_expression
 	;
 
 unary_expression
@@ -169,7 +190,6 @@ unary_operator
 	| K_TYPEOF
 	| O_INC
 	| O_DEC
-	| K_NEW
 	;
 
 multiplicative_expression
@@ -263,7 +283,7 @@ expression
 	;
 
 declaration_statement
-	: K_VAR variable_declaration_list ';'
+	: K_GLOBAL variable_declaration_list ';'
 	;
 	
 variable_declaration_list:
@@ -291,8 +311,8 @@ statement
 	;
 
 compound_statement
-	: O_BLOCK_START '}'
-	| O_BLOCK_START statement_list '}'
+	: '{' '}'
+	| '{' statement_list '}'
 	;
 
 statement_list
@@ -315,8 +335,8 @@ switch_statement:
 	;
 
 case_block:
-		O_BLOCK_START case_clauses_opt '}'
-	|	O_BLOCK_START case_clauses_opt default_clause case_clauses_opt '}'
+		'{' case_clauses_opt '}'
+	|	'{' case_clauses_opt default_clause case_clauses_opt '}'
 	;
 
 case_clauses_opt:
@@ -351,33 +371,44 @@ jump_statement
 	;
 
 function_declaration
-	: K_FUNCTION function_definition
+	: K_FUNCTION T_IDENTIFIER '(' ')' '{' function_body '}'
+	| K_FUNCTION T_IDENTIFIER '(' formal_parameter_list ')' '{' function_body '}'
 	;
 
-function_definition
-	: T_IDENTIFIER '(' ')' compound_statement
-	| T_IDENTIFIER '(' formal_parameter_list ')' compound_statement
+function_expression
+    : K_FUNCTION '(' ')' '{' function_body '}'
+    | K_FUNCTION '(' formal_parameter_list ')' '{' function_body '}'
     ;
-
+    
 formal_parameter_list:
 		T_IDENTIFIER
     |	formal_parameter_list ',' T_IDENTIFIER
     ;
-
-objectLiteral:
-		O_OBJ_START propertyNameAndValueList ']'
+    
+function_body
+    : /* empty */
+    | source_elements
     ;
 
-propertyNameAndValueList:
-		/* empty */
-    |	property
-    |	propertyNameAndValueList ',' property
+object_literal
+    : '[' ']'
+	| '[' property_name_and_value_list ']'
     ;
 
-property:
-		assignment_expression
-    |	T_IDENTIFIER ':' assignment_expression
-    |	T_STRING ':' assignment_expression
+property_name_and_value_list
+    : property_assignment
+    | property_name_and_value_list ',' property_assignment
+    ;
+
+property_assignment
+    : property_name ':' assignment_expression
+    ;
+    
+property_name
+    : T_IDENTIFIER
+    | T_STRING
+    | T_FLOAT
+    | T_INTEGER
     ;
 
 %%
@@ -477,11 +508,11 @@ extern int yylex (YYSTYPE * yylval_param , void* yyscanner);
 
 %%
 
-program:	sourceElements
+program:	source_elements
     ;
 
-sourceElements:	sourceElement
-    |			sourceElements sourceElement
+source_elements:	sourceElement
+    |			source_elements sourceElement
     ;
 
 sourceElement:
@@ -499,7 +530,7 @@ primaryExpression:
 	|	INTEGER
 	|	HEXNUMBER
     |	STRING
-    |	objectLiteral
+    |	object_literal
     |	'(' expression ')'
     ;
 
@@ -714,14 +745,14 @@ formalParameterList:
     |	formalParameterList ',' IDENTIFIER
     ;
 
-objectLiteral:
-		'[' propertyNameAndValueList ']'
+object_literal:
+		'[' property_name_and_value_list ']'
     ;
 
-propertyNameAndValueList:
+property_name_and_value_list:
 		/* empty */
     |	propertyName ':' expression
-    |	propertyNameAndValueList ',' propertyName ':' expression
+    |	property_name_and_value_list ',' propertyName ':' expression
     ;
 
 propertyName:

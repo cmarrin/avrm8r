@@ -63,7 +63,7 @@ E			[Ee][+-]?{D}+
 "this"			{ return(K_THIS); }
 "in"			{ return(K_IN); }
 "delete"		{ return(K_DELETE); }
-"var"			{ return(K_VAR); }
+"global"		{ return(K_GLOBAL); }
 "new"			{ return(K_NEW); }
 "break"			{ return(K_BREAK); }
 "case"			{ return(K_CASE); }

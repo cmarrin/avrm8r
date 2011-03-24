@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4955B38C133AB6E3001EDD20 /* ucLexer.ll in Sources */ = {isa = PBXBuildFile; fileRef = 4955B38B133AB6E3001EDD20 /* ucLexer.ll */; };
+		4955B399133AB790001EDD20 /* ucLexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4955B398133AB790001EDD20 /* ucLexer.cpp */; };
+		4955B3A5133AB92B001EDD20 /* ucParse.yy in Sources */ = {isa = PBXBuildFile; fileRef = 4955B39E133AB879001EDD20 /* ucParse.yy */; };
 		498C92EA0DABB6E7001BB343 /* ucMemory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498C92E80DABB6E7001BB343 /* ucMemory.cpp */; };
 		499B2BB80DAE4DA900C523A5 /* ucAtomList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 499B2BB60DAE4DA900C523A5 /* ucAtomList.cpp */; };
 		49C545080DB79269001524D0 /* ucScanner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49C545060DB79269001524D0 /* ucScanner.cpp */; };
@@ -23,7 +26,7 @@
 			fileType = pattern.proxy;
 			isEditable = 1;
 			outputFiles = (
-				"../../../../../$(INPUT_FILE_BASE).cpp",
+				"$(INPUT_FILE_BASE).cpp",
 			);
 			script = "lex -o ${INPUT_FILE_BASE}.cpp ${INPUT_FILE_NAME}";
 		};
@@ -34,9 +37,9 @@
 			fileType = pattern.proxy;
 			isEditable = 1;
 			outputFiles = (
-				"../../../../../${INPUT_FILE_BASE}.cpp",
+				"${INPUT_FILE_BASE}.cpp",
 			);
-			script = "bison -dv -o ${INPUT_FILE_BASE}.cpp ${INPUT_FILE_NAME}";
+			script = "yacc -dv -o ${INPUT_FILE_BASE}.cpp ${INPUT_FILE_NAME}";
 		};
 /* End PBXBuildRule section */
 
@@ -55,7 +58,9 @@
 
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4976EC830DC9830D008039C3 /* ucParse.yy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ucParse.yy; sourceTree = "<group>"; };
+		4955B38B133AB6E3001EDD20 /* ucLexer.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; path = ucLexer.ll; sourceTree = "<group>"; };
+		4955B398133AB790001EDD20 /* ucLexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucLexer.cpp; sourceTree = "<group>"; };
+		4955B39E133AB879001EDD20 /* ucParse.yy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ucParse.yy; sourceTree = "<group>"; };
 		498C92E80DABB6E7001BB343 /* ucMemory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ucMemory.cpp; sourceTree = "<group>"; };
 		498C92E90DABB6E7001BB343 /* ucMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ucMemory.h; sourceTree = "<group>"; };
 		498C92ED0DABB9D6001BB343 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
@@ -95,7 +100,9 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4976EC830DC9830D008039C3 /* ucParse.yy */,
+				4955B38B133AB6E3001EDD20 /* ucLexer.ll */,
+				4955B39E133AB879001EDD20 /* ucParse.yy */,
+				4955B398133AB790001EDD20 /* ucLexer.cpp */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
 				49DF59DA0DB598A200E75159 /* ucParser.h */,
 				49DF59DB0DB598A200E75159 /* ucParser.cpp */,
@@ -217,11 +224,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4955B38C133AB6E3001EDD20 /* ucLexer.ll in Sources */,
+				4955B3A5133AB92B001EDD20 /* ucParse.yy in Sources */,
 				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
 				498C92EA0DABB6E7001BB343 /* ucMemory.cpp in Sources */,
 				499B2BB80DAE4DA900C523A5 /* ucAtomList.cpp in Sources */,
 				49DF59DC0DB598A200E75159 /* ucParser.cpp in Sources */,
 				49C545080DB79269001524D0 /* ucScanner.cpp in Sources */,
+				4955B399133AB790001EDD20 /* ucLexer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
