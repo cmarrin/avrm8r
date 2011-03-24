@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1038.35">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 22.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica}
+    span.Apple-tab-span {white-space:pre}
+  </style>
+</head>
+<body>
+<p class="p1"><b>Marrinator Script Notes</b></p>
+<p class="p2"><br></p>
+<p class="p3">Marrinator is a scripting language for 8 bit microcontrollers. It's not necessarily limited to these devices, but it has been optimized to work within their constraints.</p>
+<p class="p2"><br></p>
+<p class="p4">Variable Storage</p>
+<p class="p2"><br></p>
+<p class="p3">Assume ATMega328, 2K RAM, 1K EEPROM. This is backed by SD card, used as a pageful. But SD cards have 512 byte blocks, so we can't have too many blocks in RAM. Each function has local storage limited to 512 bytes, so it fits in a block. If a function has less still only put 1 function in an SD block. Even using 1/4 of the blocks of a 2GB SD card allows for 1M functions max. If a function uses less than 512 bytes of local storage and that data needs to be written to the pagefile, the unused bytes are wasted.</p>
+<p class="p2"><br></p>
+<p class="p3">Maybe use EEPROM as 1st level cache since it is byte addressable.<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p3">Variable storage (local or global) holds numbers (1-4 bytes) or pointers to String, Array or Object. Pointer is 4 bytes (maybe some pointers are 2 bytes?). Maybe short strings are kept in local storage.</p>
+<p class="p2"><br></p>
+<p class="p3">Maybe support small objects with fixed structure, e.g., [ I8 a, U8 b, U16 c ] would take 4 bytes.</p>
+<p class="p2"><br></p>
+<p class="p4">Functions and Closures</p>
+<p class="p2"><br></p>
+<p class="p3">A function is just code. A closure is an object than points to a function and has data members used by that function. For instance:</p>
+<p class="p2"><br></p>
+<p class="p3"><span class="Apple-tab-span">	</span>function a(x, y)</p>
+<p class="p3"><span class="Apple-tab-span">	</span>{</p>
+<p class="p3"><span class="Apple-tab-span">	</span><span class="Apple-tab-span">	</span>return function() { tmp = 4; return tmp + x + y; }</p>
+<p class="p3"><span class="Apple-tab-span">	</span>}</p>
+<p class="p2"><br></p>
+<p class="p3">Calling a(5,6) will produce a closure with data members x=5, y=6 and a function which has one local variable, tmp=4. When that closure is called it returns 15.</p>
+<p class="p2"><br></p>
+<p class="p4">Number Types</p>
+<p class="p2"><br></p>
+<p class="p3">Integer: I8, U8, I16, U16, I32, U32</p>
+<p class="p3">Float: single precision, 32 bit IEEE</p>
+<p class="p3">Fixed: (sign:int:frac) 1:0:7, 1:4:3, 1:0:15, 1:4.11, 1:8.7, 1:0:31, 1:8:23, 1:16:15</p>
+<p class="p2"><br></p>
+<p class="p4">Byte Codes</p>
+<p class="p2"><br></p>
+<p class="p3">Cribbed from Lua 5.1</p>
+<p class="p2"><br></p>
+<p class="p3">MOVE A -&gt; B</p>
+<p class="p3">LOADK</p>
+<p class="p3">LOADBOOL</p>
+<p class="p3">LOADNIL</p>
+<p class="p3">GETUPVAL</p>
+<p class="p3">GETGLOBAL</p>
+<p class="p3">GETTABLE</p>
+<p class="p3">SETUPVAL</p>
+<p class="p3">SETGLOBAL</p>
+<p class="p3">SETTABLE</p>
+<p class="p3">NEWTABLE</p>
+<p class="p3">ADD, SUB, MUL, DIV, MOD (all number types)</p>
+<p class="p3">LE, LT, EQ (all number types plus strings [maybe general objects?])</p>
+<p class="p3">LAND, LOR</p>
+<p class="p3">AND, OR, XOR, ASR, LSR, LSL (integer types)</p>
+<p class="p3">NOT (integer types)</p>
+<p class="p3">BNOT</p>
+<p class="p3">NEG (all number types)</p>
+<p class="p3">CONCAT</p>
+<p class="p3">CAST</p>
+<p class="p3">JMP</p>
+<p class="p3">JT, JF</p>
+<p class="p3">TAS (test and set?)</p>
+<p class="p3">CALL</p>
+<p class="p3">TAILCALL</p>
+<p class="p3">RET</p>
+<p class="p3">CLOSURE</p>
+<p class="p3">CLOSE</p>
+<p class="p3">VARARG</p>
+<p class="p2"><br></p>
+<p class="p3">Questions:</p>
+<p class="p2"><br></p>
+<p class="p3"><span class="Apple-tab-span">	</span>Do we support tail calls?</p>
+<p class="p3"><span class="Apple-tab-span">	</span>Do we support multiple assignment (a,b = 4,5) like in Lua?</p>
+<p class="p3"><span class="Apple-tab-span">	</span>Do we support varargs (function foo(…) { a,b,c = …;)</p>
+<p class="p3"><span class="Apple-tab-span">	</span>How do we fill in the entries of a table (Lua uses SETLIST)</p>
+</body>
+</html>
