@@ -1,0 +1,489 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4900A1A9133F92730036518B /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		4900A1AE133F931C0036518B /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
+		4900A1CB133F954B0036518B /* marrinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1C9133F954B0036518B /* marrinator.h */; };
+		4900A1D4133F9A540036518B /* EventSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
+		4900A1D5133F9A540036518B /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
+		4900A1F0133F9C5B0036518B /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
+		4900A1F1133F9C5B0036518B /* ADC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
+		4900A1F2133F9C5B0036518B /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
+		4900A1F3133F9C5B0036518B /* ShiftReg.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E7133F9C5B0036518B /* ShiftReg.h */; };
+		4900A1F4133F9C5B0036518B /* STP08CDC596.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */; };
+		4900A1F5133F9C5B0036518B /* STP08CDC596.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E9133F9C5B0036518B /* STP08CDC596.h */; };
+		4900A1F6133F9C5B0036518B /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EA133F9C5B0036518B /* Timer0.cpp */; };
+		4900A1F7133F9C5B0036518B /* Timer0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EB133F9C5B0036518B /* Timer0.h */; };
+		4900A1F8133F9C5B0036518B /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
+		4900A1F9133F9C5B0036518B /* Timer1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1ED133F9C5B0036518B /* Timer1.h */; };
+		4900A1FA133F9C5B0036518B /* Timer1RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
+		4900A1FB133F9C5B0036518B /* Timer1RTC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EF133F9C5B0036518B /* Timer1RTC.h */; };
+		4900A2BC133FDD730036518B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4900A2BA133FDD730036518B /* InfoPlist.strings */; };
+		4900A2E6133FDE480036518B /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
+		4900A2E7133FDE480036518B /* marrinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1C9133F954B0036518B /* marrinator.h */; };
+		4900A2E8133FDE480036518B /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
+		4900A2E9133FDE480036518B /* ADC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
+		4900A2EA133FDE480036518B /* ShiftReg.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E7133F9C5B0036518B /* ShiftReg.h */; };
+		4900A2EB133FDE480036518B /* STP08CDC596.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E9133F9C5B0036518B /* STP08CDC596.h */; };
+		4900A2EC133FDE480036518B /* Timer0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EB133F9C5B0036518B /* Timer0.h */; };
+		4900A2ED133FDE480036518B /* Timer1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1ED133F9C5B0036518B /* Timer1.h */; };
+		4900A2EE133FDE480036518B /* Timer1RTC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EF133F9C5B0036518B /* Timer1RTC.h */; };
+		4900A2EF133FDE590036518B /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		4900A2F0133FDE590036518B /* EventSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
+		4900A2F1133FDE590036518B /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
+		4900A2F2133FDE590036518B /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
+		4900A2F3133FDE590036518B /* STP08CDC596.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */; };
+		4900A2F4133FDE590036518B /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EA133F9C5B0036518B /* Timer0.cpp */; };
+		4900A2F5133FDE590036518B /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
+		4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		4900A1BE133F935F0036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			outputFiles = (
+				"$(TARGET_BUILD_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+		};
+		4900A1C1133F93BC0036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+				"$(TARGET_BUILD_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+		};
+		4900A2FA133FDEF10036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+				"$(TARGET_BUILD_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+		};
+		4900A2FB133FDEF10036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			outputFiles = (
+				"$(TARGET_BUILD_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXFileReference section */
+		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
+		4900A1A8133F92730036518B /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
+		4900A1C9133F954B0036518B /* marrinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = marrinator.h; sourceTree = "<group>"; };
+		4900A1D2133F9A540036518B /* EventSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventSource.cpp; sourceTree = "<group>"; };
+		4900A1D3133F9A540036518B /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSource.h; sourceTree = "<group>"; };
+		4900A1E4133F9C5B0036518B /* ADC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ADC.cpp; sourceTree = "<group>"; };
+		4900A1E5133F9C5B0036518B /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADC.h; sourceTree = "<group>"; };
+		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShiftReg.cpp; sourceTree = "<group>"; };
+		4900A1E7133F9C5B0036518B /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShiftReg.h; sourceTree = "<group>"; };
+		4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = STP08CDC596.cpp; sourceTree = "<group>"; };
+		4900A1E9133F9C5B0036518B /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STP08CDC596.h; sourceTree = "<group>"; };
+		4900A1EA133F9C5B0036518B /* Timer0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer0.cpp; sourceTree = "<group>"; };
+		4900A1EB133F9C5B0036518B /* Timer0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer0.h; sourceTree = "<group>"; };
+		4900A1EC133F9C5B0036518B /* Timer1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1.cpp; sourceTree = "<group>"; };
+		4900A1ED133F9C5B0036518B /* Timer1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1.h; sourceTree = "<group>"; };
+		4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1RTC.cpp; sourceTree = "<group>"; };
+		4900A1EF133F9C5B0036518B /* Timer1RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1RTC.h; sourceTree = "<group>"; };
+		4900A2BB133FDD730036518B /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = InfoPlist.strings; sourceTree = "<group>"; };
+		4900A2BD133FDD810036518B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4900A2E3133FDE330036518B /* libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libm8r.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D576316048677EA00EA77CD /* libm8r.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = libm8r.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4900A2E1133FDE330036518B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D576313048677EA00EA77CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* libm8r */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AFFE84173DC02AAC07 /* Source */,
+				4900A2A1133FDCC90036518B /* Resources */,
+				19C28FB6FE9D52B211CA2CBB /* Products */,
+			);
+			name = libm8r;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4900A1C9133F954B0036518B /* marrinator.h */,
+				4900A1A7133F92730036518B /* Application.cpp */,
+				4900A1A8133F92730036518B /* Application.h */,
+				4900A1E4133F9C5B0036518B /* ADC.cpp */,
+				4900A1E5133F9C5B0036518B /* ADC.h */,
+				4900A1D2133F9A540036518B /* EventSource.cpp */,
+				4900A1D3133F9A540036518B /* EventSource.h */,
+				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
+				4900A1E7133F9C5B0036518B /* ShiftReg.h */,
+				4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */,
+				4900A1E9133F9C5B0036518B /* STP08CDC596.h */,
+				4900A1EA133F9C5B0036518B /* Timer0.cpp */,
+				4900A1EB133F9C5B0036518B /* Timer0.h */,
+				4900A1EC133F9C5B0036518B /* Timer1.cpp */,
+				4900A1ED133F9C5B0036518B /* Timer1.h */,
+				4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */,
+				4900A1EF133F9C5B0036518B /* Timer1RTC.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB6FE9D52B211CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D576316048677EA00EA77CD /* libm8r.bundle */,
+				4900A2E3133FDE330036518B /* libm8r.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4900A2A1133FDCC90036518B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4900A2BD133FDD810036518B /* Info.plist */,
+				4900A2B9133FDD730036518B /* English.lproj */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		4900A2B9133FDD730036518B /* English.lproj */ = {
+			isa = PBXGroup;
+			children = (
+				4900A2BA133FDD730036518B /* InfoPlist.strings */,
+			);
+			path = English.lproj;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		4900A1B3133F933F0036518B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A1AE133F931C0036518B /* Application.h in Headers */,
+				4900A1CB133F954B0036518B /* marrinator.h in Headers */,
+				4900A1D5133F9A540036518B /* EventSource.h in Headers */,
+				4900A1F1133F9C5B0036518B /* ADC.h in Headers */,
+				4900A1F3133F9C5B0036518B /* ShiftReg.h in Headers */,
+				4900A1F5133F9C5B0036518B /* STP08CDC596.h in Headers */,
+				4900A1F7133F9C5B0036518B /* Timer0.h in Headers */,
+				4900A1F9133F9C5B0036518B /* Timer1.h in Headers */,
+				4900A1FB133F9C5B0036518B /* Timer1RTC.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4900A2DF133FDE330036518B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A2E6133FDE480036518B /* Application.h in Headers */,
+				4900A2E7133FDE480036518B /* marrinator.h in Headers */,
+				4900A2E8133FDE480036518B /* EventSource.h in Headers */,
+				4900A2E9133FDE480036518B /* ADC.h in Headers */,
+				4900A2EA133FDE480036518B /* ShiftReg.h in Headers */,
+				4900A2EB133FDE480036518B /* STP08CDC596.h in Headers */,
+				4900A2EC133FDE480036518B /* Timer0.h in Headers */,
+				4900A2ED133FDE480036518B /* Timer1.h in Headers */,
+				4900A2EE133FDE480036518B /* Timer1RTC.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4900A2E2133FDE330036518B /* m8r */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4900A2F9133FDE770036518B /* Build configuration list for PBXNativeTarget "m8r" */;
+			buildPhases = (
+				4900A2DF133FDE330036518B /* Headers */,
+				4900A2E0133FDE330036518B /* Sources */,
+				4900A2E1133FDE330036518B /* Frameworks */,
+			);
+			buildRules = (
+				4900A2FA133FDEF10036518B /* PBXBuildRule */,
+				4900A2FB133FDEF10036518B /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = m8r;
+			productName = m8r;
+			productReference = 4900A2E3133FDE330036518B /* libm8r.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		8D57630D048677EA00EA77CD /* libm8r */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "libm8r" */;
+			buildPhases = (
+				4900A1B3133F933F0036518B /* Headers */,
+				8D57630F048677EA00EA77CD /* Resources */,
+				8D576311048677EA00EA77CD /* Sources */,
+				8D576313048677EA00EA77CD /* Frameworks */,
+			);
+			buildRules = (
+				4900A1C1133F93BC0036518B /* PBXBuildRule */,
+				4900A1BE133F935F0036518B /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = libm8r;
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = libm8r;
+			productReference = 8D576316048677EA00EA77CD /* libm8r.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "libm8r" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* libm8r */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D57630D048677EA00EA77CD /* libm8r */,
+				4900A2E2133FDE330036518B /* m8r */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D57630F048677EA00EA77CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A2BC133FDD730036518B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4900A2E0133FDE330036518B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A2EF133FDE590036518B /* Application.cpp in Sources */,
+				4900A2F0133FDE590036518B /* EventSource.cpp in Sources */,
+				4900A2F1133FDE590036518B /* ADC.cpp in Sources */,
+				4900A2F2133FDE590036518B /* ShiftReg.cpp in Sources */,
+				4900A2F3133FDE590036518B /* STP08CDC596.cpp in Sources */,
+				4900A2F4133FDE590036518B /* Timer0.cpp in Sources */,
+				4900A2F5133FDE590036518B /* Timer1.cpp in Sources */,
+				4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D576311048677EA00EA77CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A1A9133F92730036518B /* Application.cpp in Sources */,
+				4900A1D4133F9A540036518B /* EventSource.cpp in Sources */,
+				4900A1F0133F9C5B0036518B /* ADC.cpp in Sources */,
+				4900A1F2133F9C5B0036518B /* ShiftReg.cpp in Sources */,
+				4900A1F4133F9C5B0036518B /* STP08CDC596.cpp in Sources */,
+				4900A1F6133F9C5B0036518B /* Timer0.cpp in Sources */,
+				4900A1F8133F9C5B0036518B /* Timer1.cpp in Sources */,
+				4900A1FA133F9C5B0036518B /* Timer1RTC.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		4900A2BA133FDD730036518B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4900A2BB133FDD730036518B /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB911B08733D790010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = atmega168;
+				COPY_PHASE_STRIP = NO;
+				FREQUENCY = 8000000;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /opt/local/avr/include;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = libm8r;
+				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		1DEB911C08733D790010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = atmega168;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FREQUENCY = 8000000;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = /opt/local/avr/include;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = libm8r;
+				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		1DEB911F08733D790010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Debug;
+		};
+		1DEB912008733D790010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.6;
+			};
+			name = Release;
+		};
+		4900A2E4133FDE340036518B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = atmega168;
+				COPY_PHASE_STRIP = NO;
+				FREQUENCY = 8000000;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = /opt/local/avr/include;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = m8r;
+				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
+			};
+			name = Debug;
+		};
+		4900A2E5133FDE340036518B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = atmega168;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FREQUENCY = 8000000;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = /opt/local/avr/include;
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = m8r;
+				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB911A08733D790010E9CD /* Build configuration list for PBXNativeTarget "libm8r" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB911B08733D790010E9CD /* Debug */,
+				1DEB911C08733D790010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "libm8r" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB911F08733D790010E9CD /* Debug */,
+				1DEB912008733D790010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4900A2F9133FDE770036518B /* Build configuration list for PBXNativeTarget "m8r" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4900A2E4133FDE340036518B /* Debug */,
+				4900A2E5133FDE340036518B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

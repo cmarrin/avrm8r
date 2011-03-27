@@ -35,9 +35,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "avr.h"
+#include "marrinator.h"
 
-namespace avr {
+namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //

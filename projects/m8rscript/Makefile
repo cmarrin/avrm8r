@@ -56,12 +56,12 @@ FORMAT = ihex
 
 
 # Target file name (without extension).
-TARGET = ucscript
+TARGET = m8rscript
 
 
 # List C source files here. (C dependencies are automatically generated.)
 #SRC += ADC.c 
-SRC = main.cpp ucParser.cpp ucMemory.cpp ucAtomList.cpp ucScanner.cpp
+SRC = lexer.cpp
 
 
 # List Assembler source files here.

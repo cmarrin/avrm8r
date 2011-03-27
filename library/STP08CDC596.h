@@ -35,10 +35,10 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "avr.h"
-#include "avrShiftReg.h"
+#include "marrinator.h"
+#include "ShiftReg.h"
 
-namespace avr {
+namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //

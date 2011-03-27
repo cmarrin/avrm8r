@@ -34,11 +34,11 @@ POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------*/
 
 
-#include "avrTimer0.h"
-#include "avrApplication.h"
+#include "Timer0.h"
+#include "Application.h"
 #include <avr/interrupt.h>
 
-using namespace avr;
+using namespace marrinator;
 
 Timer0* Timer0::mygTimer0 = 0;
 
@@ -48,7 +48,7 @@ Timer0::setInterruptEnable(uint8_t irpt, bool b)
     switch(irpt)
     {
         case TIMER_OVERFLOW:
-            TIMSK = b ? (TIMSK | _BV(TOIE0)) : (TIMSK & ~_BV(TOIE0));
+            TIMSK0 = b ? (TIMSK0 | _BV(TOIE0)) : (TIMSK0 & ~_BV(TOIE0));
             break;
         default: break;
     }
@@ -59,7 +59,7 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 {
     switch(irpt)
     {
-        case TIMER_OVERFLOW:        return (TIMSK & _BV(TOIE0)) != 0;
+        case TIMER_OVERFLOW:        return (TIMSK0 & _BV(TOIE0)) != 0;
         default:                    return false;
     }
 }
@@ -67,6 +67,6 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 // Interrupt handlers
 SIGNAL(SIG_OVERFLOW0)
 {
-	avr::Application::getApplication()->addEvent(EV_TIMER0);
+	Application::getApplication()->addEvent(EV_TIMER0);
 }
 

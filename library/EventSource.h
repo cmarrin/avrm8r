@@ -35,48 +35,49 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "avr.h"
+#include "marrinator.h"
 
-namespace avr {
-	// Event sources
-	enum EventType {
-		EV_NO_EVENT		= 0,
-		EV_USART0		= 1,	// with parameter USART_*
-		EV_USART1		= 2,	// with parameter USART_*
-		EV_USART2		= 3,	// with parameter USART_*
-		EV_USART3		= 4,	// with parameter USART_*
-		EV_SPI			= 5,
-		EV_TWI			= 6,
-		EV_WATCHDOG		= 7,
-		EV_TIMER0		= 8,	// with parameter TIMER_*
-		EV_TIMER1		= 9,	// with parameter TIMER_*
-		EV_TIMER2		= 10,	// with parameter TIMER_*
-		EV_TIMER3		= 11,	// with parameter TIMER_*
-		EV_TIMER4		= 12,	// with parameter TIMER_*
-		EV_TIMER5		= 13,	// with parameter TIMER_*
-		EV_COMPARATOR0	= 14,
-		EV_COMPARATOR1	= 15,
-		EV_ADC			= 16,
-		EV_PIN_CHANGE	= 17,	// with parameter 0-3
-		EV_INTERRUPT	= 18,	// with parameter 0-7
-		EV_EEPROM		= 19,
-		EV_SPM			= 20,
+namespace marrinator {
 
-		// There are special and probably exclusive (any given chip supports at most one)
-		// So they can probably share a bit
-		EV_PSC			= 21,
-		EV_USB			= 22,
-		EV_DMA			= 23,
-		EV_MAC			= 24,
-		EV_CAN			= 25,
-		EV_LCD			= 26,
-		EV_FPGA			= 27,
-		
-		EV_USER0		= 28,
-		EV_USER1		= 29,
-		EV_USER2		= 30,
-		EV_USER3		= 31
-	};
+// Event sources
+enum EventType {
+    EV_NO_EVENT		= 0,
+    EV_USART0		= 1,	// with parameter USART_*
+    EV_USART1		= 2,	// with parameter USART_*
+    EV_USART2		= 3,	// with parameter USART_*
+    EV_USART3		= 4,	// with parameter USART_*
+    EV_SPI			= 5,
+    EV_TWI			= 6,
+    EV_WATCHDOG		= 7,
+    EV_TIMER0		= 8,	// with parameter TIMER_*
+    EV_TIMER1		= 9,	// with parameter TIMER_*
+    EV_TIMER2		= 10,	// with parameter TIMER_*
+    EV_TIMER3		= 11,	// with parameter TIMER_*
+    EV_TIMER4		= 12,	// with parameter TIMER_*
+    EV_TIMER5		= 13,	// with parameter TIMER_*
+    EV_COMPARATOR0	= 14,
+    EV_COMPARATOR1	= 15,
+    EV_ADC			= 16,
+    EV_PIN_CHANGE	= 17,	// with parameter 0-3
+    EV_INTERRUPT	= 18,	// with parameter 0-7
+    EV_EEPROM		= 19,
+    EV_SPM			= 20,
+
+    // There are special and probably exclusive (any given chip supports at most one)
+    // So they can probably share a bit
+    EV_PSC			= 21,
+    EV_USB			= 22,
+    EV_DMA			= 23,
+    EV_MAC			= 24,
+    EV_CAN			= 25,
+    EV_LCD			= 26,
+    EV_FPGA			= 27,
+    
+    EV_USER0		= 28,
+    EV_USER1		= 29,
+    EV_USER2		= 30,
+    EV_USER3		= 31
+};
 
 // timer parameters
 #define TIMER_COMPAREA		0

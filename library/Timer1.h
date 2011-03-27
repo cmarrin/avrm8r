@@ -35,9 +35,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "avrEventSource.h"
+#include "EventSource.h"
 
-namespace avr {
+namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -73,8 +73,8 @@ public:
     
     uint8_t getPrescaler() const        { return TCCR1B & TIMER_PRESCALE_MASK; }
 
-    void setOutputCompare(uint16_t v)   { OCR1 = v; }
-    uint16_t getOutputCompare() const   { return OCR1; }
+    void setOutputCompare(uint16_t v)   { OCR1A = v; }
+    uint16_t getOutputCompare() const   { return OCR1A; }
     
     void setValue(uint16_t v)           { TCNT1 = v; }
     uint16_t getValue() const           { return TCNT1; }
@@ -83,13 +83,15 @@ public:
     
     void setClearOnOutputCompare(bool b)
     {
+        // FIXME: This is different on modern controllers
         if (b)
-            TCCR1B |= _BV(CTC1);
+            TCCR1B |= _BV(WGM10);
         else
-            TCCR1B &= ~_BV(CTC1);
+            TCCR1B &= ~_BV(WGM10);
     }
     
-    bool isClearOnOutputCompare() const  { return (TCCR1B & _BV(CTC1)) != 0; }
+    // FIXME: This is different on modern controllers
+    bool isClearOnOutputCompare() const  { return (TCCR1B & _BV(WGM10)) != 0; }
 
 private:
     static Timer1* mygTimer1;

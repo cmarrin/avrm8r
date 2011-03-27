@@ -35,14 +35,14 @@ DAMAGE.
 
 #pragma once
 
-#include "avr.h"
+#include "marrinator.h"
 #include <avr/interrupt.h>
 
-#include "avrEventSource.h"
+#include "EventSource.h"
 
 #undef ADC
 
-namespace avr {
+namespace marrinator {
 
 // defines - borrowed from avrlib by Pascal Stang - Copyright (C) 2002
 
@@ -51,16 +51,15 @@ namespace avr {
 //		to create the A2D clock frequency
 //		*lower division ratios make conversion go faster
 //		*higher division ratios make conversions more accurate
-#define ADC_PRESCALE_DIV2		0x00	///< 0x01,0x00 -> CPU clk/2
-#define ADC_PRESCALE_DIV4		0x02	///< 0x02 -> CPU clk/4
-#define ADC_PRESCALE_DIV8		0x03	///< 0x03 -> CPU clk/8
-#define ADC_PRESCALE_DIV16		0x04	///< 0x04 -> CPU clk/16
-#define ADC_PRESCALE_DIV32		0x05	///< 0x05 -> CPU clk/32
-#define ADC_PRESCALE_DIV64		0x06	///< 0x06 -> CPU clk/64
-#define ADC_PRESCALE_DIV128		0x07	///< 0x07 -> CPU clk/128
-	
-// do not change the mask value
-#define ADC_PRESCALE_MASK		0x07
+#define ADPS_DIV2		0x00	///< 0x01,0x00 -> CPU clk/2
+#define ADPS_DIV4		0x02	///< 0x02 -> CPU clk/4
+#define ADPS_DIV8		0x03	///< 0x03 -> CPU clk/8
+#define ADPS_DIV16		0x04	///< 0x04 -> CPU clk/16
+#define ADPS_DIV32		0x05	///< 0x05 -> CPU clk/32
+#define ADPS_DIV64		0x06	///< 0x06 -> CPU clk/64
+#define ADPS_DIV128		0x07	///< 0x07 -> CPU clk/128
+#define ADPS_MAX		0x07
+#define ADPS_MASK       (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2)
 	
 // A2D voltage reference select
 //		*this determines what is used as the
@@ -136,12 +135,12 @@ public:
 			return;
 			
 		if (e) {
-			ADCSR |= _BV(ADEN);				// enable ADC (turn off ADC power)
-			ADCSR |= _BV(ADIE);				// enable ADC interrupts
+			ADCSRA |= _BV(ADEN);				// enable ADC (turn off ADC power)
+			ADCSRA |= _BV(ADIE);				// enable ADC interrupts
 		}
 		else {
-			ADCSR &= ~_BV(ADIE);			// disable ADC interrupts
-			ADCSR &= ~_BV(ADEN);			// disable ADC (turn off ADC power)
+			ADCSRA &= ~_BV(ADIE);			// disable ADC interrupts
+			ADCSRA &= ~_BV(ADEN);			// disable ADC (turn off ADC power)
 		}
 		
 		myIsEnabled = e;
@@ -151,13 +150,20 @@ public:
 	
 	void		setPrescaler(uint8_t prescale)
 	{
-		if ((prescale & ADC_PRESCALE_MASK) != 0)
+		if (prescale > ADPS_MAX)
 			prescale = 0;
 		
-		ADCSR = (ADCSR & ~ADC_PRESCALE_MASK) | prescale;
+        uint8_t psval = (((prescale & 1) != 0) << ADPS0) | 
+                        (((prescale & 2) != 0) << ADPS1) | 
+                        (((prescale & 4) != 0) << ADPS2);
+		ADCSRA = (ADCSRA & ~ADPS_MASK) | psval;
 	}
 	
-	uint8_t		getPrescaler() const			{ return ADCSR & ADC_PRESCALE_MASK; }
+	uint8_t		getPrescaler() const
+    {
+        uint8_t psval = ADCSRA;
+        return (psval & (1 << ADPS0) != 0) | ((psval & (1 << ADPS1) != 0) << 1) | ((psval & (1 << ADPS2) != 0) << 2);
+    }
 	
 	void		setReference(uint8_t ref)
 	{
@@ -179,15 +185,15 @@ public:
 	
 	void		startConversion()
 	{
-        ADCSR |= _BV(ADIE);	// enable ADC interrupts
-		ADCSR |= _BV(ADIF);	// clear hardware "conversion complete" flag 
-		ADCSR |= _BV(ADSC);	// start conversion
+        ADCSRA |= _BV(ADIE);	// enable ADC interrupts
+		ADCSRA |= _BV(ADIF);	// clear hardware "conversion complete" flag 
+		ADCSRA |= _BV(ADSC);	// start conversion
 	}
     
     uint16_t    getLastConversion10Bit()        { return ADCW; }
     uint8_t     getLastConversion8Bit()         { return getLastConversion10Bit() >> 2; }
 	
-	bool		isConversionComplete() const	{ return bit_is_set(ADCSR, ADSC); }
+	bool		isConversionComplete() const	{ return bit_is_set(ADCSRA, ADSC); }
 	
 	uint16_t	convert10Bit();
 	uint8_t		convert8Bit()					{ return convert10Bit() >> 2; }

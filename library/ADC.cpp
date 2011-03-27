@@ -36,14 +36,19 @@ DAMAGE.
 #include "ADC.h"
 #include "Application.h"
 
-using namespace marrinator
+using namespace marrinator;
 
 // FIXME: Add handling of ADC channel
 
 ADC::ADC(uint8_t prescale, uint8_t reference)
 {
-    ADCSR |= _BV(ADEN);             // enable ADC (turn on ADC power)
-    ADCSR &= ~_BV(ADFR);            // default to single sample convert mode
+    ADCSRA |= _BV(ADEN);             // enable ADC (turn on ADC power)
+    
+#ifdef ADFR
+    ADCSRA &= ~_BV(ADFR);            // default to single sample convert mode
+#else
+    ADCSRA &= ~_BV(ADATE);          // default to no auto trigger
+#endif
     setPrescaler(prescale);         // set default prescaler
     setReference(reference);        // set default reference
     
@@ -54,11 +59,11 @@ ADC::ADC(uint8_t prescale, uint8_t reference)
 uint16_t
 ADC::convert10Bit()
 {
-    ADCSR |= _BV(ADIF);                     // clear hardware "conversion complete" flag 
-    ADCSR |= _BV(ADSC);                     // start conversion
+    ADCSRA |= _BV(ADIF);                     // clear hardware "conversion complete" flag 
+    ADCSRA |= _BV(ADSC);                     // start conversion
     
     // wait for completion
-    while(bit_is_set(ADCSR, ADSC))
+    while(bit_is_set(ADCSRA, ADSC))
     ;
 
     return ADCW;
@@ -67,7 +72,7 @@ ADC::convert10Bit()
 // Interrupt handler for ADC complete interrupt.
 SIGNAL(SIG_ADC)
 {
-    ADCSR &= ~_BV(ADIE);    // disable ADC interrupts
+    ADCSRA &= ~_BV(ADIE);    // disable ADC interrupts
     marrinator::Application::getApplication()->addEvent(EV_ADC);
 }
 

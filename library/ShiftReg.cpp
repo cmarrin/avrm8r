@@ -34,9 +34,9 @@ POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------*/
 
 
-#include "avrShiftReg.h"
+#include "ShiftReg.h"
 
-using namespace avr;
+using namespace marrinator;
 
 void 
 ShiftReg::send(uint8_t value, uint8_t n)

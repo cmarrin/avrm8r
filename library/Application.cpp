@@ -50,4 +50,4 @@ void operator delete(void * ptr)
 
 void __cxa_pure_virtual(void) {}; 
 
-Application::Application* Application::mygApplication = NULL;
+Application::Application* Application::mygApplication = 0;

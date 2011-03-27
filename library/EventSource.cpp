@@ -33,10 +33,10 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------*/
 
-#include "avrEventSource.h"
-#include "avrApplication.h"
+#include "EventSource.h"
+#include "Application.h"
 
-using namespace avr;
+using namespace marrinator;
 
 void
 EventSource::addEvent(EventType type)

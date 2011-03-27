@@ -36,9 +36,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <avr/interrupt.h>
-#include "avrTimer1.h"
+#include "Timer1.h"
 
-namespace avr {
+namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -92,7 +92,7 @@ public:
         setClearOnOutputCompare(true);
     }
     
-	~Timer1RTC()		{ }
+	virtual ~Timer1RTC() { }
     
     virtual void onOutputCompare();
     

@@ -7,43 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4955B38C133AB6E3001EDD20 /* lexer.ll in Sources */ = {isa = PBXBuildFile; fileRef = 4955B38B133AB6E3001EDD20 /* lexer.ll */; };
-		4955B399133AB790001EDD20 /* lexer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4955B398133AB790001EDD20 /* lexer.cpp */; };
+		4900A152133F90110036518B /* lexer.ll in Sources */ = {isa = PBXBuildFile; fileRef = 4900A151133F90110036518B /* lexer.ll */; };
 		4955B3A5133AB92B001EDD20 /* parse.yy in Sources */ = {isa = PBXBuildFile; fileRef = 4955B39E133AB879001EDD20 /* parse.yy */; };
 		49DF59DC0DB598A200E75159 /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49DF59DB0DB598A200E75159 /* parser.cpp */; };
 		8DD76F650486A84900D96B5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
-		49E6E3DE0DA5DF890065F568 /* PBXBuildRule */ = {
+		49041048133D8AE4008D05C3 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.ll";
-			fileType = pattern.proxy;
+			fileType = sourcecode.cpp;
 			isEditable = 1;
 			outputFiles = (
-				"$(INPUT_FILE_BASE).cpp",
 			);
-			script = "lex -o ${INPUT_FILE_BASE}.cpp ${INPUT_FILE_NAME}";
 		};
-		49E6E3FA0DA5E1450065F568 /* PBXBuildRule */ = {
+		49A25031133E79260086FAC0 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.gcc.4_2;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+		49A25060133F862A0086FAC0 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
-			filePatterns = "*.yy";
+			filePatterns = "*.cpp";
 			fileType = pattern.proxy;
 			isEditable = 1;
 			outputFiles = (
-				"${INPUT_FILE_BASE}.cpp",
+				"$(TARGET_BUILD_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "yacc -dv -o ${INPUT_FILE_BASE}.cpp ${INPUT_FILE_NAME}";
+			script = "/opt/local/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
 		};
 /* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4955B38B133AB6E3001EDD20 /* lexer.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; path = lexer.ll; sourceTree = "<group>"; };
-		4955B398133AB790001EDD20 /* lexer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lexer.cpp; path = ucLexer.cpp; sourceTree = "<group>"; };
-		4955B39E133AB879001EDD20 /* parse.yy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = parse.yy; sourceTree = "<group>"; };
+		4900A151133F90110036518B /* lexer.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; path = lexer.ll; sourceTree = "<group>"; };
+		49041028133CE488008D05C3 /* libm8rscriot AVR.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libm8rscriot AVR.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4955B39E133AB879001EDD20 /* parse.yy */ = {isa = PBXFileReference; explicitFileType = sourcecode.yacc; fileEncoding = 4; path = parse.yy; sourceTree = "<group>"; };
 		499B2BFE0DAE503100C523A5 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		49DF59DA0DB598A200E75159 /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		49DF59DB0DB598A200E75159 /* parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
@@ -51,6 +54,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		49041026133CE488008D05C3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F660486A84900D96B5E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -74,9 +84,8 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4955B38B133AB6E3001EDD20 /* lexer.ll */,
+				4900A151133F90110036518B /* lexer.ll */,
 				4955B39E133AB879001EDD20 /* parse.yy */,
-				4955B398133AB790001EDD20 /* lexer.cpp */,
 				08FB7796FE84155DC02AAC07 /* main.cpp */,
 				49DF59DA0DB598A200E75159 /* parser.h */,
 				49DF59DB0DB598A200E75159 /* parser.cpp */,
@@ -89,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				8DD76F6C0486A84900D96B5E /* m8rscript */,
+				49041028133CE488008D05C3 /* libm8rscriot AVR.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +111,16 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		49041024133CE488008D05C3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
 		499B2BF00DAE4FD100C523A5 /* Make AVR */ = {
@@ -132,6 +152,25 @@
 /* End PBXLegacyTarget section */
 
 /* Begin PBXNativeTarget section */
+		49041027133CE488008D05C3 /* m8rscript AVR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4904102E133CE513008D05C3 /* Build configuration list for PBXNativeTarget "m8rscript AVR" */;
+			buildPhases = (
+				49041024133CE488008D05C3 /* Headers */,
+				49041025133CE488008D05C3 /* Sources */,
+				49041026133CE488008D05C3 /* Frameworks */,
+			);
+			buildRules = (
+				49A25060133F862A0086FAC0 /* PBXBuildRule */,
+				49A25031133E79260086FAC0 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = "m8rscript AVR";
+			productName = "m8rscript AVR";
+			productReference = 49041028133CE488008D05C3 /* libm8rscriot AVR.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		8DD76F620486A84900D96B5E /* m8rscript */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB923108733DC60010E9CD /* Build configuration list for PBXNativeTarget "m8rscript" */;
@@ -140,8 +179,7 @@
 				8DD76F660486A84900D96B5E /* Frameworks */,
 			);
 			buildRules = (
-				49E6E3FA0DA5E1450065F568 /* PBXBuildRule */,
-				49E6E3DE0DA5DF890065F568 /* PBXBuildRule */,
+				49041048133D8AE4008D05C3 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -171,6 +209,7 @@
 			projectRoot = "";
 			targets = (
 				8DD76F620486A84900D96B5E /* m8rscript */,
+				49041027133CE488008D05C3 /* m8rscript AVR */,
 				499B2BF00DAE4FD100C523A5 /* Make AVR */,
 				499B2CEF0DB15C7F00C523A5 /* Program AVR */,
 			);
@@ -178,15 +217,21 @@
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		49041025133CE488008D05C3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DD76F640486A84900D96B5E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4955B38C133AB6E3001EDD20 /* lexer.ll in Sources */,
 				4955B3A5133AB92B001EDD20 /* parse.yy in Sources */,
 				8DD76F650486A84900D96B5E /* main.cpp in Sources */,
 				49DF59DC0DB598A200E75159 /* parser.cpp in Sources */,
-				4955B399133AB790001EDD20 /* lexer.cpp in Sources */,
+				4900A152133F90110036518B /* lexer.ll in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,6 +299,26 @@
 			};
 			name = Release;
 		};
+		49041029133CE488008D05C3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = atmega168;
+				FREQUENCY = 8000000;
+				PRODUCT_NAME = "m8rscriot AVR";
+				VALID_ARCHS = atmega168;
+			};
+			name = Debug;
+		};
+		4904102A133CE488008D05C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = atmega168;
+				FREQUENCY = 8000000;
+				PRODUCT_NAME = "m8rscriot AVR";
+				VALID_ARCHS = atmega168;
+			};
+			name = Release;
+		};
 		499B2BF10DAE4FD200C523A5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -313,6 +378,15 @@
 			buildConfigurations = (
 				1DEB923608733DC60010E9CD /* Debug */,
 				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4904102E133CE513008D05C3 /* Build configuration list for PBXNativeTarget "m8rscript AVR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49041029133CE488008D05C3 /* Debug */,
+				4904102A133CE488008D05C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

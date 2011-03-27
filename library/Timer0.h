@@ -35,9 +35,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include "avrEventSource.h"
+#include "EventSource.h"
 
-namespace avr {
+namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -69,10 +69,10 @@ public:
     {
         if ((v & ~TIMER_PRESCALE_MASK) != 0)
             v = 0;
-        TCCR0 = (TCCR0 & ~TIMER_PRESCALE_MASK) | v;
+        TCCR0A = (TCCR0A & ~TIMER_PRESCALE_MASK) | v;
     }
     
-    uint8_t getPrescaler() const        { return TCCR0 & TIMER_PRESCALE_MASK; }
+    uint8_t getPrescaler() const        { return TCCR0A & TIMER_PRESCALE_MASK; }
 
     void setValue(uint8_t v)            { TCNT0 = v; }
     uint16_t getValue() const           { return TCNT0; }

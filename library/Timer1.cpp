@@ -34,53 +34,55 @@ POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------*/
 
 
-#include "avrTimer1.h"
-#include "avrApplication.h"
+#include "Timer1.h"
+#include "Application.h"
 #include <avr/interrupt.h>
 
-using namespace avr;
+using namespace marrinator;
 
 Timer1* Timer1::mygTimer1 = 0;
 
 void
 Timer1::setInterruptEnable(uint8_t irpt, bool b)
 {
+    // FIXME: This is different on modern controllers
     uint8_t bit = 0;
     if (irpt == TIMER_COMPAREA)
-        bit = _BV(OCIE1);
+        bit = _BV(OCIE1A);
     else if (irpt == TIMER_OVERFLOW)
         bit = _BV(TOIE1);
     else if (irpt == TIMER_INPUT_CAPTURE)
-        bit = _BV(TICIE1);
-    TIMSK = b ? (TIMSK | bit) : (TIMSK & ~bit);
+        bit = _BV(TOIE1);
+    TIMSK0 = b ? (TIMSK0 | bit) : (TIMSK0 & ~bit);
 }
 
 bool
 Timer1::getInterruptEnable(uint8_t irpt) const
 {
+    // FIXME: This is different on modern controllers
     uint8_t bit = 0;
     if (irpt == TIMER_COMPAREA)
-        bit = _BV(OCIE1);
+        bit = _BV(OCIE1A);
     else if (irpt == TIMER_OVERFLOW)
         bit = _BV(TOIE1);
     else if (irpt == TIMER_INPUT_CAPTURE)
-        bit = _BV(TICIE1);
-    return (TIMSK & bit) != 0;
+        bit = _BV(TOIE1);
+    return (TIMSK0 & bit) != 0;
 }
 
 // Interrupt handlers
 SIGNAL(SIG_OVERFLOW1)
 {
-	avr::Application::getApplication()->addEvent(EV_TIMER1);
+	Application::getApplication()->addEvent(EV_TIMER1);
 }
 
 SIGNAL(SIG_OUTPUT_COMPARE1A)
 {
-	avr::Application::getApplication()->addEvent(EV_TIMER1);
+	Application::getApplication()->addEvent(EV_TIMER1);
 }
 
 SIGNAL(SIG_INPUT_CAPTURE1)
 {
-	avr::Application::getApplication()->addEvent(EV_TIMER1);
+	Application::getApplication()->addEvent(EV_TIMER1);
 }
 

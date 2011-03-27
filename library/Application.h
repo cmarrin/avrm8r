@@ -37,8 +37,8 @@ DAMAGE.
 
 #pragma once
 
-#include "avr.h"
-#include "avrEventSource.h"
+#include "marrinator.h"
+#include "EventSource.h"
 
 // Setup for C++ operation
 //void * operator new(size_t size); 
@@ -46,7 +46,7 @@ void operator delete(void * ptr);
 
 extern "C" void __cxa_pure_virtual(void);
 
-namespace avr {
+namespace marrinator {
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application

@@ -34,12 +34,12 @@ POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------------*/
 
 #include <avr/pgmspace.h>
-#include "avrTimer1RTC.h"
+#include "Timer1RTC.h"
 
 extern const uint8_t mygMonthDayTable[] PROGMEM;
 const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
-using namespace avr;
+using namespace marrinator;
 
 static inline bool
 isLeapYear(uint16_t year)
