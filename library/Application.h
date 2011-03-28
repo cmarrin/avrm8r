@@ -44,8 +44,6 @@ DAMAGE.
 //void * operator new(size_t size); 
 void operator delete(void * ptr); 
 
-extern "C" void __cxa_pure_virtual(void);
-
 namespace marrinator {
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -58,11 +56,11 @@ namespace marrinator {
 class Application {
 public:
     Application(bool sleep=false) : myWantsToSleep(sleep), myEventBitmap(0) { setApplication(this); }
-    virtual ~Application() { }
+    ~Application() { }
     
     static Application* getApplication()    { return mygApplication; }
     
-    virtual void processEvent(EventType type)=0;
+    void processEvent(EventType type);
     
     void run()
     {

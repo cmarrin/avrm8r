@@ -48,6 +48,6 @@ void operator delete(void * ptr)
   //free(ptr); 
 }
 
-void __cxa_pure_virtual(void) {}; 
+int main() { return 0; }
 
 Application::Application* Application::mygApplication = 0;

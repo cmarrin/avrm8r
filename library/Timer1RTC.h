@@ -92,9 +92,9 @@ public:
         setClearOnOutputCompare(true);
     }
     
-	virtual ~Timer1RTC() { }
+	~Timer1RTC() { }
     
-    virtual void onOutputCompare();
+    void onOutputCompare();
     
     void getTime(RTCTime& t) const { cli(); t = myTime; sei(); }
 
