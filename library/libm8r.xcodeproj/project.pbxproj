@@ -38,6 +38,8 @@
 		4900A2F4133FDE590036518B /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EA133F9C5B0036518B /* Timer0.cpp */; };
 		4900A2F5133FDE590036518B /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
 		4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
+		4900A3CC1340F8DF0036518B /* MAX6969.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A3CA1340F8DF0036518B /* MAX6969.cpp */; };
+		4900A3CD1340F8DF0036518B /* MAX6969.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A3CB1340F8DF0036518B /* MAX6969.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -92,6 +94,8 @@
 		4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1RTC.cpp; sourceTree = "<group>"; };
 		4900A1EF133F9C5B0036518B /* Timer1RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1RTC.h; sourceTree = "<group>"; };
 		4900A2E3133FDE330036518B /* libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libm8r.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
+		4900A3CB1340F8DF0036518B /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAX6969.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -115,6 +119,8 @@
 				4900A1E5133F9C5B0036518B /* ADC.h */,
 				4900A1D2133F9A540036518B /* EventSource.cpp */,
 				4900A1D3133F9A540036518B /* EventSource.h */,
+				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
+				4900A3CB1340F8DF0036518B /* MAX6969.h */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
 				4900A1E7133F9C5B0036518B /* ShiftReg.h */,
 				4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */,
@@ -160,6 +166,7 @@
 				4900A2EC133FDE480036518B /* Timer0.h in Headers */,
 				4900A2ED133FDE480036518B /* Timer1.h in Headers */,
 				4900A2EE133FDE480036518B /* Timer1RTC.h in Headers */,
+				4900A3CD1340F8DF0036518B /* MAX6969.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +179,7 @@
 			buildPhases = (
 				4900A2DF133FDE330036518B /* Headers */,
 				4900A2E0133FDE330036518B /* Sources */,
-				4900A3601340D2470036518B /* ShellScript */,
+				4900A3601340D2470036518B /* Create Library */,
 			);
 			buildRules = (
 				4900A3391340BE7C0036518B /* PBXBuildRule */,
@@ -225,7 +232,7 @@
 			shellPath = /bin/sh;
 			shellScript = "rm -rf ${CONFIGURATION_BUILD_DIR}/*\nrm -rf ${CONFIGURATION_TEMP_DIR}/*\necho Removed all build products";
 		};
-		4900A3601340D2470036518B /* ShellScript */ = {
+		4900A3601340D2470036518B /* Create Library */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -233,6 +240,7 @@
 			inputPaths = (
 				"${OBJECT_FILE_DIR}/*.o",
 			);
+			name = "Create Library";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${PROJECT}.a",
 			);
@@ -255,6 +263,7 @@
 				4900A2F4133FDE590036518B /* Timer0.cpp in Sources */,
 				4900A2F5133FDE590036518B /* Timer1.cpp in Sources */,
 				4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */,
+				4900A3CC1340F8DF0036518B /* MAX6969.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,9 +1,9 @@
 //
-//  avrApplication.h
+//  Application.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
-//  AVR ADC class
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)

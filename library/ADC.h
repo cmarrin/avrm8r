@@ -1,7 +1,9 @@
 //
-//  avrADC.h
+//  ADC.h
 //
 //  Created by Chris Marrin on 3/19/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)

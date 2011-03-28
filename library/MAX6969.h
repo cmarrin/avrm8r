@@ -1,5 +1,5 @@
 //
-//  ShiftReg.h
+//  MAX6969.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -38,55 +38,58 @@ DAMAGE.
 #pragma once
 
 #include "marrinator.h"
+#include "ShiftReg.h"
 
 namespace marrinator {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: ShiftReg
+//  Class: MAX6969
 //
-//  Generic shift register interface. Has variable bit length, and is 
-//  controlled by a clock and data-in bit. Clock can use leading or
-//  trailing edge.
+//  16 bit constant current LED driver.
 //
 //////////////////////////////////////////////////////////////////////////////
 	
-class ShiftReg {
+class MAX6969 : public ShiftReg {
 public:
-	ShiftReg(uint8_t clkPort, uint8_t clkBit, uint8_t dataPort, uint8_t dataBit, uint8_t bits, bool rising, bool msbFirst)
-    : myClkPort(getPort(clkPort))
-    , myClkDDR(getDDR(clkPort))
-    , myClkMask(1<<clkBit)
-    , myDataPort(getPort(dataPort))
-    , myDataDDR(getDDR(dataPort))
-    , myDataMask(1<<dataBit)
-    , myBits(bits)
-    , myRising(rising)
-    , myMSBFirst(msbFirst)
+	MAX6969(uint8_t clkPort, uint8_t clkBit, uint8_t dataPort, uint8_t dataBit, 
+                uint8_t latchPort, uint8_t latchBit, uint8_t enaPort, uint8_t enaBit)
+    : ShiftReg(clkPort, clkBit, dataPort, dataBit, 16, true, true)
+    , myLatchPort(getPort(latchPort))
+    , myLatchDDR(getDDR(latchPort))
+    , myLatchMask(1<<latchBit)
+    , myEnaPort(getPort(enaPort))
+    , myEnaDDR(getDDR(enaPort))
+    , myEnaMask(1<<enaBit)
     {
-        *myClkDDR |= myClkMask;
-        *myDataDDR |= myDataMask;
-        if (myRising)
-            *myClkPort &= ~myClkMask;
-        else
-            *myClkPort |= myClkMask;
+        *myLatchDDR |= myLatchMask;
+        *myEnaDDR |= myEnaMask;
+        *myLatchPort &= ~myLatchMask;   // latch is active on the rising edge
+        *myEnaPort |= myEnaMask;        // enable is active low
     }
     
-	~ShiftReg()		{ }
+	~MAX6969()		{ }
     
-    void clear()    { send(0); }
+    void setOutputEnable(bool e)
+    {
+        if (e) {
+            *myLatchPort |= myLatchMask;
+            *myLatchPort &= ~myLatchMask;
+            *myEnaPort &= ~myEnaMask;
+        }
+        else
+            *myEnaPort |= myEnaMask;
+    }
     
-    void send(uint8_t value, uint8_t n = 0);
-    	
+    void setChar(uint8_t c);
+    
 private:
-    volatile uint8_t*   myClkPort;
-    volatile uint8_t*   myClkDDR;
-    uint8_t             myClkMask;
-    volatile uint8_t*   myDataPort;
-    volatile uint8_t*   myDataDDR;
-    uint8_t             myDataMask;
-    uint8_t             myBits;
-	bool                myRising, myMSBFirst;
+    volatile uint8_t*   myLatchPort;
+    volatile uint8_t*   myLatchDDR;
+    uint8_t             myLatchMask;
+    volatile uint8_t*   myEnaPort;
+    volatile uint8_t*   myEnaDDR;
+    uint8_t             myEnaMask;
 };
 
 }

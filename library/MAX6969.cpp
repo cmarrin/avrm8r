@@ -1,9 +1,7 @@
 //
-//  ShiftReg.h
+//  MAX6969.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
-//
-//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -35,58 +33,37 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+#include <avr/pgmspace.h>
+#include "STP08CDC596.h"
 
-#include "marrinator.h"
+extern const uint8_t mygCharTable[] PROGMEM;
+const uint8_t mygCharTable[] =
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+extern const uint8_t mygNumTable[] PROGMEM;
+const uint8_t mygNumTable[] = 
+    { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f };
 
-namespace marrinator {
+using namespace marrinator;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: ShiftReg
-//
-//  Generic shift register interface. Has variable bit length, and is 
-//  controlled by a clock and data-in bit. Clock can use leading or
-//  trailing edge.
-//
-//////////////////////////////////////////////////////////////////////////////
-	
-class ShiftReg {
-public:
-	ShiftReg(uint8_t clkPort, uint8_t clkBit, uint8_t dataPort, uint8_t dataBit, uint8_t bits, bool rising, bool msbFirst)
-    : myClkPort(getPort(clkPort))
-    , myClkDDR(getDDR(clkPort))
-    , myClkMask(1<<clkBit)
-    , myDataPort(getPort(dataPort))
-    , myDataDDR(getDDR(dataPort))
-    , myDataMask(1<<dataBit)
-    , myBits(bits)
-    , myRising(rising)
-    , myMSBFirst(msbFirst)
-    {
-        *myClkDDR |= myClkMask;
-        *myDataDDR |= myDataMask;
-        if (myRising)
-            *myClkPort &= ~myClkMask;
-        else
-            *myClkPort |= myClkMask;
-    }
+void
+STP08CDC596::setChar(uint8_t c)
+{
+    if (c < '0')
+        c = 0;
+    else if (c <= '9')
+        c = pgm_read_byte(&(mygNumTable[c-'0']));
+    else if (c < 'A')
+        c = 0;
+    else if (c <= 'Z')
+        c = pgm_read_byte(&(mygCharTable[c-'A']));
+    else if (c < 'a')
+        c = 0;
+    else if (c <= 'z')
+        c = pgm_read_byte(&(mygCharTable[c-'a']));
+    else
+        c = 0;
     
-	~ShiftReg()		{ }
-    
-    void clear()    { send(0); }
-    
-    void send(uint8_t value, uint8_t n = 0);
-    	
-private:
-    volatile uint8_t*   myClkPort;
-    volatile uint8_t*   myClkDDR;
-    uint8_t             myClkMask;
-    volatile uint8_t*   myDataPort;
-    volatile uint8_t*   myDataDDR;
-    uint8_t             myDataMask;
-    uint8_t             myBits;
-	bool                myRising, myMSBFirst;
-};
-
+    send(c);
 }
+
