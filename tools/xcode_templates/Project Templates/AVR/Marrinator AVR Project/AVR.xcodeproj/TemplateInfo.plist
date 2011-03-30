@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>This project builds a hex file for AVR microcontrollers and uploads it using a variety of common programmer hardware. It is setup to link with the Marrinator library (https://github.com/cmarrin/marrinator) and gives you a source file to start you off.</string>
+</dict>
+</plist>
