@@ -1,0 +1,4 @@
+To install, run:
+
+cp -rf Project\ Templates ~/Library/Application\ Support/Developer/Shared/Xcode/
+
