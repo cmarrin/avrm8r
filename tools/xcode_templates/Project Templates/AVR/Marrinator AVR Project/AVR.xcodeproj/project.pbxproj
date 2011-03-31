@@ -3,8 +3,22 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 45;
 	objects = {
+
+/* Begin PBXAggregateTarget section */
+		49346909134403EF005C85D6 /* Clean */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4934690B1344040D005C85D6 /* Build configuration list for PBXAggregateTarget "Clean" */;
+			buildPhases = (
+				49346908134403EF005C85D6 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Clean;
+			productName = "Clean 2";
+		};
+/* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
 		4900A2EF133FDE590036518B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* main.cpp */; };
@@ -31,15 +45,13 @@
 			);
 			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
 		};
-		4900A3391340BE7C0036518B /* PBXBuildRule */ = {
+		4955B5A41344028B001EDD20 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			fileType = "compiled.mach-o.objfile";
 			isEditable = 1;
 			outputFiles = (
-				"",
 			);
-			script = "";
 		};
 /* End PBXBuildRule section */
 
@@ -52,7 +64,6 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				4900A2A1133FDCC90036518B /* Resources */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
 			);
 			name = "«PROJECTNAME»";
@@ -69,7 +80,6 @@
 		19C28FB6FE9D52B211CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4900A2E3133FDE330036518B /* «PROJECTNAME».hex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -77,49 +87,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0142E2590A37DAD800461F0A /* Clean */ = {
-			isa = PBXNativeTarget;
-			buildArgumentsString = "$(ACTION) clean";
-			buildConfigurationList = 0142E25A0A37DAD800461F0A /* Build configuration list for PBXNativeTarget "Clean" */;
-			buildPhases = (
-				4900A32C1340B11A0036518B /* ShellScript */,
-			);
-			buildToolPath = /usr/bin/make;
-			dependencies = (
-			);
-			name = Clean;
-			passBuildSettingsInEnvironment = 1;
-			productName = Program;
-		};
-		01706F540A347F6900E43B08 /* Make Executable */ = {
-			isa = PBXNativeTarget;
-			buildArgumentsString = "$(ACTION)";
-			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Make Executable" */;
-			buildPhases = (
-			);
-			buildToolPath = /usr/bin/make;
-			dependencies = (
-			);
-			name = "Make Executable";
-			passBuildSettingsInEnvironment = 1;
-			productName = Make;
-		};
 		4900A2E2133FDE330036518B /* Build */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
+			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Make Executable" */;
 			buildPhases = (
 				4900A2E0133FDE330036518B /* Sources */,
+				4955B5661343FBFF001EDD20 /* Create elf */,
+				493469131344045F005C85D6 /* Create hex */,
 			);
 			buildRules = (
+				4955B5A41344028B001EDD20 /* PBXBuildRule */,
 				4900A2FA133FDEF10036518B /* PBXBuildRule */,
 				4900A2FB133FDEF10036518B /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
-			name = "Build";
-			passBuildSettingsInEnvironment = 1;
+			name = Build;
 			productName = Build;
-			productReference = 4900A2E3133FDE330036518B /* «PROJECTNAME».hex */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -127,22 +111,28 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 01706F350A34762900E43B08 /* Build configuration list for PBXProject "AVR" */;
+			buildConfigurationList = 01706F350A34762900E43B08 /* Build configuration list for PBXProject "«PROJECTNAME»" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* «PROJECTNAME» */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				4900A2E2133FDE330036518B /* Build */,
-				01706F540A347F6900E43B08 /* Make Executable */,
-				0142E2590A37DAD800461F0A /* Clean */,
+				49346909134403EF005C85D6 /* Clean */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4900A32C1340B11A0036518B /* ShellScript */ = {
+		49346908134403EF005C85D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -154,6 +144,38 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rm -rf ${CONFIGURATION_BUILD_DIR}/*\nrm -rf ${CONFIGURATION_TEMP_DIR}/*\necho Removed all build products";
+		};
+		493469131344045F005C85D6 /* Create hex */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
+			);
+			name = "Create hex";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${PROJECT}.hex",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Creating .hex file\"\n/opt/local/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
+		};
+		4955B5661343FBFF001EDD20 /* Create elf */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${OBJECT_FILE_DIR}/*.o",
+			);
+			name = "Create elf";
+			outputPaths = (
+				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Linking\"\n/opt/local/bin/avr-gcc ${LDFLAGS} ${OBJECT_FILE_DIR}/*.o -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -169,17 +191,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0142E25C0A37DAD800461F0A /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = Program;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
 		01706F370A34762900E43B08 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -214,18 +225,21 @@
 			};
 			name = Deployment;
 		};
+		4934690A134403EF005C85D6 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = "Clean 2";
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0142E25A0A37DAD800461F0A /* Build configuration list for PBXNativeTarget "Clean" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0142E25C0A37DAD800461F0A /* Deployment */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		01706F350A34762900E43B08 /* Build configuration list for PBXProject "AVR" */ = {
+		01706F350A34762900E43B08 /* Build configuration list for PBXProject "avrfoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01706F370A34762900E43B08 /* Deployment */,
@@ -240,7 +254,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
-			productType = "com.apple.product-type.library.static";
+		};
+		4934690B1344040D005C85D6 /* Build configuration list for PBXAggregateTarget "Clean" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4934690A134403EF005C85D6 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,0 +1,12 @@
+How to setup for XCode AVR development
+
+1) Install macports: http://www.macports.org/install.php
+
+2) Install AVR tools:
+
+    sudo port install avr-binutils avr-gcc avr-libc avrdude
+
+3) Install XCode templates:
+
+cp -rf Project\ Templates/xcode_templates/* ~/Library/Application\ Support/Developer/Shared/Xcode/
+
