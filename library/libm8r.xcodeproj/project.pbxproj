@@ -18,62 +18,83 @@
 			name = clean;
 			productName = m8r2;
 		};
+		49EF3963134570F100519468 /* Marrinator */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 49EF39661345711000519468 /* Build configuration list for PBXAggregateTarget "Marrinator" */;
+			buildPhases = (
+				49EF3962134570F100519468 /* Copy Headers */,
+				49EF397B134571E600519468 /* Copy Sources */,
+			);
+			dependencies = (
+			);
+			name = Marrinator;
+			productName = Marrinator;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		4900A2E6133FDE480036518B /* Application.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
-		4900A2E7133FDE480036518B /* marrinator.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1C9133F954B0036518B /* marrinator.h */; };
-		4900A2E8133FDE480036518B /* EventSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
-		4900A2E9133FDE480036518B /* ADC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
-		4900A2EA133FDE480036518B /* ShiftReg.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E7133F9C5B0036518B /* ShiftReg.h */; };
-		4900A2EB133FDE480036518B /* STP08CDC596.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E9133F9C5B0036518B /* STP08CDC596.h */; };
-		4900A2EC133FDE480036518B /* Timer0.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EB133F9C5B0036518B /* Timer0.h */; };
-		4900A2ED133FDE480036518B /* Timer1.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1ED133F9C5B0036518B /* Timer1.h */; };
-		4900A2EE133FDE480036518B /* Timer1RTC.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EF133F9C5B0036518B /* Timer1RTC.h */; };
-		4900A2EF133FDE590036518B /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
-		4900A2F0133FDE590036518B /* EventSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
-		4900A2F1133FDE590036518B /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
-		4900A2F2133FDE590036518B /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
-		4900A2F3133FDE590036518B /* STP08CDC596.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */; };
-		4900A2F4133FDE590036518B /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EA133F9C5B0036518B /* Timer0.cpp */; };
-		4900A2F5133FDE590036518B /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
-		4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
-		4900A3CC1340F8DF0036518B /* MAX6969.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A3CA1340F8DF0036518B /* MAX6969.cpp */; };
-		4900A3CD1340F8DF0036518B /* MAX6969.h in Headers */ = {isa = PBXBuildFile; fileRef = 4900A3CB1340F8DF0036518B /* MAX6969.h */; };
+		49EF39671345712400519468 /* marrinator.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1C9133F954B0036518B /* marrinator.h */; };
+		49EF39681345712400519468 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
+		49EF39691345712400519468 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
+		49EF396A1345712400519468 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
+		49EF396B1345712400519468 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A3CB1340F8DF0036518B /* MAX6969.h */; };
+		49EF396C1345712400519468 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E7133F9C5B0036518B /* ShiftReg.h */; };
+		49EF396D1345712400519468 /* STP08CDC596.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E9133F9C5B0036518B /* STP08CDC596.h */; };
+		49EF396E1345712400519468 /* Timer0.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EB133F9C5B0036518B /* Timer0.h */; };
+		49EF396F1345712400519468 /* Timer1.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1ED133F9C5B0036518B /* Timer1.h */; };
+		49EF39701345712400519468 /* Timer1RTC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EF133F9C5B0036518B /* Timer1RTC.h */; };
+		49EF3972134571C800519468 /* Application.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		49EF3973134571C800519468 /* ADC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
+		49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
+		49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A3CA1340F8DF0036518B /* MAX6969.cpp */; };
+		49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
+		49EF3977134571C800519468 /* STP08CDC596.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E8133F9C5B0036518B /* STP08CDC596.cpp */; };
+		49EF3978134571C800519468 /* Timer0.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EA133F9C5B0036518B /* Timer0.cpp */; };
+		49EF3979134571C800519468 /* Timer1.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
+		49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildRule section */
-		4900A2FA133FDEF10036518B /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			fileType = sourcecode.c;
-			isEditable = 1;
-			outputFiles = (
-				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
+/* Begin PBXCopyFilesBuildPhase section */
+		49EF3962134570F100519468 /* Copy Headers */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(USER_LIBRARY_DIR)/Marrinator/Headers";
+			dstSubfolderSpec = 0;
+			files = (
+				49EF39671345712400519468 /* marrinator.h in Copy Headers */,
+				49EF39681345712400519468 /* Application.h in Copy Headers */,
+				49EF39691345712400519468 /* ADC.h in Copy Headers */,
+				49EF396A1345712400519468 /* EventSource.h in Copy Headers */,
+				49EF396B1345712400519468 /* MAX6969.h in Copy Headers */,
+				49EF396C1345712400519468 /* ShiftReg.h in Copy Headers */,
+				49EF396D1345712400519468 /* STP08CDC596.h in Copy Headers */,
+				49EF396E1345712400519468 /* Timer0.h in Copy Headers */,
+				49EF396F1345712400519468 /* Timer1.h in Copy Headers */,
+				49EF39701345712400519468 /* Timer1RTC.h in Copy Headers */,
 			);
-			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${EXTRAS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
+			name = "Copy Headers";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4900A2FB133FDEF10036518B /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			fileType = sourcecode.cpp;
-			isEditable = 1;
-			outputFiles = (
-				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
+		49EF397B134571E600519468 /* Copy Sources */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(USER_LIBRARY_DIR)/Marrinator/Sources";
+			dstSubfolderSpec = 0;
+			files = (
+				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
+				49EF3973134571C800519468 /* ADC.cpp in Copy Sources */,
+				49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */,
+				49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */,
+				49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */,
+				49EF3977134571C800519468 /* STP08CDC596.cpp in Copy Sources */,
+				49EF3978134571C800519468 /* Timer0.cpp in Copy Sources */,
+				49EF3979134571C800519468 /* Timer1.cpp in Copy Sources */,
+				49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */,
 			);
-			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${EXTRAS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+			name = "Copy Sources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4900A3391340BE7C0036518B /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.proxy.script;
-			fileType = "compiled.mach-o.objfile";
-			isEditable = 1;
-			outputFiles = (
-				"",
-			);
-			script = "";
-		};
-/* End PBXBuildRule section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
@@ -93,7 +114,6 @@
 		4900A1ED133F9C5B0036518B /* Timer1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1.h; sourceTree = "<group>"; };
 		4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1RTC.cpp; sourceTree = "<group>"; };
 		4900A1EF133F9C5B0036518B /* Timer1RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1RTC.h; sourceTree = "<group>"; };
-		4900A2E3133FDE330036518B /* libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libm8r.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
 		4900A3CB1340F8DF0036518B /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAX6969.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,7 +158,6 @@
 		19C28FB6FE9D52B211CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4900A2E3133FDE330036518B /* libm8r.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,49 +170,6 @@
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		4900A2DF133FDE330036518B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4900A2E6133FDE480036518B /* Application.h in Headers */,
-				4900A2E7133FDE480036518B /* marrinator.h in Headers */,
-				4900A2E8133FDE480036518B /* EventSource.h in Headers */,
-				4900A2E9133FDE480036518B /* ADC.h in Headers */,
-				4900A2EA133FDE480036518B /* ShiftReg.h in Headers */,
-				4900A2EB133FDE480036518B /* STP08CDC596.h in Headers */,
-				4900A2EC133FDE480036518B /* Timer0.h in Headers */,
-				4900A2ED133FDE480036518B /* Timer1.h in Headers */,
-				4900A2EE133FDE480036518B /* Timer1RTC.h in Headers */,
-				4900A3CD1340F8DF0036518B /* MAX6969.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-/* Begin PBXNativeTarget section */
-		4900A2E2133FDE330036518B /* m8r */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4900A2F9133FDE770036518B /* Build configuration list for PBXNativeTarget "m8r" */;
-			buildPhases = (
-				4900A2DF133FDE330036518B /* Headers */,
-				4900A2E0133FDE330036518B /* Sources */,
-				4900A3601340D2470036518B /* Create Library */,
-			);
-			buildRules = (
-				4900A3391340BE7C0036518B /* PBXBuildRule */,
-				4900A2FA133FDEF10036518B /* PBXBuildRule */,
-				4900A2FB133FDEF10036518B /* PBXBuildRule */,
-			);
-			dependencies = (
-			);
-			name = m8r;
-			productName = m8r;
-			productReference = 4900A2E3133FDE330036518B /* libm8r.a */;
-			productType = "com.apple.product-type.library.static";
-		};
-/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		089C1669FE841209C02AAC07 /* Project object */ = {
@@ -212,8 +188,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4900A2E2133FDE330036518B /* m8r */,
 				4900A32D1340B11A0036518B /* clean */,
+				49EF3963134570F100519468 /* Marrinator */,
 			);
 		};
 /* End PBXProject section */
@@ -232,42 +208,7 @@
 			shellPath = /bin/sh;
 			shellScript = "rm -rf ${CONFIGURATION_BUILD_DIR}/*\nrm -rf ${CONFIGURATION_TEMP_DIR}/*\necho Removed all build products";
 		};
-		4900A3601340D2470036518B /* Create Library */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${OBJECT_FILE_DIR}/*.o",
-			);
-			name = "Create Library";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${PROJECT}.a",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Linking\"\n/opt/local/bin/avr-ar rcs ${TARGET_BUILD_DIR}/${PROJECT}.a ${OBJECT_FILE_DIR}/*.o\n";
-		};
 /* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		4900A2E0133FDE330036518B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4900A2EF133FDE590036518B /* Application.cpp in Sources */,
-				4900A2F0133FDE590036518B /* EventSource.cpp in Sources */,
-				4900A2F1133FDE590036518B /* ADC.cpp in Sources */,
-				4900A2F2133FDE590036518B /* ShiftReg.cpp in Sources */,
-				4900A2F3133FDE590036518B /* STP08CDC596.cpp in Sources */,
-				4900A2F4133FDE590036518B /* Timer0.cpp in Sources */,
-				4900A2F5133FDE590036518B /* Timer1.cpp in Sources */,
-				4900A2F6133FDE590036518B /* Timer1RTC.cpp in Sources */,
-				4900A3CC1340F8DF0036518B /* MAX6969.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB911F08733D790010E9CD /* Debug */ = {
@@ -296,52 +237,6 @@
 			};
 			name = Release;
 		};
-		4900A2E4133FDE340036518B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = atmega168;
-				COPY_PHASE_STRIP = NO;
-				EXTRAS = "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
-				FREQUENCY = 8000000;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = /opt/local/avr/include;
-				INSTALL_PATH = /usr/local/lib;
-				ONLY_ACTIVE_ARCH = NO;
-				PREBINDING = NO;
-				PRODUCT_NAME = m8r;
-				SKIP_INSTALL = YES;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
-				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
-			};
-			name = Debug;
-		};
-		4900A2E5133FDE340036518B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = atmega168;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EXTRAS = "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
-				FREQUENCY = 8000000;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				HEADER_SEARCH_PATHS = /opt/local/avr/include;
-				INSTALL_PATH = /usr/local/lib;
-				ONLY_ACTIVE_ARCH = NO;
-				PREBINDING = NO;
-				PRODUCT_NAME = m8r;
-				SKIP_INSTALL = YES;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
-				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		4900A32E1340B11B0036518B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -363,6 +258,27 @@
 			};
 			name = Release;
 		};
+		49EF3964134570F200519468 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = Marrinator;
+			};
+			name = Debug;
+		};
+		49EF3965134570F200519468 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Marrinator;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -375,20 +291,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4900A2F9133FDE770036518B /* Build configuration list for PBXNativeTarget "m8r" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4900A2E4133FDE340036518B /* Debug */,
-				4900A2E5133FDE340036518B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		4900A3301340B13B0036518B /* Build configuration list for PBXAggregateTarget "clean" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4900A32E1340B11B0036518B /* Debug */,
 				4900A32F1340B11B0036518B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49EF39661345711000519468 /* Build configuration list for PBXAggregateTarget "Marrinator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49EF3964134570F200519468 /* Debug */,
+				49EF3965134570F200519468 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
