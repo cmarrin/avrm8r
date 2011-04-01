@@ -1,5 +1,4 @@
-#include <avr/io.h>
-#include <avr/interrupt.h>
+#include <marrinator.h>
 
 int main( void )
 {
