@@ -1,0 +1,317 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		49346909134403EF005C85D6 /* Clean */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4934690B1344040D005C85D6 /* Build configuration list for PBXAggregateTarget "Clean" */;
+			buildPhases = (
+				49346908134403EF005C85D6 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Clean;
+			productName = Clean;
+		};
+		4990FD941344BAD700F96FEF /* Program */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4990FD981344BB0E00F96FEF /* Build configuration list for PBXAggregateTarget "Program" */;
+			buildPhases = (
+				4990FD931344BAD700F96FEF /* ShellScript */,
+			);
+			dependencies = (
+				4990FD971344BAF000F96FEF /* PBXTargetDependency */,
+			);
+			name = Program;
+			productName = Program;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		4900A2EF133FDE590036518B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* main.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		4900A2FA133FDEF10036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
+		};
+		4900A2FB133FDEF10036518B /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.cpp;
+			isEditable = 1;
+			outputFiles = (
+				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+		};
+		4955B5A41344028B001EDD20 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = "compiled.mach-o.objfile";
+			isEditable = 1;
+			outputFiles = (
+			);
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		4990FD961344BAF000F96FEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4900A2E2133FDE330036518B;
+			remoteInfo = Build;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4900A1A7133F92730036518B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4990FD7A1344B7E400F96FEF /* etherclock.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.hex; path = build/Deployment/etherclock.hex; sourceTree = "<group>"; };
+		4990FD7B1344B7E400F96FEF /* etherclock.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.map; path = build/Deployment/etherclock.map; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* etherclock */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AFFE84173DC02AAC07 /* Source */,
+				19C28FB6FE9D52B211CA2CBB /* Products */,
+			);
+			name = etherclock;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4900A1A7133F92730036518B /* main.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB6FE9D52B211CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4990FD7A1344B7E400F96FEF /* etherclock.hex */,
+				4990FD7B1344B7E400F96FEF /* etherclock.map */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4900A2E2133FDE330036518B /* Build */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
+			buildPhases = (
+				4900A2E0133FDE330036518B /* Sources */,
+				4955B5661343FBFF001EDD20 /* Create elf */,
+				493469131344045F005C85D6 /* Create hex */,
+			);
+			buildRules = (
+				4955B5A41344028B001EDD20 /* PBXBuildRule */,
+				4900A2FA133FDEF10036518B /* PBXBuildRule */,
+				4900A2FB133FDEF10036518B /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = Build;
+			productName = Build;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 01706F350A34762900E43B08 /* Build configuration list for PBXProject "etherclock" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* etherclock */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4900A2E2133FDE330036518B /* Build */,
+				49346909134403EF005C85D6 /* Clean */,
+				4990FD941344BAD700F96FEF /* Program */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49346908134403EF005C85D6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf ${CONFIGURATION_BUILD_DIR}/*\nrm -rf ${CONFIGURATION_TEMP_DIR}/*\necho Removed all build products";
+		};
+		493469131344045F005C85D6 /* Create hex */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
+			);
+			name = "Create hex";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${PROJECT}.hex",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Creating .hex file\"\n/opt/local/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
+		};
+		4955B5661343FBFF001EDD20 /* Create elf */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${OBJECT_FILE_DIR}/*.o",
+			);
+			name = "Create elf";
+			outputPaths = (
+				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
+				"${TARGET_BUILD_DIR}/${PROJECT}.map",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n/opt/local/bin/avr-gcc ${LDFLAGS} ${OBJECT_FILE_DIR}/*.o -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
+		};
+		4990FD931344BAD700F96FEF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${TARGET_BUILD_DIR}/${PROJECT}.hex",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo Programming\n/opt/local/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${ARCHS} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4900A2E0133FDE330036518B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4900A2EF133FDE590036518B /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4990FD971344BAF000F96FEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4900A2E2133FDE330036518B /* Build */;
+			targetProxy = 4990FD961344BAF000F96FEF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		01706F370A34762900E43B08 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = atmega168;
+				AVRDUDE_PORT = /dev/cu.usbserial;
+				AVRDUDE_PROGRAMMER = stk500v1;
+				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
+				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/Marrinator/Headers";
+				FREQUENCY = 8000000;
+				PRODUCT_NAME = etherclock;
+				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
+			};
+			name = Deployment;
+		};
+		01706F570A347F8800E43B08 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Build;
+			};
+			name = Deployment;
+		};
+		4934690A134403EF005C85D6 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Clean;
+			};
+			name = Deployment;
+		};
+		4990FD951344BAD700F96FEF /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Program;
+			};
+			name = Deployment;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01706F350A34762900E43B08 /* Build configuration list for PBXProject "etherclock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01706F370A34762900E43B08 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01706F570A347F8800E43B08 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4934690B1344040D005C85D6 /* Build configuration list for PBXAggregateTarget "Clean" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4934690A134403EF005C85D6 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		4990FD981344BB0E00F96FEF /* Build configuration list for PBXAggregateTarget "Program" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4990FD951344BAD700F96FEF /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
