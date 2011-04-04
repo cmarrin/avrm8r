@@ -36,10 +36,10 @@ DAMAGE.
 #include "EventSource.h"
 #include "Application.h"
 
-using namespace marrinator;
+using namespace m8r;
 
 void
 EventSource::addEvent(EventType type)
 {
-	Application::getApplication()->addEvent(type);
+	Application::application()->addEvent(type);
 }

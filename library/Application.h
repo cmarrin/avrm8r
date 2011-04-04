@@ -37,14 +37,14 @@ DAMAGE.
 
 #pragma once
 
-#include "marrinator.h"
+#include "m8r.h"
 #include "EventSource.h"
 
 // Setup for C++ operation
 //void * operator new(size_t size); 
 void operator delete(void * ptr); 
 
-namespace marrinator {
+namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application
@@ -55,22 +55,14 @@ namespace marrinator {
     
 class Application {
 public:
-    Application(bool sleep=false) : myWantsToSleep(sleep), myEventBitmap(0) { setApplication(this); }
-    ~Application() { }
+    Application() : myEventBitmap(0) { }
     
-    static Application* getApplication()    { return mygApplication; }
+    static Application* application();
     
+    void initialize();
     void processEvent(EventType type);
     
-    void run()
-    {
-        while(1) {
-            while (!hasEvent())
-                wait();
-            EventType event = nextEvent();
-            processEvent(event);
-        }
-    }
+    void run();
     
     void addEvent(EventType type)
     {
@@ -78,7 +70,6 @@ public:
     }
             
 private:
-    static void setApplication(Application* app)    { mygApplication = app; }
     bool hasEvent() const
     {
         return myEventBitmap != 0;
@@ -99,9 +90,8 @@ private:
     {
     }
     
-    static Application* mygApplication;
-    bool                myWantsToSleep;
-    volatile uint32_t   myEventBitmap;
+    static Application* m_application;
+    volatile uint32_t myEventBitmap;
 };
 
 }

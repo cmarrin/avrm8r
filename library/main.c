@@ -1,9 +1,7 @@
 //
-//  ShiftReg.h
+//  main.c
 //
 //  Created by Chris Marrin on 3/19/2011.
-//
-//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -35,54 +33,13 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+void main() __attribute__((noreturn));
 
-#include "m8r.h"
+void _main();
 
-namespace m8r {
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: ShiftReg
-//
-//  Generic shift register interface. Has variable bit length, and is 
-//  controlled by a clock and data-in bit. Clock can use leading or
-//  trailing edge.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class ShiftRegBase {
-    void send(volatile uint8_t& clk, uint8_t clkBit, volatile uint8_t& data, uint8_t dataBit, 
-              uint8_t v, uint8_t n, bool rising, bool msbFirst);
-};
-
-template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit>
-class ShiftReg : ShiftRegBase {
-public:
-	ShiftReg(bool rising, bool msbFirst)
-    : m_rising(rising)
-    , m_msbFirst(msbFirst)
-    {
-        m_clockPort.setDDRBit(ClockBit);
-        m_dataPort.setDDRBit(DataBit);
-        m_clockPort.setPortBit(ClockBit, !m_rising);
-    }
-    
-    void clear()    { send(0); }
-    
-    void send(uint8_t v, uint8_t n)
-    {
-        ShiftRegBase::send(m_clockPort.getPortAddress(), ClockBit, m_dataPort.getPortAddress(), DataBit, 
-                           v, n, m_rising, m_msbFirst);
-    }
-    	
-private:
-    uint8_t clockMask() const { return _BV(ClockBit); }
-    uint8_t dataMask() const { return _BV(DataBit); }
-    
-    ClockPort m_clockPort;
-    DataPort m_dataPort;
-	bool m_rising, m_msbFirst;
-};
-
+void main()
+{
+    _main();
+    while(1);
 }
+

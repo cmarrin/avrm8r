@@ -37,10 +37,10 @@ DAMAGE.
 
 #pragma once
 
-#include "marrinator.h"
+#include "m8r.h"
 #include "ShiftReg.h"
 
-namespace marrinator {
+namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -49,47 +49,46 @@ namespace marrinator {
 //  16 bit constant current LED driver.
 //
 //////////////////////////////////////////////////////////////////////////////
-	
-class MAX6969 : public ShiftReg {
+
+class MAX6969Base {
+    uint8_t patternFromChar(uint8_t c) const;
+};
+
+template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit,
+          class LatchPort, uint8_t LatchBit, class EnablePort, uint8_t EnableBit>
+class MAX6969 : public ShiftReg<ClockPort, ClockBit, DataPort, DataBit>, public MAX6969Base {
 public:
-	MAX6969(uint8_t clkPort, uint8_t clkBit, uint8_t dataPort, uint8_t dataBit, 
-                uint8_t latchPort, uint8_t latchBit, uint8_t enaPort, uint8_t enaBit)
-    : ShiftReg(clkPort, clkBit, dataPort, dataBit, 16, true, true)
-    , myLatchPort(getPort(latchPort))
-    , myLatchDDR(getDDR(latchPort))
-    , myLatchMask(1<<latchBit)
-    , myEnaPort(getPort(enaPort))
-    , myEnaDDR(getDDR(enaPort))
-    , myEnaMask(1<<enaBit)
+    MAX6969()
+    : ShiftReg<ClockPort, ClockBit, DataPort, DataBit>(true, true)
     {
-        *myLatchDDR |= myLatchMask;
-        *myEnaDDR |= myEnaMask;
-        *myLatchPort &= ~myLatchMask;   // latch is active on the rising edge
-        *myEnaPort |= myEnaMask;        // enable is active low
+        // latch is active on the rising edge
+        m_latchPort.setPortBit(LatchBit, false);
+        m_latchPort.setDDRBit(LatchBit, true);
+
+        // enable is active low
+        m_enablePort.setPortBit(EnableBit, true);
+        m_enablePort.setDDRBit(EnableBit, true);
+        
+        ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::send(0, 8);
+        ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::send(0, 8);
     }
-    
-	~MAX6969()		{ }
-    
+
     void setOutputEnable(bool e)
     {
         if (e) {
-            *myLatchPort |= myLatchMask;
-            *myLatchPort &= ~myLatchMask;
-            *myEnaPort &= ~myEnaMask;
+            m_latchPort.setPortBit(LatchBit, true);
+            m_latchPort.setPortBit(LatchBit, false);
+            m_enablePort.setPortBit(EnableBit, false);
         }
         else
-            *myEnaPort |= myEnaMask;
+            m_enablePort.setPortBit(EnableBit, true);
     }
     
-    void setChar(uint8_t c);
+    void setChar(uint8_t c) { send(patternFromChar(c), 8); }
     
 private:
-    volatile uint8_t*   myLatchPort;
-    volatile uint8_t*   myLatchDDR;
-    uint8_t             myLatchMask;
-    volatile uint8_t*   myEnaPort;
-    volatile uint8_t*   myEnaDDR;
-    uint8_t             myEnaMask;
+    LatchPort m_latchPort;
+    EnablePort m_enablePort;
 };
 
 }

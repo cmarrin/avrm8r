@@ -37,10 +37,10 @@ DAMAGE.
 
 #pragma once
 
-#include "marrinator.h"
+#include "m8r.h"
 #include "ShiftReg.h"
 
-namespace marrinator {
+namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //

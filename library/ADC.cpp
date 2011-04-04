@@ -36,7 +36,7 @@ DAMAGE.
 #include "ADC.h"
 #include "Application.h"
 
-using namespace marrinator;
+using namespace m8r;
 
 // FIXME: Add handling of ADC channel
 
@@ -73,7 +73,7 @@ ADC::convert10Bit()
 SIGNAL(SIG_ADC)
 {
     ADCSRA &= ~_BV(ADIE);    // disable ADC interrupts
-    marrinator::Application::getApplication()->addEvent(EV_ADC);
+    Application::application()->addEvent(EV_ADC);
 }
 
 

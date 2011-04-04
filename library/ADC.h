@@ -37,14 +37,14 @@ DAMAGE.
 
 #pragma once
 
-#include "marrinator.h"
+#include "m8r.h"
 #include <avr/interrupt.h>
 
 #include "EventSource.h"
 
 #undef ADC
 
-namespace marrinator {
+namespace m8r {
 
 // defines - borrowed from avrlib by Pascal Stang - Copyright (C) 2002
 

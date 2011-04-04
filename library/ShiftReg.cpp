@@ -35,30 +35,29 @@ DAMAGE.
 
 #include "ShiftReg.h"
 
-using namespace marrinator;
+using namespace m8r;
 
-void 
-ShiftReg::send(uint8_t value, uint8_t n)
+void
+ShiftRegBase::send(volatile uint8_t& clk, uint8_t clkBit, volatile uint8_t& data, uint8_t dataBit, 
+                   uint8_t v, uint8_t n, bool rising, bool msbFirst)
 {
-    if (n == 0)
-        n = myBits;
-    for (uint8_t mask = myMSBFirst ? 0x80 : 1; n > 0; --n) {
+    for (uint8_t mask = msbFirst ? 0x80 : 1; n > 0; --n) {
         // set data bit
-        if ((value & mask) != 0)
-            *myDataPort |= myDataMask;
+        if ((v & mask) != 0)
+            data |= _BV(dataBit);
         else
-            *myDataPort &= ~myDataMask;
+            data &= ~_BV(dataBit);
 
         // clock in data
-        if (myRising) {
-            *myClkPort |= myClkMask;
-            *myClkPort &= ~myClkMask;
+        if (rising) {
+            clk |= _BV(clkBit);
+            clk &= ~_BV(clkBit);
         }
         else {
-            *myClkPort &= ~myClkMask;
-            *myClkPort |= myClkMask;
+            clk &= ~_BV(clkBit);
+            clk |= _BV(clkBit);
         }
 
-        mask = myMSBFirst ? (mask >> 1) : (mask << 1);
+        mask = msbFirst ? (mask >> 1) : (mask << 1);
     }
 }

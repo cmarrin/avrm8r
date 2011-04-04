@@ -39,7 +39,7 @@ DAMAGE.
 extern const uint8_t mygMonthDayTable[] PROGMEM;
 const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
-using namespace marrinator;
+using namespace m8r;
 
 static inline bool
 isLeapYear(uint16_t year)

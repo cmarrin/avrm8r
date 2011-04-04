@@ -37,9 +37,9 @@ DAMAGE.
 
 #pragma once
 
-#include "marrinator.h"
+#include "m8r.h"
 
-namespace marrinator {
+namespace m8r {
 
 // Event sources
 enum EventType {

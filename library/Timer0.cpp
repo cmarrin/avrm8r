@@ -37,7 +37,7 @@ DAMAGE.
 #include "Application.h"
 #include <avr/interrupt.h>
 
-using namespace marrinator;
+using namespace m8r;
 
 Timer0* Timer0::mygTimer0 = 0;
 
@@ -66,6 +66,6 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 // Interrupt handlers
 SIGNAL(SIG_OVERFLOW0)
 {
-	Application::getApplication()->addEvent(EV_TIMER0);
+	Application::application()->addEvent(EV_TIMER0);
 }
 

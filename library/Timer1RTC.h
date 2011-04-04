@@ -40,7 +40,7 @@ DAMAGE.
 #include <avr/interrupt.h>
 #include "Timer1.h"
 
-namespace marrinator {
+namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //

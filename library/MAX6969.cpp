@@ -34,7 +34,7 @@ DAMAGE.
 */
 
 #include <avr/pgmspace.h>
-#include "STP08CDC596.h"
+#include "MAX6969.h"
 
 extern const uint8_t mygCharTable[] PROGMEM;
 const uint8_t mygCharTable[] =
@@ -44,26 +44,24 @@ extern const uint8_t mygNumTable[] PROGMEM;
 const uint8_t mygNumTable[] = 
     { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f };
 
-using namespace marrinator;
+using namespace m8r;
 
-void
-STP08CDC596::setChar(uint8_t c)
+uint8_t
+MAX6969Base::patternFromChar(uint8_t c) const
 {
     if (c < '0')
-        c = 0;
+        return 0;
     else if (c <= '9')
-        c = pgm_read_byte(&(mygNumTable[c-'0']));
+        return pgm_read_byte(&(mygNumTable[c-'0']));
     else if (c < 'A')
-        c = 0;
+        return 0;
     else if (c <= 'Z')
-        c = pgm_read_byte(&(mygCharTable[c-'A']));
+        return pgm_read_byte(&(mygCharTable[c-'A']));
     else if (c < 'a')
-        c = 0;
+        return 0;
     else if (c <= 'z')
-        c = pgm_read_byte(&(mygCharTable[c-'a']));
+        return pgm_read_byte(&(mygCharTable[c-'a']));
     else
-        c = 0;
-    
-    send(c);
+        return 0;
 }
 

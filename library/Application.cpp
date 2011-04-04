@@ -35,18 +35,43 @@ DAMAGE.
 
 #include "Application.h"
 
-using namespace marrinator;
+using namespace m8r;
 
-//void * operator new(size_t size) 
-//{ 
-//  return malloc(size); 
-//} 
+Application* Application::m_application;
+
+Application* Application::application()
+{
+    if (!m_application)
+        m_application = new Application();
+    return m_application;
+}
+
+void
+Application::run()
+{
+    while(1) {
+        while (!hasEvent())
+            wait();
+        EventType event = nextEvent();
+        processEvent(event);
+    }
+}
+    
+/*
+void * operator new(size_t size) 
+{ 
+    return malloc(size); 
+} 
 
 void operator delete(void * ptr) 
 { 
-  //free(ptr); 
+  free(ptr); 
+}
+*/
+
+void _main()
+{
+    Application::application()->initialize();
+    Application::application()->run();
 }
 
-int main() { return 0; }
-
-Application::Application* Application::mygApplication = 0;
