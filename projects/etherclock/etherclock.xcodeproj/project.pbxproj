@@ -79,7 +79,7 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
-		495F1C42134979C60059E738 /* libBuild libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libBuild libm8r.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		495F1C42134979C60059E738 /* libBuild libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libBuild libm8r.a"; path = "/Volumes/Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Deployment/libBuild libm8r.a"; sourceTree = "<absolute>"; };
 		4990FD7A1344B7E400F96FEF /* etherclock.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.hex; path = build/Deployment/etherclock.hex; sourceTree = "<group>"; };
 		4990FD7B1344B7E400F96FEF /* etherclock.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.map; path = build/Deployment/etherclock.map; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,7 +117,6 @@
 			children = (
 				4990FD7A1344B7E400F96FEF /* etherclock.hex */,
 				4990FD7B1344B7E400F96FEF /* etherclock.map */,
-				495F1C42134979C60059E738 /* libBuild libm8r.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
