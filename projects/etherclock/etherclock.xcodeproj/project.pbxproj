@@ -79,20 +79,9 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
-		495F1C42134979C60059E738 /* libBuild libm8r.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libBuild libm8r.a"; path = "/Volumes/Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Deployment/libBuild libm8r.a"; sourceTree = "<absolute>"; };
 		4990FD7A1344B7E400F96FEF /* etherclock.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.hex; path = build/Deployment/etherclock.hex; sourceTree = "<group>"; };
 		4990FD7B1344B7E400F96FEF /* etherclock.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = etherclock.map; path = build/Deployment/etherclock.map; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		495F1C40134979C60059E738 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		08FB7794FE84155DC02AAC07 /* etherclock */ = {
@@ -128,6 +117,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
 			buildPhases = (
+				49282A0E134BA95A009E0FE6 /* Build libm8r.a */,
 				4900A2E0133FDE330036518B /* Sources */,
 				4955B5661343FBFF001EDD20 /* Create elf */,
 				493469131344045F005C85D6 /* Create hex */,
@@ -141,22 +131,6 @@
 			);
 			name = Build;
 			productName = Build;
-			productType = "com.apple.product-type.library.static";
-		};
-		495F1C41134979C60059E738 /* Build libm8r */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 495F1C44134979FB0059E738 /* Build configuration list for PBXNativeTarget "Build libm8r" */;
-			buildPhases = (
-				495F1C3F134979C60059E738 /* Sources */,
-				495F1C40134979C60059E738 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Build libm8r";
-			productName = "Build libm8r";
-			productReference = 495F1C42134979C60059E738 /* libBuild libm8r.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -178,7 +152,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				495F1C41134979C60059E738 /* Build libm8r */,
 				4900A2E2133FDE330036518B /* Build */,
 				49346909134403EF005C85D6 /* Clean */,
 				4990FD941344BAD700F96FEF /* Program */,
@@ -187,6 +160,20 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		49282A0E134BA95A009E0FE6 /* Build libm8r.a */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build libm8r.a";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -f ${USER_LIBRARY_DIR}/m8r/Makefile";
+		};
 		49346908134403EF005C85D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -258,13 +245,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		495F1C3F134979C60059E738 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -304,21 +284,6 @@
 			};
 			name = Deployment;
 		};
-		495F1C43134979C60059E738 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				INSTALL_PATH = /usr/local/lib;
-				PREBINDING = NO;
-				PRODUCT_NAME = "Build libm8r";
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
 		4990FD951344BAD700F96FEF /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -349,14 +314,6 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4934690A134403EF005C85D6 /* Deployment */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
-		495F1C44134979FB0059E738 /* Build configuration list for PBXNativeTarget "Build libm8r" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				495F1C43134979C60059E738 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;

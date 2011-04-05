@@ -34,7 +34,7 @@ DAMAGE.
 */
 
 #include <avr/pgmspace.h>
-#include "Timer1RTC.h"
+#include "m8r/Timer1RTC.h"
 
 extern const uint8_t mygMonthDayTable[] PROGMEM;
 const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};

@@ -34,7 +34,7 @@ DAMAGE.
 */
 
 #include <avr/pgmspace.h>
-#include "MAX6969.h"
+#include "m8r/MAX6969.h"
 
 extern const uint8_t mygCharTable[] PROGMEM;
 const uint8_t mygCharTable[] =

@@ -33,7 +33,7 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Application.h"
+#include "m8r/Application.h"
 
 using namespace m8r;
 
@@ -57,7 +57,6 @@ Application::run()
     }
 }
     
-/*
 void * operator new(size_t size) 
 { 
     return malloc(size); 
@@ -67,11 +66,12 @@ void operator delete(void * ptr)
 { 
   free(ptr); 
 }
-*/
 
+extern "C" {
 void _main()
 {
     Application::application()->initialize();
     Application::application()->run();
+}
 }
 

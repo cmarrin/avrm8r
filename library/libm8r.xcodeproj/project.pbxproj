@@ -26,6 +26,7 @@
 /* Begin PBXBuildFile section */
 		490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */ = {isa = PBXBuildFile; fileRef = 490EBD531348B4C800FAD91C /* m8r.h */; };
 		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
+		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
 		49EF39681345712400519468 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
 		49EF39691345712400519468 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
 		49EF396A1345712400519468 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
@@ -91,6 +92,7 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				49282A46134BACF8009E0FE6 /* main.c in Copy Sources */,
 				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
 				49EF3973134571C800519468 /* ADC.cpp in Copy Sources */,
 				49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */,

@@ -38,7 +38,7 @@ DAMAGE.
 #pragma once
 
 #include <avr/interrupt.h>
-#include "Timer1.h"
+#include "m8r/Timer1.h"
 
 namespace m8r {
 

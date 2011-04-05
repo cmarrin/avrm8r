@@ -40,7 +40,7 @@ DAMAGE.
 #include "m8r.h"
 #include <avr/interrupt.h>
 
-#include "EventSource.h"
+#include "m8r/EventSource.h"
 
 #undef ADC
 

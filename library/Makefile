@@ -104,7 +104,9 @@ MSG_ASSEMBLING = Assembling:
 MSG_CLEANING = Cleaning project:
 
 # Define all object files.
-OBJ := ${CSRC:%.c=${OBJECT_FILE_DIR}/%.o} ${CPPSRC:%.cpp=${OBJECT_FILE_DIR}/%.o} ${ASRC:%.S=${OBJECT_FILE_DIR}/%.o} 
+OBJ := ${CSRC:%.c=${OBJECT_FILE_DIR}/%.o} ${CPPSRC:%.cpp=${OBJECT_FILE_DIR}/%.o} ${ASRC:%.S=${OBJECT_FILE_DIR}/%.o}
+
+SRCDIR = $(USER_LIBRARY_DIR)/m8r/Sources/m8r
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
@@ -137,14 +139,14 @@ $(OBJECT_FILE_DIR)/%.a: $(OBJ)
 
 
 # Compile: create object files from C source files.
-$(OBJECT_FILE_DIR)/%.o : %.c
+$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.c
 	@echo
 	@echo $(MSG_COMPILING) $<
 	$(MKDIR) -p $(OBJECT_FILE_DIR)
 	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
 
 # Compile: create object files from C++ source files.
-$(OBJECT_FILE_DIR)/%.o : %.cpp
+$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.cpp
 	@echo
 	@echo $(MSG_COMPILING) $<
 	$(MKDIR) -p $(OBJECT_FILE_DIR)
@@ -161,7 +163,7 @@ $(OBJECT_FILE_DIR)/%.o : %.cpp
 
 
 # Assemble: create object files from assembler source files.
-$(OBJECT_FILE_DIR)/%.o : %.S
+$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.S
 	@echo
 	@echo $(MSG_ASSEMBLING) $<
 	$(MKDIR) -p $(OBJECT_FILE_DIR)

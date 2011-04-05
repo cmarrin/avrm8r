@@ -33,8 +33,8 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Timer1.h"
-#include "Application.h"
+#include "m8r/Timer1.h"
+#include "m8r/Application.h"
 #include <avr/interrupt.h>
 
 using namespace m8r;

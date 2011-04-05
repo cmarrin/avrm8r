@@ -33,8 +33,8 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "EventSource.h"
-#include "Application.h"
+#include "m8r/EventSource.h"
+#include "m8r/Application.h"
 
 using namespace m8r;
 

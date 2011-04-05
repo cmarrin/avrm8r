@@ -37,11 +37,13 @@ DAMAGE.
 
 #pragma once
 
+#include <stdlib.h>
+
 #include "m8r.h"
-#include "EventSource.h"
+#include "m8r/EventSource.h"
 
 // Setup for C++ operation
-//void * operator new(size_t size); 
+void * operator new(size_t size); 
 void operator delete(void * ptr); 
 
 namespace m8r {

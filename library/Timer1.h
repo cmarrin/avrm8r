@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "EventSource.h"
+#include "m8r/EventSource.h"
 
 namespace m8r {
 
