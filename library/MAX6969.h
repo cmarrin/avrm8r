@@ -51,6 +51,7 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class MAX6969Base {
+protected:
     uint8_t patternFromChar(uint8_t c) const;
 };
 

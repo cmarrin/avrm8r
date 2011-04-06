@@ -4,10 +4,12 @@
 
 using namespace m8r;
 
-MAX6969<PortC, 3, PortC, 2, PortC, 1, PortC, 4> myShiftReg();
+MAX6969<PortC, 3, PortC, 2, PortC, 1, PortC, 4> myShiftReg;
 
 void Application::initialize()
 {
+    myShiftReg.setChar('8');
+    myShiftReg.setOutputEnable(true);
 }
 
 void Application::processEvent(EventType type)

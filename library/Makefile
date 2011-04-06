@@ -2,7 +2,7 @@
 # Build archive of marrinator source files for the passed flags
 #----------------------------------------------------------------------------
 
-TARGET = ${PRODUCT_NAME}
+TARGET = libm8r
 CSRC = main.c
 CPPSRC = Application.cpp ADC.cpp EventSource.cpp MAX6969.cpp ShiftReg.cpp Timer0.cpp Timer1.cpp Timer1RTC.cpp
 
@@ -136,6 +136,7 @@ $(OBJECT_FILE_DIR)/%.a: $(OBJ)
 	@echo
 	@echo $(MSG_ARCHIVING) $@
 	$(AR) rcs $@ $^
+	$(REMOVE) $^
 
 
 # Compile: create object files from C source files.
