@@ -1,0 +1,588 @@
+**********************
+This is a .map file from building the following C code:
+======================
+/*
+ *  Test.c
+ *  etherclock
+ *
+ *  Created by Chris Marrin on 4/6/11.
+ *  Copyright 2011 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <avr/io.h>
+#include <avr/pgmspace.h>
+
+void main() __attribute__((noreturn));
+
+extern const uint8_t myCharTable[] PROGMEM;
+const uint8_t myCharTable[] =
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+extern const uint8_t myNumTable[] PROGMEM;
+const uint8_t myNumTable[] = 
+    { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f };
+
+uint8_t
+patternFromChar(uint8_t c)
+{
+    if (c < '0')
+        return 0;
+    else if (c <= '9')
+        return pgm_read_byte(&(myNumTable[c-'0']));
+    else if (c < 'A')
+        return 0;
+    else if (c <= 'Z')
+        return pgm_read_byte(&(myCharTable[c-'A']));
+    else if (c < 'a')
+        return 0;
+    else if (c <= 'z')
+        return pgm_read_byte(&(myCharTable[c-'a']));
+    else
+        return 0;
+}
+
+void setOutputEnable(uint8_t e)
+{
+    if (e) {
+        PORTC |= 0x1;
+        PORTC &= ~0x1;
+        PORTC &= ~0x2;
+    }
+    else
+        PORTC |= 0x2;
+}
+
+void send(uint8_t v, uint8_t n, uint8_t clkBit, uint8_t dataBit, uint8_t msbFirst, uint8_t rising)
+{
+    uint8_t mask;
+    for (mask = msbFirst ? 0x80 : 1; n > 0; --n) {
+        // set data bit
+        if ((v & mask) != 0)
+            PORTC |= _BV(dataBit);
+        else
+            PORTC &= ~_BV(dataBit);
+
+        // clock in data
+        if (rising) {
+            PORTC |= _BV(clkBit);
+            PORTC &= ~_BV(clkBit);
+        }
+        else {
+            PORTC &= ~_BV(clkBit);
+            PORTC |= _BV(clkBit);
+        }
+
+        mask = msbFirst ? (mask >> 1) : (mask << 1);
+    }
+}
+
+void setChar(uint8_t c)
+{
+    send(patternFromChar(c), 8, 0, 1, 1, 0);
+}
+
+void initShiftReg()
+{
+    DDRC |= 0x1;
+    DDRC |= 0x2;
+    PORTC |= 0x1;
+    PORTC &= ~0x2;
+    PORTC |= 0x2;
+    PORTC &= 0x4;
+    DDRC |= 0x4;
+    PORTC |= 0x8;
+    DDRC |= 0x8;
+    send(0, 8, 0, 1, 1, 0);
+    send(0, 8, 0, 1, 1, 0);
+}
+
+void main()
+{
+    void* a = malloc(10);
+    free(a);
+    
+    initShiftReg();
+
+    setChar('8');
+    setOutputEnable(1);
+
+    while(1);
+}
+
+======================
+
+This should be equivalent to this .cpp file:
+
+======================
+
+MAX6969<PortC, 3, PortC, 2, PortC, 1, PortC, 4> myShiftReg;
+
+void Application::initialize()
+{
+    myShiftReg.setChar('8');
+    myShiftReg.setOutputEnable(true);
+}
+
+void Application::processEvent(EventType type)
+{
+    switch(type)
+    {
+        default:
+            break;
+    }
+}
+
+======================
+
+This should show how much overhead there is in using the Marrinator classes (and hopefully way to avoid the overhead)
+
+**********************
+
+
+
+
+Archive member included because of file (symbol)
+
+/opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+                              /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o (exit)
+/opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+                              /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o (__do_copy_data)
+/opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+                              /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o (__do_clear_bss)
+/opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                              /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o (malloc)
+
+Allocating common symbols
+Common symbol       size              file
+
+__brkval            0x2               /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__flp               0x2               /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x0000000000000000 0x0000000000020000 xr
+data             0x0000000000800060 0x000000000000ffa0 rw !x
+eeprom           0x0000000000810000 0x0000000000010000 rw !x
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+Address of section .data set to 0x800100
+LOAD /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+LOAD /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+LOAD /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/libm8r.a
+LOAD /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a
+LOAD /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a
+LOAD /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x0000000000000000      0x4a2
+ *(.vectors)
+ .vectors       0x0000000000000000       0x68 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+                0x0000000000000000                __vectors
+                0x0000000000000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+ .progmem.data  0x0000000000000068       0x24 /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+                0x0000000000000068                myNumTable
+                0x0000000000000072                myCharTable
+                0x000000000000008c                . = ALIGN (0x2)
+                0x000000000000008c                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x000000000000008c        0x0 linker stubs
+ *(.trampolines*)
+                0x000000000000008c                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x000000000000008c                __ctors_start = .
+ *(.ctors)
+                0x000000000000008c                __ctors_end = .
+                0x000000000000008c                __dtors_start = .
+ *(.dtors)
+                0x000000000000008c                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x000000000000008c        0x0 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+                0x000000000000008c                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x000000000000008c        0xc /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x0000000000000098       0x16 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+                0x0000000000000098                __do_copy_data
+ .init4         0x00000000000000ae       0x10 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+                0x00000000000000ae                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000000000000be        0x8 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+ *(.init9)
+ *(.text)
+ .text          0x00000000000000c6        0x4 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+                0x00000000000000c6                __vector_20
+                0x00000000000000c6                __vector_1
+                0x00000000000000c6                __vector_24
+                0x00000000000000c6                __vector_12
+                0x00000000000000c6                __bad_interrupt
+                0x00000000000000c6                __vector_6
+                0x00000000000000c6                __vector_3
+                0x00000000000000c6                __vector_23
+                0x00000000000000c6                __vector_25
+                0x00000000000000c6                __vector_11
+                0x00000000000000c6                __vector_13
+                0x00000000000000c6                __vector_17
+                0x00000000000000c6                __vector_19
+                0x00000000000000c6                __vector_7
+                0x00000000000000c6                __vector_5
+                0x00000000000000c6                __vector_4
+                0x00000000000000c6                __vector_9
+                0x00000000000000c6                __vector_2
+                0x00000000000000c6                __vector_21
+                0x00000000000000c6                __vector_15
+                0x00000000000000c6                __vector_8
+                0x00000000000000c6                __vector_14
+                0x00000000000000c6                __vector_10
+                0x00000000000000c6                __vector_16
+                0x00000000000000c6                __vector_18
+                0x00000000000000c6                __vector_22
+ .text          0x00000000000000ca      0x184 /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+                0x00000000000000ca                patternFromChar
+                0x0000000000000110                setOutputEnable
+                0x0000000000000120                send
+                0x00000000000001d0                setChar
+                0x00000000000001ec                initShiftReg
+                0x0000000000000228                main
+ .text          0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+ .text          0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+ .text          0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+ .text          0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x000000000000024e                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+ .text.libgcc   0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+ .text.libgcc   0x000000000000024e        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x000000000000024e      0x252 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x000000000000024e                malloc
+                0x000000000000037a                free
+                0x00000000000004a0                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x00000000000004a0        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+                0x00000000000004a0                exit
+                0x00000000000004a0                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x00000000000004a0        0x2 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+ *(.fini0)
+                0x00000000000004a2                _etext = .
+
+.data           0x0000000000800100        0x6 load address 0x00000000000004a2
+                0x0000000000800100                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x0000000000800100        0x0 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+ .data          0x0000000000800100        0x0 /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+ .data          0x0000000000800100        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+ .data          0x0000000000800100        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+ .data          0x0000000000800100        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+ .data          0x0000000000800100        0x6 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x0000000000800100                __malloc_heap_end
+                0x0000000000800102                __malloc_heap_start
+                0x0000000000800104                __malloc_margin
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x0000000000800106                . = ALIGN (0x2)
+                0x0000000000800106                _edata = .
+                0x0000000000800106                PROVIDE (__data_end, .)
+
+.bss            0x0000000000800106        0x4
+                0x0000000000800106                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x0000000000800106        0x0 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+ .bss           0x0000000000800106        0x0 /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+ .bss           0x0000000000800106        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+ .bss           0x0000000000800106        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+ .bss           0x0000000000800106        0x0 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+ .bss           0x0000000000800106        0x0 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x0000000000800106        0x4 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                0x0000000000800106                __brkval
+                0x0000000000800108                __flp
+                0x000000000080010a                PROVIDE (__bss_end, .)
+                0x00000000000004a2                __data_load_start = LOADADDR (.data)
+                0x00000000000004a8                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x000000000080010a        0x0
+                0x000000000080010a                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x000000000080010a                PROVIDE (__noinit_end, .)
+                0x000000000080010a                _end = .
+                0x000000000080010a                PROVIDE (__heap_start, .)
+
+.eeprom         0x0000000000810000        0x0
+ *(.eeprom*)
+                0x0000000000810000                __eeprom_end = .
+
+.stab           0x0000000000000000      0xe1c
+ *(.stab)
+ .stab          0x0000000000000000      0x6cc /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+ .stab          0x00000000000006cc      0x750 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                        0x75c (size before relaxing)
+
+.stabstr        0x0000000000000000      0x926
+ *(.stabstr)
+ .stabstr       0x0000000000000000      0x926 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges
+ *(.debug_aranges)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info
+ *(.debug_info)
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev
+ *(.debug_abbrev)
+
+.debug_line
+ *(.debug_line)
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str
+ *(.debug_str)
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(/Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/etherclock.elf elf32-avr)
+LOAD linker stubs
+
+Cross Reference Table
+
+Symbol                                            File
+__bad_interrupt                                   /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__brkval                                          /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__bss_end                                         /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+__bss_start                                       /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+__data_end                                        /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+__data_load_start                                 /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+__data_start                                      /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+__do_clear_bss                                    /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_clear_bss.o)
+                                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+__do_copy_data                                    /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_copy_data.o)
+                                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+__flp                                             /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__heap_end                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+                                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__heap_start                                      /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__init                                            /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__malloc_heap_end                                 /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__malloc_heap_start                               /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__malloc_margin                                   /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+__stack                                           /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+                                                  /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+__vector_1                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_10                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_11                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_12                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_13                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_14                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_15                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_16                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_17                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_18                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_19                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_2                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_20                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_21                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_22                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_23                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_24                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_25                                       /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_3                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_4                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_5                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_6                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_7                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_8                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_9                                        /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vector_default                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+__vectors                                         /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+_exit                                             /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+exit                                              /opt/local/lib/gcc/avr/4.0.2/avr5/libgcc.a(_exit.o)
+                                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+free                                              /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+initShiftReg                                      /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+main                                              /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+                                                  /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/crtm168.o
+malloc                                            /opt/local/lib/gcc/avr/4.0.2/../../../../avr/lib/avr5/libc.a(malloc.o)
+                                                  /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+myCharTable                                       /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+myNumTable                                        /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+patternFromChar                                   /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+send                                              /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+setChar                                           /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
+setOutputEnable                                   /Users/cmarrin/personal/Projects/git/marrinator/projects/etherclock/build/etherclock.build/Deployment/Build.build/Objects/Test.o
