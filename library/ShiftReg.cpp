@@ -36,28 +36,3 @@ DAMAGE.
 #include "m8r/ShiftReg.h"
 
 using namespace m8r;
-
-void
-ShiftRegBase::send(volatile uint8_t& clk, uint8_t clkBit, volatile uint8_t& data, uint8_t dataBit, 
-                   uint8_t v, uint8_t n, bool rising, bool msbFirst)
-{
-    for (uint8_t mask = msbFirst ? 0x80 : 1; n > 0; --n) {
-        // set data bit
-        if ((v & mask) != 0)
-            data |= _BV(dataBit);
-        else
-            data &= ~_BV(dataBit);
-
-        // clock in data
-        if (rising) {
-            clk |= _BV(clkBit);
-            clk &= ~_BV(clkBit);
-        }
-        else {
-            clk &= ~_BV(clkBit);
-            clk |= _BV(clkBit);
-        }
-
-        mask = msbFirst ? (mask >> 1) : (mask << 1);
-    }
-}

@@ -64,23 +64,40 @@ public:
     : m_rising(rising)
     , m_msbFirst(msbFirst)
     {
-        m_clockPort.setDDRBit(ClockBit, true);
-        m_dataPort.setDDRBit(DataBit, true);
-        m_clockPort.setPortBit(ClockBit, !m_rising);
+        m_clockPort.setDDRMask(_BV(ClockBit));
+        m_dataPort.setDDRMask(_BV(DataBit));
+        if (m_rising)
+            m_clockPort.clearPortMask(_BV(ClockBit));
+        else
+            m_clockPort.setPortMask(_BV(ClockBit));
     }
     
     void clear()    { send(0); }
     
     void send(uint8_t v, uint8_t n)
-    {
-        ShiftRegBase::send(m_clockPort.getPortAddress(), ClockBit, m_dataPort.getPortAddress(), DataBit, 
-                           v, n, m_rising, m_msbFirst);
+    {        
+        for (uint8_t mask = m_msbFirst ? 0x80 : 1; n > 0; --n) {
+            // set data bit
+            if ((v & mask) != 0)
+                m_dataPort.setPortMask(_BV(DataBit));
+            else
+                m_dataPort.clearPortMask(_BV(DataBit));
+
+            // clock in data
+            if (m_rising) {
+                m_clockPort.setPortMask(_BV(ClockBit));
+                m_clockPort.clearPortMask(_BV(ClockBit));
+            }
+            else {
+                m_clockPort.clearPortMask(_BV(ClockBit));
+                m_clockPort.setPortMask(_BV(ClockBit));
+            }
+
+            mask = m_msbFirst ? (mask >> 1) : (mask << 1);
+        }
     }
     	
-private:
-    uint8_t clockMask() const { return _BV(ClockBit); }
-    uint8_t dataMask() const { return _BV(DataBit); }
-    
+private:    
     ClockPort m_clockPort;
     DataPort m_dataPort;
 	bool m_rising, m_msbFirst;

@@ -63,12 +63,12 @@ public:
     : ShiftReg<ClockPort, ClockBit, DataPort, DataBit>(true, true)
     {
         // latch is active on the rising edge
-        m_latchPort.setPortBit(LatchBit, false);
-        m_latchPort.setDDRBit(LatchBit, true);
+        m_latchPort.clearPortMask(_BV(LatchBit));
+        m_latchPort.setDDRMask(_BV(LatchBit));
 
         // enable is active low
-        m_enablePort.setPortBit(EnableBit, true);
-        m_enablePort.setDDRBit(EnableBit, true);
+        m_enablePort.setPortMask(_BV(EnableBit));
+        m_enablePort.setDDRMask(_BV(EnableBit));
         
         ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::send(0, 8);
         ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::send(0, 8);
@@ -77,12 +77,12 @@ public:
     void setOutputEnable(bool e)
     {
         if (e) {
-            m_latchPort.setPortBit(LatchBit, true);
-            m_latchPort.setPortBit(LatchBit, false);
-            m_enablePort.setPortBit(EnableBit, false);
+            m_latchPort.setPortMask(_BV(LatchBit));
+            m_latchPort.clearPortMask(_BV(LatchBit));
+            m_enablePort.clearPortMask(_BV(EnableBit));
         }
         else
-            m_enablePort.setPortBit(EnableBit, true);
+            m_enablePort.setPortMask(_BV(EnableBit));
     }
     
     void setChar(uint8_t c) { send(patternFromChar(c), 8); }

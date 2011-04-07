@@ -146,16 +146,23 @@ public: \
     void setDDR(uint8_t v) { DDR##PortId = v; } \
     bool isDDRBit(uint8_t i) const { return DDR##PortId & _BV(i); } \
     void setDDRBit(uint8_t i, bool v) { if (v) DDR##PortId |= _BV(i); else DDR##PortId &= ~_BV(i); } \
+    bool isDDRMask(uint8_t m) const { return DDR##PortId & m; } \
+    void setDDRMask(uint8_t m) { DDR##PortId |= m; } \
+    void clearDDRMask(uint8_t m) { DDR##PortId &= ~m; } \
     volatile uint8_t& getDDRAddress() { return DDR##PortId; } \
  \
     uint8_t getPort() const { return PORT##PortId; } \
     void setPort(uint8_t v) { PORT##PortId = v; } \
     bool isPortBit(uint8_t i) const { return PORT##PortId & _BV(i); } \
     void setPortBit(uint8_t i, bool v) { if (v) PORT##PortId |= _BV(i); else PORT##PortId &= ~_BV(i); } \
+    bool isPortMask(uint8_t m) const { return PORT##PortId & m; } \
+    void setPortMask(uint8_t m) { PORT##PortId |= m; } \
+    void clearPortMask(uint8_t m) { PORT##PortId &= ~m; } \
     volatile uint8_t& getPortAddress() { return PORT##PortId; } \
  \
     uint8_t getPin() const { return PIN##PortId; } \
     bool isPinBit(uint8_t i) const { return PIN##PortId & _BV(i); } \
+    bool isPinMask(uint8_t m) const { return PIN##PortId & m; } \
     volatile uint8_t& getPinAddress() { return PIN##PortId; } \
 }; \
 

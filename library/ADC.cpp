@@ -70,7 +70,7 @@ ADC::convert10Bit()
 }
 
 // Interrupt handler for ADC complete interrupt.
-SIGNAL(SIG_ADC)
+ISR(SIG_ADC)
 {
     ADCSRA &= ~_BV(ADIE);    // disable ADC interrupts
     Application::application()->addEvent(EV_ADC);

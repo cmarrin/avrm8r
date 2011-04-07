@@ -70,17 +70,17 @@ Timer1::getInterruptEnable(uint8_t irpt) const
 }
 
 // Interrupt handlers
-SIGNAL(SIG_OVERFLOW1)
+ISR(SIG_OVERFLOW1)
 {
 	Application::application()->addEvent(EV_TIMER1);
 }
 
-SIGNAL(SIG_OUTPUT_COMPARE1A)
+ISR(SIG_OUTPUT_COMPARE1A)
 {
 	Application::application()->addEvent(EV_TIMER1);
 }
 
-SIGNAL(SIG_INPUT_CAPTURE1)
+ISR(SIG_INPUT_CAPTURE1)
 {
 	Application::application()->addEvent(EV_TIMER1);
 }

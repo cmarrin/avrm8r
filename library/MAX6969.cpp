@@ -51,17 +51,16 @@ MAX6969Base::patternFromChar(uint8_t c) const
 {
     if (c < '0')
         return 0;
-    else if (c <= '9')
+    if (c <= '9')
         return pgm_read_byte(&(mygNumTable[c-'0']));
-    else if (c < 'A')
+    if (c < 'A')
         return 0;
-    else if (c <= 'Z')
+    if (c <= 'Z')
         return pgm_read_byte(&(mygCharTable[c-'A']));
-    else if (c < 'a')
+    if (c < 'a')
         return 0;
-    else if (c <= 'z')
+    if (c <= 'z')
         return pgm_read_byte(&(mygCharTable[c-'a']));
-    else
-        return 0;
+    return 0;
 }
 
