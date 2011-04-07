@@ -294,7 +294,7 @@
 				ARCHS = atmega168;
 				AVRDUDE_PORT = /dev/cu.usbserial;
 				AVRDUDE_PROGRAMMER = stk500v1;
-				CFLAGS = "-Wa,-adhlns={OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 8000000;
 				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";

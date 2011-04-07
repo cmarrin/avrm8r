@@ -27,6 +27,7 @@
 		490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */ = {isa = PBXBuildFile; fileRef = 490EBD531348B4C800FAD91C /* m8r.h */; };
 		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
 		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
+		49E790B5134E427E00947F0D /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 49E790B2134E32F700947F0D /* EventSourceEnums.h */; };
 		49EF39681345712400519468 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
 		49EF39691345712400519468 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
 		49EF396A1345712400519468 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
@@ -44,6 +45,16 @@
 		49EF3979134571C800519468 /* Timer1.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
 		49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		49E790B3134E3F6600947F0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49EF3963134570F100519468;
+			remoteInfo = Install;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		490EBD671348B60E00FAD91C /* Copy Main Header */ = {
@@ -74,6 +85,7 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				49E790B5134E427E00947F0D /* EventSourceEnums.h in Copy Headers */,
 				49EF39681345712400519468 /* Application.h in Copy Headers */,
 				49EF39691345712400519468 /* ADC.h in Copy Headers */,
 				49EF396A1345712400519468 /* EventSource.h in Copy Headers */,
@@ -127,6 +139,7 @@
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m8r.h; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		49E790B2134E32F700947F0D /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSourceEnums.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -151,6 +164,7 @@
 				4900A1E5133F9C5B0036518B /* ADC.h */,
 				4900A1D2133F9A540036518B /* EventSource.cpp */,
 				4900A1D3133F9A540036518B /* EventSource.h */,
+				49E790B2134E32F700947F0D /* EventSourceEnums.h */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
 				4900A3CB1340F8DF0036518B /* MAX6969.h */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
@@ -191,6 +205,7 @@
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
+				49E790B4134E3F6600947F0D /* PBXTargetDependency */,
 			);
 			name = Make;
 			passBuildSettingsInEnvironment = 1;
@@ -220,6 +235,14 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXTargetDependency section */
+		49E790B4134E3F6600947F0D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49EF3963134570F100519468 /* Install */;
+			targetProxy = 49E790B3134E3F6600947F0D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB912008733D790010E9CD /* Release */ = {

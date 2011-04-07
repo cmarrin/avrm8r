@@ -48,7 +48,7 @@ Timer1::setInterruptEnable(uint8_t irpt, bool b)
     uint8_t bit = 0;
     if (irpt == TIMER_COMPAREA)
         bit = _BV(OCIE1A);
-    else if (irpt == TIMER_OVERFLOW)
+    else if (irpt == EV_TIMER1_OVF)
         bit = _BV(TOIE1);
     else if (irpt == TIMER_INPUT_CAPTURE)
         bit = _BV(TOIE1);
@@ -62,7 +62,7 @@ Timer1::getInterruptEnable(uint8_t irpt) const
     uint8_t bit = 0;
     if (irpt == TIMER_COMPAREA)
         bit = _BV(OCIE1A);
-    else if (irpt == TIMER_OVERFLOW)
+    else if (irpt == EV_TIMER1_OVF)
         bit = _BV(TOIE1);
     else if (irpt == TIMER_INPUT_CAPTURE)
         bit = _BV(TOIE1);

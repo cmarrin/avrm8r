@@ -46,7 +46,7 @@ Timer0::setInterruptEnable(uint8_t irpt, bool b)
 {
     switch(irpt)
     {
-        case TIMER_OVERFLOW:
+        case EV_TIMER0_OVF:
             TIMSK0 = b ? (TIMSK0 | _BV(TOIE0)) : (TIMSK0 & ~_BV(TOIE0));
             break;
         default: break;
@@ -58,7 +58,7 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 {
     switch(irpt)
     {
-        case TIMER_OVERFLOW:        return (TIMSK0 & _BV(TOIE0)) != 0;
+        case EV_TIMER0_OVF:        return (TIMSK0 & _BV(TOIE0)) != 0;
         default:                    return false;
     }
 }
@@ -66,6 +66,6 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 // Interrupt handlers
 ISR(SIG_OVERFLOW0)
 {
-	Application::application()->addEvent(EV_TIMER0);
+	Application::application()->addEvent(EV_TIMER0_OVF);
 }
 

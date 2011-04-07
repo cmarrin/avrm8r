@@ -56,7 +56,7 @@ public:
         // initialize timer 1
         setPrescaler(prescaler);	// set prescaler
         TCNT0 = initial;			// reset TCNT1
-        setInterruptEnable(TIMER_OVERFLOW, true);
+        setInterruptEnable(EV_TIMER0_OVF, true);
         mygTimer0 = this;
     }
     
