@@ -53,9 +53,6 @@
     done
 */
 
-// HACK until we get a version of gcc with __COUNTER__
-#define __COUNTER__ 0
-
 enum EventType {
     EV_NO_EVENT		= 0,
 

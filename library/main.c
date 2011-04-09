@@ -35,11 +35,10 @@ DAMAGE.
 
 void main() __attribute__((noreturn));
 
-void _main();
+void _main() __attribute__((noreturn));
 
 void main()
 {
     _main();
-    while(1);
 }
 

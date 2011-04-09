@@ -38,7 +38,7 @@ DAMAGE.
 #pragma once
 
 #include <stdlib.h>
-
+#include <avr/interrupt.h>
 #include "m8r.h"
 #include "m8r/EventSource.h"
 
@@ -57,43 +57,29 @@ namespace m8r {
     
 class Application {
 public:
-    Application() : myEventBitmap(0) { }
+    Application() { }
     
-    static Application* application();
+    static Application& application();
     
     void initialize();
     void processEvent(EventType type);
     
-    void run();
+    void run() __attribute__((noreturn));
     
     void addEvent(EventType type)
     {
-        myEventBitmap |= ((uint32_t) 1) << (uint8_t) type;
+        cli();
+        m_events[type >> 3] |= 1 << (type & 0x1f);
+        sei();
     }
             
 private:
-    bool hasEvent() const
-    {
-        return myEventBitmap != 0;
-    }
-    
-    EventType nextEvent()
-    {
-        uint8_t event = 0;
-        for (uint32_t mask = 1; mask; mask <<= 1, ++event)
-            if (myEventBitmap & mask) {
-                myEventBitmap &= ~mask;
-                return (EventType) event;
-            }
-        return EV_NO_EVENT;
-    }
-    
     void wait()
     {
     }
     
-    static Application* m_application;
-    volatile uint32_t myEventBitmap;
+    static Application m_application;
+    static uint8_t m_events[eventArraySize];
 };
 
 }

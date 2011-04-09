@@ -46,11 +46,11 @@ Timer1::setInterruptEnable(uint8_t irpt, bool b)
 {
     // FIXME: This is different on modern controllers
     uint8_t bit = 0;
-    if (irpt == TIMER_COMPAREA)
+    if (irpt == EV_TIMER1_COMPA)
         bit = _BV(OCIE1A);
     else if (irpt == EV_TIMER1_OVF)
         bit = _BV(TOIE1);
-    else if (irpt == TIMER_INPUT_CAPTURE)
+    else if (irpt == EV_TIMER1_CAPT)
         bit = _BV(TOIE1);
     TIMSK0 = b ? (TIMSK0 | bit) : (TIMSK0 & ~bit);
 }
@@ -60,28 +60,28 @@ Timer1::getInterruptEnable(uint8_t irpt) const
 {
     // FIXME: This is different on modern controllers
     uint8_t bit = 0;
-    if (irpt == TIMER_COMPAREA)
+    if (irpt == EV_TIMER1_COMPA)
         bit = _BV(OCIE1A);
     else if (irpt == EV_TIMER1_OVF)
         bit = _BV(TOIE1);
-    else if (irpt == TIMER_INPUT_CAPTURE)
+    else if (irpt == EV_TIMER1_CAPT)
         bit = _BV(TOIE1);
     return (TIMSK0 & bit) != 0;
 }
 
 // Interrupt handlers
-ISR(SIG_OVERFLOW1)
+ISR(TIMER1_OVF_vect)
 {
-	Application::application()->addEvent(EV_TIMER1);
+	Application::application().addEvent(EV_TIMER1_OVF);
 }
 
-ISR(SIG_OUTPUT_COMPARE1A)
+ISR(TIMER1_COMPA_vect)
 {
-	Application::application()->addEvent(EV_TIMER1);
+	Application::application().addEvent(EV_TIMER1_COMPA);
 }
 
-ISR(SIG_INPUT_CAPTURE1)
+ISR(TIMER1_CAPT_vect)
 {
-	Application::application()->addEvent(EV_TIMER1);
+	Application::application().addEvent(EV_TIMER1_CAPT);
 }
 

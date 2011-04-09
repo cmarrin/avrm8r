@@ -90,7 +90,7 @@ public:
     , myPeriod(period)
     {
         setOutputCompare(match);
-        setInterruptEnable(TIMER_COMPAREA, true);
+        setInterruptEnable(EV_TIMER1_COMPA, true);
         setClearOnOutputCompare(true);
     }
     

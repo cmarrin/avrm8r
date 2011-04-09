@@ -46,16 +46,6 @@
 		49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		49E790B3134E3F6600947F0D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 49EF3963134570F100519468;
-			remoteInfo = Install;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		490EBD671348B60E00FAD91C /* Copy Main Header */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -205,7 +195,6 @@
 			);
 			buildToolPath = /usr/bin/make;
 			dependencies = (
-				49E790B4134E3F6600947F0D /* PBXTargetDependency */,
 			);
 			name = Make;
 			passBuildSettingsInEnvironment = 1;
@@ -236,14 +225,6 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXTargetDependency section */
-		49E790B4134E3F6600947F0D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 49EF3963134570F100519468 /* Install */;
-			targetProxy = 49E790B3134E3F6600947F0D /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		1DEB912008733D790010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -251,6 +232,7 @@
 				ARCHS = atmega168;
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
+				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				PRODUCT_NAME = libm8r;

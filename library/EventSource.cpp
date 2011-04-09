@@ -41,5 +41,5 @@ using namespace m8r;
 void
 EventSource::addEvent(EventType type)
 {
-	Application::application()->addEvent(type);
+	Application::application().addEvent(type);
 }

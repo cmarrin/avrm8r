@@ -45,7 +45,7 @@
 			outputFiles = (
 				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "/opt/local/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
+			script = "${TOOLS_DIR}/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
 		};
 		4900A2FB133FDEF10036518B /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -55,7 +55,7 @@
 			outputFiles = (
 				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+			script = "${TOOLS_DIR}/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
 		};
 		4955B5A41344028B001EDD20 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -190,7 +190,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "i=0\nfor s in `/opt/local/bin/avr-size -td ${OBJECT_FILE_DIR}/${PROJECT}.elf`\ndo\n\tarray[$i]=$s\n\t((i++))\ndone\necho\necho '===================='\necho Executable size:\nprintf \"\\ttext:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[6]}\" \"${array[6]}\"\nprintf \"\\tdata:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[7]}\" \"${array[7]}\"\nprintf \"\\tbss:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[8]}\" \"${array[8]}\"\necho \necho Total: ${array[9]} \\(0x${array[10]}\\)\necho '===================='\necho\n";
+			shellScript = "i=0\nfor s in `${TOOLS_DIR}/bin/avr-size -td ${OBJECT_FILE_DIR}/${PROJECT}.elf`\ndo\n\tarray[$i]=$s\n\t((i++))\ndone\necho\necho '===================='\necho Executable size:\nprintf \"\\ttext:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[6]}\" \"${array[6]}\"\nprintf \"\\tdata:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[7]}\" \"${array[7]}\"\nprintf \"\\tbss:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[8]}\" \"${array[8]}\"\necho \necho Total: ${array[9]} \\(0x${array[10]}\\)\necho '===================='\necho\n";
 		};
 		49346908134403EF005C85D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -219,7 +219,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Creating .hex file\"\n/opt/local/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
+			shellScript = "echo \"Creating .hex file\"\n${TOOLS_DIR}/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
 		};
 		4955B5661343FBFF001EDD20 /* Create elf */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -236,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n/opt/local/bin/avr-gcc ${OBJECT_FILE_DIR}/*.o ${LDFLAGS} -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
+			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n${TOOLS_DIR}/bin/avr-gcc ${OBJECT_FILE_DIR}/*.o ${LDFLAGS} -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
 		};
 		4990FD931344BAD700F96FEF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -250,7 +250,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo Programming\n/opt/local/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${ARCHS} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
+			shellScript = "echo Programming\n${TOOLS_DIR}/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${ARCHS} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
 		};
 		49FC495C134D6B6100FD30CF /* Create listing */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -264,7 +264,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/opt/local/bin/avr-objdump -lhS --demangle ${OBJECT_FILE_DIR}/${PROJECT}.elf > ${TARGET_BUILD_DIR}/${PROJECT}.lss";
+			shellScript = "${TOOLS_DIR}/bin/avr-objdump -lhS --demangle ${OBJECT_FILE_DIR}/${PROJECT}.elf > ${TARGET_BUILD_DIR}/${PROJECT}.lss";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -298,7 +298,9 @@
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 8000000;
 				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
+				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 				PRODUCT_NAME = etherclock;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR";
 				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
 			};
 			name = Deployment;

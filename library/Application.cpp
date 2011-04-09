@@ -33,30 +33,47 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
+#include <string.h>
+
 #include "m8r/Application.h"
 
 using namespace m8r;
 
-Application* Application::m_application;
+Application Application::m_application;
+uint8_t Application::m_events[eventArraySize];
 
-Application* Application::application()
+Application& Application::application()
 {
-    if (!m_application)
-        m_application = new Application();
     return m_application;
 }
 
 void
 Application::run()
 {
-    while(1) {
-        while (!hasEvent())
+    memset(m_events, 0, eventArraySize);
+    
+    while (1) {
+        for (uint8_t i = 0; i < eventArraySize; ++i) {
+            cli();
+            uint8_t event = m_events[i];
+            m_events[i] = 0;
+            sei();
+            
+            if (event) {
+                for (uint8_t j = 0; j < 8; ++j) {
+                    if (event & 1)
+                        processEvent((EventType) (i << 3 | j));
+                    event >>= 1;
+                    if (!event)
+                        break;
+                }
+            }
+            
             wait();
-        EventType event = nextEvent();
-        processEvent(event);
+        }
     }
 }
-    
+
 void * operator new(size_t size) 
 { 
     return malloc(size); 
@@ -68,10 +85,11 @@ void operator delete(void * ptr)
 }
 
 extern "C" {
+void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::application()->initialize();
-    Application::application()->run();
+    Application::application().initialize();
+    Application::application().run();
 }
 }
 

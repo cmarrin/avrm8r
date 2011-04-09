@@ -73,7 +73,7 @@ ADC::convert10Bit()
 ISR(SIG_ADC)
 {
     ADCSRA &= ~_BV(ADIE);    // disable ADC interrupts
-    Application::application()->addEvent(EV_ADC);
+    Application::application().addEvent(EV_ADC);
 }
 
 

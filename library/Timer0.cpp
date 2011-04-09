@@ -64,8 +64,8 @@ Timer0::getInterruptEnable(uint8_t irpt) const
 }
 
 // Interrupt handlers
-ISR(SIG_OVERFLOW0)
+ISR(TIMER0_OVF_vect)
 {
-	Application::application()->addEvent(EV_TIMER0_OVF);
+	Application::application().addEvent(EV_TIMER0_OVF);
 }
 
