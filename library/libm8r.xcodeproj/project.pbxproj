@@ -27,15 +27,17 @@
 		490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */ = {isa = PBXBuildFile; fileRef = 490EBD531348B4C800FAD91C /* m8r.h */; };
 		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
 		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
-		49E790B5134E427E00947F0D /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 49E790B2134E32F700947F0D /* EventSourceEnums.h */; };
-		49EF39681345712400519468 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1A8133F92730036518B /* Application.h */; };
-		49EF39691345712400519468 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E5133F9C5B0036518B /* ADC.h */; };
-		49EF396A1345712400519468 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1D3133F9A540036518B /* EventSource.h */; };
-		49EF396B1345712400519468 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A3CB1340F8DF0036518B /* MAX6969.h */; };
-		49EF396C1345712400519468 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1E7133F9C5B0036518B /* ShiftReg.h */; };
-		49EF396E1345712400519468 /* Timer0.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EB133F9C5B0036518B /* Timer0.h */; };
-		49EF396F1345712400519468 /* Timer1.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1ED133F9C5B0036518B /* Timer1.h */; };
-		49EF39701345712400519468 /* Timer1RTC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4900A1EF133F9C5B0036518B /* Timer1RTC.h */; };
+		4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817913514A3B0072EEA4 /* ADC.h */; };
+		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
+		4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817B13514A3B0072EEA4 /* EventSource.h */; };
+		4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817C13514A3B0072EEA4 /* EventSourceEnums.h */; };
+		4999819A13514A6B0072EEA4 /* marrinator.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817D13514A3B0072EEA4 /* marrinator.h */; };
+		4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817E13514A3B0072EEA4 /* MAX6969.h */; };
+		4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817F13514A3B0072EEA4 /* ShiftReg.h */; };
+		4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818013514A3B0072EEA4 /* STP08CDC596.h */; };
+		4999819E13514A6B0072EEA4 /* Timer0.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818113514A3B0072EEA4 /* Timer0.h */; };
+		4999819F13514A6B0072EEA4 /* Timer1.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818213514A3B0072EEA4 /* Timer1.h */; };
+		499981A013514A6B0072EEA4 /* Timer1RTC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818313514A3B0072EEA4 /* Timer1RTC.h */; };
 		49EF3972134571C800519468 /* Application.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
 		49EF3973134571C800519468 /* ADC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
 		49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
@@ -75,15 +77,17 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
 			dstSubfolderSpec = 0;
 			files = (
-				49E790B5134E427E00947F0D /* EventSourceEnums.h in Copy Headers */,
-				49EF39681345712400519468 /* Application.h in Copy Headers */,
-				49EF39691345712400519468 /* ADC.h in Copy Headers */,
-				49EF396A1345712400519468 /* EventSource.h in Copy Headers */,
-				49EF396B1345712400519468 /* MAX6969.h in Copy Headers */,
-				49EF396C1345712400519468 /* ShiftReg.h in Copy Headers */,
-				49EF396E1345712400519468 /* Timer0.h in Copy Headers */,
-				49EF396F1345712400519468 /* Timer1.h in Copy Headers */,
-				49EF39701345712400519468 /* Timer1RTC.h in Copy Headers */,
+				4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */,
+				4999819713514A6B0072EEA4 /* Application.h in Copy Headers */,
+				4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */,
+				4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */,
+				4999819A13514A6B0072EEA4 /* marrinator.h in Copy Headers */,
+				4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */,
+				4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */,
+				4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */,
+				4999819E13514A6B0072EEA4 /* Timer0.h in Copy Headers */,
+				4999819F13514A6B0072EEA4 /* Timer1.h in Copy Headers */,
+				499981A013514A6B0072EEA4 /* Timer1RTC.h in Copy Headers */,
 			);
 			name = "Copy Headers";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,31 +115,35 @@
 
 /* Begin PBXFileReference section */
 		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
-		4900A1A8133F92730036518B /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		4900A1D2133F9A540036518B /* EventSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventSource.cpp; sourceTree = "<group>"; };
-		4900A1D3133F9A540036518B /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSource.h; sourceTree = "<group>"; };
 		4900A1E4133F9C5B0036518B /* ADC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ADC.cpp; sourceTree = "<group>"; };
-		4900A1E5133F9C5B0036518B /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADC.h; sourceTree = "<group>"; };
 		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShiftReg.cpp; sourceTree = "<group>"; };
-		4900A1E7133F9C5B0036518B /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShiftReg.h; sourceTree = "<group>"; };
 		4900A1EA133F9C5B0036518B /* Timer0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer0.cpp; sourceTree = "<group>"; };
-		4900A1EB133F9C5B0036518B /* Timer0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer0.h; sourceTree = "<group>"; };
 		4900A1EC133F9C5B0036518B /* Timer1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1.cpp; sourceTree = "<group>"; };
-		4900A1ED133F9C5B0036518B /* Timer1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1.h; sourceTree = "<group>"; };
 		4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1RTC.cpp; sourceTree = "<group>"; };
-		4900A1EF133F9C5B0036518B /* Timer1RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer1RTC.h; sourceTree = "<group>"; };
 		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
-		4900A3CB1340F8DF0036518B /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAX6969.h; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m8r.h; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		49E790B2134E32F700947F0D /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventSourceEnums.h; sourceTree = "<group>"; };
+		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
+		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
+		4999817B13514A3B0072EEA4 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = m8r/EventSource.h; sourceTree = "<group>"; };
+		4999817C13514A3B0072EEA4 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = m8r/EventSourceEnums.h; sourceTree = "<group>"; };
+		4999817D13514A3B0072EEA4 /* marrinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = marrinator.h; path = m8r/marrinator.h; sourceTree = "<group>"; };
+		4999817E13514A3B0072EEA4 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = m8r/MAX6969.h; sourceTree = "<group>"; };
+		4999817F13514A3B0072EEA4 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = m8r/ShiftReg.h; sourceTree = "<group>"; };
+		4999818013514A3B0072EEA4 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = m8r/STP08CDC596.h; sourceTree = "<group>"; };
+		4999818113514A3B0072EEA4 /* Timer0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = m8r/Timer0.h; sourceTree = "<group>"; };
+		4999818213514A3B0072EEA4 /* Timer1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = m8r/Timer1.h; sourceTree = "<group>"; };
+		4999818313514A3B0072EEA4 /* Timer1RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer1RTC.h; path = m8r/Timer1RTC.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		089C166AFE841209C02AAC07 /* libm8r */ = {
 			isa = PBXGroup;
 			children = (
+				490EBD531348B4C800FAD91C /* m8r.h */,
+				4999817813514A1B0072EEA4 /* Headers */,
 				49282959134B852C009E0FE6 /* Makefile */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				4900A2A1133FDCC90036518B /* Resources */,
@@ -147,24 +155,14 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				490EBD531348B4C800FAD91C /* m8r.h */,
 				4900A1A7133F92730036518B /* Application.cpp */,
-				4900A1A8133F92730036518B /* Application.h */,
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
-				4900A1E5133F9C5B0036518B /* ADC.h */,
 				4900A1D2133F9A540036518B /* EventSource.cpp */,
-				4900A1D3133F9A540036518B /* EventSource.h */,
-				49E790B2134E32F700947F0D /* EventSourceEnums.h */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
-				4900A3CB1340F8DF0036518B /* MAX6969.h */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
-				4900A1E7133F9C5B0036518B /* ShiftReg.h */,
 				4900A1EA133F9C5B0036518B /* Timer0.cpp */,
-				4900A1EB133F9C5B0036518B /* Timer0.h */,
 				4900A1EC133F9C5B0036518B /* Timer1.cpp */,
-				4900A1ED133F9C5B0036518B /* Timer1.h */,
 				4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */,
-				4900A1EF133F9C5B0036518B /* Timer1RTC.h */,
 				495F1CB3134A1F920059E738 /* main.c */,
 			);
 			name = Source;
@@ -182,6 +180,24 @@
 			children = (
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		4999817813514A1B0072EEA4 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				4999817913514A3B0072EEA4 /* ADC.h */,
+				4999817A13514A3B0072EEA4 /* Application.h */,
+				4999817B13514A3B0072EEA4 /* EventSource.h */,
+				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
+				4999817D13514A3B0072EEA4 /* marrinator.h */,
+				4999817E13514A3B0072EEA4 /* MAX6969.h */,
+				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
+				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
+				4999818113514A3B0072EEA4 /* Timer0.h */,
+				4999818213514A3B0072EEA4 /* Timer1.h */,
+				4999818313514A3B0072EEA4 /* Timer1RTC.h */,
+			);
+			name = Headers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,7 +247,7 @@
 			buildSettings = {
 				ARCHS = atmega168;
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
-				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
+				C_INCLUDE_PATH = "${PROJECT_DIR}/";
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;

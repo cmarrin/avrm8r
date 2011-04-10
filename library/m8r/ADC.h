@@ -158,13 +158,14 @@ public:
         uint8_t psval = (((prescale & 1) != 0) << ADPS0) | 
                         (((prescale & 2) != 0) << ADPS1) | 
                         (((prescale & 4) != 0) << ADPS2);
-		ADCSRA = ((ADCSRA & ~ADPS_MASK) | psval);
+        ADCSRA &= ~ADPS_MASK;
+		ADCSRA |= psval;
 	}
 	
 	uint8_t		getPrescaler() const
     {
         uint8_t psval = ADCSRA;
-        return (((psval & (1 << ADPS0)) != 0) | ((psval & (1 << ADPS1)) != 0) << 1) | ((psval & (1 << ADPS2)) != 0) << 2);
+        return (((psval & (1 << ADPS0)) != 0) | (((psval & (1 << ADPS1)) != 0) << 1) | (((psval & (1 << ADPS2)) != 0) << 2));
     }
 	
 	void		setReference(uint8_t ref)
