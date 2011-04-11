@@ -106,7 +106,7 @@ MSG_CLEANING = Cleaning project:
 # Define all object files.
 OBJ := ${CSRC:%.c=${OBJECT_FILE_DIR}/%.o} ${CPPSRC:%.cpp=${OBJECT_FILE_DIR}/%.o} ${ASRC:%.S=${OBJECT_FILE_DIR}/%.o}
 
-SRCDIR = $(USER_LIBRARY_DIR)/m8r/Sources/m8r
+SRCDIR = $(M8R_SRC_DIR)
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d

@@ -39,8 +39,6 @@ DAMAGE.
 
 using namespace m8r;
 
-Timer0* Timer0::mygTimer0 = 0;
-
 void
 Timer0::setInterruptEnable(uint8_t irpt, bool b)
 {

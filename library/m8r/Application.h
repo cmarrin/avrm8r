@@ -54,10 +54,17 @@ namespace m8r {
 //  Main application for AVR apps. Singleton
 //
 //////////////////////////////////////////////////////////////////////////////
+
+#define EVENT_QUEUE_SIZE 20
     
 class Application {
 public:
-    Application() { }
+    Application()
+    : m_eventOnIdle(false)
+    , m_eventQueueHead(0)
+    , m_eventQueueTail(0)
+    {
+    }
     
     static Application& application();
     
@@ -69,9 +76,13 @@ public:
     void addEvent(EventType type)
     {
         cli();
-        m_events[type >> 3] |= 1 << (type & 0x1f);
+        m_eventQueue[m_eventQueueTail++] = type;
+        if (m_eventQueueTail >= EVENT_QUEUE_SIZE)
+            m_eventQueueTail = 0;
         sei();
     }
+    
+    void setEventOnIdle(bool b) { m_eventOnIdle = b; }
             
 private:
     void wait()
@@ -79,7 +90,11 @@ private:
     }
     
     static Application m_application;
-    static uint8_t m_events[eventArraySize];
+    
+    bool m_eventOnIdle;
+    uint8_t m_eventQueueHead;
+    uint8_t m_eventQueueTail;
+    EventType m_eventQueue[EVENT_QUEUE_SIZE];
 };
 
 }

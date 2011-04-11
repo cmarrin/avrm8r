@@ -51,19 +51,16 @@ namespace m8r {
 	
 class Timer0 : public EventSource {
 public:
-	Timer0(uint8_t prescaler, uint8_t initial)
+	Timer0()
     {
-        // initialize timer 1
-        setPrescaler(prescaler);	// set prescaler
-        TCNT0 = initial;			// reset TCNT1
+        // initialize timer 0
+        setPrescaler(1);
+        TCNT0 = 0;
         setInterruptEnable(EV_TIMER0_OVF, true);
-        mygTimer0 = this;
     }
     
 	~Timer0()                       { }
-    
-    static Timer0* getTimer0()      { return mygTimer0; }
-    
+
     void setInterruptEnable(uint8_t irpt, bool b);
     bool getInterruptEnable(uint8_t irpt) const;
         
@@ -80,7 +77,6 @@ public:
     uint16_t getValue() const           { return TCNT0; }
     
 private:
-    static Timer0* mygTimer0;
 };
 
 }

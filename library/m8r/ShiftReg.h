@@ -78,7 +78,8 @@ public:
     {        
         for (uint8_t mask = m_msbFirst ? 0x80 : 1; n > 0; --n) {
             // set data bit
-            if ((v & mask) != 0)
+            uint8_t tmp = ((uint8_t) v) & ((uint8_t) mask);
+            if (tmp)
                 m_dataPort.setPortMask(_BV(DataBit));
             else
                 m_dataPort.clearPortMask(_BV(DataBit));

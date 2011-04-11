@@ -57,384 +57,390 @@ enum EventType {
     EV_NO_EVENT		= 0,
 
 #ifdef ADC_vect
-    EV_ADC = __COUNTER__,
+    EV_ADC,
 #endif
 #ifdef ANALOG_COMP_0_vect
-    EV_ANALOG_COMP_0 = __COUNTER__,
+    EV_ANALOG_COMP_0,
 #endif
 #ifdef ANALOG_COMP_1_vect
-    EV_ANALOG_COMP_1 = __COUNTER__,
+    EV_ANALOG_COMP_1,
 #endif
 #ifdef ANALOG_COMP_2_vect
-    EV_ANALOG_COMP_2 = __COUNTER__,
+    EV_ANALOG_COMP_2,
 #endif
 #ifdef ANALOG_COMP_vect
-    EV_ANALOG_COMP = __COUNTER__,
+    EV_ANALOG_COMP,
 #endif
 #ifdef ANA_COMP_vect
-    EV_ANA_COMP = __COUNTER__,
+    EV_ANA_COMP,
 #endif
 #ifdef CANIT_vect
-    EV_CANIT = __COUNTER__,
+    EV_CANIT,
 #endif
 #ifdef EEPROM_READY_vect
-    EV_EEPROM_READY = __COUNTER__,
+    EV_EEPROM_READY,
 #endif
 #ifdef EE_RDY_vect
-    EV_EE_RDY = __COUNTER__,
+    EV_EE_RDY,
 #endif
 #ifdef EE_READY_vect
-    EV_EE_READY = __COUNTER__,
+    EV_EE_READY,
 #endif
 #ifdef EXT_INT0_vect
-    EV_EXT_INT0 = __COUNTER__,
+    EV_EXT_INT0,
 #endif
 #ifdef INT0_vect
-    EV_INT0 = __COUNTER__,
+    EV_INT0,
 #endif
 #ifdef INT1_vect
-    EV_INT1 = __COUNTER__,
+    EV_INT1,
 #endif
 #ifdef INT2_vect
-    EV_INT2 = __COUNTER__,
+    EV_INT2,
 #endif
 #ifdef INT3_vect
-    EV_INT3 = __COUNTER__,
+    EV_INT3,
 #endif
 #ifdef INT4_vect
-    EV_INT4 = __COUNTER__,
+    EV_INT4,
 #endif
 #ifdef INT5_vect
-    EV_INT5 = __COUNTER__,
+    EV_INT5,
 #endif
 #ifdef INT6_vect
-    EV_INT6 = __COUNTER__,
+    EV_INT6,
 #endif
 #ifdef INT7_vect
-    EV_INT7 = __COUNTER__,
+    EV_INT7,
 #endif
 #ifdef IO_PINS_vect
-    EV_IO_PINS = __COUNTER__,
+    EV_IO_PINS,
 #endif
 #ifdef LCD_vect
-    EV_LCD = __COUNTER__,
+    EV_LCD,
 #endif
 #ifdef LOWLEVEL_IO_PINS_vect
-    EV_LOWLEVEL_IO_PINS = __COUNTER__,
+    EV_LOWLEVEL_IO_PINS,
 #endif
 #ifdef OVRIT_vect
-    EV_OVRIT = __COUNTER__,
+    EV_OVRIT,
 #endif
 #ifdef PCINT0_vect
-    EV_PCINT0 = __COUNTER__,
+    EV_PCINT0,
 #endif
 #ifdef PCINT1_vect
-    EV_PCINT1 = __COUNTER__,
+    EV_PCINT1,
 #endif
 #ifdef PCINT2_vect
-    EV_PCINT2 = __COUNTER__,
+    EV_PCINT2,
 #endif
 #ifdef PCINT3_vect
-    EV_PCINT3 = __COUNTER__,
+    EV_PCINT3,
 #endif
 #ifdef PCINT_vect
-    EV_PCINT = __COUNTER__,
+    EV_PCINT,
 #endif
 #ifdef PSC0_CAPT_vect
-    EV_PSC0_CAPT = __COUNTER__,
+    EV_PSC0_CAPT,
 #endif
 #ifdef PSC0_EC_vect
-    EV_PSC0_EC = __COUNTER__,
+    EV_PSC0_EC,
 #endif
 #ifdef PSC1_CAPT_vect
-    EV_PSC1_CAPT = __COUNTER__,
+    EV_PSC1_CAPT,
 #endif
 #ifdef PSC1_EC_vect
-    EV_PSC1_EC = __COUNTER__,
+    EV_PSC1_EC,
 #endif
 #ifdef PSC2_CAPT_vect
-    EV_PSC2_CAPT = __COUNTER__,
+    EV_PSC2_CAPT,
 #endif
 #ifdef PSC2_EC_vect
-    EV_PSC2_EC = __COUNTER__,
+    EV_PSC2_EC,
 #endif
 #ifdef SPI_STC_vect
-    EV_SPI_STC = __COUNTER__,
+    EV_SPI_STC,
 #endif
 #ifdef SPM_RDY_vect
-    EV_SPM_RDY = __COUNTER__,
+    EV_SPM_RDY,
 #endif
 #ifdef SPM_READY_vect
-    EV_SPM_READY = __COUNTER__,
+    EV_SPM_READY,
 #endif
 #ifdef TIM0_COMPA_vect
-    EV_TIM0_COMPA = __COUNTER__,
+    EV_TIM0_COMPA,
 #endif
 #ifdef TIM0_COMPB_vect
-    EV_TIM0_COMPB = __COUNTER__,
+    EV_TIM0_COMPB,
 #endif
 #ifdef TIM0_OVF_vect
-    EV_TIM0_OVF = __COUNTER__,
+    EV_TIM0_OVF,
 #endif
 #ifdef TIM1_CAPT_vect
-    EV_TIM1_CAPT = __COUNTER__,
+    EV_TIM1_CAPT,
 #endif
 #ifdef TIM1_COMPA_vect
-    EV_TIM1_COMPA = __COUNTER__,
+    EV_TIM1_COMPA,
 #endif
 #ifdef TIM1_COMPB_vect
-    EV_TIM1_COMPB = __COUNTER__,
+    EV_TIM1_COMPB,
 #endif
 #ifdef TIM1_OVF_vect
-    EV_TIM1_OVF = __COUNTER__,
+    EV_TIM1_OVF,
 #endif
 #ifdef TIMER0_CAPT_vect
-    EV_TIMER0_CAPT = __COUNTER__,
+    EV_TIMER0_CAPT,
 #endif
 #ifdef TIMER0_COMPA_vect
-    EV_TIMER0_COMPA = __COUNTER__,
+    EV_TIMER0_COMPA,
 #endif
 #ifdef TIMER0_COMPB_vect
-    EV_TIMER0_COMPB = __COUNTER__,
+    EV_TIMER0_COMPB,
 #endif
 #ifdef TIMER0_COMP_A_vect
-    EV_TIMER0_COMP_A = __COUNTER__,
+    EV_TIMER0_COMP_A,
 #endif
 #ifdef TIMER0_COMP_vect
-    EV_TIMER0_COMP = __COUNTER__,
+    EV_TIMER0_COMP,
 #endif
 #ifdef TIMER0_OVF0_vect
-    EV_TIMER0_OVF0 = __COUNTER__,
+    EV_TIMER0_OVF0,
 #endif
 #ifdef TIMER0_OVF_vect
-    EV_TIMER0_OVF = __COUNTER__,
+    EV_TIMER0_OVF,
 #endif
 #ifdef TIMER1_CAPT1_vect
-    EV_TIMER1_CAPT1 = __COUNTER__,
+    EV_TIMER1_CAPT1,
 #endif
 #ifdef TIMER1_CAPT_vect
-    EV_TIMER1_CAPT = __COUNTER__,
+    EV_TIMER1_CAPT,
 #endif
 #ifdef TIMER1_CMPA_vect
-    EV_TIMER1_CMPA = __COUNTER__,
+    EV_TIMER1_CMPA,
 #endif
 #ifdef TIMER1_CMPB_vect
-    EV_TIMER1_CMPB = __COUNTER__,
+    EV_TIMER1_CMPB,
 #endif
 #ifdef TIMER1_COMP1_vect
-    EV_TIMER1_COMP1 = __COUNTER__,
+    EV_TIMER1_COMP1,
 #endif
 #ifdef TIMER1_COMPA_vect
-    EV_TIMER1_COMPA = __COUNTER__,
+    EV_TIMER1_COMPA,
 #endif
 #ifdef TIMER1_COMPB_vect
-    EV_TIMER1_COMPB = __COUNTER__,
+    EV_TIMER1_COMPB,
 #endif
 #ifdef TIMER1_COMPC_vect
-    EV_TIMER1_COMPC = __COUNTER__,
+    EV_TIMER1_COMPC,
 #endif
 #ifdef TIMER1_COMPD_vect
-    EV_TIMER1_COMPD = __COUNTER__,
+    EV_TIMER1_COMPD,
 #endif
 #ifdef TIMER1_COMP_vect
-    EV_TIMER1_COMP = __COUNTER__,
+    EV_TIMER1_COMP,
 #endif
 #ifdef TIMER1_OVF1_vect
-    EV_TIMER1_OVF1 = __COUNTER__,
+    EV_TIMER1_OVF1,
 #endif
 #ifdef TIMER1_OVF_vect
-    EV_TIMER1_OVF = __COUNTER__,
+    EV_TIMER1_OVF,
 #endif
 #ifdef TIMER2_COMPA_vect
-    EV_TIMER2_COMPA = __COUNTER__,
+    EV_TIMER2_COMPA,
 #endif
 #ifdef TIMER2_COMPB_vect
-    EV_TIMER2_COMPB = __COUNTER__,
+    EV_TIMER2_COMPB,
 #endif
 #ifdef TIMER2_COMP_vect
-    EV_TIMER2_COMP = __COUNTER__,
+    EV_TIMER2_COMP,
 #endif
 #ifdef TIMER2_OVF_vect
-    EV_TIMER2_OVF = __COUNTER__,
+    EV_TIMER2_OVF,
 #endif
 #ifdef TIMER3_CAPT_vect
-    EV_TIMER3_CAPT = __COUNTER__,
+    EV_TIMER3_CAPT,
 #endif
 #ifdef TIMER3_COMPA_vect
-    EV_TIMER3_COMPA = __COUNTER__,
+    EV_TIMER3_COMPA,
 #endif
 #ifdef TIMER3_COMPB_vect
-    EV_TIMER3_COMPB = __COUNTER__,
+    EV_TIMER3_COMPB,
 #endif
 #ifdef TIMER3_COMPC_vect
-    EV_TIMER3_COMPC = __COUNTER__,
+    EV_TIMER3_COMPC,
 #endif
 #ifdef TIMER3_OVF_vect
-    EV_TIMER3_OVF = __COUNTER__,
+    EV_TIMER3_OVF,
 #endif
 #ifdef TIMER4_CAPT_vect
-    EV_TIMER4_CAPT = __COUNTER__,
+    EV_TIMER4_CAPT,
 #endif
 #ifdef TIMER4_COMPA_vect
-    EV_TIMER4_COMPA = __COUNTER__,
+    EV_TIMER4_COMPA,
 #endif
 #ifdef TIMER4_COMPB_vect
-    EV_TIMER4_COMPB = __COUNTER__,
+    EV_TIMER4_COMPB,
 #endif
 #ifdef TIMER4_COMPC_vect
-    EV_TIMER4_COMPC = __COUNTER__,
+    EV_TIMER4_COMPC,
 #endif
 #ifdef TIMER4_OVF_vect
-    EV_TIMER4_OVF = __COUNTER__,
+    EV_TIMER4_OVF,
 #endif
 #ifdef TIMER5_CAPT_vect
-    EV_TIMER5_CAPT = __COUNTER__,
+    EV_TIMER5_CAPT,
 #endif
 #ifdef TIMER5_COMPA_vect
-    EV_TIMER5_COMPA = __COUNTER__,
+    EV_TIMER5_COMPA,
 #endif
 #ifdef TIMER5_COMPB_vect
-    EV_TIMER5_COMPB = __COUNTER__,
+    EV_TIMER5_COMPB,
 #endif
 #ifdef TIMER5_COMPC_vect
-    EV_TIMER5_COMPC = __COUNTER__,
+    EV_TIMER5_COMPC,
 #endif
 #ifdef TIMER5_OVF_vect
-    EV_TIMER5_OVF = __COUNTER__,
+    EV_TIMER5_OVF,
 #endif
 #ifdef TWI_vect
-    EV_TWI = __COUNTER__,
+    EV_TWI,
 #endif
 #ifdef TXDONE_vect
-    EV_TXDONE = __COUNTER__,
+    EV_TXDONE,
 #endif
 #ifdef TXEMPTY_vect
-    EV_TXEMPTY = __COUNTER__,
+    EV_TXEMPTY,
 #endif
 #ifdef UART0_RX_vect
-    EV_UART0_RX = __COUNTER__,
+    EV_UART0_RX,
 #endif
 #ifdef UART0_TX_vect
-    EV_UART0_TX = __COUNTER__,
+    EV_UART0_TX,
 #endif
 #ifdef UART0_UDRE_vect
-    EV_UART0_UDRE = __COUNTER__,
+    EV_UART0_UDRE,
 #endif
 #ifdef UART1_RX_vect
-    EV_UART1_RX = __COUNTER__,
+    EV_UART1_RX,
 #endif
 #ifdef UART1_TX_vect
-    EV_UART1_TX = __COUNTER__,
+    EV_UART1_TX,
 #endif
 #ifdef UART1_UDRE_vect
-    EV_UART1_UDRE = __COUNTER__,
+    EV_UART1_UDRE,
 #endif
 #ifdef UART_RX_vect
-    EV_UART_RX = __COUNTER__,
+    EV_UART_RX,
 #endif
 #ifdef UART_TX_vect
-    EV_UART_TX = __COUNTER__,
+    EV_UART_TX,
 #endif
 #ifdef UART_UDRE_vect
-    EV_UART_UDRE = __COUNTER__,
+    EV_UART_UDRE,
 #endif
 #ifdef USART0_RXC_vect
-    EV_USART0_RXC = __COUNTER__,
+    EV_USART0_RXC,
 #endif
 #ifdef USART0_RX_vect
-    EV_USART0_RX = __COUNTER__,
+    EV_USART0_RX,
 #endif
 #ifdef USART0_TXC_vect
-    EV_USART0_TXC = __COUNTER__,
+    EV_USART0_TXC,
 #endif
 #ifdef USART0_TX_vect
-    EV_USART0_TX = __COUNTER__,
+    EV_USART0_TX,
 #endif
 #ifdef USART0_UDRE_vect
-    EV_USART0_UDRE = __COUNTER__,
+    EV_USART0_UDRE,
 #endif
 #ifdef USART1_RXC_vect
-    EV_USART1_RXC = __COUNTER__,
+    EV_USART1_RXC,
 #endif
 #ifdef USART1_RX_vect
-    EV_USART1_RX = __COUNTER__,
+    EV_USART1_RX,
 #endif
 #ifdef USART1_TXC_vect
-    EV_USART1_TXC = __COUNTER__,
+    EV_USART1_TXC,
 #endif
 #ifdef USART1_TX_vect
-    EV_USART1_TX = __COUNTER__,
+    EV_USART1_TX,
 #endif
 #ifdef USART1_UDRE_vect
-    EV_USART1_UDRE = __COUNTER__,
+    EV_USART1_UDRE,
 #endif
 #ifdef USART2_RX_vect
-    EV_USART2_RX = __COUNTER__,
+    EV_USART2_RX,
 #endif
 #ifdef USART2_TX_vect
-    EV_USART2_TX = __COUNTER__,
+    EV_USART2_TX,
 #endif
 #ifdef USART2_UDRE_vect
-    EV_USART2_UDRE = __COUNTER__,
+    EV_USART2_UDRE,
 #endif
 #ifdef USART3_RX_vect
-    EV_USART3_RX = __COUNTER__,
+    EV_USART3_RX,
 #endif
 #ifdef USART3_TX_vect
-    EV_USART3_TX = __COUNTER__,
+    EV_USART3_TX,
 #endif
 #ifdef USART3_UDRE_vect
-    EV_USART3_UDRE = __COUNTER__,
+    EV_USART3_UDRE,
 #endif
 #ifdef USART_RXC_vect
-    EV_USART_RXC = __COUNTER__,
+    EV_USART_RXC,
 #endif
 #ifdef USART_RX_vect
-    EV_USART_RX = __COUNTER__,
+    EV_USART_RX,
 #endif
 #ifdef USART_TXC_vect
-    EV_USART_TXC = __COUNTER__,
+    EV_USART_TXC,
 #endif
 #ifdef USART_TX_vect
-    EV_USART_TX = __COUNTER__,
+    EV_USART_TX,
 #endif
 #ifdef USART_UDRE_vect
-    EV_USART_UDRE = __COUNTER__,
+    EV_USART_UDRE,
 #endif
 #ifdef USI_OVERFLOW_vect
-    EV_USI_OVERFLOW = __COUNTER__,
+    EV_USI_OVERFLOW,
 #endif
 #ifdef USI_OVF_vect
-    EV_USI_OVF = __COUNTER__,
+    EV_USI_OVF,
 #endif
 #ifdef USI_START_vect
-    EV_USI_START = __COUNTER__,
+    EV_USI_START,
 #endif
 #ifdef USI_STRT_vect
-    EV_USI_STRT = __COUNTER__,
+    EV_USI_STRT,
 #endif
 #ifdef USI_STR_vect
-    EV_USI_STR = __COUNTER__,
+    EV_USI_STR,
 #endif
 #ifdef WATCHDOG_vect
-    EV_WATCHDOG = __COUNTER__,
+    EV_WATCHDOG,
 #endif
 #ifdef WDT_OVERFLOW_vect
-    EV_WDT_OVERFLOW = __COUNTER__,
+    EV_WDT_OVERFLOW,
 #endif
 #ifdef WDT_vect
-    EV_WDT = __COUNTER__,
+    EV_WDT,
 #endif
 
     // User generated events
-    EV_USER0		= __COUNTER__,
-    EV_USER1		= __COUNTER__,
-    EV_USER2		= __COUNTER__,
-    EV_USER3		= __COUNTER__,
-    EV_USER4		= __COUNTER__,
-    EV_USER5		= __COUNTER__,
-    EV_USER6		= __COUNTER__,
-    EV_USER7		= __COUNTER__,
+    EV_USER0,
+    EV_USER1,
+    EV_USER2,
+    EV_USER3,
+    EV_USER4,
+    EV_USER5,
+    EV_USER6,
+    EV_USER7,
     
-    EV_LAST         = __COUNTER__
+    // Sent once per event loop
+    EV_IDLE,
+    
+    EV_LAST
 };
+
+#define EV_SIZE ((EV_LAST + 7) / 8)
+

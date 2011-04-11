@@ -40,7 +40,6 @@ DAMAGE.
 using namespace m8r;
 
 Application Application::m_application;
-uint8_t Application::m_events[eventArraySize];
 
 Application& Application::application()
 {
@@ -50,25 +49,14 @@ Application& Application::application()
 void
 Application::run()
 {
-    memset(m_events, 0, eventArraySize);
-    
     while (1) {
-        for (uint8_t i = 0; i < eventArraySize; ++i) {
-            cli();
-            uint8_t event = m_events[i];
-            m_events[i] = 0;
-            sei();
-            
-            if (event) {
-                for (uint8_t j = 0; j < 8; ++j) {
-                    if (event & 1)
-                        processEvent((EventType) (i << 3 | j));
-                    event >>= 1;
-                    if (!event)
-                        break;
-                }
-            }
-            
+        if (m_eventQueueHead != m_eventQueueTail) {
+            processEvent(m_eventQueue[m_eventQueueHead++]);
+            if (m_eventQueueHead >= EVENT_QUEUE_SIZE)
+                m_eventQueueHead = 0;
+        }
+        else {
+            processEvent(EV_IDLE);
             wait();
         }
     }
