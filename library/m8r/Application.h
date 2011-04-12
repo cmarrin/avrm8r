@@ -47,6 +47,14 @@ void * operator new(size_t size);
 void operator delete(void * ptr); 
 
 namespace m8r {
+
+#define EVENT_QUEUE_SIZE 10
+
+enum ErrorType {
+    ERROR_NONE,
+    ERROR_EVENT_OVERRUN
+};
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application
@@ -55,12 +63,12 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#define EVENT_QUEUE_SIZE 20
     
 class Application {
 public:
     Application()
     : m_eventOnIdle(false)
+    , m_eventOverrunError(false)
     , m_eventQueueHead(0)
     , m_eventQueueTail(0)
     {
@@ -69,21 +77,15 @@ public:
     static Application& application();
     
     void initialize();
-    void processEvent(EventType type);
+    void processEvent(EventType);
+    void setErrorCondition(ErrorType, bool raise);
     
+    void addEvent(EventType);
     void run() __attribute__((noreturn));
     
-    void addEvent(EventType type)
-    {
-        cli();
-        m_eventQueue[m_eventQueueTail++] = type;
-        if (m_eventQueueTail >= EVENT_QUEUE_SIZE)
-            m_eventQueueTail = 0;
-        sei();
-    }
     
     void setEventOnIdle(bool b) { m_eventOnIdle = b; }
-            
+
 private:
     void wait()
     {
@@ -92,6 +94,7 @@ private:
     static Application m_application;
     
     bool m_eventOnIdle;
+    bool m_eventOverrunError;
     uint8_t m_eventQueueHead;
     uint8_t m_eventQueueTail;
     EventType m_eventQueue[EVENT_QUEUE_SIZE];

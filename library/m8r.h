@@ -203,4 +203,7 @@ PORT_CLASS(K)
 PORT_CLASS(L)
 #endif
 
+class PortNone {
+};
+
 }

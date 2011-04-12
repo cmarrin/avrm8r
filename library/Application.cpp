@@ -47,13 +47,40 @@ Application& Application::application()
 }
 
 void
+Application::addEvent(EventType type)
+{
+    cli();
+    m_eventQueue[m_eventQueueTail++] = type;
+    if (m_eventQueueTail >= EVENT_QUEUE_SIZE)
+        m_eventQueueTail = 0;
+        
+    // If we have filled the queue, don't reenable interrupts
+    // But set a flag and signal an error. The flag will get
+    // cleared and we will reenable interrupts when we remove
+    // an item from the queue
+    if (m_eventQueueHead == m_eventQueueTail) {
+        setErrorCondition(ERROR_EVENT_OVERRUN, true);
+        m_eventOverrunError = true;
+    } else
+        sei();
+}
+
+void
 Application::run()
 {
     while (1) {
-        if (m_eventQueueHead != m_eventQueueTail) {
-            processEvent(m_eventQueue[m_eventQueueHead++]);
+        cli();
+        if (m_eventQueueHead != m_eventQueueTail || m_eventOverrunError) {
+            EventType event = m_eventQueue[m_eventQueueHead++];
             if (m_eventQueueHead >= EVENT_QUEUE_SIZE)
                 m_eventQueueHead = 0;
+            if (m_eventOverrunError) {
+                setErrorCondition(ERROR_EVENT_OVERRUN, false);
+                m_eventOverrunError = false;
+            }
+            sei();
+            
+            processEvent(event);
         }
         else {
             processEvent(EV_IDLE);
