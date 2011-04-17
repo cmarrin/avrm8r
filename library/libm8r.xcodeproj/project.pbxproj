@@ -256,7 +256,7 @@
 				PRODUCT_NAME = libm8r;
 				SDKROOT = "";
 				TARGET = "";
-				TOOLS_DIR = "/usr/local/CrossPack-AVR";
+				TOOLS_DIR = /usr/local;
 				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
 			};
 			name = Release;

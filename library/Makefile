@@ -78,7 +78,7 @@ MATH_LIB =
 #MATH_LIB = -lm
 
 # Define programs and commands.
-SHELL = PATH=$${PATH}:/usr/local/CrossPack-AVR/bin /bin/sh
+SHELL = PATH=$${PATH}:/usr/local/bin /bin/sh
 CC = avr-gcc
 AR = avr-ar
 OBJCOPY = avr-objcopy

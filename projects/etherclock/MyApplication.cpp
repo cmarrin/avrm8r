@@ -38,7 +38,7 @@ Application::processEvent(EventType type)
     {
         case EV_IDLE:
             //myShiftReg.setOutputEnable(false);
-            myShiftReg.setChar('7');
+            myShiftReg.setChar('9');
             myShiftReg.setOutputEnable(true);
             break;
         default:
