@@ -33,7 +33,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		4900A2EF133FDE590036518B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* main.cpp */; };
+		490EBD251348B13700FAD91C /* MyApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 490EBD241348B13700FAD91C /* MyApplication.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -45,7 +45,7 @@
 			outputFiles = (
 				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "/opt/local/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
+			script = "${TOOLS_DIR}/bin/avr-gcc -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.o";
 		};
 		4900A2FB133FDEF10036518B /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -55,7 +55,7 @@
 			outputFiles = (
 				"$(OBJECT_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "/opt/local/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
+			script = "${TOOLS_DIR}/bin/avr-g++ -Wall -Os -DF_CPU=${FREQUENCY} -mmcu=${ARCHS} ${CFLAGS} -c ${INPUT_FILE_PATH} -o ${TARGET_BUILD_DIR}/${INPUT_FILE_BASE}.o";
 		};
 		4955B5A41344028B001EDD20 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
@@ -78,9 +78,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4900A1A7133F92730036518B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4990FD7A1344B7E400F96FEF /* «PROJECTNAME».hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = «PROJECTNAME».hex; path = build/Deployment/«PROJECTNAME».hex; sourceTree = "<group>"; };
-		4990FD7B1344B7E400F96FEF /* «PROJECTNAME».map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = «PROJECTNAME».map; path = build/Deployment/«PROJECTNAME».map; sourceTree = "<group>"; };
+		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -88,7 +86,6 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				19C28FB6FE9D52B211CA2CBB /* Products */,
 			);
 			name = "«PROJECTNAME»";
 			sourceTree = "<group>";
@@ -96,18 +93,9 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4900A1A7133F92730036518B /* main.cpp */,
+				490EBD241348B13700FAD91C /* MyApplication.cpp */,
 			);
 			name = Source;
-			sourceTree = "<group>";
-		};
-		19C28FB6FE9D52B211CA2CBB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4990FD7A1344B7E400F96FEF /* «PROJECTNAME».hex */,
-				4990FD7B1344B7E400F96FEF /* «PROJECTNAME».map */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,9 +105,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
 			buildPhases = (
+				49282A0E134BA95A009E0FE6 /* Build libm8r.a */,
 				4900A2E0133FDE330036518B /* Sources */,
 				4955B5661343FBFF001EDD20 /* Create elf */,
 				493469131344045F005C85D6 /* Create hex */,
+				49FC495C134D6B6100FD30CF /* Create listing */,
+				49282B70134CFEDE009E0FE6 /* Show size */,
 			);
 			buildRules = (
 				4955B5A41344028B001EDD20 /* PBXBuildRule */,
@@ -159,6 +150,34 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		49282A0E134BA95A009E0FE6 /* Build libm8r.a */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build libm8r.a";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -f ${USER_LIBRARY_DIR}/m8r/Makefile\n";
+		};
+		49282B70134CFEDE009E0FE6 /* Show size */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Show size";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "i=0\nfor s in `${TOOLS_DIR}/bin/avr-size -td ${OBJECT_FILE_DIR}/${PROJECT}.elf`\ndo\n\tarray[$i]=$s\n\t((i++))\ndone\necho\necho '===================='\necho Executable size:\nprintf \"\\ttext:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[6]}\" \"${array[6]}\"\nprintf \"\\tdata:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[7]}\" \"${array[7]}\"\nprintf \"\\tbss:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[8]}\" \"${array[8]}\"\necho \necho Total: ${array[9]} \\(0x${array[10]}\\)\necho '===================='\necho\n";
+		};
 		49346908134403EF005C85D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -186,7 +205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Creating .hex file\"\n/opt/local/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
+			shellScript = "echo \"Creating .hex file\"\n${TOOLS_DIR}/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
 		};
 		4955B5661343FBFF001EDD20 /* Create elf */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -203,7 +222,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n/opt/local/bin/avr-gcc ${LDFLAGS} ${OBJECT_FILE_DIR}/*.o -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
+			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n${TOOLS_DIR}/bin/avr-gcc ${OBJECT_FILE_DIR}/*.o ${LDFLAGS} -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${ARCHS} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
 		};
 		4990FD931344BAD700F96FEF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -217,7 +236,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo Programming\n/opt/local/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${ARCHS} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
+			shellScript = "echo Programming\n${TOOLS_DIR}/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${ARCHS} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
+		};
+		49FC495C134D6B6100FD30CF /* Create listing */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create listing";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-objdump -lhS --demangle ${OBJECT_FILE_DIR}/${PROJECT}.elf > ${TARGET_BUILD_DIR}/${PROJECT}.lss";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -226,7 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4900A2EF133FDE590036518B /* main.cpp in Sources */,
+				490EBD251348B13700FAD91C /* MyApplication.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,10 +280,13 @@
 				ARCHS = atmega168;
 				AVRDUDE_PORT = /dev/cu.usbserial;
 				AVRDUDE_PROGRAMMER = stk500v1;
-				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
-				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/Marrinator/Headers";
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
+				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 8000000;
+				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
+				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 				PRODUCT_NAME = "«PROJECTNAME»";
+				TOOLS_DIR = /usr/local;
 				VALID_ARCHS = "avr2 at90s2313 at90s2323 at90s2333 at90s2343 attiny22 attiny26 at90s4414 at90s4433 at90s4434 at90s8515 at90c8534 at90s8535 attiny13 attiny2313 attiny25 attiny45 attiny85 at86rf401 attiny13 attiny2313 avr3 atmega103 atmega603 at43usb320 at43usb355 at76c711 avr4 atmega8 atmega48 atmega88 atmega8515 atmega8535 at90pwm2 at90pwm3 avr5 atmega16 atmega161 atmega162 atmega163 atmega164 atmega165 atmega168 atmega169 atmega32 atmega323 atmega324 atmega325 atmega3250 atmega329 atmega3290 atmega640 atmega64 atmega644 atmega645 atmega649 atmega6490 atmega6450 atmega128 atmega1280 atmega1281 at90can32 at90can64 at90can128 at94k avr1 at90s1200 attiny11 attiny12 attiny15 attiny28";
 			};
 			name = Deployment;
@@ -265,7 +301,7 @@
 		4934690A134403EF005C85D6 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "Clean";
+				PRODUCT_NAME = Clean;
 			};
 			name = Deployment;
 		};
