@@ -5,6 +5,10 @@
     
     An error LED is also assigned to PortB, pin 0. An LED on this port will turn
     on whenever an error condition is present.
+    
+    Project is setup for atmega168 running at 8MHz, with an STK500v1 programmer on
+    port /dev/cu.usbserial. These can be changed in the XCode Project Settings
+    (User Defined settings)
 */
 
 #include <m8r.h>

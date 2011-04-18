@@ -114,9 +114,9 @@ GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
 
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
-ALL_CFLAGS = -mmcu=$(ARCHS) -I. $(CFLAGS) $(GENDEPFLAGS)
-ALL_CPPFLAGS = -mmcu=$(ARCHS) -I. $(CPPFLAGS) $(GENDEPFLAGS)
-ALL_ASFLAGS = -mmcu=$(ARCHS) -I. -x assembler-with-cpp $(ASFLAGS)
+ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
+ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
+ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 # Default target.
 all: begin gccversion sizebefore build sizeafter end
@@ -172,11 +172,11 @@ $(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.S
 
 # Create preprocessed source for use in sending a bug report.
 %.i : %.c
-	$(CC) -E -mmcu=$(ARCHS) -I. $(CFLAGS) $< -o $@ 
+	$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $@ 
 
 # Create preprocessed source for use in sending a bug report.
 %.i : %.cpp
-	$(CC) -E -mmcu=$(ARCHS) -I. $(CPPFLAGS) $< -o $@ 
+	$(CC) -E -mmcu=$(MCU) -I. $(CPPFLAGS) $< -o $@ 
 
 
 # Target: clean project.
