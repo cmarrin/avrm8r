@@ -79,12 +79,12 @@ MATH_LIB =
 
 # Define programs and commands.
 SHELL = PATH=$${PATH}:/usr/local/bin /bin/sh
-CC = avr-gcc
-AR = avr-ar
-OBJCOPY = avr-objcopy
-OBJDUMP = avr-objdump
-SIZE = avr-size
-NM = avr-nm
+CC = ${TOOLS_DIR}/bin/avr-gcc
+AR = ${TOOLS_DIR}/bin/avr-ar
+OBJCOPY = ${TOOLS_DIR}/bin/avr-objcopy
+OBJDUMP = ${TOOLS_DIR}/bin/avr-objdump
+SIZE = ${TOOLS_DIR}/bin/avr-size
+NM = ${TOOLS_DIR}/bin/avr-nm
 REMOVE = rm -f
 COPY = cp
 MKDIR = mkdir

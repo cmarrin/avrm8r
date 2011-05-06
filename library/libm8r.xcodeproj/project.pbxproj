@@ -256,7 +256,7 @@
 				PRODUCT_NAME = libm8r;
 				SDKROOT = "";
 				TARGET = "";
-				TOOLS_DIR = /usr/local;
+				TOOLS_DIR = /usr/local/avrtools;
 			};
 			name = Release;
 		};
@@ -273,6 +273,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = Marrinator;
+				TOOLS_DIR = /usr/local/avrtools;
 				ZERO_LINK = NO;
 			};
 			name = Release;

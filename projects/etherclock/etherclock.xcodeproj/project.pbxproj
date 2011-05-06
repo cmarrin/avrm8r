@@ -286,7 +286,7 @@
 				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
-				TOOLS_DIR = /usr/local;
+				TOOLS_DIR = /usr/local/avrtools/;
 			};
 			name = Deployment;
 		};
