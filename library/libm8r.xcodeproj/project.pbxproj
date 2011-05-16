@@ -17,6 +17,7 @@
 				492829E1134B990E009E0FE6 /* Copy Makefile */,
 			);
 			dependencies = (
+				49B59EF61375937D006090D7 /* PBXTargetDependency */,
 			);
 			name = Install;
 			productName = Marrinator;
@@ -47,6 +48,16 @@
 		49EF3979134571C800519468 /* Timer1.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EC133F9C5B0036518B /* Timer1.cpp */; };
 		49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		49B59EF51375937D006090D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4928295E134B8866009E0FE6;
+			remoteInfo = Make;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		490EBD671348B60E00FAD91C /* Copy Main Header */ = {
@@ -243,12 +254,21 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXTargetDependency section */
+		49B59EF61375937D006090D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4928295E134B8866009E0FE6 /* Make */;
+			targetProxy = 49B59EF51375937D006090D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		1DEB912008733D790010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
+				FREQUENCY = 8000000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;
 				ONLY_ACTIVE_ARCH = NO;

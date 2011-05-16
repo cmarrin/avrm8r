@@ -83,6 +83,7 @@ Application::run()
             processEvent(event);
         }
         else {
+            sei();
             processEvent(EV_IDLE);
             wait();
         }
@@ -103,7 +104,6 @@ extern "C" {
 void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::application().initialize();
     Application::application().run();
 }
 }

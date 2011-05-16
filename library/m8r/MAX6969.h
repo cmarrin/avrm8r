@@ -76,16 +76,22 @@ public:
 
     void setOutputEnable(bool e)
     {
-        if (e) {
-            m_latchPort.setPortMask(_BV(LatchBit));
-            m_latchPort.clearPortMask(_BV(LatchBit));
+        if (e)
             m_enablePort.clearPortMask(_BV(EnableBit));
-        }
         else
             m_enablePort.setPortMask(_BV(EnableBit));
     }
     
-    void setChar(uint8_t c) { send(patternFromChar(c), 8); }
+    void latch()
+    {
+        m_latchPort.setPortMask(_BV(LatchBit));
+        m_latchPort.clearPortMask(_BV(LatchBit));
+    }
+    
+    void setChar(uint8_t c)
+    {
+        send(patternFromChar(c), 8);
+    }
     
 private:
     LatchPort m_latchPort;

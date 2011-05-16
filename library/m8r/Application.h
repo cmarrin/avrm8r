@@ -39,6 +39,7 @@ DAMAGE.
 
 #include <stdlib.h>
 #include <avr/interrupt.h>
+#include <util/delay_basic.h>
 #include "m8r.h"
 #include "m8r/EventSource.h"
 
@@ -52,7 +53,8 @@ namespace m8r {
 
 enum ErrorType {
     ERROR_NONE,
-    ERROR_EVENT_OVERRUN
+    ERROR_EVENT_OVERRUN,
+    ERROR_USER
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -76,7 +78,6 @@ public:
     
     static Application& application();
     
-    void initialize();
     void processEvent(EventType);
     void setErrorCondition(ErrorType, bool raise);
     
@@ -85,7 +86,12 @@ public:
     
     
     void setEventOnIdle(bool b) { m_eventOnIdle = b; }
-
+    
+    static void delay(uint16_t us)
+    {
+        _delay_loop_2((uint32_t) us * 4000000 / F_CPU);
+    }
+    
 private:
     void wait()
     {

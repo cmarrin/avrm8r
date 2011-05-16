@@ -236,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo Programming\n${TOOLS_DIR}/bin/avrdude -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${MCU} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
+			shellScript = "echo Programming\n${TOOLS_DIR}/bin/avrdude -C ${TOOLS_DIR}/etc/avrdude.conf -c ${AVRDUDE_PROGRAMMER} -P ${AVRDUDE_PORT} -p ${MCU} -U flash:w:${TARGET_BUILD_DIR}/${PROJECT}.hex:i";
 		};
 		49FC495C134D6B6100FD30CF /* Create listing */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -293,6 +293,7 @@
 		01706F570A347F8800E43B08 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = Build;
 			};
 			name = Deployment;

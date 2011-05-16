@@ -36,24 +36,72 @@ DAMAGE.
 #include "m8r/ADC.h"
 #include "m8r/Application.h"
 
+uint16_t g_lastConversion = 0;
+
 using namespace m8r;
 
 // FIXME: Add handling of ADC channel
 
-ADC::ADC(uint8_t prescale, uint8_t reference)
+ADC::ADC(uint8_t channel, uint8_t prescale, uint8_t reference)
 {
-    ADCSRA |= _BV(ADEN);             // enable ADC (turn on ADC power)
+    setPrescaler(prescale);
+    setReference(reference);
+    setChannel(channel);
+}
+
+void
+ADC::setEnabled(bool e)
+{
+    if (e) {
+        ADCSRA |= _BV(ADIE); // enable ADC interrupts
+        ADCSRA |= _BV(ADEN); // enable ADC (turn on ADC power)
+    }
+    else {
+        ADCSRA &= ~_BV(ADIE); // disable ADC interrupts
+        ADCSRA &= ~_BV(ADEN); // disable ADC (turn off ADC power)
+    }
+}
+
+void
+ADC::setPrescaler(uint8_t prescale)
+{
+    if (prescale & ADC_PS_MASK)
+        prescale = ADC_PS_DIV128;
     
-#ifdef ADFR
-    ADCSRA &= ~_BV(ADFR);            // default to single sample convert mode
-#else
-    ADCSRA &= ~_BV(ADATE);          // default to no auto trigger
-#endif
-    setPrescaler(prescale);         // set default prescaler
-    setReference(reference);        // set default reference
+    ADCSRA &= ~ADC_PS_MASK;
+    ADCSRA |= prescale;
+}
+
+void
+ADC::setReference(uint8_t ref)
+{
+    if (ref & ADC_REF_MASK)
+        ref = ADC_REF_AVCC;
+
+    ADMUX &= ~ADC_REF_MASK;
+    ADMUX |= ref;
+}
+
+void
+ADC::setChannel(uint8_t channel)
+{
+    if (channel & ADC_CH_MASK)
+        channel = ADC_CH_ADC0;
     
-    //ADCSR |= _BV(ADIE);               // enable ADC interrupts
-    setChannel(0);
+    ADMUX &= ~ADC_CH_MASK;
+    ADMUX |= channel;
+}
+
+void
+ADC::startConversion()
+{
+    ADCSRA |= _BV(ADSC);
+}
+
+uint16_t
+ADC::getLastConversion10Bit()
+{
+    return g_lastConversion;
 }
 
 uint16_t
@@ -63,16 +111,16 @@ ADC::convert10Bit()
     ADCSRA |= _BV(ADSC);                     // start conversion
     
     // wait for completion
-    while(bit_is_set(ADCSRA, ADSC))
-    ;
-
+    while(!isConversionComplete())
+        ;
+    
     return ADCW;
 }
 
 // Interrupt handler for ADC complete interrupt.
-ISR(SIG_ADC)
+ISR(ADC_vect)
 {
-    ADCSRA &= ~_BV(ADIE);    // disable ADC interrupts
+    g_lastConversion = ADCW;
     Application::application().addEvent(EV_ADC);
 }
 
