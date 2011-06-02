@@ -88,12 +88,10 @@ public:
             // clock in data
             if (m_rising) {
                 m_clockPort.setPortBit(ClockBit);
-                _delay_loop_1(50);
                 m_clockPort.clearPortBit(ClockBit);
             }
             else {
                 m_clockPort.clearPortBit(ClockBit);
-                _delay_loop_1(50);
                 m_clockPort.setPortBit(ClockBit);
             }
 
