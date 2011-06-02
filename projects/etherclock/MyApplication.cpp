@@ -5,7 +5,7 @@
 
 using namespace m8r;
 
-#define ErrorPort PortB
+#define ErrorPort Port<B>
 #define ErrorBit 0
 
 #define NumBrightnessValuesToAccumulate 100
@@ -20,11 +20,11 @@ public:
     , m_brightnessCount(0)
     {
         // Testing
-        m_shiftReg.setChar('8');
+        m_shiftReg.setChar('7');
         m_shiftReg.latch();
         
-        m_errorPort.setPortMask(_BV(ErrorBit));
-        m_errorPort.setDDRMask(_BV(ErrorBit));
+        m_errorPort.setPortBit(ErrorBit);
+        m_errorPort.setBitOutput(ErrorBit);
         Application::application().setEventOnIdle(true);
         
         m_adc.setEnabled(true);
@@ -51,7 +51,7 @@ protected:
     
 private:
     ADC m_adc;
-    MAX6969<PortC, 1, PortC, 2, PortC, 4, PortC, 3> m_shiftReg;
+    MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 4, Port<C>, 3> m_shiftReg;
     ErrorPort m_errorPort;
     
     uint16_t m_accumulatedBrightness;
@@ -75,9 +75,9 @@ MyApp::setErrorCondition(ErrorType error, bool raise)
         case ERROR_EVENT_OVERRUN:
         case ERROR_USER:
             if (raise)
-                m_errorPort.clearPortMask(_BV(ErrorBit));
+                m_errorPort.clearPortBit(ErrorBit);
             else
-                m_errorPort.setPortMask(_BV(ErrorBit));
+                m_errorPort.setPortBit(ErrorBit);
             break;
         default:
             break;
@@ -98,9 +98,11 @@ MyApp::processEvent(EventType type)
             if (++m_brightnessCount == 0) {
                 m_shiftReg.setOutputEnable(true);
                 m_brightnessMatch = brightness();
+                setErrorCondition(ERROR_USER, true);
             }
             else if (m_brightnessCount == m_brightnessMatch) {
                 m_shiftReg.setOutputEnable(false);
+                setErrorCondition(ERROR_USER, false);
             }
             break;
         default:

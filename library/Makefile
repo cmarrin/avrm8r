@@ -37,6 +37,8 @@ CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 CPPFLAGS = $(CDEFS)
 CPPFLAGS += -O$(OPT)
 CPPFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CPPFLAGS += -finline-limit=10
+CPPFLAGS += -ffunction-sections -fdata-sections -ffreestanding 
 CPPFLAGS += -Wall 
 CPPFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 

@@ -293,6 +293,8 @@
 		01706F570A347F8800E43B08 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
+				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = Build;
 			};
