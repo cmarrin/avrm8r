@@ -125,7 +125,7 @@ public:
 	~ADC() { }
 	
 	void setEnabled(bool e);
-	bool isEnabled() const { return ADCSRA | _BV(ADEN); }
+	bool isEnabled() const _INLINE_ { return ADCSRA | _BV(ADEN); }
 	
 	void setPrescaler(uint8_t prescale);
 	uint8_t	getPrescaler() const
@@ -142,12 +142,12 @@ public:
 	
 	void startConversion();    
     uint16_t getLastConversion10Bit();
-    uint8_t getLastConversion8Bit() { return getLastConversion10Bit() >> 2; }
+    uint8_t getLastConversion8Bit() _INLINE_ { return getLastConversion10Bit() >> 2; }
 	
     uint16_t convert10Bit();
-    uint16_t convert8Bit() { return convert10Bit() >> 2; }
+    uint16_t convert8Bit() _INLINE_ { return convert10Bit() >> 2; }
     
-	bool isConversionComplete() const { return (ADCSRA & (1 << ADSC)) == 0; }
+	bool isConversionComplete() const _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
 
 private:
 };

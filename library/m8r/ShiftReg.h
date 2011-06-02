@@ -38,6 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
+#include <util/delay_basic.h>
 
 namespace m8r {
 
@@ -64,15 +65,15 @@ public:
     : m_rising(rising)
     , m_msbFirst(msbFirst)
     {
-        m_clockPort.setDDRMask(_BV(ClockBit));
-        m_dataPort.setDDRMask(_BV(DataBit));
+        m_clockPort.setBitOutput(ClockBit);
+        m_dataPort.setBitOutput(DataBit);
         if (m_rising)
-            m_clockPort.clearPortMask(_BV(ClockBit));
+            m_clockPort.clearPortBit(ClockBit);
         else
-            m_clockPort.setPortMask(_BV(ClockBit));
+            m_clockPort.setPortBit(ClockBit);
     }
     
-    void clear()    { send(0); }
+    void clear() { send(0); }
     
     void send(uint8_t v, uint8_t n)
     {        
@@ -80,18 +81,18 @@ public:
             // set data bit
             uint8_t tmp = ((uint8_t) v) & ((uint8_t) mask);
             if (tmp)
-                m_dataPort.setPortMask(_BV(DataBit));
+                m_dataPort.setPortBit(DataBit);
             else
-                m_dataPort.clearPortMask(_BV(DataBit));
+                m_dataPort.clearPortBit(DataBit);
 
             // clock in data
             if (m_rising) {
-                m_clockPort.setPortMask(_BV(ClockBit));
-                m_clockPort.clearPortMask(_BV(ClockBit));
+                m_clockPort.setPortBit(ClockBit);
+                m_clockPort.clearPortBit(ClockBit);
             }
             else {
-                m_clockPort.clearPortMask(_BV(ClockBit));
-                m_clockPort.setPortMask(_BV(ClockBit));
+                m_clockPort.clearPortBit(ClockBit);
+                m_clockPort.setPortBit(ClockBit);
             }
 
             mask = m_msbFirst ? (mask >> 1) : (mask << 1);

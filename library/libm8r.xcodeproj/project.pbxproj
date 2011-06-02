@@ -32,7 +32,6 @@
 		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
 		4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817B13514A3B0072EEA4 /* EventSource.h */; };
 		4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817C13514A3B0072EEA4 /* EventSourceEnums.h */; };
-		4999819A13514A6B0072EEA4 /* marrinator.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817D13514A3B0072EEA4 /* marrinator.h */; };
 		4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817E13514A3B0072EEA4 /* MAX6969.h */; };
 		4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817F13514A3B0072EEA4 /* ShiftReg.h */; };
 		4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818013514A3B0072EEA4 /* STP08CDC596.h */; };
@@ -92,7 +91,6 @@
 				4999819713514A6B0072EEA4 /* Application.h in Copy Headers */,
 				4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */,
 				4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */,
-				4999819A13514A6B0072EEA4 /* marrinator.h in Copy Headers */,
 				4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */,
 				4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */,
 				4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */,
@@ -140,7 +138,6 @@
 		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
 		4999817B13514A3B0072EEA4 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = m8r/EventSource.h; sourceTree = "<group>"; };
 		4999817C13514A3B0072EEA4 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = m8r/EventSourceEnums.h; sourceTree = "<group>"; };
-		4999817D13514A3B0072EEA4 /* marrinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = marrinator.h; path = m8r/marrinator.h; sourceTree = "<group>"; };
 		4999817E13514A3B0072EEA4 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = m8r/MAX6969.h; sourceTree = "<group>"; };
 		4999817F13514A3B0072EEA4 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = m8r/ShiftReg.h; sourceTree = "<group>"; };
 		4999818013514A3B0072EEA4 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = m8r/STP08CDC596.h; sourceTree = "<group>"; };
@@ -202,7 +199,6 @@
 				4999817A13514A3B0072EEA4 /* Application.h */,
 				4999817B13514A3B0072EEA4 /* EventSource.h */,
 				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
-				4999817D13514A3B0072EEA4 /* marrinator.h */,
 				4999817E13514A3B0072EEA4 /* MAX6969.h */,
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
 				4999818013514A3B0072EEA4 /* STP08CDC596.h */,

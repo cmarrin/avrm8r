@@ -1,5 +1,5 @@
 //
-//  marrinator.h
+//  m8r.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -44,6 +44,9 @@ DAMAGE.
 
 #include <stdint.h>
 #include <avr/io.h>
+
+#define _INLINE_ __attribute__ ((always_inline)) 
+#define _NO_INLINE_ __attribute__ ((noinline)) 
 
 namespace m8r {
 
@@ -138,72 +141,56 @@ inline FPF FPF_MAKE(uint32_t i, uint32_t f, uint8_t dp, uint32_t e)
 #define TIMER_CLK_T_RISE        0x07    ///< Timer clocked at T rising edge
 #define TIMER_PRESCALE_MASK     0x07    ///< Timer Prescaler Bit-Mask
 
-// Macro for Port classes
-#define PORT_CLASS(PortId) \
-class Port##PortId { \
-public: \
-    uint8_t getDDR() const { return DDR##PortId; } \
-    void setDDR(uint8_t v) { DDR##PortId = v; } \
-    bool isDDRBit(uint8_t i) const { return DDR##PortId & _BV(i); } \
-    void setDDRBit(uint8_t i, bool v) { if (v) DDR##PortId |= _BV(i); else DDR##PortId &= ~_BV(i); } \
-    bool isDDRMask(uint8_t m) const { return DDR##PortId & m; } \
-    void setDDRMask(uint8_t m) { DDR##PortId |= m; } \
-    void clearDDRMask(uint8_t m) { DDR##PortId &= ~m; } \
-    volatile uint8_t& getDDRAddress() { return DDR##PortId; } \
- \
-    uint8_t getPort() const { return PORT##PortId; } \
-    void setPort(uint8_t v) { PORT##PortId = v; } \
-    bool isPortBit(uint8_t i) const { return PORT##PortId & _BV(i); } \
-    void setPortBit(uint8_t i, bool v) { if (v) PORT##PortId |= _BV(i); else PORT##PortId &= ~_BV(i); } \
-    bool isPortMask(uint8_t m) const { return PORT##PortId & m; } \
-    void setPortMask(uint8_t m) { PORT##PortId |= m; } \
-    void clearPortMask(uint8_t m) { PORT##PortId &= ~m; } \
-    volatile uint8_t& getPortAddress() { return PORT##PortId; } \
- \
-    uint8_t getPin() const { return PIN##PortId; } \
-    bool isPinBit(uint8_t i) const { return PIN##PortId & _BV(i); } \
-    bool isPinMask(uint8_t m) const { return PIN##PortId & m; } \
-    volatile uint8_t& getPinAddress() { return PIN##PortId; } \
-}; \
-
+enum Ports {
 #ifdef PORTA
-PORT_CLASS(A)
+    A = 0x00,
 #endif
 #ifdef PORTB
-PORT_CLASS(B)
+    B = 0x03,
 #endif
 #ifdef PORTC
-PORT_CLASS(C)
+    C = 0x06,
 #endif
 #ifdef PORTD
-PORT_CLASS(D)
+    D = 0x09,
 #endif
 #ifdef PORTE
-PORT_CLASS(E)
+    E = 0x0c,
 #endif
 #ifdef PORTF
-PORT_CLASS(F)
+    F = 0x0f,
 #endif
 #ifdef PORTG
-PORT_CLASS(G)
+    G = 0x12,
 #endif
-#ifdef PORTH
-PORT_CLASS(H)
-#endif
-#ifdef PORTI
-PORT_CLASS(I)
-#endif
-#ifdef PORTJ
-PORT_CLASS(J)
-#endif
-#ifdef PORTK
-PORT_CLASS(K)
-#endif
-#ifdef PORTL
-PORT_CLASS(L)
-#endif
+    _NOPORT
+};
 
-class PortNone {
+#define PIN(port) _SFR_IO8(port)
+#define DDR(port) _SFR_IO8(port + 1)
+#define PORT(port) _SFR_IO8(port + 2)
+
+// Template for Port classes
+template <uint8_t port>
+class Port {
+public:
+    uint8_t getDDR() const _INLINE_ { return DDR(port); }
+    void setDDR(uint8_t v) _INLINE_ { DDR(port) = v; }
+    void setBitOutput(uint8_t i) _INLINE_ { DDR(port) |= _BV(i); }
+    void setBitInput(uint8_t i) _INLINE_ { DDR(port) &= ~_BV(i); }
+    bool isBitOutput(uint8_t i) const _INLINE_ { return DDR(port) & _BV(i); }
+    volatile uint8_t& getDDRAddress() _INLINE_ { return DDR(port); }
+    
+    uint8_t getPort() const _INLINE_ { return PORT(port); }
+    void setPort(uint8_t v) _INLINE_ { PORT(port) = v; }
+    bool isPortBit(uint8_t i) const _INLINE_ { return PORT(port) & _BV(i); }
+    void setPortBit(uint8_t i) _INLINE_ { PORT(port) |= _BV(i); }
+    void clearPortBit(uint8_t i) _INLINE_ { PORT(port) &= ~_BV(i); }
+    volatile uint8_t& getPortAddress() _INLINE_ { return PORT(port); }
+
+    uint8_t getPin() const _INLINE_ { return PIN(port); }
+    bool isPinBit(uint8_t i) const _INLINE_ { return PIN(port) & _BV(i); }
+    volatile uint8_t& getPinAddress() _INLINE_ { return PIN(port); }
 };
 
 }
