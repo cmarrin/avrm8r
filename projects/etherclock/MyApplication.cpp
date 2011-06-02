@@ -6,7 +6,7 @@
 using namespace m8r;
 
 #define ErrorPort Port<B>
-#define ErrorBit 0
+#define ErrorBit 1
 
 #define NumBrightnessValuesToAccumulate 100
 
