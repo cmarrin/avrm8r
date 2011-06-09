@@ -20,7 +20,10 @@ public:
     , m_brightnessCount(0)
     {
         // Testing
-        m_shiftReg.setChar('7');
+        m_shiftReg.setChar('8', true);
+        m_shiftReg.setChar('8', true);
+        m_shiftReg.setChar('8', true);
+        m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
         
         m_errorPort.setPortBit(ErrorBit);
@@ -51,7 +54,7 @@ protected:
     
 private:
     ADC m_adc;
-    MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 4, Port<C>, 3> m_shiftReg;
+    MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     ErrorPort m_errorPort;
     
     uint16_t m_accumulatedBrightness;

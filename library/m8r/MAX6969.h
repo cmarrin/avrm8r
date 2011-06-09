@@ -88,9 +88,9 @@ public:
         m_latchPort.clearPortBit(LatchBit);
     }
     
-    void setChar(uint8_t c) _INLINE_
+    void setChar(uint8_t c, bool dp = false) _INLINE_
     {
-        send(patternFromChar(c), 8);
+        send(patternFromChar(c) | (dp ? 0x80 : 0), 8);
     }
     
 private:
