@@ -1,7 +1,9 @@
 //
-//  Application.cpp
+//  Event.h
 //
 //  Created by Chris Marrin on 3/19/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,44 +35,52 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <string.h>
+#pragma once
 
-#include "m8r/Application.h"
+#include "m8r.h"
+#include "EventSourceEnums.h"
 
-using namespace m8r;
+namespace m8r {
 
-Application Application::m_application;
 
-Application& Application::application()
-{
-    return m_application;
-}
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: Event
+//
+//  Linked list of event objects
+//
+//////////////////////////////////////////////////////////////////////////////
 
-void
-Application::run()
-{
-    while (1) {
-        Event::processAllEvents();
-        processEvent(EV_IDLE);
-        wait();
+class Event {
+public:
+	Event(EventType type) : m_type(type), m_next(0)	{ }
+	
+	static void _INLINE_ add(EventType type)
+    {
+        Event* event = alloc(type);
+        event->m_next = m_head;
+        m_head = event;
     }
-}
+    
+    static void processAllEvents();
+    
+private:
+    static Event* _INLINE_ alloc(EventType type)
+    {
+        if (m_free) {
+            Event* event = m_free;
+            m_free = event->m_next;
+            return event;
+        }
+        
+        return new Event(type);
+    }
+    
+    EventType m_type;
+    Event* m_next;
+    
+    static Event* m_head;
+    static Event* m_free;
+};
 
-void * operator new(size_t size) 
-{ 
-    return malloc(size); 
-} 
-
-void operator delete(void * ptr) 
-{ 
-  free(ptr); 
 }
-
-extern "C" {
-void _main() __attribute__((noreturn));
-void _main()
-{
-    Application::application().run();
-}
-}
-

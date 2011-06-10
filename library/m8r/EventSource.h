@@ -55,11 +55,8 @@ class EventSource {
 	friend class Application;
 	
 public:
-	EventSource()	{ }
-	~EventSource()	{ }
 	
 protected:
-	void addEvent(EventType type);
 	
 private:
 };

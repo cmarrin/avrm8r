@@ -121,7 +121,7 @@ ADC::convert10Bit()
 ISR(ADC_vect)
 {
     g_lastConversion = ADCW;
-    Application::application().addEvent(EV_ADC);
+    Event::add(EV_ADC);
 }
 
 

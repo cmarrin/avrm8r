@@ -1,5 +1,5 @@
 //
-//  Application.cpp
+//  Event.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -33,44 +33,35 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <string.h>
-
+#include "m8r/Event.h"
 #include "m8r/Application.h"
 
 using namespace m8r;
 
-Application Application::m_application;
-
-Application& Application::application()
-{
-    return m_application;
-}
+Event* Event::m_head = 0;
+Event* Event::m_free = 0;
 
 void
-Application::run()
+Event::processAllEvents()
 {
-    while (1) {
-        Event::processAllEvents();
-        processEvent(EV_IDLE);
-        wait();
+    cli();
+    if (!m_head) {
+        sei();
+        return;
     }
+    
+    Event* firstEvent = m_head;
+    m_head = 0;
+    sei();
+    
+    Event* lastEvent;
+    for (Event* event = firstEvent; event; event = event->m_next) {
+        Application::application().processEvent(event->m_type);
+        lastEvent = event;
+    }
+    
+    cli();
+    lastEvent->m_next = m_free;
+    m_free = firstEvent;
 }
-
-void * operator new(size_t size) 
-{ 
-    return malloc(size); 
-} 
-
-void operator delete(void * ptr) 
-{ 
-  free(ptr); 
-}
-
-extern "C" {
-void _main() __attribute__((noreturn));
-void _main()
-{
-    Application::application().run();
-}
-}
-
+	

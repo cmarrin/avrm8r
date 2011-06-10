@@ -41,7 +41,7 @@ DAMAGE.
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
 #include "m8r.h"
-#include "m8r/EventSource.h"
+#include "m8r/Event.h"
 
 // Setup for C++ operation
 void * operator new(size_t size); 
@@ -70,9 +70,6 @@ class Application {
 public:
     Application()
     : m_eventOnIdle(false)
-    , m_eventOverrunError(false)
-    , m_eventQueueHead(0)
-    , m_eventQueueTail(0)
     {
     }
     
@@ -81,7 +78,6 @@ public:
     void processEvent(EventType);
     void setErrorCondition(ErrorType, bool raise);
     
-    void addEvent(EventType);
     void run() __attribute__((noreturn));
     
     
@@ -100,10 +96,6 @@ private:
     static Application m_application;
     
     bool m_eventOnIdle;
-    bool m_eventOverrunError;
-    uint8_t m_eventQueueHead;
-    uint8_t m_eventQueueTail;
-    EventType m_eventQueue[EVENT_QUEUE_SIZE];
 };
 
 }

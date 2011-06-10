@@ -37,9 +37,3 @@ DAMAGE.
 #include "m8r/Application.h"
 
 using namespace m8r;
-
-void
-EventSource::addEvent(EventType type)
-{
-	Application::application().addEvent(type);
-}

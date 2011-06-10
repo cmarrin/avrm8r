@@ -72,16 +72,16 @@ Timer1::getInterruptEnable(uint8_t irpt) const
 // Interrupt handlers
 ISR(TIMER1_OVF_vect)
 {
-	Application::application().addEvent(EV_TIMER1_OVF);
+	Event::add(EV_TIMER1_OVF);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-	Application::application().addEvent(EV_TIMER1_COMPA);
+	Event::add(EV_TIMER1_COMPA);
 }
 
 ISR(TIMER1_CAPT_vect)
 {
-	Application::application().addEvent(EV_TIMER1_CAPT);
+	Event::add(EV_TIMER1_CAPT);
 }
 
