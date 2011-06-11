@@ -140,6 +140,7 @@
 		4922582C13A2806F008A024A /* Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Event.cpp; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
 		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
 		4999817B13514A3B0072EEA4 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = m8r/EventSource.h; sourceTree = "<group>"; };
@@ -210,6 +211,7 @@
 				4999817E13514A3B0072EEA4 /* MAX6969.h */,
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
 				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
+				4980957C13A296B6000B717B /* Timer.h */,
 				4999818113514A3B0072EEA4 /* Timer0.h */,
 				4999818213514A3B0072EEA4 /* Timer1.h */,
 				4999818313514A3B0072EEA4 /* Timer1RTC.h */,
