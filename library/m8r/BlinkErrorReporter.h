@@ -1,5 +1,5 @@
 //
-//  Application.h
+//  BlinkErrorReporter.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -37,70 +37,68 @@ DAMAGE.
 
 #pragma once
 
-#include <stdlib.h>
-#include <avr/interrupt.h>
-#include <util/delay_basic.h>
 #include "m8r.h"
-#include "m8r/Event.h"
-
-// Setup for C++ operation
-void * operator new(size_t size); 
-void operator delete(void * ptr); 
+#include "m8r/Application.h"
 
 namespace m8r {
 
-#define EVENT_QUEUE_SIZE 10
-
-enum ErrorType {
-    ERROR_USER = 10
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Application
+//  Class: BlinkErrorReporter
 //
-//  Main application for AVR apps. Singleton
+//  Blinks out error codes. One long dash for every 5 and 1 short dot for
+//  every 1. So a code of 12 would be long, long, short, short. Delay
+//  1s after each set of blinks and 2 seconds after the last.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-    
-class Application {
+template <class ErrorPort, uint8_t ErrorBit>
+class BlinkErrorReporter {
 public:
-    Application()
-    : m_eventOnIdle(false)
+	BlinkErrorReporter()
+        : m_hang(true)
     {
+        m_errorPort.setPortBit(ErrorBit);
+        m_errorPort.setBitOutput(ErrorBit);
+        setError(false);
     }
     
-    static Application& application();
-    
-    void processEvent(EventType);
-    void setErrorCondition(ErrorType, bool raise);
-    
-    void run() __attribute__((noreturn));
-    
-    
-    void setEventOnIdle(bool b) { m_eventOnIdle = b; }
-    
-    // Delays of 16ms are possible down to F_CPU of 1MHz
-    static void usDelay(uint16_t us)
+    void hangOnError(bool hang) { m_hang = hang; }
+	
+    // Blink out the code 3 times then hang if 'hang' is true, otherwise return
+    void reportError(uint8_t code)
     {
-        _delay_loop_2((uint32_t) us * 4000000 / F_CPU);
-    }
-    
-    static void msDelay(uint16_t ms)
-    {
-        for ( ; ms > 0; --ms)
-            usDelay(1000);
+        for (uint8_t i = 0; m_hang || i < 3; ++i) {
+            uint8_t j = code;
+            for ( ; j >= 5; j -= 5)
+                blink(1000);
+            for ( ; j > 0; --j)
+                blink(250);
+            Application::application().msDelay(2000);
+        }
+        Application::application().msDelay(2000);
     }
     
 private:
-    void wait()
+    void blink(uint16_t duration)
     {
+        setError(true);
+        Application::application().msDelay(duration);
+        setError(false);
+        Application::application().msDelay(250);
     }
     
-    static Application m_application;
+    void setError(bool error)
+    {
+        if (error)
+            m_errorPort.clearPortBit(ErrorBit);
+        else
+            m_errorPort.setPortBit(ErrorBit);
+    }
     
-    bool m_eventOnIdle;
+    ErrorPort m_errorPort;
+    bool m_hang;
 };
 
 }
