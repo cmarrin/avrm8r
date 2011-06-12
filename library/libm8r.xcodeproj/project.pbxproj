@@ -30,6 +30,7 @@
 		4922582D13A281C6008A024A /* Event.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4922582C13A2806F008A024A /* Event.cpp */; };
 		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
 		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
+		4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4947159513A40DCF009178CB /* BlinkErrorReporter.h */; };
 		4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817913514A3B0072EEA4 /* ADC.h */; };
 		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
 		4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817B13514A3B0072EEA4 /* EventSource.h */; };
@@ -89,6 +90,7 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */,
 				4922582B13A27AF7008A024A /* Event.h in Copy Headers */,
 				4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */,
 				4999819713514A6B0072EEA4 /* Application.h in Copy Headers */,
@@ -139,6 +141,7 @@
 		4922582A13A27AE5008A024A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = m8r/Event.h; sourceTree = "<group>"; };
 		4922582C13A2806F008A024A /* Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Event.cpp; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		4947159513A40DCF009178CB /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 				490EBD531348B4C800FAD91C /* m8r.h */,
 				4999817913514A3B0072EEA4 /* ADC.h */,
 				4999817A13514A3B0072EEA4 /* Application.h */,
+				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
 				4922582A13A27AE5008A024A /* Event.h */,
 				4999817B13514A3B0072EEA4 /* EventSource.h */,
 				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
