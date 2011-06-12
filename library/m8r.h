@@ -130,42 +130,112 @@ inline FPF FPF_MAKE(uint32_t i, uint32_t f, uint8_t dp, uint32_t e)
 #define INT_TO_FPF(i)   ((float) i)
 */
 
-// presccale values for all timers
-#define TIMER_CLK_STOP          0x00    ///< Timer Stopped
-#define TIMER_CLK_DIV1          0x01    ///< Timer clocked at F_CPU
-#define TIMER_CLK_DIV8          0x02    ///< Timer clocked at F_CPU/8
-#define TIMER_CLK_DIV64         0x03    ///< Timer clocked at F_CPU/64
-#define TIMER_CLK_DIV256        0x04    ///< Timer clocked at F_CPU/256
-#define TIMER_CLK_DIV1024       0x05    ///< Timer clocked at F_CPU/1024
-#define TIMER_CLK_T_FALL        0x06    ///< Timer clocked at T falling edge
-#define TIMER_CLK_T_RISE        0x07    ///< Timer clocked at T rising edge
-#define TIMER_PRESCALE_MASK     0x07    ///< Timer Prescaler Bit-Mask
-
-enum Ports {
+    enum Ports {
 #ifdef PORTA
-    A = 0x00,
+        A = 0x00,
 #endif
 #ifdef PORTB
-    B = 0x03,
+        B = 0x03,
 #endif
 #ifdef PORTC
-    C = 0x06,
+        C = 0x06,
 #endif
 #ifdef PORTD
-    D = 0x09,
+        D = 0x09,
 #endif
 #ifdef PORTE
-    E = 0x0c,
+        E = 0x0c,
 #endif
 #ifdef PORTF
-    F = 0x0f,
+        F = 0x0f,
 #endif
 #ifdef PORTG
-    G = 0x12,
+        G = 0x12,
 #endif
-    _NOPORT
-};
-
+        _NOPORT
+    };
+    
+    enum Registers {
+#ifdef TIFR0
+        _TIFR0 = 0x15,
+#endif
+#ifdef TIFR1
+        _TIFR1 = 0x16,
+#endif
+#ifdef TIFR1
+        _TIFR2 = 0x17,
+#endif
+#ifdef GTCCR
+        _GTCCR = 0x23,
+#endif
+#ifdef TCCR0A
+        _TCCR0A = 0x24,
+#endif
+#ifdef TCCR0B
+        _TCCR0B = 0x25,
+#endif
+#ifdef TCNT0
+        _TCNT0 = 0x26,
+#endif
+#ifdef OCR0A
+        _OCR0A = 0x27,
+#endif
+#ifdef OCR0B
+        _OCR0B = 0x28,
+#endif
+#ifdef TIMSK0
+        _TIMSK0 = 0x6e,
+#endif
+#ifdef TIMSK1
+        _TIMSK1 = 0x6f,
+#endif
+#ifdef TIMSK2
+        _TIMSK2 = 0x70,
+#endif
+#ifdef TCCR1A
+        _TCCR1A = 0x80,
+#endif
+#ifdef TCCR1B
+        _TCCR1B = 0x81,
+#endif
+#ifdef TCCR1C
+        _TCCR1C = 0x82,
+#endif
+#ifdef TCNT1
+        _TCNT1 = 0x84,
+#endif
+#ifdef ICR1
+        _ICR1 = 0x86,
+#endif
+#ifdef OCR1A
+        _OCR1A = 0x88,
+#endif
+#ifdef OCR1B
+        _OCR1B = 0x8A,
+#endif
+#ifdef TCCR2A
+        _TCCR2A = 0xB0,
+#endif
+#ifdef TCCR2B
+        _TCCR2B = 0xB1,
+#endif
+#ifdef TCNT2
+        _TCNT2 = 0xB2,
+#endif
+#ifdef OCR2A
+        _OCR2A = 0xB3,
+#endif
+#ifdef OCR2B
+        _OCR2B = 0xB4,
+#endif
+#ifdef ASSR
+        _ASSR = 0xB6,
+#endif
+        _NOREG
+    };
+    
+#define REG8(reg) _SFR_MEM8(reg)
+#define REG16(reg) _SFR_MEM16(reg)
 #define PIN(port) _SFR_IO8(port)
 #define DDR(port) _SFR_IO8(port + 1)
 #define PORT(port) _SFR_IO8(port + 2)
@@ -192,5 +262,24 @@ public:
     bool isPinBit(uint8_t i) const _INLINE_ { return PIN(port) & _BV(i); }
     volatile uint8_t& getPinAddress() _INLINE_ { return PIN(port); }
 };
+    
+// Template for 8 bit registers
+template <uint8_t reg>
+class Reg8 {
+public:
+    uint8_t get() const _INLINE_ { return REG8(reg); }
+    void set(uint8_t v) _INLINE_ { REG8(reg) = v; }
+    void setBit(uint8_t i) _INLINE_ { REG8(reg) |= _BV(i); }
+    void clearBit(uint8_t i) _INLINE_ { REG8(reg) &= ~_BV(i); }
+    void setMaskedBits(uint8_t v, uint8_t m) { REG8(reg) &= ~m; REG8(reg) |= v & m; }
+    volatile uint8_t& getAddress() _INLINE_ { return REG8(reg); }
+};
 
+template <uint8_t reg>
+class Reg16 {
+public:
+    uint16_t get() const _INLINE_ { return REG16(reg); }
+    void set(uint16_t v) _INLINE_ { REG16(reg) = v; }
+    volatile uint8_t& getAddress() _INLINE_ { return REG16(reg); }
+};
 }

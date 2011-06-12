@@ -1,5 +1,5 @@
 //
-//  Timer1.h
+//  Timer.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -39,49 +39,82 @@ DAMAGE.
 
 #include "m8r/EventSource.h"
 
+/*
+ Timers share some common functionality (e.g., prescalers, compare, interrupts).
+ This class represents that functionality for all timers. A template class
+ is used to allow the specific registers to be passed in. The table below
+ summarizes the timer functionality:
+ 
+Template Name   Description             Timer1         Timer2          Timer3
+==============+===================+===============+===============+===============
+ControlAPort   Control bits         TCCR0A          TCCR1A          TCCR1A
+ControlBPort   Control bits         TCCR0B          TCCR1B          TCCR2B
+               Control bits         ---             TCCR1C          ---
+CounterPort    Current ctr value    TCNT0           TCNT1H/TCNT1L   TCNT2
+CompareAPort   Compare value        OCR0A           OCR1AH/OCR1AL   OCR2A
+CompareBPort   Compare value        OCR0B           OCR1BH/OCR1BL   OCR2B
+               Input capture        ---             ICR1H/ICR1L     ---
+IrptMaskPort   Irpt mask bits       TIMSK0          TIMSK1          TIMSK2
+IrptFlagPort   Irpt flag bits       TIFR0           TIFR1           TIFR2
+               Async ccontrol       ---             ---             ASSR
+               Gen timer/ctr ctrl   ---             ---             GTCCR
+
+
+ Note that this timer functionality is common to most if not all megaAVR chips.
+*/
+
+// presccale values for all timers
+#define TIMER_CLK_STOP          0x00    ///< Timer Stopped
+#define TIMER_CLK_DIV1          0x01    ///< Timer clocked at F_CPU
+#define TIMER_CLK_DIV8          0x02    ///< Timer clocked at F_CPU/8
+#define TIMER_CLK_DIV64         0x03    ///< Timer clocked at F_CPU/64
+#define TIMER_CLK_DIV256        0x04    ///< Timer clocked at F_CPU/256
+#define TIMER_CLK_DIV1024       0x05    ///< Timer clocked at F_CPU/1024
+#define TIMER_CLK_T_FALL        0x06    ///< Timer clocked at T falling edge
+#define TIMER_CLK_T_RISE        0x07    ///< Timer clocked at T rising edge
+#define TIMER_PRESCALE_MASK     0x07    ///< Timer Prescaler Bit-Mask
+
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Timer1
+//  Class: Timer
 //
-//  Interface to 16 bit Timer/Counter Timer 1
+//  Template base class for timers
 //
 //////////////////////////////////////////////////////////////////////////////
-	
-class Timer1 : public EventSource {
-public:
-	Timer1(uint8_t prescaler, uint16_t initial)
-    {
-        // initialize timer 1
-        setPrescaler(prescaler);	// set prescaler
-        TCNT1 = initial;            // reset TCNT1
-        mygTimer1 = this;
-    }
-    
-	~Timer1()                       { }
-    
-    static Timer1* getTimer1()      { return mygTimer1; }
-    
-    void setInterruptEnable(uint8_t irpt, bool b);
-    bool getInterruptEnable(uint8_t irpt) const;
-        
-    void setPrescaler(uint8_t v)
-    {
-        if ((v & ~TIMER_PRESCALE_MASK) != 0)
-            v = 0;
-        TCCR1B = (TCCR1B & ~TIMER_PRESCALE_MASK) | v;
-    }
-    
-    uint8_t getPrescaler() const        { return TCCR1B & TIMER_PRESCALE_MASK; }
 
-    void setOutputCompare(uint16_t v)   { OCR1A = v; }
-    uint16_t getOutputCompare() const   { return OCR1A; }
+template <
+    class CountSize, // uint8_t or uint16_t
+    class ControlAPort, 
+    class ControlBPort, 
+    class CounterPort, 
+    class CompareAPort, 
+    class CompareBPort, 
+    class IrptMaskPort, 
+    class IrptFlagPort>
+class Timer {
+public:
+	Timer()
+    {
+        setPrescaler(TIMER_CLK_STOP);
+        setCount(0);
+    }
     
-    void setValue(uint16_t v)           { TCNT1 = v; }
-    uint16_t getValue() const           { return TCNT1; }
+    void setInterruptEnabled(uint8_t irpt, bool b);
+    bool isInterruptEnabled(uint8_t irpt) const;
+        
+    void setPrescaler(uint8_t v) { m_controlBPort.setMaskedBits(v, TIMER_PRESCALE_MASK); }
+    uint8_t getPrescaler() const { return m_controlBPort.get() & TIMER_PRESCALE_MASK; }
+
+    void setOutputCompareA(CountSize v) { CompareAPort.set(v); }
+    CountSize getOutputCompareA() const { return CompareAPort.get(); }
     
-    uint16_t getInputCapture() const    { return ICR1; }
+    void setOutputCompareB(CountSize v) { CompareBPort.set(v); }
+    CountSize getOutputCompareB() const { return CompareBPort.get(); }
+    
+    void setValue(CountSize v) { CounterPort.set(v); }
+    CountSize getValue() const { return CounterPort.get(); }
     
     void setClearOnOutputCompare(bool b)
     {
@@ -96,7 +129,13 @@ public:
     bool isClearOnOutputCompare() const  { return (TCCR1B & _BV(WGM10)) != 0; }
 
 private:
-    static Timer1* mygTimer1;
+    ControlAPort m_controlAPort;
+    ControlBPort m_controlBPort;
+    CounterPort m_counterPort;
+    CompareAPort m_compareAPort;
+    CompareBPort m_compareBPort;
+    IrptMaskPort m_irptMaskPort;
+    IrptFlagPort m_irptFlagPort;
 };
 
 }
