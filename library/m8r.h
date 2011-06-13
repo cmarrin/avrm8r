@@ -278,7 +278,7 @@ public:
     }
     void setBit(uint8_t i) _INLINE_ { REG8(reg) |= _BV(i); }
     void clearBit(uint8_t i) _INLINE_ { REG8(reg) &= ~_BV(i); }
-    bool isBitSet(uint8_t i) _INLINE_ { return (REG8(reg) & _BV(i)) != 0; }
+    bool isBitSet(uint8_t i) const _INLINE_ { return (REG8(reg) & _BV(i)) != 0; }
     void setBitMask(uint8_t m, bool b) _INLINE_
     {
         if (b)
@@ -288,7 +288,7 @@ public:
     }
     void setBitMask(uint8_t m) _INLINE_ { REG8(reg) |= m; }
     void clearBitMask(uint8_t m) _INLINE_ { REG8(reg) &= ~m; }
-    bool isBitMaskSet(uint8_t m) _INLINE_ { return (REG8(reg) & m) != 0; }
+    bool isBitMaskSet(uint8_t m) const _INLINE_ { return (REG8(reg) & m) != 0; }
     void setMaskedBits(uint8_t v, uint8_t m) { REG8(reg) &= ~m; REG8(reg) |= v & m; }
     volatile uint8_t& getAddress() _INLINE_ { return REG8(reg); }
 };
