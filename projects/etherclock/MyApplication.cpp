@@ -1,6 +1,7 @@
 #include <m8r.h>
 #include <m8r/Application.h>
 #include <m8r/ADC.h>
+#include <m8r/BlinkErrorReporter.h>
 #include <m8r/MAX6969.h>
 
 using namespace m8r;
@@ -19,16 +20,14 @@ public:
     , m_currentBrightness(0)
     , m_brightnessCount(0)
     {
+        Application::application().setEventOnIdle(true);
+        
         // Testing
         m_shiftReg.setChar('8', true);
         m_shiftReg.setChar('8', true);
         m_shiftReg.setChar('8', true);
         m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
-        
-        m_errorPort.setPortBit(ErrorBit);
-        m_errorPort.setBitOutput(ErrorBit);
-        Application::application().setEventOnIdle(true);
         
         m_adc.setEnabled(true);
         
@@ -55,7 +54,7 @@ protected:
 private:
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
-    ErrorPort m_errorPort;
+    BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     
     uint16_t m_accumulatedBrightness;
     uint8_t m_numAccumulatedBrightness;
@@ -74,17 +73,9 @@ MyApp g_myApp;
 void
 MyApp::setErrorCondition(ErrorType error, bool raise)
 {
-    switch(error) {
-        case ERROR_EVENT_OVERRUN:
-        case ERROR_USER:
-            if (raise)
-                m_errorPort.clearPortBit(ErrorBit);
-            else
-                m_errorPort.setPortBit(ErrorBit);
-            break;
-        default:
-            break;
-    }
+    if (!raise)
+        return;
+    m_errorReporter.reportError(error);
 }
 
 void
@@ -101,11 +92,9 @@ MyApp::processEvent(EventType type)
             if (++m_brightnessCount == 0) {
                 m_shiftReg.setOutputEnable(true);
                 m_brightnessMatch = brightness();
-                setErrorCondition(ERROR_USER, true);
             }
             else if (m_brightnessCount == m_brightnessMatch) {
                 m_shiftReg.setOutputEnable(false);
-                setErrorCondition(ERROR_USER, false);
             }
             break;
         default:
