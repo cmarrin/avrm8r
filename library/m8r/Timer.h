@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/EventSource.h"
+#include "m8r/Event.h"
 
 /*
  Timers share some common functionality (e.g., prescalers, compare, interrupts).
@@ -133,7 +133,7 @@ enum TimerClockMode {
     TimerExtClockRise = 0x07
 };
 
-const TimerPrescaleMask = 0x07;
+const uint8_t TimerPrescaleMask = 0x07;
 
 // Compare output mode
 enum TimerCompOutputMode {
@@ -143,10 +143,10 @@ enum TimerCompOutputMode {
     TimerCompOutputSet = 0x03
 };
 
-const TimerCompOutputMaskA = 0xc0;
-const TimerCompOutputMaskB = 0x30;
-const TimerCompOutputShiftA = 6;
-const TimerCompOutputShiftB = 4;
+const uint8_t TimerCompOutputMaskA = 0xc0;
+const uint8_t TimerCompOutputMaskB = 0x30;
+const uint8_t TimerCompOutputShiftA = 6;
+const uint8_t TimerCompOutputShiftB = 4;
 
 // Waveform generation mode (for Timer0 and Timer2)
 enum TimerWaveGenMode {
@@ -158,9 +158,9 @@ enum TimerWaveGenMode {
     TimerWaveGenFastPWM_OCRARev = 0x07
 };
 
-const TimerWaveGenMaskA = 0x03;
-const TimerWaveGenMaskB = 0x08;
-const TimerWaveGenShiftB = 1;
+const uint8_t TimerWaveGenMaskA = 0x03;
+const uint8_t TimerWaveGenMaskB = 0x08;
+const uint8_t TimerWaveGenShiftB = 1;
 
 // Waveform generation mode (for Timer1)
 enum Timer1WaveGenMode {
@@ -181,9 +181,9 @@ enum Timer1WaveGenMode {
     Timer1WaveGenFastPWM_OCRA = 0x0f
 };
 
-const Timer1WaveGenMaskA = 0x03;
-const Timer1WaveGenMaskB = 0x18;
-const Timer1WaveGenShiftB = 1;
+const uint8_t Timer1WaveGenMaskA = 0x03;
+const uint8_t Timer1WaveGenMaskB = 0x18;
+const uint8_t Timer1WaveGenShiftB = 1;
 
 // Timer interrupts
 enum TimerIrptType {
@@ -194,29 +194,29 @@ enum TimerIrptType {
 };
 
 // Other flags
-const TimerForceOutputCompareA = 0x80;
-const TimerForceOutputCompareB = 0x40;
-const Timer1InputCapNoiseCncl = 0x80;
-const Timer1InputCapEdgeSel = 0x40;
+const uint8_t TimerForceOutputCompareA = 0x80;
+const uint8_t TimerForceOutputCompareB = 0x40;
+const uint8_t Timer1InputCapNoiseCncl = 0x80;
+const uint8_t Timer1InputCapEdgeSel = 0x40;
 
-const TimerTSM = 0x80;
-const TimerPrescalerReset = 0x01;
-const Timer2PrescalerReset = 0x02;
+const uint8_t TimerTSM = 0x80;
+const uint8_t TimerPrescalerReset = 0x01;
+const uint8_t Timer2PrescalerReset = 0x02;
 
 // Timer2 ASSR flags
-const Timer2TCCRB2Busy = 0x01;
-const Timer2TCCRA2Busy = 0x02;
-const Timer2OCRB2Busy = 0x04;
-const Timer2OCRA2Busy = 0x08;
-const Timer2TCNT2Busy = 0x10;
-const Timer2Async = 0x20;
-const Timer2ExtClk = 0x40;
+const uint8_t Timer2TCCRB2Busy = 0x01;
+const uint8_t Timer2TCCRA2Busy = 0x02;
+const uint8_t Timer2OCRB2Busy = 0x04;
+const uint8_t Timer2OCRA2Busy = 0x08;
+const uint8_t Timer2TCNT2Busy = 0x10;
+const uint8_t Timer2Async = 0x20;
+const uint8_t Timer2ExtClk = 0x40;
 
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Timer
+//  Class: TimerBase
 //
 //  Template base class for timers
 //
@@ -232,12 +232,14 @@ template <
     class IrptMaskPort, 
     class IrptFlagPort,
     class GenTCCtrlPort>
-class Timer {
+class TimerBase {
+    typedef TimerBase<CountSize, ControlAPort, ControlBPort, CounterPort, 
+                                    CompareAPort, CompareBPort, IrptMaskPort, IrptFlagPort, 
+                                    GenTCCtrlPort> TimerBaseType;
+
 public:
-	Timer()
+	TimerBase()
     {
-        setPrescaler(TIMER_CLK_STOP);
-        setCount(0);
     }
     
     void setOutputCompareA(CountSize v) { m_compareAPort.set(v); }
@@ -249,10 +251,10 @@ public:
     void setCounter(CountSize v) { m_counterPort.set(v); }
     CountSize counter() const { return m_counterPort.get(); }
     
-    void setTimerClockMode(TimerClockMode v) { m_controlBPort.setMaskedBits(v, TIMER_PRESCALE_MASK); }
+    void setTimerClockMode(TimerClockMode v) { m_controlBPort.setMaskedBits(v, TimerPrescaleMask); }
     void setCompOutputAMode(TimerCompOutputMode mode) { m_controlAPort.setMaskedBits(mode << TimerCompOutputShiftA, TimerCompOutputMaskA); }
     void setCompOutputBMode(TimerCompOutputMode mode) { m_controlAPort.setMaskedBits(mode << TimerCompOutputShiftB, TimerCompOutputMaskB); }
-    void setWaveGenMode(TimerWaveGenMode mode)
+    virtual void setWaveGenMode(TimerWaveGenMode mode)
     {
         m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
         m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, TimerWaveGenMaskB);
@@ -265,7 +267,7 @@ public:
     bool isIrptTriggered(TimerIrptType type) const { return m_irptFlagPort.isBitMaskSet(type); }
     
     void setTimerTSM(bool e) { m_genTCCtrlPort.setBitMask(TimerTSM, e); }
-    void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
+    virtual void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
     
 protected:
     ControlAPort m_controlAPort;
@@ -286,7 +288,7 @@ protected:
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class Timer0 : public<uint8_t,
+class Timer0 : public TimerBase<uint8_t,
                     Reg8<_TCCR0A>,
                     Reg8<_TCCR0B>,
                     Reg8<_TCNT0>,
@@ -294,7 +296,20 @@ class Timer0 : public<uint8_t,
                     Reg8<_OCR0B>,
                     Reg8<_TIMSK0>,
                     Reg8<_TIFR0>,
-                    Reg8<_GTCCR> > { };
+                    Reg8<_GTCCR> >
+{
+public:
+    Timer0() { m_sharedTimer = this; }
+    
+    static Timer0* shared() { return m_sharedTimer; }
+
+    virtual void handleOutputCmpMatchAIrpt(Timer0*) { Event::add(EV_TIMER0_COMPA); }
+    virtual void handleOutputCmpMatchBIrpt(Timer0*) { Event::add(EV_TIMER0_COMPB); }
+    virtual void handleOverflowIrpt(Timer0*) { Event::add(EV_TIMER0_OVF); }
+    
+private:
+    static Timer0* m_sharedTimer;
+};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -304,7 +319,7 @@ class Timer0 : public<uint8_t,
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class Timer1 : public<uint16_t,
+class Timer1 : public TimerBase<uint16_t,
                     Reg8<_TCCR1A>,
                     Reg8<_TCCR1B>,
                     Reg16<_TCNT1>,
@@ -314,6 +329,11 @@ class Timer1 : public<uint16_t,
                     Reg8<_TIFR1>,
                     Reg8<_GTCCR> >
 {
+public:
+    Timer1() { m_sharedTimer = this; }
+    
+    static Timer1* shared() { return m_sharedTimer; }
+
     void setWaveGenMode(Timer1WaveGenMode mode)
     {
         m_controlAPort.setMaskedBits(mode, Timer1WaveGenMaskA);
@@ -322,7 +342,14 @@ class Timer1 : public<uint16_t,
     
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
 
+    virtual void handleOutputCmpMatchAIrpt(Timer1*) { Event::add(EV_TIMER1_COMPA); }
+    virtual void handleOutputCmpMatchBIrpt(Timer1*) { Event::add(EV_TIMER1_COMPB); }
+    virtual void handleOverflowIrpt(Timer1*) { Event::add(EV_TIMER1_OVF); }
+    virtual void handleInputCapIrpt(Timer1*) { Event::add(EV_TIMER1_CAPT); }
+
 private:
+    static Timer1* m_sharedTimer;
+
     Reg8<_TCCR1C> m_controlPortC;
     Reg16<_ICR1> m_inputCapPort;
 };
@@ -335,7 +362,7 @@ private:
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class Timer2 : public<uint8_t,
+class Timer2 : public TimerBase<uint8_t,
                     Reg8<_TCCR0A>,
                     Reg8<_TCCR0B>,
                     Reg8<_TCNT0>,
@@ -345,6 +372,11 @@ class Timer2 : public<uint8_t,
                     Reg8<_TIFR0>,
                     Reg8<_GTCCR> >
 {
+public:
+    Timer2() { m_sharedTimer = this; }
+    
+    static Timer2* shared() { return m_sharedTimer; }
+
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
     void setExtClk(bool e) { m_asyncStatusPort.setMaskedBits(Timer2ExtClk, e); }
     void setAsync(bool e) { m_asyncStatusPort.setMaskedBits(Timer2Async, e); }
@@ -355,6 +387,14 @@ class Timer2 : public<uint8_t,
     bool isOCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRB2Busy); }
     bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
     
+    virtual void handleOutputCmpMatchAIrpt(Timer2*) { Event::add(EV_TIMER2_COMPA); }
+    virtual void handleOutputCmpMatchBIrpt(Timer2*) { Event::add(EV_TIMER2_COMPB); }
+    virtual void handleOverflowIrpt(Timer2*) { Event::add(EV_TIMER2_OVF); }
+
 private:
+    static Timer2* m_sharedTimer;
+
     Reg8<_ASSR> m_asyncStatusPort;
 };
+
+}

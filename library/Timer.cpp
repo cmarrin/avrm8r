@@ -1,5 +1,5 @@
 //
-//  Timer1.cpp
+//  Timer.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -33,55 +33,65 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/Timer1.h"
-#include "m8r/Application.h"
+#include "m8r/Timer.h"
+
+#include "m8r/Event.h"
 #include <avr/interrupt.h>
 
 using namespace m8r;
 
-Timer1* Timer1::mygTimer1 = 0;
-
-void
-Timer1::setInterruptEnable(uint8_t irpt, bool b)
-{
-    // FIXME: This is different on modern controllers
-    uint8_t bit = 0;
-    if (irpt == EV_TIMER1_COMPA)
-        bit = _BV(OCIE1A);
-    else if (irpt == EV_TIMER1_OVF)
-        bit = _BV(TOIE1);
-    else if (irpt == EV_TIMER1_CAPT)
-        bit = _BV(TOIE1);
-    TIMSK0 = b ? (TIMSK0 | bit) : (TIMSK0 & ~bit);
-}
-
-bool
-Timer1::getInterruptEnable(uint8_t irpt) const
-{
-    // FIXME: This is different on modern controllers
-    uint8_t bit = 0;
-    if (irpt == EV_TIMER1_COMPA)
-        bit = _BV(OCIE1A);
-    else if (irpt == EV_TIMER1_OVF)
-        bit = _BV(TOIE1);
-    else if (irpt == EV_TIMER1_CAPT)
-        bit = _BV(TOIE1);
-    return (TIMSK0 & bit) != 0;
-}
+Timer0* Timer0::m_sharedTimer = 0;
+Timer1* Timer1::m_sharedTimer = 0;
+Timer2* Timer2::m_sharedTimer = 0;
 
 // Interrupt handlers
+ISR(TIMER0_OVF_vect)
+{
+	Timer0::shared()->handleOverflowIrpt(Timer0::shared());
+}
+
+ISR(TIMER0_COMPA_vect)
+{
+	Timer0::shared()->handleOutputCmpMatchAIrpt(Timer0::shared());
+}
+
+ISR(TIMER0_COMPB_vect)
+{
+	Timer0::shared()->handleOutputCmpMatchBIrpt(Timer0::shared());
+}
+
 ISR(TIMER1_OVF_vect)
 {
-	Event::add(EV_TIMER1_OVF);
+	Timer1::shared()->handleOverflowIrpt(Timer1::shared());
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-	Event::add(EV_TIMER1_COMPA);
+	Timer1::shared()->handleOutputCmpMatchAIrpt(Timer1::shared());
+}
+
+ISR(TIMER1_COMPB_vect)
+{
+	Timer1::shared()->handleOutputCmpMatchBIrpt(Timer1::shared());
 }
 
 ISR(TIMER1_CAPT_vect)
 {
-	Event::add(EV_TIMER1_CAPT);
+	Timer1::shared()->handleInputCapIrpt(Timer1::shared());
+}
+
+ISR(TIMER2_OVF_vect)
+{
+	Timer2::shared()->handleOverflowIrpt(Timer2::shared());
+}
+
+ISR(TIMER2_COMPA_vect)
+{
+	Timer2::shared()->handleOutputCmpMatchAIrpt(Timer2::shared());
+}
+
+ISR(TIMER2_COMPB_vect)
+{
+	Timer2::shared()->handleOutputCmpMatchBIrpt(Timer2::shared());
 }
 
