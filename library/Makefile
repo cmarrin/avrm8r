@@ -4,7 +4,7 @@
 
 TARGET = libm8r
 CSRC = main.c
-CPPSRC = Application.cpp ADC.cpp Event.cpp EventSource.cpp MAX6969.cpp ShiftReg.cpp Timer0.cpp Timer1.cpp Timer1RTC.cpp
+CPPSRC = Application.cpp ADC.cpp Event.cpp EventSource.cpp MAX6969.cpp ShiftReg.cpp
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
 #     0 = turn off optimization. s = optimize for size.

@@ -269,8 +269,26 @@ class Reg8 {
 public:
     uint8_t get() const _INLINE_ { return REG8(reg); }
     void set(uint8_t v) _INLINE_ { REG8(reg) = v; }
+    void setBit(uint8_t i, bool b) _INLINE_
+    {
+        if (b)
+            setBit(i);
+        else
+            clearBit(i);
+    }
     void setBit(uint8_t i) _INLINE_ { REG8(reg) |= _BV(i); }
     void clearBit(uint8_t i) _INLINE_ { REG8(reg) &= ~_BV(i); }
+    bool isBitSet(uint8_t i) _INLINE_ { return (REG8(reg) & _BV(i)) != 0; }
+    void setBitMask(uint8_t m, bool b) _INLINE_
+    {
+        if (b)
+            setBitMask(m);
+        else
+            clearBitMask(m);
+    }
+    void setBitMask(uint8_t m) _INLINE_ { REG8(reg) |= m; }
+    void clearBitMask(uint8_t m) _INLINE_ { REG8(reg) &= ~m; }
+    bool isBitMaskSet(uint8_t m) _INLINE_ { return (REG8(reg) & m) != 0; }
     void setMaskedBits(uint8_t v, uint8_t m) { REG8(reg) &= ~m; REG8(reg) |= v & m; }
     volatile uint8_t& getAddress() _INLINE_ { return REG8(reg); }
 };
