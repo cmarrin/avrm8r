@@ -418,17 +418,11 @@ int main(int argc, char* argv[])
     printf("    EV_WDT = %d,\n", i++);
 #endif
 
-    // User generated events
-    printf("    EV_USER0		= %d,\n", i++);
-    printf("    EV_USER1		= %d,\n", i++);
-    printf("    EV_USER2		= %d,\n", i++);
-    printf("    EV_USER3		= %d,\n", i++);
-    printf("    EV_USER4		= %d,\n", i++);
-    printf("    EV_USER5		= %d,\n", i++);
-    printf("    EV_USER6		= %d,\n", i++);
-    printf("    EV_USER7		= %d,\n", i++);
+    printf("\n");
+    printf("    EV_TIMER_EVENT = %d,\n", i++);
+    printf("    EV_IDLE = %d,\n", i++);
     printf("    EV_LAST         = %d,\n", i++);
-printf("};\n");
+    printf("};\n");
 
 
 

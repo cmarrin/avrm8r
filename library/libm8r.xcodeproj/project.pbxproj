@@ -32,6 +32,9 @@
 		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
 		4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4947159513A40DCF009178CB /* BlinkErrorReporter.h */; };
 		4947159913A5C171009178CB /* Timer.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4980957C13A296B6000B717B /* Timer.h */; };
+		494715A313A7991C009178CB /* Timer.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAB13A6D82D0085ECC6 /* Timer.cpp */; };
+		494715A413A7991C009178CB /* TimerEventManager.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAA13A6D8190085ECC6 /* TimerEventManager.cpp */; };
+		494715A513A79926009178CB /* TimerEventManager.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4972DBA713A6D7FE0085ECC6 /* TimerEventManager.h */; };
 		4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817913514A3B0072EEA4 /* ADC.h */; };
 		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
 		4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817B13514A3B0072EEA4 /* EventSource.h */; };
@@ -87,6 +90,7 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				494715A513A79926009178CB /* TimerEventManager.h in Copy Headers */,
 				4947159913A5C171009178CB /* Timer.h in Copy Headers */,
 				4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */,
 				4922582B13A27AF7008A024A /* Event.h in Copy Headers */,
@@ -108,6 +112,8 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				494715A313A7991C009178CB /* Timer.cpp in Copy Sources */,
+				494715A413A7991C009178CB /* TimerEventManager.cpp in Copy Sources */,
 				4922582D13A281C6008A024A /* Event.cpp in Copy Sources */,
 				49282A46134BACF8009E0FE6 /* main.c in Copy Sources */,
 				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
@@ -135,7 +141,6 @@
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		4947159513A40DCF009178CB /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		4972DBA613A6D7FE0085ECC6 /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = m8r/TimerEvent.h; sourceTree = "<group>"; };
 		4972DBA713A6D7FE0085ECC6 /* TimerEventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventManager.h; path = m8r/TimerEventManager.h; sourceTree = "<group>"; };
 		4972DBAA13A6D8190085ECC6 /* TimerEventManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimerEventManager.cpp; sourceTree = "<group>"; };
 		4972DBAB13A6D82D0085ECC6 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
@@ -210,7 +215,6 @@
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
 				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
 				4980957C13A296B6000B717B /* Timer.h */,
-				4972DBA613A6D7FE0085ECC6 /* TimerEvent.h */,
 				4972DBA713A6D7FE0085ECC6 /* TimerEventManager.h */,
 				4999818313514A3B0072EEA4 /* Timer1RTC.h */,
 			);
@@ -294,8 +298,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PRODUCT_NAME = Marrinator;
-				TOOLS_DIR = "";
 			};
 			name = Release;
 		};

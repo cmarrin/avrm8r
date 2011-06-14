@@ -39,12 +39,7 @@ DAMAGE.
 
 using namespace m8r;
 
-Application Application::m_application;
-
-Application& Application::application()
-{
-    return m_application;
-}
+Application* Application::m_application;
 
 void
 Application::run()

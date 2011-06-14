@@ -38,9 +38,45 @@ DAMAGE.
 #pragma once
 
 #include "m8r/Timer.h"
-#include "m8r/TimerEvent.h"
 
 namespace m8r {
+
+enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: TimerEvent
+//
+//  Timer events managed by TimerEventManager
+//
+//////////////////////////////////////////////////////////////////////////////
+    
+
+class TimerEvent {
+    friend class TimerEventManagerBase;
+    
+protected:
+	TimerEvent(uint16_t intervals, TimerEventMode mode, uint8_t identifier)
+    : m_intervals(intervals ? intervals : 1)
+    , m_remainingIntervals(intervals)
+    , m_mode(mode)
+    , m_identifier(identifier)
+    , m_next(0) { }
+
+    uint16_t intervals() const { return m_intervals; }
+    uint16_t remainingIntervals() const { return m_remainingIntervals; }
+    TimerEventMode mode() const { return m_mode; }
+    uint8_t identifier() const { return m_identifier; }
+    
+    void setNext(TimerEvent* event) { m_next = event; }
+    TimerEvent* next() { return m_next; }
+
+private:
+    uint16_t m_intervals, m_remainingIntervals;
+    TimerEventMode m_mode;
+    uint8_t m_identifier;
+    TimerEvent* m_next;
+};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -50,20 +86,55 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class TimerEventManagerBase {
+public:
+    uint8_t createTimerEvent(uint16_t intervals, TimerEventMode mode);
+
+    void fireInterval();
+
+protected:
+	TimerEventManagerBase(TimerClockMode prescaler, uint16_t count)
+        : m_head(0)
+        , m_free(0)
+        , m_nextIdentifier(1)
+    {
+    }
+
+
+private:
+    TimerEvent* alloc(uint16_t intervals, TimerEventMode mode);
+    void add(TimerEvent* event);
+
+    TimerEvent* m_head;
+    TimerEvent* m_free;
+    uint8_t m_nextIdentifier;
+};
+
 template <class Timer>
-class TimerEventManager {
+class TimerEventManager : public TimerEventManagerBase {
+    class MyTimer : public Timer {
+    public:
+        MyTimer(TimerEventManagerBase* base) : m_timerEventManagerBase(base) { }
+    
+    private:
+        virtual void handleOutputCmpMatchAIrpt(Timer*) { m_timerEventManagerBase->fireInterval(); }
+        
+        TimerEventManagerBase* m_timerEventManagerBase;
+    };
+    
 public:
 	TimerEventManager(TimerClockMode prescaler, uint16_t count)
+        : TimerEventManagerBase(prescaler, count)
+        , m_timer(this)
     {
         m_timer.setTimerClockMode(prescaler);
         m_timer.setOutputCompareA(count);
         m_timer.setWaveGenMode(TimerWaveGenCTC);
-        
-        // FIXME: Setup interrupts
+        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
     }
-        
+    
 private:
-    Timer m_timer;
+    MyTimer m_timer;
 };
 
 }

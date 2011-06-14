@@ -151,39 +151,32 @@ const uint8_t TimerCompOutputShiftB = 4;
 // Waveform generation mode (for Timer0 and Timer2)
 enum TimerWaveGenMode {
     TimerWaveGenNormal = 0x00,
-    TimerWaveGenPWMPC = 0x01,
+    TimerWaveGenPWM_PC = 0x01, // This is PWM_PC8 for Timer1
     TimerWaveGenCTC = 0x02,
     TimerWaveGenFastPWM = 0x03,
-    TimerWaveGenFastPWM_OCRA = 0x05,
-    TimerWaveGenFastPWM_OCRARev = 0x07
+    TimerWaveGenPWM_PC_OCRA = 0x05,
+    TimerWaveGenFastPWM_OCRA = 0x07,
+    
+    // These are mapped values, mask off high bit for actual bit value
+    Timer1WaveGenPWM_PC9 = 0x82,
+    Timer1WaveGenPWM_PC10 = 0x83,
+    Timer1WaveGenCTC = 0x84, // TimerWaveGenCTC maps here
+    Timer1WaveGenFastPWM8 = 0x85, // TimerWaveGenFastPWM maps here
+    Timer1WaveGenFastPWM9 = 0x86,
+    Timer1WaveGenFastPWM10 = 0x87,
+    Timer1WaveGenPWM_PFC_ICR = 0x88,
+    Timer1WaveGenPWM_PFC_OCRA = 0x89,
+    Timer1WaveGenPWM_PC_ICR = 0x8a,
+    Timer1WaveGenPWM_PC_OCRA = 0x8b, // TimerWaveGenPWM_PC_OCRA maps here
+    Timer1WaveGenCTC_ICR = 0x8c,
+    Timer1WaveGenFastPWM_ICR = 0x8e,
+    Timer1WaveGenFastPWM_OCRA = 0x0f // TimerWaveGenFastPWM_OCRA maps here
 };
 
 const uint8_t TimerWaveGenMaskA = 0x03;
 const uint8_t TimerWaveGenMaskB = 0x08;
 const uint8_t TimerWaveGenShiftB = 1;
-
-// Waveform generation mode (for Timer1)
-enum Timer1WaveGenMode {
-    Timer1WaveGenNormal = 0x00,
-    Timer1WaveGenPWM_PC8 = 0x01,
-    Timer1WaveGenPWM_PC9 = 0x02,
-    Timer1WaveGenPWM_PC10 = 0x03,
-    Timer1WaveGenCTC_OCRA = 0x04,
-    Timer1WaveGenFastPWM8 = 0x05,
-    Timer1WaveGenFastPWM9 = 0x06,
-    Timer1WaveGenFastPWM10 = 0x07,
-    Timer1WaveGenPWM_PFC_ICR = 0x08,
-    Timer1WaveGenPWM_PFC_OCRA = 0x09,
-    Timer1WaveGenPWM_PC_ICR = 0x0a,
-    Timer1WaveGenPWM_PC_OCRA = 0x0b,
-    Timer1WaveGenCTC_ICR = 0x0c,
-    Timer1WaveGenFastPWM_ICR = 0x0e,
-    Timer1WaveGenFastPWM_OCRA = 0x0f
-};
-
-const uint8_t Timer1WaveGenMaskA = 0x03;
 const uint8_t Timer1WaveGenMaskB = 0x18;
-const uint8_t Timer1WaveGenShiftB = 1;
 
 // Timer interrupts
 enum TimerIrptType {
@@ -334,10 +327,19 @@ public:
     
     static Timer1* shared() { return m_sharedTimer; }
 
-    void setWaveGenMode(Timer1WaveGenMode mode)
+    void setWaveGenMode(TimerWaveGenMode mode)
     {
-        m_controlAPort.setMaskedBits(mode, Timer1WaveGenMaskA);
-        m_controlBPort.setMaskedBits(mode << Timer1WaveGenShiftB, Timer1WaveGenMaskB);
+        // Map values
+        switch(mode) {
+            case TimerWaveGenCTC: mode = Timer1WaveGenCTC; break;
+            case TimerWaveGenFastPWM: mode = Timer1WaveGenFastPWM8; break;
+            case TimerWaveGenPWM_PC_OCRA: mode = Timer1WaveGenPWM_PC_OCRA; break;
+            case TimerWaveGenFastPWM_OCRA: mode = Timer1WaveGenFastPWM_OCRA; break;
+            default: break;
+        }
+                
+        m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
+        m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, Timer1WaveGenMaskB);
     }
     
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }

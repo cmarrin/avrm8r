@@ -52,12 +52,12 @@ namespace m8r {
 enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
 
 class TimerEvent {
-    friend class Application;
+    friend class TimerEventManagerBase;
     
 protected:
 	TimerEvent(uint16_t intervals, TimerEventMode mode, uint8_t identifier)
-    : m_intervals(intervals)
-    , m_remainingIntervals(0)
+    : m_intervals(intervals ? intervals : 1)
+    , m_remainingIntervals(intervals)
     , m_mode(mode)
     , m_identifier(identifier)
     , m_next(0) { }

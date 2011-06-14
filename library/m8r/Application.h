@@ -69,12 +69,13 @@ public:
     Application()
     : m_eventOnIdle(false)
     {
+        m_application = this;
     }
     
-    static Application& application();
+    static Application& application() { return *m_application; }
     
-    void processEvent(EventType);
-    void setErrorCondition(ErrorType, bool raise);
+    virtual void processEvent(EventType, uint8_t identifier = 0) { }
+    virtual void setErrorCondition(ErrorType, bool raise) { }
     
     void run() __attribute__((noreturn));
     
@@ -98,7 +99,7 @@ private:
     {
     }
     
-    static Application m_application;
+    static Application* m_application;
     
     bool m_eventOnIdle;
 };

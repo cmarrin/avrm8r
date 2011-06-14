@@ -426,19 +426,8 @@ enum EventType {
     EV_WDT,
 #endif
 
-    // User generated events
-    EV_USER0,
-    EV_USER1,
-    EV_USER2,
-    EV_USER3,
-    EV_USER4,
-    EV_USER5,
-    EV_USER6,
-    EV_USER7,
-    
-    // Sent once per event loop
+    EV_TIMER_EVENT,
     EV_IDLE,
-    
     EV_LAST
 };
 
