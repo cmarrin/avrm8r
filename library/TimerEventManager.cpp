@@ -57,7 +57,9 @@ TimerEventManagerBase::alloc(uint16_t intervals, TimerEventMode mode)
         return event;
     }
     
-    return new TimerEvent(intervals, mode, m_nextIdentifier++);
+    TimerEvent* event = new TimerEvent(intervals, mode, m_nextIdentifier++);
+    ASSERT(event, ASSERT_TIMER_EVENT_ALLOC);
+    return event;
 }
 
 void

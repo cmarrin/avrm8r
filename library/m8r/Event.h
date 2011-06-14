@@ -76,7 +76,9 @@ private:
             return event;
         }
         
-        return new Event(type, identifier);
+        Event* event = new Event(type, identifier);
+        ASSERT(event, ASSERT_EVENT_ALLOC);
+        return event;
     }
     
     EventType m_type;

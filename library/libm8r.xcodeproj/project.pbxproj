@@ -37,7 +37,6 @@
 		494715A513A79926009178CB /* TimerEventManager.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4972DBA713A6D7FE0085ECC6 /* TimerEventManager.h */; };
 		4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817913514A3B0072EEA4 /* ADC.h */; };
 		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
-		4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817B13514A3B0072EEA4 /* EventSource.h */; };
 		4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817C13514A3B0072EEA4 /* EventSourceEnums.h */; };
 		4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817E13514A3B0072EEA4 /* MAX6969.h */; };
 		4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817F13514A3B0072EEA4 /* ShiftReg.h */; };
@@ -45,7 +44,6 @@
 		499981A013514A6B0072EEA4 /* Timer1RTC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818313514A3B0072EEA4 /* Timer1RTC.h */; };
 		49EF3972134571C800519468 /* Application.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
 		49EF3973134571C800519468 /* ADC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
-		49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1D2133F9A540036518B /* EventSource.cpp */; };
 		49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A3CA1340F8DF0036518B /* MAX6969.cpp */; };
 		49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
 		49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */; };
@@ -96,7 +94,6 @@
 				4922582B13A27AF7008A024A /* Event.h in Copy Headers */,
 				4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */,
 				4999819713514A6B0072EEA4 /* Application.h in Copy Headers */,
-				4999819813514A6B0072EEA4 /* EventSource.h in Copy Headers */,
 				4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */,
 				4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */,
 				4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */,
@@ -118,7 +115,6 @@
 				49282A46134BACF8009E0FE6 /* main.c in Copy Sources */,
 				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
 				49EF3973134571C800519468 /* ADC.cpp in Copy Sources */,
-				49EF3974134571C800519468 /* EventSource.cpp in Copy Sources */,
 				49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */,
 				49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */,
 				49EF397A134571C800519468 /* Timer1RTC.cpp in Copy Sources */,
@@ -130,7 +126,6 @@
 
 /* Begin PBXFileReference section */
 		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
-		4900A1D2133F9A540036518B /* EventSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventSource.cpp; sourceTree = "<group>"; };
 		4900A1E4133F9C5B0036518B /* ADC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ADC.cpp; sourceTree = "<group>"; };
 		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShiftReg.cpp; sourceTree = "<group>"; };
 		4900A1EE133F9C5B0036518B /* Timer1RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer1RTC.cpp; sourceTree = "<group>"; };
@@ -147,7 +142,6 @@
 		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
 		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
-		4999817B13514A3B0072EEA4 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = m8r/EventSource.h; sourceTree = "<group>"; };
 		4999817C13514A3B0072EEA4 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = m8r/EventSourceEnums.h; sourceTree = "<group>"; };
 		4999817E13514A3B0072EEA4 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = m8r/MAX6969.h; sourceTree = "<group>"; };
 		4999817F13514A3B0072EEA4 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = m8r/ShiftReg.h; sourceTree = "<group>"; };
@@ -176,7 +170,6 @@
 				4900A1A7133F92730036518B /* Application.cpp */,
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
 				4922582C13A2806F008A024A /* Event.cpp */,
-				4900A1D2133F9A540036518B /* EventSource.cpp */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
 				4972DBAB13A6D82D0085ECC6 /* Timer.cpp */,
@@ -209,7 +202,6 @@
 				4999817A13514A3B0072EEA4 /* Application.h */,
 				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
 				4922582A13A27AE5008A024A /* Event.h */,
-				4999817B13514A3B0072EEA4 /* EventSource.h */,
 				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
 				4999817E13514A3B0072EEA4 /* MAX6969.h */,
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
@@ -276,6 +268,7 @@
 			buildSettings = {
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
+				DEBUG = NDEBUG;
 				FREQUENCY = 8000000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;
@@ -294,6 +287,37 @@
 			};
 			name = Release;
 		};
+		49A5D67613A7F6D300E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
+				C_INCLUDE_PATH = "${PROJECT_DIR}/";
+				DEBUG = DEBUG;
+				FREQUENCY = 8000000;
+				M8R_SRC_DIR = "$(PROJECT_DIR)";
+				MCU = atmega168;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = libm8r;
+				SDKROOT = "";
+				TARGET = "";
+				TOOLS_DIR = /usr/local/avrtools;
+			};
+			name = Debug;
+		};
+		49A5D67713A7F6D300E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+			};
+			name = Debug;
+		};
+		49A5D67813A7F6D300E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
 		49EF3965134570F200519468 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -308,6 +332,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB912008733D790010E9CD /* Release */,
+				49A5D67613A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -316,6 +341,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49282960134B8867009E0FE6 /* Release */,
+				49A5D67813A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -324,6 +350,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49EF3965134570F200519468 /* Release */,
+				49A5D67713A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

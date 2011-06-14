@@ -45,92 +45,28 @@ DAMAGE.
 #include <stdint.h>
 #include <avr/io.h>
 
+#ifdef DEBUG
+extern "C" {
+    void _assert(uint8_t code);
+}
+
+#define ASSERT(expr, code) if (!(expr)) _assert(code)
+#else
+#define ASSERT(expr, code)
+#endif
+
 #define _INLINE_ __attribute__ ((always_inline)) 
-#define _NO_INLINE_ __attribute__ ((noinline)) 
+#define _NO_INLINE_ __attribute__ ((noinline))
 
 namespace m8r {
 
-// Fixed point floats
-//
-// Format is <sign>:<integer part>:<fractional part>
-// 6 formats supported - 1:0:7, 1:3:4, 1:0:15, 1:7:8, 1:0:31, 1:15:16
-// Formats with 0 bits of integer part have 2 special values. All fractional bits 1 is a value of 1.
-typedef uint8_t fixed_8; // 1:3:4
-typedef uint8_t fixed0_8; // 1:0:7
-typedef uint16_t fixed_16; // 1:7:8
-typedef uint16_t fixed0_16; // 1:0:15
-typedef uint32_t fixed_32; // 1:15:16
-typedef uint32_t fixed0_32; // 1:0:31
+enum ErrorType {
+    ERROR_USER = 11,
+    ASSERT_TIMER_EVENT_ALLOC = 21,
+    ASSERT_EVENT_ALLOC = 22,
+};
 
-inline fixed_8 makeFixed8(int8_t i, uint8_t f)
-{
-    return (i < -7 || i > 7) ? 0 : ((i << 4) | (f & 0xf));
-}
-
-/*
-// 32 bit integers representing the value multiplied by 1000,
-// give 3 decimal digits of floating point precision.
-#define FPF int32_t
-#define FPF_ADD(a,b)    (a+b)
-#define FPF_SUB(a,b)    (a-b)
-#define FPF_MUL(a,b)    (a*b/1000)
-#define FPF_DIV(a,b)    (a*1000/b)
-inline FPF FPF_MAKE(uint32_t i, uint32_t f, uint8_t dp, uint32_t e)
-{
-    int32_t num = i*1000;
-    while (dp < 3) {
-        ++dp;
-        f *= 10;
-    }
-    while (dp > 3) {
-        --dp;
-        f /= 10;
-    }
-    num += f;
-    while (e > 0) {
-        --e;
-        num *= 10;
-    }
-    while (e < 0) {
-        ++e;
-        num /= 10;
-    }
-    return num;
-}
-
-#define FPF_TO_INT(f)   (f/1000)
-#define INT_TO_FPF(i)   (i*1000)
-
-#else
-
-// Floats are normal IEEE floating point numbers
-#define FPF float
-#define FPF_ADD(a,b)    (a+b)
-#define FPF_SUB(a,b)    (a-b)
-#define FPF_MUL(a,b)    (a*b)
-#define FPF_DIV(a,b)    (a/b)
-inline FPF FPF_MAKE(uint32_t i, uint32_t f, uint8_t dp, uint32_t e)
-{
-    float num = (float) f;
-    while (dp-- > 0)
-        num /= 10;
-    num += (float) i;
-    while (e > 0) {
-        --e;
-        num *= 10;
-    }
-    while (e < 0) {
-        ++e;
-        num /= 10;
-    }
-    return num;
-}
-
-#define FPF_TO_INT(f)   ((int32_t) f)
-#define INT_TO_FPF(i)   ((float) i)
-*/
-
-    enum Ports {
+enum Ports {
 #ifdef PORTA
         A = 0x00,
 #endif

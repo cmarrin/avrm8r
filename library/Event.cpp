@@ -34,6 +34,7 @@ DAMAGE.
 */
 
 #include "m8r/Event.h"
+
 #include "m8r/Application.h"
 
 using namespace m8r;

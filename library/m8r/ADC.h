@@ -40,8 +40,6 @@ DAMAGE.
 #include "m8r.h"
 #include <avr/interrupt.h>
 
-#include "m8r/EventSource.h"
-
 #undef ADC
 
 namespace m8r {
@@ -119,7 +117,7 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 	
-class ADC : public EventSource {
+class ADC {
 public:
 	ADC(uint8_t channel, uint8_t prescale, uint8_t reference);
 	~ADC() { }

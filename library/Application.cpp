@@ -62,6 +62,13 @@ void operator delete(void * ptr)
 }
 
 extern "C" {
+#ifdef DEBUG
+void _assert(uint8_t code)
+{
+    Application::application().setErrorCondition((ErrorType) code, true);
+}
+#endif
+
 void _main() __attribute__((noreturn));
 void _main()
 {

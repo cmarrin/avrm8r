@@ -4,7 +4,7 @@
 
 TARGET = libm8r
 CSRC = main.c
-CPPSRC = Application.cpp ADC.cpp Event.cpp EventSource.cpp MAX6969.cpp ShiftReg.cpp Timer.cpp TimerEventManager.cpp
+CPPSRC = Application.cpp ADC.cpp Event.cpp MAX6969.cpp ShiftReg.cpp Timer.cpp TimerEventManager.cpp
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
 #     0 = turn off optimization. s = optimize for size.
@@ -12,7 +12,7 @@ CPPSRC = Application.cpp ADC.cpp Event.cpp EventSource.cpp MAX6969.cpp ShiftReg.
 OPT = s
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(FREQUENCY)UL 
+CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information

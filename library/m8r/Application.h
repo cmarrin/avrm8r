@@ -40,7 +40,6 @@ DAMAGE.
 #include <stdlib.h>
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
-#include "m8r.h"
 #include "m8r/Event.h"
 
 // Setup for C++ operation
@@ -50,10 +49,6 @@ void operator delete(void * ptr);
 namespace m8r {
 
 #define EVENT_QUEUE_SIZE 10
-
-enum ErrorType {
-    ERROR_USER = 10
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -72,7 +67,7 @@ public:
         m_application = this;
     }
     
-    static Application& application() { return *m_application; }
+    static Application& _INLINE_ application() { return *m_application; }
     
     virtual void processEvent(EventType, uint8_t identifier = 0) { }
     virtual void setErrorCondition(ErrorType, bool raise) { }

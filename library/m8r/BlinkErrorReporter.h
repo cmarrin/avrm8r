@@ -38,7 +38,6 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
-#include "m8r/Application.h"
 
 namespace m8r {
 
@@ -66,18 +65,13 @@ public:
     
     void hangOnError(bool hang) { m_hang = hang; }
 	
-    // Blink out the code 3 times then hang if 'hang' is true, otherwise return
+    // Blink out the code 3 times then repeat if 'hang' is true, otherwise return
     void reportError(uint8_t code)
     {
         for (uint8_t i = 0; m_hang || i < 3; ++i) {
-            uint8_t j = code;
-            for ( ; j >= 5; j -= 5)
-                blink(1000);
-            for ( ; j > 0; --j)
-                blink(250);
+            blinkCode(code);
             Application::application().msDelay(2000);
         }
-        Application::application().msDelay(2000);
     }
     
 private:
@@ -87,6 +81,29 @@ private:
         Application::application().msDelay(duration);
         setError(false);
         Application::application().msDelay(250);
+    }
+    
+    uint8_t blinkDigit(uint8_t digit, uint8_t radix5, uint8_t radix1)
+    {
+        if (digit >= radix5) {
+            blink(1000);
+            digit -= radix5;
+        }
+        for ( ; digit >= radix1; digit -= radix1)
+            blink(250);
+        Application::application().msDelay(2000);
+        return digit;
+    }
+    
+    void blinkCode(uint8_t code)
+    {
+        uint8_t digit = 0;
+        
+        if (code >= 100)
+            digit = blinkDigit(digit, 0, 100);
+        if (code >= 10)
+            digit = blinkDigit(digit, 50, 10);
+        blinkDigit(digit, 5, 1);
     }
     
     void setError(bool error)

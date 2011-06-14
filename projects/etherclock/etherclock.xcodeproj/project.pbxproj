@@ -274,13 +274,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		01706F370A34762900E43B08 /* Deployment */ = {
+		01706F370A34762900E43B08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				AVRDUDE_PORT = /dev/cu.usbserial;
 				AVRDUDE_PROGRAMMER = stk500v1;
-				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums";
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
+				DEBUG = NDEBUG;
 				FREQUENCY = 8000000;
 				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
 				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
@@ -288,31 +289,68 @@
 				PRODUCT_NAME = etherclock;
 				TOOLS_DIR = /usr/local/avrtools/;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		01706F570A347F8800E43B08 /* Deployment */ = {
+		01706F570A347F8800E43B08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
-				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = Build;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		4934690A134403EF005C85D6 /* Deployment */ = {
+		4934690A134403EF005C85D6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = Clean;
 			};
-			name = Deployment;
+			name = Release;
 		};
-		4990FD951344BAD700F96FEF /* Deployment */ = {
+		4990FD951344BAD700F96FEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = Program;
 			};
-			name = Deployment;
+			name = Release;
+		};
+		49A5D67F13A7F72B00E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AVRDUDE_PORT = /dev/cu.usbserial;
+				AVRDUDE_PROGRAMMER = stk500v1;
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
+				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
+				DEBUG = DEBUG;
+				FREQUENCY = 8000000;
+				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r";
+				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
+				MCU = atmega168;
+				PRODUCT_NAME = etherclock;
+				TOOLS_DIR = /usr/local/avrtools/;
+			};
+			name = Debug;
+		};
+		49A5D68013A7F72B00E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = Build;
+			};
+			name = Debug;
+		};
+		49A5D68113A7F72B00E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Clean;
+			};
+			name = Debug;
+		};
+		49A5D68213A7F72B00E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Program;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -320,7 +358,8 @@
 		01706F350A34762900E43B08 /* Build configuration list for PBXProject "etherclock" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01706F370A34762900E43B08 /* Deployment */,
+				01706F370A34762900E43B08 /* Release */,
+				49A5D67F13A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
@@ -328,7 +367,8 @@
 		01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01706F570A347F8800E43B08 /* Deployment */,
+				01706F570A347F8800E43B08 /* Release */,
+				49A5D68013A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
@@ -336,7 +376,8 @@
 		4934690B1344040D005C85D6 /* Build configuration list for PBXAggregateTarget "Clean" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4934690A134403EF005C85D6 /* Deployment */,
+				4934690A134403EF005C85D6 /* Release */,
+				49A5D68113A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
@@ -344,7 +385,8 @@
 		4990FD981344BB0E00F96FEF /* Build configuration list for PBXAggregateTarget "Program" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4990FD951344BAD700F96FEF /* Deployment */,
+				4990FD951344BAD700F96FEF /* Release */,
+				49A5D68213A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
