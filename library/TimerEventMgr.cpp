@@ -33,15 +33,18 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/TimerEventManager.h"
+#include "m8r/TimerEventMgr.h"
 
 #include "m8r/Event.h"
 #include <avr/interrupt.h>
 
 using namespace m8r;
 
+TimerEventMgrBase* TimerEventMgrBase::m_shared = 0;
+
+
 uint8_t
-TimerEventManagerBase::createTimerEvent(uint16_t intervals, TimerEventMode mode)
+TimerEventMgrBase::createTimerEventWithIntervals(uint16_t intervals, TimerEventMode mode)
 {
     TimerEvent* event = alloc(intervals, mode);
     add(event);
@@ -49,7 +52,7 @@ TimerEventManagerBase::createTimerEvent(uint16_t intervals, TimerEventMode mode)
 }
 
 TimerEvent*
-TimerEventManagerBase::alloc(uint16_t intervals, TimerEventMode mode)
+TimerEventMgrBase::alloc(uint16_t intervals, TimerEventMode mode)
 {
     if (m_free) {
         TimerEvent* event = m_free;
@@ -58,12 +61,12 @@ TimerEventManagerBase::alloc(uint16_t intervals, TimerEventMode mode)
     }
     
     TimerEvent* event = new TimerEvent(intervals, mode, m_nextIdentifier++);
-    ASSERT(event, ASSERT_TIMER_EVENT_ALLOC);
+    ASSERT(event, AssertTimerEventAlloc);
     return event;
 }
 
 void
-TimerEventManagerBase::add(TimerEvent* event)
+TimerEventMgrBase::add(TimerEvent* event)
 {
     TimerEvent* before = 0;
     TimerEvent* after;
@@ -86,7 +89,7 @@ TimerEventManagerBase::add(TimerEvent* event)
 // It will fire every time, get removed from the front of the list and then
 // readded to the front of the list. This can be optimized.
 void
-TimerEventManagerBase::fireInterval()
+TimerEventMgrBase::fireInterval()
 {
     TimerEvent* finishedEvents = 0;
     

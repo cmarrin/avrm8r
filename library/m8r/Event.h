@@ -77,7 +77,7 @@ private:
         }
         
         Event* event = new Event(type, identifier);
-        ASSERT(event, ASSERT_EVENT_ALLOC);
+        ASSERT(event, AssertEventAlloc);
         return event;
     }
     

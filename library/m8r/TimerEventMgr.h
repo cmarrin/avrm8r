@@ -1,5 +1,5 @@
 //
-//  TimerEventManager.h
+//  TimerEventMgr.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -47,13 +47,13 @@ enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
 //
 //  Class: TimerEvent
 //
-//  Timer events managed by TimerEventManager
+//  Timer events managed by TimerEventMgr
 //
 //////////////////////////////////////////////////////////////////////////////
     
 
 class TimerEvent {
-    friend class TimerEventManagerBase;
+    friend class TimerEventMgrBase;
     
 protected:
 	TimerEvent(uint16_t intervals, TimerEventMode mode, uint8_t identifier)
@@ -80,26 +80,38 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: TimerEventManager
+//  Class: TimerEventMgr
 //
 //  Manage list of events which fire at given intervals
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TimerEventManagerBase {
+class TimerEventMgrBase {
 public:
-    uint8_t createTimerEvent(uint16_t intervals, TimerEventMode mode);
+    uint8_t createTimerEventWithIntervals(uint16_t intervals, TimerEventMode mode);
+    uint8_t createTimerEvent(uint16_t ms, TimerEventMode mode)
+    {
+        return createTimerEventWithIntervals((ms + (m_msPerInterval >> 1)) / m_msPerInterval, mode);
+    }
 
     void fireInterval();
 
+    static TimerEventMgrBase* shared()
+    {
+        ASSERT(m_shared, AssertNoTimerEventMgr);
+        return m_shared;
+    }
+
 protected:
-	TimerEventManagerBase(TimerClockMode prescaler, uint16_t count)
+	TimerEventMgrBase(uint16_t msPerInterval)
         : m_head(0)
         , m_free(0)
         , m_nextIdentifier(1)
+        , m_msPerInterval(msPerInterval)
     {
+        ASSERT(!m_shared, AssertSglTimerEventMgr);
+        m_shared = this;
     }
-
 
 private:
     TimerEvent* alloc(uint16_t intervals, TimerEventMode mode);
@@ -108,23 +120,26 @@ private:
     TimerEvent* m_head;
     TimerEvent* m_free;
     uint8_t m_nextIdentifier;
+    uint16_t m_msPerInterval;
+    
+    static TimerEventMgrBase* m_shared;
 };
 
 template <class Timer>
-class TimerEventManager : public TimerEventManagerBase {
+class TimerEventMgr : public TimerEventMgrBase {
     class MyTimer : public Timer {
     public:
-        MyTimer(TimerEventManagerBase* base) : m_timerEventManagerBase(base) { }
+        MyTimer(TimerEventMgrBase* base) : m_timerEventMgrBase(base) { }
     
     private:
-        virtual void handleOutputCmpMatchAIrpt(Timer*) { m_timerEventManagerBase->fireInterval(); }
+        virtual void handleOutputCmpMatchAIrpt(Timer*) { m_timerEventMgrBase->fireInterval(); }
         
-        TimerEventManagerBase* m_timerEventManagerBase;
+        TimerEventMgrBase* m_timerEventMgrBase;
     };
     
 public:
-	TimerEventManager(TimerClockMode prescaler, uint16_t count)
-        : TimerEventManagerBase(prescaler, count)
+	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t msPerInterval)
+        : TimerEventMgrBase(msPerInterval)
         , m_timer(this)
     {
         m_timer.setTimerClockMode(prescaler);

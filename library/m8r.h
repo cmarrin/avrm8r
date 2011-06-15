@@ -61,9 +61,19 @@ extern "C" {
 namespace m8r {
 
 enum ErrorType {
-    ERROR_USER = 11,
-    ASSERT_TIMER_EVENT_ALLOC = 21,
-    ASSERT_EVENT_ALLOC = 22,
+    ErrorUser = 0x10,
+    AssertTimerEventAlloc = 0x32,
+    AssertEventAlloc = 0x33,
+    AssertNoTimerEventMgr = 0x34,
+    AssertSglTimerEventMgr = 0x35,
+    AssertNoApp = 0x36,
+    AssertSglApp = 0x37,
+    AssertNoTimer0 = 0x38,
+    AssertSglTimer0 = 0x39,
+    AssertNoTimer1 = 0x3a,
+    AssertSglTimer1 = 0x3b,
+    AssertNoTimer2 = 0x3c,
+    AssertSglTimer2 = 0x3d,
 };
 
 enum Ports {

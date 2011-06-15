@@ -39,7 +39,7 @@ DAMAGE.
 
 using namespace m8r;
 
-Application* Application::m_application;
+Application* Application::m_shared;
 
 void
 Application::run()
@@ -65,14 +65,14 @@ extern "C" {
 #ifdef DEBUG
 void _assert(uint8_t code)
 {
-    Application::application().setErrorCondition((ErrorType) code, true);
+    Application::application()->setErrorCondition((ErrorType) code, true);
 }
 #endif
 
 void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::application().run();
+    Application::application()->run();
 }
 }
 

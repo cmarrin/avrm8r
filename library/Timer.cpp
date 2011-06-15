@@ -40,9 +40,9 @@ DAMAGE.
 
 using namespace m8r;
 
-Timer0* Timer0::m_sharedTimer = 0;
-Timer1* Timer1::m_sharedTimer = 0;
-Timer2* Timer2::m_sharedTimer = 0;
+Timer0* Timer0::m_shared = 0;
+Timer1* Timer1::m_shared = 0;
+Timer2* Timer2::m_shared = 0;
 
 // Interrupt handlers
 ISR(TIMER0_OVF_vect)

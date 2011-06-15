@@ -57,7 +57,7 @@ Event::processAllEvents()
     
     Event* lastEvent;
     for (Event* event = firstEvent; event; event = event->m_next) {
-        Application::application().processEvent(event->m_type, event->m_identifier);
+        Application::application()->processEvent(event->m_type, event->m_identifier);
         lastEvent = event;
     }
     

@@ -309,7 +309,6 @@
 		4990FD951344BAD700F96FEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = Program;
 			};
 			name = Release;
 		};
@@ -348,7 +347,6 @@
 		49A5D68213A7F72B00E4C97D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = Program;
 			};
 			name = Debug;
 		};

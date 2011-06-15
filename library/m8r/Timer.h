@@ -292,16 +292,24 @@ class Timer0 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer0() { m_sharedTimer = this; }
+    Timer0()
+    {
+        ASSERT(!m_shared, AssertSglTimer0);
+        m_shared = this;
+    }
     
-    static Timer0* shared() { return m_sharedTimer; }
+    static Timer0* shared()
+    {
+        ASSERT(m_shared, AssertNoTimer0);
+        return m_shared;
+    }
 
     virtual void handleOutputCmpMatchAIrpt(Timer0*) { Event::add(EV_TIMER0_COMPA); }
     virtual void handleOutputCmpMatchBIrpt(Timer0*) { Event::add(EV_TIMER0_COMPB); }
     virtual void handleOverflowIrpt(Timer0*) { Event::add(EV_TIMER0_OVF); }
     
 private:
-    static Timer0* m_sharedTimer;
+    static Timer0* m_shared;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -323,9 +331,17 @@ class Timer1 : public TimerBase<uint16_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer1() { m_sharedTimer = this; }
+    Timer1()
+    {
+        ASSERT(!m_shared, AssertSglTimer1);
+        m_shared = this;
+    }
     
-    static Timer1* shared() { return m_sharedTimer; }
+    static Timer1* shared()
+    {
+        ASSERT(m_shared, AssertNoTimer1);
+        return m_shared;
+    }
 
     void setWaveGenMode(TimerWaveGenMode mode)
     {
@@ -350,7 +366,7 @@ public:
     virtual void handleInputCapIrpt(Timer1*) { Event::add(EV_TIMER1_CAPT); }
 
 private:
-    static Timer1* m_sharedTimer;
+    static Timer1* m_shared;
 
     Reg8<_TCCR1C> m_controlPortC;
     Reg16<_ICR1> m_inputCapPort;
@@ -375,9 +391,17 @@ class Timer2 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer2() { m_sharedTimer = this; }
+    Timer2()
+    {
+        ASSERT(!m_shared, AssertSglTimer2);
+        m_shared = this;
+    }
     
-    static Timer2* shared() { return m_sharedTimer; }
+    static Timer2* shared()
+    {
+        ASSERT(m_shared, AssertNoTimer2);
+        return m_shared;
+    }
 
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
     void setExtClk(bool e) { m_asyncStatusPort.setMaskedBits(Timer2ExtClk, e); }
@@ -394,7 +418,7 @@ public:
     virtual void handleOverflowIrpt(Timer2*) { Event::add(EV_TIMER2_OVF); }
 
 private:
-    static Timer2* m_sharedTimer;
+    static Timer2* m_shared;
 
     Reg8<_ASSR> m_asyncStatusPort;
 };

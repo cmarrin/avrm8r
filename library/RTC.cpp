@@ -1,9 +1,7 @@
 //
-//  Application.h
+//  Timer1RTC.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
-//
-//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -35,73 +33,52 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+#include <avr/pgmspace.h>
+#include "m8r/RTC.h"
 
-#include <stdlib.h>
-#include <avr/interrupt.h>
-#include <util/delay_basic.h>
-#include "m8r/Event.h"
+extern const uint8_t mygMonthDayTable[] PROGMEM;
+const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
-// Setup for C++ operation
-void * operator new(size_t size); 
-void operator delete(void * ptr); 
+using namespace m8r;
 
-namespace m8r {
-
-#define EVENT_QUEUE_SIZE 10
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: Application
-//
-//  Main application for AVR apps. Singleton
-//
-//////////////////////////////////////////////////////////////////////////////
-
-    
-class Application {
-public:
-    Application()
-    : m_eventOnIdle(false)
-    {
-        ASSERT(!m_shared, AssertSglApp);
-        m_shared = this;
-    }
-    
-    static Application* _INLINE_ application()
-    {
-        ASSERT(m_shared, AssertNoApp);
-        return m_shared;
-    }
-    
-    virtual void processEvent(EventType, uint8_t identifier = 0) { }
-    virtual void setErrorCondition(ErrorType, bool raise) { }
-    
-    void run() __attribute__((noreturn));
-    
-    
-    void setEventOnIdle(bool b) { m_eventOnIdle = b; }
-    
-    // Delays of 16ms are possible down to F_CPU of 1MHz
-    static void usDelay(uint16_t us)
-    {
-        _delay_loop_2((uint32_t) us * 4000000 / F_CPU);
-    }
-    
-    static void msDelay(uint16_t ms)
-    {
-        for ( ; ms > 0; --ms)
-            usDelay(1000);
-    }
-    
-private:
-    void wait()
-    {
-    }
-    
-    static Application* m_shared;
-    
-    bool m_eventOnIdle;
-};
-
+static inline bool
+isLeapYear(uint16_t year)
+{
+    // leap year:
+    // is divisable by 4 and not by 100
+    // or is divisable by 400 
+    return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
 }
+
+void
+RTC::tick()
+{
+	myTime.myTicks++;
+    if(myTime.myTicks == myPeriod) {
+		myTime.myTicks = 0;
+		myTime.mySeconds++;
+		if(myTime.mySeconds > 59) {
+			myTime.mySeconds = 0;
+			myTime.myMinutes++;
+			if(myTime.myMinutes > 59) {
+				myTime.myMinutes = 0;
+				myTime.myHours++;
+				if(myTime.myHours > 23) {
+					myTime.myHours = 0;
+					myTime.myDay++;
+					// check days overflow
+					if((myTime.myMonth == 2 && isLeapYear(myTime.myYear) && myTime.myDay == 29) ||
+                            (myTime.myDay == pgm_read_byte(&mygMonthDayTable[myTime.myMonth-1]))) {
+						myTime.myDay = 1;
+						myTime.myMonth++;
+						if(myTime.myMonth == 13) {
+							myTime.myMonth = 1;
+							myTime.myYear++;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

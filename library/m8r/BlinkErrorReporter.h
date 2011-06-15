@@ -70,40 +70,39 @@ public:
     {
         for (uint8_t i = 0; m_hang || i < 3; ++i) {
             blinkCode(code);
-            Application::application().msDelay(2000);
+            Application::application()->msDelay(2000);
         }
     }
     
 private:
-    void blink(uint16_t duration)
+    void blink(uint16_t duration, uint8_t delay)
     {
         setError(true);
-        Application::application().msDelay(duration);
+        Application::application()->msDelay(duration);
         setError(false);
-        Application::application().msDelay(250);
+        Application::application()->msDelay(delay);
     }
     
-    uint8_t blinkDigit(uint8_t digit, uint8_t radix5, uint8_t radix1)
+    void blinkDigit(uint8_t digit)
     {
-        if (digit >= radix5) {
-            blink(1000);
-            digit -= radix5;
+        if (digit == 0) {
+            blink(100, 100);
+            blink(100, 100);
+            blink(100, 100);
+            blink(100, 100);
         }
-        for ( ; digit >= radix1; digit -= radix1)
-            blink(250);
-        Application::application().msDelay(2000);
-        return digit;
+        
+        for ( ; digit >= 4; digit -= 4)
+            blink(1000, 250);
+        for ( ; digit > 0; --digit)
+            blink(250, 250);
+        Application::application()->msDelay(2000);
     }
     
     void blinkCode(uint8_t code)
     {
-        uint8_t digit = 0;
-        
-        if (code >= 100)
-            digit = blinkDigit(digit, 0, 100);
-        if (code >= 10)
-            digit = blinkDigit(digit, 50, 10);
-        blinkDigit(digit, 5, 1);
+        blinkDigit(code >> 4);
+        blinkDigit(code & 0x0f);
     }
     
     void setError(bool error)

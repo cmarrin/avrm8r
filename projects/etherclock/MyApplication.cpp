@@ -3,7 +3,8 @@
 #include <m8r/ADC.h>
 #include <m8r/BlinkErrorReporter.h>
 #include <m8r/MAX6969.h>
-#include <m8r/TimerEventManager.h>
+#include <m8r/RTC.h>
+#include <m8r/TimerEventMgr.h>
 
 using namespace m8r;
 
@@ -16,13 +17,13 @@ class MyApp : public Application {
 public:
     MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
-    , m_timerEventManager(TimerClockDIV1, 6249) // 1ms timer
+    , m_timerEventMgr(TimerClockDIV1, 6249, 1000) // 1ms timer
     , m_accumulatedBrightness(0)
     , m_numAccumulatedBrightness(0)
     , m_currentBrightness(0)
     , m_brightnessCount(0)
     {
-        Application::application().setEventOnIdle(true);
+        Application::application()->setEventOnIdle(true);
         
         // Testing
         m_shiftReg.setChar('8', true);
@@ -31,7 +32,7 @@ public:
         m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
         
-        m_timerEventManager.createTimerEvent(5000, TimerEventOneShot);
+        m_timerEventMgr.createTimerEvent(5000, TimerEventOneShot);
         
         m_adc.setEnabled(true);
         
@@ -60,7 +61,8 @@ private:
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
-    TimerEventManager<Timer1> m_timerEventManager;
+    TimerEventMgr<Timer1> m_timerEventMgr;
+    RTC m_clock;
     
     uint16_t m_accumulatedBrightness;
     uint8_t m_numAccumulatedBrightness;
