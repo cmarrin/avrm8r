@@ -37,6 +37,7 @@ DAMAGE.
 
 #pragma once
 
+#include "m8r/EventListener.h"
 #include "m8r/TimerEventMgr.h"
 
 namespace m8r {
@@ -79,18 +80,19 @@ public:
     uint16_t    myYear;    
 };
     
-class RTC {
+class RTC : public EventListener {
 public:
 	RTC()
     {
         TimerEventMgrBase::shared()->createTimerEvent(1000, TimerEventRepeating);
     }
-
+    
     void getTime(RTCTime& t) const { cli(); t = myTime; sei(); }
 
-private:
-    void tick();
+    // EventListener overrides
+    virtual void fire(EventType, uint8_t identifier);
     
+private:
     RTCTime myTime;
 };
 

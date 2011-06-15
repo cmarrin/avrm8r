@@ -427,6 +427,7 @@ enum EventType {
 #endif
 
     EV_TIMER_EVENT,
+    EV_RTC_EVENT,
     EV_IDLE,
     EV_LAST
 };

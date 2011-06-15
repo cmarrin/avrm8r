@@ -36,6 +36,7 @@ DAMAGE.
 #include "m8r/Event.h"
 
 #include "m8r/Application.h"
+#include "m8r/EventListener.h"
 
 using namespace m8r;
 
@@ -57,7 +58,10 @@ Event::processAllEvents()
     
     Event* lastEvent;
     for (Event* event = firstEvent; event; event = event->m_next) {
-        Application::application()->processEvent(event->m_type, event->m_identifier);
+        if (event->m_eventListener)
+            event->m_eventListener->fire(event->m_type, event->m_identifier);
+        else
+            Application::application()->processEvent(event->m_type, event->m_identifier);
         lastEvent = event;
     }
     

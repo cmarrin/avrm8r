@@ -51,11 +51,21 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class EventListener;
+
 class Event {
 public:
 	static void _INLINE_ add(EventType type, uint8_t identifier = 0)
     {
-        Event* event = alloc(type, identifier);
+        add(0, type, identifier);
+    }
+    
+	static void _INLINE_ add(EventListener* eventListener, EventType type, uint8_t identifier = 0)
+    {
+        Event* event = alloc();
+        event->m_eventListener = eventListener;
+        event->m_type = type;
+        event->m_identifier = identifier;
         event->m_next = m_head;
         m_head = event;
     }
@@ -63,12 +73,9 @@ public:
     static void processAllEvents();
     
 private:
-	Event(EventType type, uint8_t identifier) 
-        : m_type(type)
-        , m_identifier(identifier)
-        , m_next(0)	{ }
+	Event() : m_next(0) { }
 	
-    static Event* _INLINE_ alloc(EventType type, uint8_t identifier)
+    static Event* _INLINE_ alloc()
     {
         if (m_free) {
             Event* event = m_free;
@@ -76,11 +83,12 @@ private:
             return event;
         }
         
-        Event* event = new Event(type, identifier);
+        Event* event = new Event();
         ASSERT(event, AssertEventAlloc);
         return event;
     }
     
+    EventListener* m_eventListener;
     EventType m_type;
     uint8_t m_identifier;
     Event* m_next;

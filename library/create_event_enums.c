@@ -419,6 +419,7 @@ int main(int argc, char* argv[])
 #endif
 
     printf("\n");
+    printf("    EV_RTC_EVENT = %d,\n", i++);
     printf("    EV_TIMER_EVENT = %d,\n", i++);
     printf("    EV_IDLE = %d,\n", i++);
     printf("    EV_LAST         = %d,\n", i++);

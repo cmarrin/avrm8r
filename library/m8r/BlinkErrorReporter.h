@@ -64,10 +64,22 @@ public:
     }
     
     void hangOnError(bool hang) { m_hang = hang; }
-	
+    
+    void setError(bool error)
+    {
+        if (error)
+            m_errorPort.clearPortBit(ErrorBit);
+        else
+            m_errorPort.setPortBit(ErrorBit);
+    }
+    
+    bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
+
     // Blink out the code 3 times then repeat if 'hang' is true, otherwise return
     void reportError(uint8_t code)
     {
+        setError(false);
+        Application::application()->msDelay(1000);
         for (uint8_t i = 0; m_hang || i < 3; ++i) {
             blinkCode(code);
             Application::application()->msDelay(2000);
@@ -103,14 +115,6 @@ private:
     {
         blinkDigit(code >> 4);
         blinkDigit(code & 0x0f);
-    }
-    
-    void setError(bool error)
-    {
-        if (error)
-            m_errorPort.clearPortBit(ErrorBit);
-        else
-            m_errorPort.setPortBit(ErrorBit);
     }
     
     ErrorPort m_errorPort;

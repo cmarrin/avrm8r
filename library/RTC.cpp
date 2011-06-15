@@ -33,8 +33,10 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <avr/pgmspace.h>
 #include "m8r/RTC.h"
+
+#include "m8r/Event.h"
+#include <avr/pgmspace.h>
 
 extern const uint8_t mygMonthDayTable[] PROGMEM;
 const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
@@ -51,7 +53,7 @@ isLeapYear(uint16_t year)
 }
 
 void
-RTC::tick()
+RTC::fire(EventType, uint8_t)
 {
 	myTime.myTicks++;
     if(myTime.myTicks == myPeriod) {
@@ -80,5 +82,7 @@ RTC::tick()
 			}
 		}
 	}
+    
+    Event::add(EV_RTC_EVENT);
 }
 

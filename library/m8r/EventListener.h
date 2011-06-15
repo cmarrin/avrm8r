@@ -1,5 +1,5 @@
 //
-//  EventSource.h
+//  EventListener.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -45,20 +45,15 @@ namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: EventSource
+//  Class: EventListener
 //
-//  Base class for event sources in run loop
+//  Abstract base class for event callbacks
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class EventSource {
-	friend class Application;
-	
+class EventListener {
 public:
-	
-protected:
-	
-private:
+    virtual void fire(EventType type, uint8_t identifier);
 };
 
 }
