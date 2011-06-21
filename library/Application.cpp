@@ -62,6 +62,8 @@ void operator delete(void * ptr)
 }
 
 extern "C" {
+void __cxa_pure_virtual() { while (1); }
+
 #ifdef DEBUG
 void _showErrorCondition(uint8_t code, ErrorConditionType condition)
 {

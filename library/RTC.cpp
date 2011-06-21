@@ -55,33 +55,30 @@ isLeapYear(uint16_t year)
 void
 RTC::fire(EventType, uint8_t)
 {
-	myTime.myTicks++;
-    if(myTime.myTicks == myPeriod) {
-		myTime.myTicks = 0;
-		myTime.mySeconds++;
-		if(myTime.mySeconds > 59) {
-			myTime.mySeconds = 0;
-			myTime.myMinutes++;
-			if(myTime.myMinutes > 59) {
-				myTime.myMinutes = 0;
-				myTime.myHours++;
-				if(myTime.myHours > 23) {
-					myTime.myHours = 0;
-					myTime.myDay++;
-					// check days overflow
-					if((myTime.myMonth == 2 && isLeapYear(myTime.myYear) && myTime.myDay == 29) ||
-                            (myTime.myDay == pgm_read_byte(&mygMonthDayTable[myTime.myMonth-1]))) {
-						myTime.myDay = 1;
-						myTime.myMonth++;
-						if(myTime.myMonth == 13) {
-							myTime.myMonth = 1;
-							myTime.myYear++;
-						}
-					}
-				}
-			}
-		}
-	}
+    // Once per second.
+    m_time.m_seconds++;
+    if (m_time.m_seconds > 59) {
+        m_time.m_seconds = 0;
+        m_time.m_minutes++;
+        if (m_time.m_minutes > 59) {
+            m_time.m_minutes = 0;
+            m_time.m_hours++;
+            if (m_time.m_hours > 23) {
+                m_time.m_hours = 0;
+                m_time.m_day++;
+                // check days overflow
+                if ((m_time.m_month == 2 && isLeapYear(m_time.m_year) && m_time.m_day == 29) ||
+                        (m_time.m_day == pgm_read_byte(&mygMonthDayTable[m_time.m_month-1]))) {
+                    m_time.m_day = 1;
+                    m_time.m_month++;
+                    if (m_time.m_month == 13) {
+                        m_time.m_month = 1;
+                        m_time.m_year++;
+                    }
+                }
+            }
+        }
+    }
     
     Event::add(EV_RTC_EVENT);
 }

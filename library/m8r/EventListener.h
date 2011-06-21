@@ -53,7 +53,7 @@ namespace m8r {
 
 class EventListener {
 public:
-    virtual void fire(EventType type, uint8_t identifier);
+    virtual void fire(EventType type, uint8_t identifier) = 0;
 };
 
 }

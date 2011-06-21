@@ -39,6 +39,7 @@ DAMAGE.
 
 #include "m8r/EventListener.h"
 #include "m8r/TimerEventMgr.h"
+#include <avr/interrupt.h>
 
 namespace m8r {
 
@@ -54,46 +55,48 @@ namespace m8r {
 
 class RTCTime {
 public:
-    RTCTime() 
-    : myTicks(0)
-    , mySeconds(0)
-    , myMinutes(0)
-    , myHours(0)
-    , myDay(0)
-    , myMonth(0)
-    , myYear(0)
+    RTCTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hours, uint8_t minutes, uint8_t seconds)
+        : m_seconds(seconds)
+        , m_minutes(minutes)
+        , m_hours(hours)
+        , m_day(day)
+        , m_month(month)
+        , m_year(year)
     { }
     
     RTCTime(const RTCTime& t)
-    : myTicks(t.myTicks)
-    , mySeconds(t.mySeconds)
-    , myMinutes(t.myMinutes)
-    , myHours(t.myHours)
-    , myDay(t.myDay)
-    , myMonth(t.myMonth)
-    , myYear(t.myYear)
+    : m_ticks(t.m_ticks)
+    , m_seconds(t.m_seconds)
+    , m_minutes(t.m_minutes)
+    , m_hours(t.m_hours)
+    , m_day(t.m_day)
+    , m_month(t.m_month)
+    , m_year(t.m_year)
     { }
     
-    uint16_t    myTicks;
-    uint8_t     mySeconds, myMinutes, myHours;
-    uint8_t     myDay, myMonth;
-    uint16_t    myYear;    
+    uint16_t    m_ticks;
+    uint8_t     m_seconds, m_minutes, m_hours;
+    uint8_t     m_day, m_month;
+    uint16_t    m_year;    
 };
     
 class RTC : public EventListener {
 public:
-	RTC()
+	RTC(const RTCTime& currentTime)
+        : m_time(currentTime)
     {
+        m_ticks = 0;
         TimerEventMgrBase::shared()->createTimerEvent(1000, TimerEventRepeating);
     }
     
-    void getTime(RTCTime& t) const { cli(); t = myTime; sei(); }
+    const RTCTime& time() const { return m_time; }
 
     // EventListener overrides
     virtual void fire(EventType, uint8_t identifier);
     
 private:
-    RTCTime myTime;
+    uint32_t m_ticks;
+    RTCTime m_time;
 };
 
 }

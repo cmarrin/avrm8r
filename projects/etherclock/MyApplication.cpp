@@ -62,7 +62,7 @@ private:
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     TimerEventMgr<Timer1> m_timerEventMgr;
-    //RTC m_clock;
+    RTC m_clock;
     
     uint16_t m_accumulatedBrightness;
     uint8_t m_numAccumulatedBrightness;
