@@ -41,7 +41,7 @@ public:
     }
     
     // Application overrides
-    virtual void setErrorCondition(ErrorType error, bool raise);
+    virtual void setErrorCondition(ErrorType, ErrorConditionType);
     virtual void processEvent(EventType type, uint8_t identifier);
     
     uint8_t brightness() const { return m_currentBrightness; }
@@ -79,11 +79,9 @@ uint8_t MyApp::g_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
 MyApp g_myApp;
 
 void
-MyApp::setErrorCondition(ErrorType error, bool raise)
+MyApp::setErrorCondition(ErrorType error, ErrorConditionType condition)
 {
-    if (!raise)
-        return;
-    m_errorReporter.reportError(error);
+    m_errorReporter.reportError(error, condition);
 }
 
 void
@@ -95,8 +93,8 @@ MyApp::processEvent(EventType type, uint8_t identifier)
             accumulateBrightnessValue(m_adc.getLastConversion8Bit());
             m_adc.startConversion();
             break;
-        case EV_RTC_EVENT:
-            m_errorReporter.setError(!m_errorReporter.isErrorSet());
+        case EV_TIMER_EVENT:
+            NOTE(0x12);
             break;
         case EV_IDLE:
             if (++m_brightnessCount == 0) {

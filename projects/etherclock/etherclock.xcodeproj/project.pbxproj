@@ -277,8 +277,13 @@
 		01706F370A34762900E43B08 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				AVRDUDE_PORT = /dev/cu.usbserial;
-				AVRDUDE_PROGRAMMER = stk500v1;
+				AVRDUDE_DEVICE = STK500;
+				AVRDUDE_PORT = "$(AVRDUDE_PORT_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PORT_DRAGON = usb;
+				AVRDUDE_PORT_STK500 = /dev/cu.usbserial;
+				AVRDUDE_PROGRAMMER = "$(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
+				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				DEBUG = NDEBUG;
@@ -315,8 +320,13 @@
 		49A5D67F13A7F72B00E4C97D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				AVRDUDE_PORT = /dev/cu.usbserial;
-				AVRDUDE_PROGRAMMER = stk500v1;
+				AVRDUDE_DEVICE = STK500;
+				AVRDUDE_PORT = "$(AVRDUDE_PORT_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PORT_DRAGON = usb;
+				AVRDUDE_PORT_STK500 = /dev/cu.usbserial;
+				AVRDUDE_PROGRAMMER = "$(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
+				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				DEBUG = DEBUG;

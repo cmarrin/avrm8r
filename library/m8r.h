@@ -45,20 +45,12 @@ DAMAGE.
 #include <stdint.h>
 #include <avr/io.h>
 
-#ifdef DEBUG
-extern "C" {
-    void _assert(uint8_t code);
-}
-
-#define ASSERT(expr, code) if (!(expr)) _assert(code)
-#else
-#define ASSERT(expr, code)
-#endif
-
 #define _INLINE_ __attribute__ ((always_inline)) 
 #define _NO_INLINE_ __attribute__ ((noinline))
 
 namespace m8r {
+
+enum ErrorConditionType { ErrorConditionNote, ErrorConditionWarning, ErrorConditionFatal };
 
 enum ErrorType {
     ErrorUser = 0x10,
@@ -74,6 +66,7 @@ enum ErrorType {
     AssertSglTimer1 = 0x3b,
     AssertNoTimer2 = 0x3c,
     AssertSglTimer2 = 0x3d,
+    AssertTooManyEventAllocs = 0x3e,
 };
 
 enum Ports {
@@ -247,3 +240,19 @@ public:
     volatile uint8_t& getAddress() _INLINE_ { return REG16(reg); }
 };
 }
+
+#ifdef DEBUG
+extern "C" {
+    void _showErrorCondition(uint8_t code, m8r::ErrorConditionType);
+}
+
+#define ASSERT(expr, code) if (!(expr)) FATAL(code)
+#define FATAL(code) _showErrorCondition(code, ErrorConditionFatal)
+#define WARNING(code) _showErrorCondition(code, ErrorConditionWarning)
+#define NOTE(code) _showErrorCondition(code, ErrorConditionNote)
+#else
+#define ASSERT(expr, code)
+#define FATAL(code)
+#define WARNING(code)
+#define NOTE(code)
+#endif

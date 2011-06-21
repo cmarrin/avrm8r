@@ -75,7 +75,7 @@ public:
     }
     
     virtual void processEvent(EventType, uint8_t identifier = 0) { }
-    virtual void setErrorCondition(ErrorType, bool raise) { }
+    virtual void setErrorCondition(ErrorType, ErrorConditionType) { }
     
     void run() __attribute__((noreturn));
     

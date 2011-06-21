@@ -53,6 +53,8 @@ namespace m8r {
 
 class EventListener;
 
+const uint8_t MaxEventAllocs = 10;
+
 class Event {
 public:
 	static void _INLINE_ add(EventType type, uint8_t identifier = 0)
@@ -84,6 +86,8 @@ private:
         }
         
         Event* event = new Event();
+        ++m_numAllocs;
+        ASSERT(m_numAllocs <= MaxEventAllocs, AssertTooManyEventAllocs);
         ASSERT(event, AssertEventAlloc);
         return event;
     }
@@ -95,6 +99,7 @@ private:
     
     static Event* m_head;
     static Event* m_free;
+    static uint8_t m_numAllocs;
 };
 
 }

@@ -91,7 +91,9 @@ public:
     uint8_t createTimerEventWithIntervals(uint16_t intervals, TimerEventMode mode);
     uint8_t createTimerEvent(uint16_t ms, TimerEventMode mode)
     {
-        return createTimerEventWithIntervals((ms + (m_msPerInterval >> 1)) / m_msPerInterval, mode);
+        uint32_t us = (uint32_t) ms * 1000;
+        uint16_t intervals = (us + (m_usPerInterval >> 1)) / (uint32_t) m_usPerInterval;
+        return createTimerEventWithIntervals(intervals, mode);
     }
 
     void fireInterval();
@@ -103,11 +105,11 @@ public:
     }
 
 protected:
-	TimerEventMgrBase(uint16_t msPerInterval)
+	TimerEventMgrBase(uint16_t usPerInterval)
         : m_head(0)
         , m_free(0)
         , m_nextIdentifier(1)
-        , m_msPerInterval(msPerInterval)
+        , m_usPerInterval(usPerInterval)
     {
         ASSERT(!m_shared, AssertSglTimerEventMgr);
         m_shared = this;
@@ -120,7 +122,7 @@ private:
     TimerEvent* m_head;
     TimerEvent* m_free;
     uint8_t m_nextIdentifier;
-    uint16_t m_msPerInterval;
+    uint16_t m_usPerInterval;
     
     static TimerEventMgrBase* m_shared;
 };
@@ -138,8 +140,8 @@ class TimerEventMgr : public TimerEventMgrBase {
     };
     
 public:
-	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t msPerInterval)
-        : TimerEventMgrBase(msPerInterval)
+	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t usPerInterval)
+        : TimerEventMgrBase(usPerInterval)
         , m_timer(this)
     {
         m_timer.setTimerClockMode(prescaler);

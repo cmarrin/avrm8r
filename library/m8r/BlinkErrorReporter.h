@@ -56,15 +56,12 @@ template <class ErrorPort, uint8_t ErrorBit>
 class BlinkErrorReporter {
 public:
 	BlinkErrorReporter()
-        : m_hang(true)
     {
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
     }
-    
-    void hangOnError(bool hang) { m_hang = hang; }
-    
+        
     void setError(bool error)
     {
         if (error)
@@ -76,17 +73,28 @@ public:
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
     // Blink out the code 3 times then repeat if 'hang' is true, otherwise return
-    void reportError(uint8_t code)
+    void reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);
         Application::application()->msDelay(1000);
-        for (uint8_t i = 0; m_hang || i < 3; ++i) {
+        for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
+            if (condition == ErrorConditionNote) {
+                flicker(10);
+                Application::application()->msDelay(2000);
+            }
             blinkCode(code);
             Application::application()->msDelay(2000);
         }
     }
     
 private:
+    void flicker(uint8_t num)
+    {
+        while (--num > 0)
+            blink(100, 100);
+        Application::application()->msDelay(250);
+    }
+    
     void blink(uint16_t duration, uint8_t delay)
     {
         setError(true);
@@ -97,12 +105,8 @@ private:
     
     void blinkDigit(uint8_t digit)
     {
-        if (digit == 0) {
-            blink(100, 100);
-            blink(100, 100);
-            blink(100, 100);
-            blink(100, 100);
-        }
+        if (digit == 0)
+            flicker(4);
         
         for ( ; digit >= 4; digit -= 4)
             blink(1000, 250);
@@ -118,7 +122,6 @@ private:
     }
     
     ErrorPort m_errorPort;
-    bool m_hang;
 };
 
 }

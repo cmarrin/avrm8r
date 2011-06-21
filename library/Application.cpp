@@ -63,9 +63,9 @@ void operator delete(void * ptr)
 
 extern "C" {
 #ifdef DEBUG
-void _assert(uint8_t code)
+void _showErrorCondition(uint8_t code, ErrorConditionType condition)
 {
-    Application::application()->setErrorCondition((ErrorType) code, true);
+    Application::application()->setErrorCondition((ErrorType) code, condition);
 }
 #endif
 

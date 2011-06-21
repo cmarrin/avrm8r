@@ -42,6 +42,7 @@ using namespace m8r;
 
 Event* Event::m_head = 0;
 Event* Event::m_free = 0;
+uint8_t Event::m_numAllocs = 0;
 
 void
 Event::processAllEvents()
