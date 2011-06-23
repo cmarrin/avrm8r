@@ -52,9 +52,12 @@ isLeapYear(uint16_t year)
     return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
 }
 
-void
-RTC::fire(EventType, uint8_t)
+bool
+RTC::handleEvent(EventType type, uint8_t identifier)
 {
+    if (identifier != m_timerId)
+        return false;
+
     // Once per second.
     m_time.m_seconds++;
     if (m_time.m_seconds > 59) {
@@ -81,5 +84,6 @@ RTC::fire(EventType, uint8_t)
     }
     
     Event::add(EV_RTC_EVENT);
+    return true;
 }
 

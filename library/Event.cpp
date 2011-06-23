@@ -59,12 +59,11 @@ Event::processAllEvents()
     
     Event* lastEvent;
     for (Event* event = firstEvent; event; event = event->m_next) {
-        if (event->m_eventListener)
-            event->m_eventListener->fire(event->m_type, event->m_identifier);
-        else
-            Application::application()->processEvent(event->m_type, event->m_identifier);
+        Application::application()->sendEventToListeners(event->m_type, event->m_identifier);
         lastEvent = event;
     }
+    
+    Application::application()->sendEventToListeners(EV_IDLE, 0);
     
     cli();
     lastEvent->m_next = m_free;

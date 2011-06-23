@@ -51,21 +51,13 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class EventListener;
-
 const uint8_t MaxEventAllocs = 10;
 
 class Event {
 public:
 	static void _INLINE_ add(EventType type, uint8_t identifier = 0)
     {
-        add(0, type, identifier);
-    }
-    
-	static void _INLINE_ add(EventListener* eventListener, EventType type, uint8_t identifier = 0)
-    {
         Event* event = alloc();
-        event->m_eventListener = eventListener;
         event->m_type = type;
         event->m_identifier = identifier;
         event->m_next = m_head;
@@ -92,7 +84,6 @@ private:
         return event;
     }
     
-    EventListener* m_eventListener;
     EventType m_type;
     uint8_t m_identifier;
     Event* m_next;

@@ -58,11 +58,13 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class EventListener;
     
 class Application {
 public:
     Application()
-    : m_eventOnIdle(false)
+        : m_eventOnIdle(false)
+        , m_eventListeners(0)
     {
         ASSERT(!m_shared, AssertSglApp);
         m_shared = this;
@@ -74,7 +76,10 @@ public:
         return m_shared;
     }
     
-    virtual void processEvent(EventType, uint8_t identifier = 0) { }
+    void addEventListener(EventListener*);
+    void removeEventListener(EventListener*);
+    void sendEventToListeners(EventType, uint8_t identifier);
+    
     virtual void setErrorCondition(ErrorType, ErrorConditionType) { }
     
     void run() __attribute__((noreturn));
@@ -102,6 +107,7 @@ private:
     static Application* m_shared;
     
     bool m_eventOnIdle;
+    EventListener* m_eventListeners;
 };
 
 }

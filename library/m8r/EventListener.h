@@ -38,6 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
+#include "Application.h"
 #include "EventSourceEnums.h"
 
 namespace m8r {
@@ -52,8 +53,16 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class EventListener {
+    friend class Application;
+    
 public:
-    virtual void fire(EventType type, uint8_t identifier) = 0;
+    EventListener() : m_next(0) { Application::application()->addEventListener(this); }
+    ~EventListener() { Application::application()->removeEventListener(this); }
+    
+    virtual bool handleEvent(EventType type, uint8_t identifier) = 0;
+    
+private:
+    EventListener* m_next;
 };
 
 }

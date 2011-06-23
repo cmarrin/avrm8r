@@ -37,16 +37,47 @@ DAMAGE.
 
 #include "m8r/Application.h"
 
+#include "m8r/EventListener.h"
+
 using namespace m8r;
 
 Application* Application::m_shared;
+
+void
+Application::addEventListener(EventListener* eventListener)
+{
+    eventListener->m_next = m_eventListeners;
+    m_eventListeners = eventListener;
+}
+    
+void
+Application::removeEventListener(EventListener* eventListener)
+{
+    EventListener* previousListener = 0;
+    
+    for (EventListener* currentListener = m_eventListeners; currentListener; currentListener = currentListener->m_next) {
+        if (currentListener == eventListener) {
+            if (previousListener)
+                previousListener->m_next = currentListener->m_next;
+            else
+                m_eventListeners = currentListener->m_next;
+        }
+    }
+}
+
+void
+Application::sendEventToListeners(EventType type, uint8_t identifier)
+{
+    for (EventListener* currentListener = m_eventListeners; currentListener; currentListener = currentListener->m_next)
+        if (currentListener->handleEvent(type, identifier))
+            return;
+}
 
 void
 Application::run()
 {
     while (1) {
         Event::processAllEvents();
-        processEvent(EV_IDLE);
         wait();
     }
 }

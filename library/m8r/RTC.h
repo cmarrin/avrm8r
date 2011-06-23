@@ -55,6 +55,15 @@ namespace m8r {
 
 class RTCTime {
 public:
+    RTCTime()
+        : m_seconds(0)
+        , m_minutes(0)
+        , m_hours(12)
+        , m_day(1)
+        , m_month(1)
+        , m_year(2000)
+    { }
+    
     RTCTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hours, uint8_t minutes, uint8_t seconds)
         : m_seconds(seconds)
         , m_minutes(minutes)
@@ -82,21 +91,22 @@ public:
     
 class RTC : public EventListener {
 public:
-	RTC(const RTCTime& currentTime)
-        : m_time(currentTime)
+	RTC()
+        : m_ticks(0)
+        , m_timerId(TimerEventMgrBase::shared()->createTimerEvent(1000, TimerEventRepeating))
     {
-        m_ticks = 0;
-        TimerEventMgrBase::shared()->createTimerEvent(1000, TimerEventRepeating);
     }
     
+    void setTime(const RTCTime& time) { m_time = time; }
     const RTCTime& time() const { return m_time; }
 
     // EventListener overrides
-    virtual void fire(EventType, uint8_t identifier);
+    virtual bool handleEvent(EventType type, uint8_t identifier);
     
 private:
     uint32_t m_ticks;
     RTCTime m_time;
+    uint8_t m_timerId;
 };
 
 }

@@ -13,7 +13,7 @@ using namespace m8r;
 
 #define NumBrightnessValuesToAccumulate 100
 
-class MyApp : public Application {
+class MyApp : public Application, public EventListener {
 public:
     MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
@@ -42,7 +42,9 @@ public:
     
     // Application overrides
     virtual void setErrorCondition(ErrorType, ErrorConditionType);
-    virtual void processEvent(EventType type, uint8_t identifier);
+    
+    // EventListener overrides
+    virtual bool handleEvent(EventType type, uint8_t identifier);
     
     uint8_t brightness() const { return m_currentBrightness; }
 
@@ -84,8 +86,8 @@ MyApp::setErrorCondition(ErrorType error, ErrorConditionType condition)
     m_errorReporter.reportError(error, condition);
 }
 
-void
-MyApp::processEvent(EventType type, uint8_t identifier)
+bool
+MyApp::handleEvent(EventType type, uint8_t identifier)
 {
     switch(type)
     {
@@ -107,4 +109,6 @@ MyApp::processEvent(EventType type, uint8_t identifier)
         default:
             break;
     }
+    
+    return false;
 }
