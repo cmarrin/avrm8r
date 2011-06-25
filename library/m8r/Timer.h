@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/Event.h"
+#include "m8r/EventListener.h"
 
 /*
  Timers share some common functionality (e.g., prescalers, compare, interrupts).
@@ -225,7 +225,7 @@ template <
     class IrptMaskPort, 
     class IrptFlagPort,
     class GenTCCtrlPort>
-class TimerBase {
+class TimerBase : public EventListener {
     typedef TimerBase<CountSize, ControlAPort, ControlBPort, CounterPort, 
                                     CompareAPort, CompareBPort, IrptMaskPort, IrptFlagPort, 
                                     GenTCCtrlPort> TimerBaseType;
@@ -261,6 +261,9 @@ public:
     
     void setTimerTSM(bool e) { m_genTCCtrlPort.setBitMask(TimerTSM, e); }
     virtual void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
+    
+    // EventListener override
+    virtual bool handleEvent(EventType type, uint8_t identifier) { return false; }
     
 protected:
     ControlAPort m_controlAPort;

@@ -134,7 +134,13 @@ class TimerEventMgr : public TimerEventMgrBase {
         MyTimer(TimerEventMgrBase* base) : m_timerEventMgrBase(base) { }
     
     private:
-        virtual void handleOutputCmpMatchAIrpt(Timer*) { m_timerEventMgrBase->fireInterval(); }
+        // EventListener override
+        virtual bool handleEvent(EventType type, uint8_t identifier)
+        {
+            if (type != EV_TIMER1_COMPA)
+                return false;
+            m_timerEventMgrBase->fireInterval();
+        }
         
         TimerEventMgrBase* m_timerEventMgrBase;
     };
