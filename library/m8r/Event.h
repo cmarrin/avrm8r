@@ -51,12 +51,14 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-const uint8_t MaxEventAllocs = 10;
+const uint8_t MaxEventAllocs = 100;
 
 class Event {
 public:
 	static void _INLINE_ add(EventType type, uint8_t identifier = 0)
     {
+        if (m_numAllocs >= MaxEventAllocs && !m_free)
+            NOTE(type);
         Event* event = alloc();
         event->m_type = type;
         event->m_identifier = identifier;

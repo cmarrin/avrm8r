@@ -50,6 +50,7 @@ Event::processAllEvents()
     cli();
     if (!m_head) {
         sei();
+        Application::application()->sendEventToListeners(EV_IDLE, 0);
         return;
     }
     
