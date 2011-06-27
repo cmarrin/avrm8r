@@ -53,62 +53,38 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class RTCTime {
-public:
-    RTCTime()
-        : m_seconds(0)
-        , m_minutes(0)
-        , m_hours(12)
-        , m_day(1)
-        , m_month(1)
-        , m_year(2000)
-    { }
-    
-    RTCTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hours, uint8_t minutes, uint8_t seconds)
-        : m_seconds(seconds)
-        , m_minutes(minutes)
-        , m_hours(hours)
-        , m_day(day)
-        , m_month(month)
-        , m_year(year)
-    { }
-    
-    RTCTime(const RTCTime& t)
-    : m_ticks(t.m_ticks)
-    , m_seconds(t.m_seconds)
-    , m_minutes(t.m_minutes)
-    , m_hours(t.m_hours)
-    , m_day(t.m_day)
-    , m_month(t.m_month)
-    , m_year(t.m_year)
-    { }
-    
-    uint16_t    m_ticks;
-    uint8_t     m_seconds, m_minutes, m_hours;
-    uint8_t     m_day, m_month;
-    uint16_t    m_year;    
+struct RTCTime {
+    uint8_t seconds, minutes, hours;
+    uint8_t day, date, month;
+    uint16_t year;    
 };
     
 class RTC : public EventListener {
 public:
 	RTC(EventListener* listener)
         : m_timerEvent(this, 1000, TimerEventRepeating)
-        , m_ticks(0)
-        , m_event(listener, EV_RTC_EVENT)
+        , m_minutes(0)
+        , m_seconds(0)
+        , m_secondsEvent(listener, EV_RTC_SECONDS_EVENT)
+        , m_minutesEvent(listener, EV_RTC_MINUTES_EVENT)
     {
     }
     
-    void setTime(const RTCTime& time) { m_time = time; }
-    const RTCTime& time() const { return m_time; }
+    void setTicks(uint32_t t)
+    {
+        m_minutes = t / 60;
+        m_seconds = t % 60;
+    }
+    void currentTime(RTCTime& rtc);
 
     // EventListener override
     virtual void handleEvent(EventType, uint8_t identifier);
     
 private:
     TimerEvent m_timerEvent;
-    uint32_t m_ticks;
-    RTCTime m_time;
-    Event m_event;
+    uint32_t m_minutes;
+    uint8_t m_seconds;
+    Event m_secondsEvent, m_minutesEvent;
 };
 
 }

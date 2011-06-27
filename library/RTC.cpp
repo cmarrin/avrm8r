@@ -39,48 +39,73 @@ DAMAGE.
 #include "m8r/Event.h"
 #include <avr/pgmspace.h>
 
+const uint32_t minutesPerDay = 24UL * 60UL;
+const uint16_t epochYear = 2000;
+const uint8_t epochDayOfWeek = 6; // Saturday
+
 extern const uint8_t mygMonthDayTable[] PROGMEM;
 const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+static inline uint8_t 
+daysInMonth(uint8_t month)
+{
+    return pgm_read_byte(&mygMonthDayTable[month]);
+}
 
 using namespace m8r;
 
 static inline bool
 isLeapYear(uint16_t year)
 {
-    // leap year:
-    // is divisable by 4 and not by 100
-    // or is divisable by 400 
     return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
+}
+
+void
+RTC::currentTime(RTCTime& rtc)
+{
+    uint32_t minutesInDay = m_minutes % minutesPerDay;
+	uint16_t days = m_minutes / minutesPerDay;
+
+	rtc.seconds = m_seconds;
+	rtc.minutes = minutesInDay % 60UL;
+	rtc.hours = minutesInDay / 60UL;
+	rtc.day = (days + epochDayOfWeek) % 7;
+    
+    bool leap;
+    uint16_t year;
+    
+    for (year = epochYear; ; ++year) {
+        leap = isLeapYear(year);
+        uint16_t yearLength = leap ? 366 : 365;
+        if (days > yearLength)
+            break;
+        days -= yearLength;
+    }
+
+    rtc.year = year;
+    
+    uint8_t month;
+    
+    for (month = 0; ; ++month) {
+        uint8_t monthLength = daysInMonth(month);
+        if (days > monthLength)
+            break;
+        days -= monthLength;
+    }
+
+    rtc.month = month;
+    rtc.date = days;
 }
 
 void
 RTC::handleEvent(EventType, uint8_t)
 {
-    // Once per second.
-    m_time.m_seconds++;
-    if (m_time.m_seconds > 59) {
-        m_time.m_seconds = 0;
-        m_time.m_minutes++;
-        if (m_time.m_minutes > 59) {
-            m_time.m_minutes = 0;
-            m_time.m_hours++;
-            if (m_time.m_hours > 23) {
-                m_time.m_hours = 0;
-                m_time.m_day++;
-                // check days overflow
-                if ((m_time.m_month == 2 && isLeapYear(m_time.m_year) && m_time.m_day == 29) ||
-                        (m_time.m_day == pgm_read_byte(&mygMonthDayTable[m_time.m_month-1]))) {
-                    m_time.m_day = 1;
-                    m_time.m_month++;
-                    if (m_time.m_month == 13) {
-                        m_time.m_month = 1;
-                        m_time.m_year++;
-                    }
-                }
-            }
-        }
+    if (++m_seconds >= 60) {
+        m_seconds = 0;
+        m_minutes++;
+        Application::addEvent(&m_minutesEvent);
     }
     
-    Application::addEvent(&m_event);
+    Application::addEvent(&m_secondsEvent);
 }
 

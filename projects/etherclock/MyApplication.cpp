@@ -112,6 +112,15 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
         case EV_TIMER_EVENT:
             NOTE(0x12);
             break;
+        case EV_RTC_MINUTES_EVENT: {
+            RTCTime t;
+            m_clock.currentTime(t);
+            
+            // FIXME: This is bogus, just for testing
+            m_shiftReg.setChar(t.seconds, false);
+            m_shiftReg.latch();
+            break;
+        }
         default:
             break;
     }
