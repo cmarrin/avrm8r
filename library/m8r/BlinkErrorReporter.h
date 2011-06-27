@@ -55,14 +55,14 @@ namespace m8r {
 template <class ErrorPort, uint8_t ErrorBit>
 class BlinkErrorReporter {
 public:
-	BlinkErrorReporter()
+	_NO_INLINE_ BlinkErrorReporter()
     {
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
     }
         
-    void setError(bool error)
+    void _NO_INLINE_ setError(bool error)
     {
         if (error)
             m_errorPort.clearPortBit(ErrorBit);
@@ -73,7 +73,7 @@ public:
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
     // Blink out the code 3 times then repeat if 'hang' is true, otherwise return
-    void reportError(uint8_t code, ErrorConditionType condition)
+    void _NO_INLINE_ reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);
         Application::msDelay(1000);
@@ -88,14 +88,14 @@ public:
     }
     
 private:
-    void flicker(uint8_t num)
+    void _NO_INLINE_ flicker(uint8_t num)
     {
         while (--num > 0)
             blink(100, 100);
         Application::msDelay(250);
     }
     
-    void blink(uint16_t duration, uint8_t delay)
+    void _NO_INLINE_ blink(uint16_t duration, uint8_t delay)
     {
         setError(true);
         Application::msDelay(duration);
@@ -103,7 +103,7 @@ private:
         Application::msDelay(delay);
     }
     
-    void blinkDigit(uint8_t digit)
+    void _NO_INLINE_ blinkDigit(uint8_t digit)
     {
         if (digit == 0)
             flicker(4);
@@ -115,7 +115,7 @@ private:
         Application::msDelay(2000);
     }
     
-    void blinkCode(uint8_t code)
+    void _NO_INLINE_ blinkCode(uint8_t code)
     {
         blinkDigit(code >> 4);
         blinkDigit(code & 0x0f);

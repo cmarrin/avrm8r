@@ -23,7 +23,10 @@ CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
 CFLAGS += -O$(OPT)
-CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffreestanding
+CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -finline-limit=3 -fno-inline-small-functions
+CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -ffreestanding
 CFLAGS += -Wall
 CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 
