@@ -106,7 +106,7 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
     switch(type)
     {
         case EV_ADC:
-            accumulateBrightnessValue(m_adc.getLastConversion8Bit());
+            accumulateBrightnessValue(m_adc.lastConversion8Bit());
             m_adc.startConversion();
             break;
         case EV_TIMER_EVENT:

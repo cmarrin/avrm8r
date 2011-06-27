@@ -36,25 +36,36 @@ DAMAGE.
 #include "m8r/ADC.h"
 #include "m8r/Application.h"
 
-uint16_t m_lastConversion = 0;
-
 using namespace m8r;
 
-ADC* ADC::m_shared = 0;
-
-
-// FIXME: Add handling of ADC channel
+uint16_t ADC::m_lastConversion = 0;
+Event*ADC::m_event = 0;
 
 ADC::ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference)
-    : m_lastConversion(0)
-    , m_event(listener, EV_ADC)
 {
-    ASSERT(!m_shared, AssertSglADC);
-    m_shared = this;
+    ASSERT(!m_event, AssertSglADCEvent);
+    m_event = new Event(listener, EV_ADC);
 
-    setPrescaler(prescale);
-    setReference(reference);
-    setChannel(channel);
+    // Set prescaler
+    if (prescale & ADC_PS_MASK)
+        prescale = ADC_PS_DIV128;
+    
+    ADCSRA &= ~ADC_PS_MASK;
+    ADCSRA |= prescale;
+    
+    // Set reference
+    if (reference & ADC_REF_MASK)
+        reference = ADC_REF_AVCC;
+
+    ADMUX &= ~ADC_REF_MASK;
+    ADMUX |= reference;
+
+    // Set channel
+    if (channel & ADC_CH_MASK)
+        channel = ADC_CH_ADC0;
+    
+    ADMUX &= ~ADC_CH_MASK;
+    ADMUX |= channel;
 }
 
 void
@@ -100,18 +111,6 @@ ADC::setChannel(uint8_t channel)
     ADMUX |= channel;
 }
 
-void
-ADC::startConversion()
-{
-    ADCSRA |= _BV(ADSC);
-}
-
-uint16_t
-ADC::getLastConversion10Bit()
-{
-    return m_lastConversion;
-}
-
 uint16_t
 ADC::convert10Bit()
 {
@@ -128,7 +127,8 @@ ADC::convert10Bit()
 // Interrupt handler for ADC complete interrupt.
 ISR(ADC_vect)
 {
-    ADC::shared()->handleIrpt();
+    ADC::setLastConversion(ADCW);
+    ADC::addEvent();
 }
 
 

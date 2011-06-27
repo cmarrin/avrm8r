@@ -40,86 +40,117 @@ DAMAGE.
 
 using namespace m8r;
 
-Timer0* Timer0::m_shared = 0;
-Timer1* Timer1::m_shared = 0;
-Timer2* Timer2::m_shared = 0;
+
+Event* Timer0::m_outputCmpMatchAEvent = 0;
+Event* Timer0::m_outputCmpMatchBEvent = 0;
+Event* Timer0::m_overflowEvent = 0;
+
+Event* Timer1::m_outputCmpMatchAEvent = 0;
+Event* Timer1::m_outputCmpMatchBEvent = 0;
+Event* Timer1::m_overflowEvent = 0;
+Event* Timer1::m_inputCapEvent = 0;
+
+Event* Timer2::m_outputCmpMatchAEvent = 0;
+Event* Timer2::m_outputCmpMatchBEvent = 0;
+Event* Timer2::m_overflowEvent = 0;
 
 Timer0::Timer0(EventListener* listener)
-    : m_outputCmpMatchAEvent(listener, EV_TIMER0_COMPA)
-    , m_outputCmpMatchBEvent(listener, EV_TIMER0_COMPB)
-    , m_overflowEvent(listener, EV_TIMER0_OVF)
 {
-    ASSERT(!m_shared, AssertSglTimer0);
-    m_shared = this;
+    ASSERT(!m_outputCmpMatchAEvent, AssertSglTimer0Event);
+    m_outputCmpMatchAEvent = new Event(listener, EV_TIMER0_COMPA);
+    
+    ASSERT(!m_outputCmpMatchBEvent, AssertSglTimer0Event);
+    m_outputCmpMatchBEvent = new Event(listener, EV_TIMER0_COMPB);
+    
+    ASSERT(!m_overflowEvent, AssertSglTimer0Event);
+    m_overflowEvent = new Event(listener, EV_TIMER0_OVF);
 }
 
 Timer1::Timer1(EventListener* listener)
-    : m_outputCmpMatchAEvent(listener, EV_TIMER1_COMPA)
-    , m_outputCmpMatchBEvent(listener, EV_TIMER1_COMPB)
-    , m_overflowEvent(listener, EV_TIMER1_OVF)
-    , m_inputCapEvent(listener, EV_TIMER1_CAPT)
 {
-    ASSERT(!m_shared, AssertSglTimer1);
-    m_shared = this;
+    ASSERT(!m_outputCmpMatchAEvent, AssertSglTimer1Event);
+    m_outputCmpMatchAEvent = new Event(listener, EV_TIMER1_COMPA);
+    
+    ASSERT(!m_outputCmpMatchBEvent, AssertSglTimer1Event);
+    m_outputCmpMatchBEvent = new Event(listener, EV_TIMER1_COMPB);
+    
+    ASSERT(!m_overflowEvent, AssertSglTimer1Event);
+    m_overflowEvent = new Event(listener, EV_TIMER1_OVF);
+    
+    ASSERT(!m_inputCapEvent, AssertSglTimer1Event);
+    m_inputCapEvent = new Event(listener, EV_TIMER1_CAPT);
 }
 
 Timer2::Timer2(EventListener* listener)
-    : m_outputCmpMatchAEvent(listener, EV_TIMER2_COMPA)
-    , m_outputCmpMatchBEvent(listener, EV_TIMER2_COMPB)
-    , m_overflowEvent(listener, EV_TIMER2_OVF)
 {
-    ASSERT(!m_shared, AssertSglTimer2);
-    m_shared = this;
+    ASSERT(!m_outputCmpMatchAEvent, AssertSglTimer2Event);
+    m_outputCmpMatchAEvent = new Event(listener, EV_TIMER2_COMPA);
+    
+    ASSERT(!m_outputCmpMatchBEvent, AssertSglTimer2Event);
+    m_outputCmpMatchBEvent = new Event(listener, EV_TIMER2_COMPB);
+    
+    ASSERT(!m_overflowEvent, AssertSglTimer2Event);
+    m_overflowEvent = new Event(listener, EV_TIMER2_OVF);
 }
 
 // Interrupt handlers
 ISR(TIMER0_OVF_vect)
 {
-	Timer0::shared()->handleOverflowIrpt(Timer0::shared());
+    ASSERT(Timer0::m_overflowEvent, AssertNoTimer0Event);
+    Application::addEvent(Timer0::m_overflowEvent);
 }
 
 ISR(TIMER0_COMPA_vect)
 {
-	Timer0::shared()->handleOutputCmpMatchAIrpt(Timer0::shared());
+    ASSERT(Timer0::m_outputCmpMatchAEvent, AssertNoTimer0Event);
+    Application::addEvent(Timer0::m_outputCmpMatchAEvent);
 }
 
 ISR(TIMER0_COMPB_vect)
 {
-	Timer0::shared()->handleOutputCmpMatchBIrpt(Timer0::shared());
+    ASSERT(Timer0::m_outputCmpMatchBEvent, AssertNoTimer0Event);
+    Application::addEvent(Timer0::m_outputCmpMatchBEvent);
 }
 
 ISR(TIMER1_OVF_vect)
 {
-	Timer1::shared()->handleOverflowIrpt(Timer1::shared());
+    ASSERT(Timer1::m_overflowEvent, AssertNoTimer1Event);
+    Application::addEvent(Timer1::m_overflowEvent);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-	Timer1::shared()->handleOutputCmpMatchAIrpt(Timer1::shared());
+    ASSERT(Timer1::m_outputCmpMatchAEvent, AssertNoTimer1Event);
+    Application::addEvent(Timer1::m_outputCmpMatchAEvent);
 }
 
 ISR(TIMER1_COMPB_vect)
 {
-	Timer1::shared()->handleOutputCmpMatchBIrpt(Timer1::shared());
+    ASSERT(Timer1::m_outputCmpMatchBEvent, AssertNoTimer1Event);
+    Application::addEvent(Timer1::m_outputCmpMatchBEvent);
 }
 
 ISR(TIMER1_CAPT_vect)
 {
-	Timer1::shared()->handleInputCapIrpt(Timer1::shared());
+    ASSERT(Timer1::m_inputCapEvent, AssertNoTimer1Event);
+    Application::addEvent(Timer1::m_inputCapEvent);
 }
 
 ISR(TIMER2_OVF_vect)
 {
-	Timer2::shared()->handleOverflowIrpt(Timer2::shared());
+    ASSERT(Timer2::m_overflowEvent, AssertNoTimer2Event);
+    Application::addEvent(Timer2::m_overflowEvent);
 }
 
 ISR(TIMER2_COMPA_vect)
 {
-	Timer2::shared()->handleOutputCmpMatchAIrpt(Timer2::shared());
+    ASSERT(Timer2::m_outputCmpMatchAEvent, AssertNoTimer2Event);
+    Application::addEvent(Timer2::m_outputCmpMatchAEvent);
 }
 
 ISR(TIMER2_COMPB_vect)
 {
-	Timer2::shared()->handleOutputCmpMatchBIrpt(Timer2::shared());
+    ASSERT(Timer2::m_outputCmpMatchBEvent, AssertNoTimer2Event);
+    Application::addEvent(Timer2::m_outputCmpMatchBEvent);
 }
 
