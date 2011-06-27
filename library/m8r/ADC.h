@@ -152,7 +152,7 @@ public:
     
 	bool isConversionComplete() const _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
     
-    static void addEvent()
+    static void addEvent() _INLINE_ 
     {
         ASSERT(m_event, AssertNoADCEvent);
         Application::addEvent(m_event);
