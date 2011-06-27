@@ -47,23 +47,14 @@ ADC::ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t ref
     m_event = new Event(listener, EV_ADC);
 
     // Set prescaler
-    if (prescale & ADC_PS_MASK)
-        prescale = ADC_PS_DIV128;
-    
     ADCSRA &= ~ADC_PS_MASK;
     ADCSRA |= prescale;
     
     // Set reference
-    if (reference & ADC_REF_MASK)
-        reference = ADC_REF_AVCC;
-
     ADMUX &= ~ADC_REF_MASK;
     ADMUX |= reference;
 
     // Set channel
-    if (channel & ADC_CH_MASK)
-        channel = ADC_CH_ADC0;
-    
     ADMUX &= ~ADC_CH_MASK;
     ADMUX |= channel;
 }
