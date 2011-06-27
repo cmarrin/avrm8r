@@ -36,14 +36,22 @@ DAMAGE.
 #include "m8r/ADC.h"
 #include "m8r/Application.h"
 
-uint16_t g_lastConversion = 0;
+uint16_t m_lastConversion = 0;
 
 using namespace m8r;
 
+ADC* ADC::m_shared = 0;
+
+
 // FIXME: Add handling of ADC channel
 
-ADC::ADC(uint8_t channel, uint8_t prescale, uint8_t reference)
+ADC::ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference)
+    : m_lastConversion(0)
+    , m_event(listener, EV_ADC)
 {
+    ASSERT(!m_shared, AssertSglADC);
+    m_shared = this;
+
     setPrescaler(prescale);
     setReference(reference);
     setChannel(channel);
@@ -101,7 +109,7 @@ ADC::startConversion()
 uint16_t
 ADC::getLastConversion10Bit()
 {
-    return g_lastConversion;
+    return m_lastConversion;
 }
 
 uint16_t
@@ -120,8 +128,7 @@ ADC::convert10Bit()
 // Interrupt handler for ADC complete interrupt.
 ISR(ADC_vect)
 {
-    g_lastConversion = ADCW;
-    Event::add(EV_ADC);
+    ADC::shared()->handleIrpt();
 }
 
 

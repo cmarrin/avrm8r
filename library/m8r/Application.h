@@ -41,6 +41,7 @@ DAMAGE.
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
 #include "m8r/Event.h"
+#include "m8r/EventListener.h"
 
 // Setup for C++ operation
 void * operator new(size_t size); 
@@ -49,6 +50,8 @@ void operator delete(void * ptr);
 namespace m8r {
 
 #define EVENT_QUEUE_SIZE 10
+
+const uint8_t MaxEventAllocs = 100;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -59,33 +62,42 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class EventListener;
+
+class ErrorConditionHandler {
+public:
+    virtual void handleErrorCondition(ErrorType, ErrorConditionType) = 0;
+};
     
 class Application {
 public:
-    Application()
-        : m_eventOnIdle(false)
-        , m_eventListeners(0)
+	static void _INLINE_ addEvent(Event* event)
     {
-        ASSERT(!m_shared, AssertSglApp);
-        m_shared = this;
+        if (event->m_active)
+            return;
+        event->m_next = m_eventHead;
+        m_eventHead = event;
+        event->m_active = true;
     }
     
-    static Application* _INLINE_ application()
+    static void _INLINE_ addIdleEventListener(IdleEventListener* listener)
     {
-        ASSERT(m_shared, AssertNoApp);
-        return m_shared;
+        listener->m_next = m_idleEventListeners;
+        m_idleEventListeners = listener;
+    }
+
+    static void removeIdleEventListener(IdleEventListener* listener);
+
+    static void handleErrorCondition(ErrorType type, ErrorConditionType condition)
+    {
+        if (m_errorConditionHandler)
+            m_errorConditionHandler->handleErrorCondition(type, condition);
     }
     
-    void addEventListener(EventListener*);
-    void removeEventListener(EventListener*);
-    void sendEventToListeners(EventType, uint8_t identifier);
-    
-    virtual void setErrorCondition(ErrorType, ErrorConditionType) { }
-    
-    void run() __attribute__((noreturn));
+    static void run() __attribute__((noreturn));
     
     
-    void setEventOnIdle(bool b) { m_eventOnIdle = b; }
+    static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
+    static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
     
     // Delays of 16ms are possible down to F_CPU of 1MHz
     static void usDelay(uint16_t us)
@@ -100,14 +112,16 @@ public:
     }
     
 private:
-    void wait()
+    static void wait()
     {
     }
     
-    static Application* m_shared;
+    static ErrorConditionHandler* m_errorConditionHandler;
     
-    bool m_eventOnIdle;
-    EventListener* m_eventListeners;
+    static bool m_eventOnIdle;
+    static IdleEventListener* m_idleEventListeners;
+    
+    static Event* m_eventHead;
 };
 
 }

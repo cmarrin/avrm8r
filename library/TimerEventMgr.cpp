@@ -1,5 +1,5 @@
 //
-//  Timer1.cpp
+//  TimerEventMgr.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -36,52 +36,70 @@ DAMAGE.
 #include "m8r/TimerEventMgr.h"
 
 #include "m8r/Event.h"
+#include "m8r/TimerEvent.h"
 #include <avr/interrupt.h>
 
 using namespace m8r;
 
 TimerEventMgrBase* TimerEventMgrBase::m_shared = 0;
 
-
-uint8_t
-TimerEventMgrBase::createTimerEventWithIntervals(uint16_t intervals, TimerEventMode mode)
+TimerEventMgrBase::TimerEventMgrBase(uint16_t usPerInterval)
+    : m_head(0)
+    , m_free(0)
+    , m_usPerInterval(usPerInterval)
+    , m_currentInterval(0)
 {
-    TimerEvent* event = alloc(intervals, mode);
-    add(event);
-    return event->identifier();
+    ASSERT(!m_shared, AssertSglTimerEventMgr);
+    m_shared = this;
 }
 
-TimerEvent*
-TimerEventMgrBase::alloc(uint16_t intervals, TimerEventMode mode)
+uint16_t
+TimerEventMgrBase::intervalsFromMilliseconds(uint16_t ms) const
 {
-    if (m_free) {
-        TimerEvent* event = m_free;
-        m_free = event->m_next;
-        return event;
-    }
-    
-    TimerEvent* event = new TimerEvent(intervals, mode, m_nextIdentifier++);
-    ASSERT(event, AssertTimerEventAlloc);
-    return event;
+    uint32_t us = ((uint32_t) ms) * 1000;
+    return (us + (m_usPerInterval >> 1)) / (uint32_t) m_usPerInterval;
 }
 
 void
 TimerEventMgrBase::add(TimerEvent* event)
 {
-    TimerEvent* before = 0;
-    TimerEvent* after;
+    uint32_t endInterval = (int32_t) event->m_intervals + m_currentInterval;
+    event->m_endInterval = endInterval;
     
-    for (after = m_head; after; before = after, after = after->m_next)
-        if (event->m_remainingIntervals < after->m_remainingIntervals)
-            break;
-            
-    if (!before) {
+    if (!m_head || m_head->m_endInterval >= endInterval) {
         event->m_next = m_head;
         m_head = event;
+        return;
     }
-    else {
-        event->setNext(after);
-        before->m_next = event;
+    
+    for (TimerEvent* currentEvent = m_head; ; currentEvent = currentEvent->m_next) {
+        if (currentEvent->m_next->m_endInterval >= endInterval) {
+            event->m_next = currentEvent;
+            currentEvent->m_next = event;
+            return;
+        }
+        
+        if (!currentEvent->m_next) {
+            event->m_next = 0;
+            currentEvent->m_next = event;
+            return;
+        }
+    }
+}
+
+void
+TimerEventMgrBase::remove(TimerEvent* event)
+{
+    if (event == m_head) {
+        m_head = event->m_next;
+        return;
+    }
+    
+    for (TimerEvent* currentEvent = m_head; currentEvent; currentEvent = currentEvent->m_next) {
+        if (currentEvent->m_next == event) {
+            currentEvent->m_next = event->m_next;
+            return;
+        }
     }
 }
 
@@ -89,35 +107,32 @@ TimerEventMgrBase::add(TimerEvent* event)
 // It will fire every time, get removed from the front of the list and then
 // readded to the front of the list. This can be optimized.
 void
-TimerEventMgrBase::fireInterval()
+TimerEventMgrBase::handleEvent(EventType, uint8_t identifier)
 {
-    TimerEvent* finishedEvents = 0;
+    ++m_currentInterval;
     
-    for (TimerEvent* event = m_head; event; ) {
-        TimerEvent* nextEvent = event->m_next;
+    TimerEvent* newEvents = 0;
+    
+    while (m_head) {
+        TimerEvent* event = m_head;
         
-        if (--event->m_remainingIntervals == 0) {
-            // FIXME: Need to make timer event ids start at EV_LAST and go up from there
-            Event::add(EV_TIMER_EVENT, event->m_identifier);
+        if (event->m_endInterval <= m_currentInterval) {
+            event->m_eventListener->handleEvent(EV_TIMER_EVENT, 0);
             
+            m_head = m_head->m_next;
             
             if (event->m_mode == TimerEventRepeating) {
-                event->m_next = finishedEvents;
-                finishedEvents = event;
-            }
-            else {
-                event->m_next = m_free;
-                m_free = event;
+                event->m_next = newEvents;
+                newEvents = m_head;
             }
         }
-
-        event = nextEvent;
+        else
+            break;
     }
     
-    while (finishedEvents) {
-        TimerEvent* event = finishedEvents;
-        finishedEvents = finishedEvents->m_next;
-        event->m_remainingIntervals = event->m_intervals;
+    while (newEvents) {
+        TimerEvent* event = newEvents;
+        newEvents = newEvents->m_next;
         add(event);
     }
 }

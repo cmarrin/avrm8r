@@ -35,6 +35,7 @@ DAMAGE.
 
 #include "m8r/RTC.h"
 
+#include "m8r/Application.h"
 #include "m8r/Event.h"
 #include <avr/pgmspace.h>
 
@@ -52,12 +53,9 @@ isLeapYear(uint16_t year)
     return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
 }
 
-bool
-RTC::handleEvent(EventType type, uint8_t identifier)
+void
+RTC::handleEvent(EventType, uint8_t)
 {
-    if (identifier != m_timerId)
-        return false;
-
     // Once per second.
     m_time.m_seconds++;
     if (m_time.m_seconds > 59) {
@@ -83,7 +81,6 @@ RTC::handleEvent(EventType type, uint8_t identifier)
         }
     }
     
-    Event::add(EV_RTC_EVENT);
-    return true;
+    Application::addEvent(&m_event);
 }
 

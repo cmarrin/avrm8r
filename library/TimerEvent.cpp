@@ -1,9 +1,7 @@
 //
-//  Event.h
+//  TimerEvent.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
-//
-//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -35,42 +33,31 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+#include "m8r/TimerEvent.h"
 
-#include "m8r.h"
-#include "EventSourceEnums.h"
+#include "m8r/Event.h"
+#include "m8r/TimerEventMgr.h"
+#include <avr/interrupt.h>
 
-namespace m8r {
+using namespace m8r;
 
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: Event
-//
-//  Linked list of current events
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class EventListener;
-
-class Event {
-    friend class Application;
-    
-public:
-    Event(EventListener* listener, EventType type, uint8_t identifier = 0)
-        : m_listener(listener)
-        , m_type(type)
-        , m_identifier(identifier)
-        , m_active(false)
-        , m_next(0)
-    { }
-    
-private:
-    EventListener* m_listener;
-    EventType m_type;
-    uint8_t m_identifier;
-    bool m_active;
-    Event* m_next;
-};
-
+TimerEvent::TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode)
+    : m_intervals(TimerEventMgrBase::shared()->intervalsFromMilliseconds(ms))
+    , m_mode(mode)
+    , m_eventListener(listener)
+    , m_next(0)
+{
 }
+    
+void
+TimerEvent::start()
+{
+    TimerEventMgrBase::shared()->add(this);
+}
+
+void
+TimerEvent::stop()
+{
+    TimerEventMgrBase::shared()->remove(this);
+}
+

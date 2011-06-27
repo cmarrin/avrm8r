@@ -38,7 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "m8r/EventListener.h"
-#include "m8r/TimerEventMgr.h"
+#include "m8r/TimerEvent.h"
 #include <avr/interrupt.h>
 
 namespace m8r {
@@ -91,22 +91,24 @@ public:
     
 class RTC : public EventListener {
 public:
-	RTC()
-        : m_ticks(0)
-        , m_timerId(TimerEventMgrBase::shared()->createTimerEvent(1000, TimerEventRepeating))
+	RTC(EventListener* listener)
+        : m_timerEvent(this, 1000, TimerEventRepeating)
+        , m_ticks(0)
+        , m_event(listener, EV_RTC_EVENT)
     {
     }
     
     void setTime(const RTCTime& time) { m_time = time; }
     const RTCTime& time() const { return m_time; }
 
-    // EventListener overrides
-    virtual bool handleEvent(EventType type, uint8_t identifier);
+    // EventListener override
+    virtual void handleEvent(EventType, uint8_t identifier);
     
 private:
+    TimerEvent m_timerEvent;
     uint32_t m_ticks;
     RTCTime m_time;
-    uint8_t m_timerId;
+    Event m_event;
 };
 
 }

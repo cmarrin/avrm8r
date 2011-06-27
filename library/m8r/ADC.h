@@ -39,6 +39,7 @@ DAMAGE.
 
 #include "m8r.h"
 #include <avr/interrupt.h>
+#include "m8r/Application.h"
 
 #undef ADC
 
@@ -117,11 +118,19 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 	
+class EventListener;
+
 class ADC {
 public:
-	ADC(uint8_t channel, uint8_t prescale, uint8_t reference);
+	ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference);
 	~ADC() { }
 	
+    static ADC* shared()
+    {
+        ASSERT(m_shared, AssertNoADC);
+        return m_shared;
+    }
+
 	void setEnabled(bool e);
 	bool isEnabled() const _INLINE_ { return ADCSRA | _BV(ADEN); }
 	
@@ -146,8 +155,18 @@ public:
     uint16_t convert8Bit() _INLINE_ { return convert10Bit() >> 2; }
     
 	bool isConversionComplete() const _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
+    
+    void _INLINE_ handleIrpt()
+    {
+        m_lastConversion = ADCW;
+        Application::addEvent(&m_event);
+    }
 
 private:
+    static ADC* m_shared;
+
+    uint16_t m_lastConversion;
+    Event m_event;
 };
 
 }

@@ -41,43 +41,51 @@ DAMAGE.
 
 using namespace m8r;
 
-Application* Application::m_shared;
+ErrorConditionHandler* Application::m_errorConditionHandler = 0;
+bool Application::m_eventOnIdle = 0;
+IdleEventListener* Application::m_idleEventListeners = 0;
+Event* Application::m_eventHead = 0;
 
 void
-Application::addEventListener(EventListener* eventListener)
+Application::removeIdleEventListener(IdleEventListener* listener)
 {
-    eventListener->m_next = m_eventListeners;
-    m_eventListeners = eventListener;
-}
+    if (listener == m_idleEventListeners) {
+        m_idleEventListeners = listener->m_next;
+        return;
+    }
     
-void
-Application::removeEventListener(EventListener* eventListener)
-{
-    EventListener* previousListener = 0;
-    
-    for (EventListener* currentListener = m_eventListeners; currentListener; currentListener = currentListener->m_next) {
-        if (currentListener == eventListener) {
-            if (previousListener)
-                previousListener->m_next = currentListener->m_next;
-            else
-                m_eventListeners = currentListener->m_next;
+    for (IdleEventListener* currentListener = m_idleEventListeners; ; currentListener = currentListener->m_next) {
+        if (!currentListener->m_next)
+            return;
+        if (currentListener->m_next == listener) {
+            currentListener->m_next = listener->m_next;
+            return;
         }
     }
-}
-
-void
-Application::sendEventToListeners(EventType type, uint8_t identifier)
-{
-    for (EventListener* currentListener = m_eventListeners; currentListener; currentListener = currentListener->m_next)
-        if (currentListener->handleEvent(type, identifier))
-            return;
 }
 
 void
 Application::run()
 {
     while (1) {
-        Event::processAllEvents();
+        cli();
+        
+        if (m_eventHead) {
+            Event* event = m_eventHead;
+            m_eventHead = 0;
+            sei();
+            
+            for ( ; event; event = event->m_next) {
+                event->m_listener->handleEvent(event->m_type, event->m_identifier);
+                event->m_active = false;
+            }
+        }
+        else
+            sei();
+
+        for (IdleEventListener* listener = m_idleEventListeners; listener; listener = listener->m_next)
+            listener->handleIdleEvent();
+            
         wait();
     }
 }
@@ -98,14 +106,14 @@ void __cxa_pure_virtual() { while (1); }
 #ifdef DEBUG
 void _showErrorCondition(uint8_t code, ErrorConditionType condition)
 {
-    Application::application()->setErrorCondition((ErrorType) code, condition);
+    Application::handleErrorCondition((ErrorType) code, condition);
 }
 #endif
 
 void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::application()->run();
+    Application::run();
 }
 }
 

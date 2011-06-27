@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/EventListener.h"
+#include "m8r/Application.h"
 
 /*
  Timers share some common functionality (e.g., prescalers, compare, interrupts).
@@ -225,7 +225,7 @@ template <
     class IrptMaskPort, 
     class IrptFlagPort,
     class GenTCCtrlPort>
-class TimerBase : public EventListener {
+class TimerBase {
     typedef TimerBase<CountSize, ControlAPort, ControlBPort, CounterPort, 
                                     CompareAPort, CompareBPort, IrptMaskPort, IrptFlagPort, 
                                     GenTCCtrlPort> TimerBaseType;
@@ -262,9 +262,6 @@ public:
     void setTimerTSM(bool e) { m_genTCCtrlPort.setBitMask(TimerTSM, e); }
     virtual void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
     
-    // EventListener override
-    virtual bool handleEvent(EventType type, uint8_t identifier) { return false; }
-    
 protected:
     ControlAPort m_controlAPort;
     ControlBPort m_controlBPort;
@@ -295,11 +292,7 @@ class Timer0 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer0()
-    {
-        ASSERT(!m_shared, AssertSglTimer0);
-        m_shared = this;
-    }
+    Timer0(EventListener* listener);
     
     static Timer0* shared()
     {
@@ -307,12 +300,16 @@ public:
         return m_shared;
     }
 
-    virtual void handleOutputCmpMatchAIrpt(Timer0*) { Event::add(EV_TIMER0_COMPA); }
-    virtual void handleOutputCmpMatchBIrpt(Timer0*) { Event::add(EV_TIMER0_COMPB); }
-    virtual void handleOverflowIrpt(Timer0*) { Event::add(EV_TIMER0_OVF); }
+    virtual void handleOutputCmpMatchAIrpt(Timer0*) { Application::addEvent(&m_outputCmpMatchAEvent); }
+    virtual void handleOutputCmpMatchBIrpt(Timer0*) { Application::addEvent(&m_outputCmpMatchBEvent); }
+    virtual void handleOverflowIrpt(Timer0*) { Application::addEvent(&m_overflowEvent); }
     
 private:
     static Timer0* m_shared;
+
+    Event m_outputCmpMatchAEvent;
+    Event m_outputCmpMatchBEvent;
+    Event m_overflowEvent;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -334,11 +331,7 @@ class Timer1 : public TimerBase<uint16_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer1()
-    {
-        ASSERT(!m_shared, AssertSglTimer1);
-        m_shared = this;
-    }
+    Timer1(EventListener* listener);
     
     static Timer1* shared()
     {
@@ -363,16 +356,21 @@ public:
     
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
 
-    virtual void handleOutputCmpMatchAIrpt(Timer1*) { Event::add(EV_TIMER1_COMPA); }
-    virtual void handleOutputCmpMatchBIrpt(Timer1*) { Event::add(EV_TIMER1_COMPB); }
-    virtual void handleOverflowIrpt(Timer1*) { Event::add(EV_TIMER1_OVF); }
-    virtual void handleInputCapIrpt(Timer1*) { Event::add(EV_TIMER1_CAPT); }
+    virtual void handleOutputCmpMatchAIrpt(Timer1*) { Application::addEvent(&m_outputCmpMatchAEvent); }
+    virtual void handleOutputCmpMatchBIrpt(Timer1*) { Application::addEvent(&m_outputCmpMatchBEvent); }
+    virtual void handleOverflowIrpt(Timer1*) { Application::addEvent(&m_overflowEvent); }
+    virtual void handleInputCapIrpt(Timer1*) { Application::addEvent(&m_inputCapEvent); }
 
 private:
     static Timer1* m_shared;
 
     Reg8<_TCCR1C> m_controlPortC;
     Reg16<_ICR1> m_inputCapPort;
+
+    Event m_outputCmpMatchAEvent;
+    Event m_outputCmpMatchBEvent;
+    Event m_overflowEvent;
+    Event m_inputCapEvent;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -394,12 +392,8 @@ class Timer2 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer2()
-    {
-        ASSERT(!m_shared, AssertSglTimer2);
-        m_shared = this;
-    }
-    
+    Timer2(EventListener* listener);
+        
     static Timer2* shared()
     {
         ASSERT(m_shared, AssertNoTimer2);
@@ -416,14 +410,18 @@ public:
     bool isOCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRB2Busy); }
     bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
     
-    virtual void handleOutputCmpMatchAIrpt(Timer2*) { Event::add(EV_TIMER2_COMPA); }
-    virtual void handleOutputCmpMatchBIrpt(Timer2*) { Event::add(EV_TIMER2_COMPB); }
-    virtual void handleOverflowIrpt(Timer2*) { Event::add(EV_TIMER2_OVF); }
+    virtual void handleOutputCmpMatchAIrpt(Timer2*) { Application::addEvent(&m_outputCmpMatchAEvent); }
+    virtual void handleOutputCmpMatchBIrpt(Timer2*) { Application::addEvent(&m_outputCmpMatchBEvent); }
+    virtual void handleOverflowIrpt(Timer2*) { Application::addEvent(&m_overflowEvent); }
 
 private:
     static Timer2* m_shared;
 
     Reg8<_ASSR> m_asyncStatusPort;
+
+    Event m_outputCmpMatchAEvent;
+    Event m_outputCmpMatchBEvent;
+    Event m_overflowEvent;
 };
 
 }

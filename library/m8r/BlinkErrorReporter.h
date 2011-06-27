@@ -76,14 +76,14 @@ public:
     void reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);
-        Application::application()->msDelay(1000);
+        Application::msDelay(1000);
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
                 flicker(10);
-                Application::application()->msDelay(2000);
+                Application::msDelay(2000);
             }
             blinkCode(code);
-            Application::application()->msDelay(2000);
+            Application::msDelay(2000);
         }
     }
     
@@ -92,15 +92,15 @@ private:
     {
         while (--num > 0)
             blink(100, 100);
-        Application::application()->msDelay(250);
+        Application::msDelay(250);
     }
     
     void blink(uint16_t duration, uint8_t delay)
     {
         setError(true);
-        Application::application()->msDelay(duration);
+        Application::msDelay(duration);
         setError(false);
-        Application::application()->msDelay(delay);
+        Application::msDelay(delay);
     }
     
     void blinkDigit(uint8_t digit)
@@ -112,7 +112,7 @@ private:
             blink(1000, 250);
         for ( ; digit > 0; --digit)
             blink(250, 250);
-        Application::application()->msDelay(2000);
+        Application::msDelay(2000);
     }
     
     void blinkCode(uint8_t code)

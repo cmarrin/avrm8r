@@ -33,41 +33,18 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/Event.h"
+#include "m8r/EventListener.h"
 
 #include "m8r/Application.h"
-#include "m8r/EventListener.h"
 
 using namespace m8r;
 
-Event* Event::m_head = 0;
-Event* Event::m_free = 0;
-uint8_t Event::m_numAllocs = 0;
-
-void
-Event::processAllEvents()
+IdleEventListener::IdleEventListener()
 {
-    cli();
-    if (!m_head) {
-        sei();
-        Application::application()->sendEventToListeners(EV_IDLE, 0);
-        return;
-    }
-    
-    Event* firstEvent = m_head;
-    m_head = 0;
-    sei();
-    
-    Event* lastEvent;
-    for (Event* event = firstEvent; event; event = event->m_next) {
-        Application::application()->sendEventToListeners(event->m_type, event->m_identifier);
-        lastEvent = event;
-    }
-    
-    Application::application()->sendEventToListeners(EV_IDLE, 0);
-    
-    cli();
-    lastEvent->m_next = m_free;
-    m_free = firstEvent;
+    Application::addIdleEventListener(this);
 }
-	
+
+IdleEventListener::~IdleEventListener()
+{
+    Application::removeIdleEventListener(this);
+}

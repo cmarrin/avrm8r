@@ -37,46 +37,10 @@ DAMAGE.
 
 #pragma once
 
+#include "m8r/EventListener.h"
 #include "m8r/Timer.h"
 
 namespace m8r {
-
-enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: TimerEvent
-//
-//  Timer events managed by TimerEventMgr
-//
-//////////////////////////////////////////////////////////////////////////////
-    
-
-class TimerEvent {
-    friend class TimerEventMgrBase;
-    
-protected:
-	TimerEvent(uint16_t intervals, TimerEventMode mode, uint8_t identifier)
-    : m_intervals(intervals ? intervals : 1)
-    , m_remainingIntervals(intervals)
-    , m_mode(mode)
-    , m_identifier(identifier)
-    , m_next(0) { }
-
-    uint16_t intervals() const { return m_intervals; }
-    uint16_t remainingIntervals() const { return m_remainingIntervals; }
-    TimerEventMode mode() const { return m_mode; }
-    uint8_t identifier() const { return m_identifier; }
-    
-    void setNext(TimerEvent* event) { m_next = event; }
-    TimerEvent* next() { return m_next; }
-
-private:
-    uint16_t m_intervals, m_remainingIntervals;
-    TimerEventMode m_mode;
-    uint8_t m_identifier;
-    TimerEvent* m_next;
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -86,65 +50,38 @@ private:
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TimerEventMgrBase {
+class TimerEvent;
+
+class TimerEventMgrBase : public EventListener {
 public:
-    uint8_t createTimerEventWithIntervals(uint16_t intervals, TimerEventMode mode);
-    uint8_t createTimerEvent(uint16_t ms, TimerEventMode mode)
-    {
-        uint32_t us = (uint32_t) ms * 1000;
-        uint16_t intervals = (us + (m_usPerInterval >> 1)) / (uint32_t) m_usPerInterval;
-        return createTimerEventWithIntervals(intervals, mode);
-    }
-
-    void fireInterval();
-
     static TimerEventMgrBase* shared()
     {
         ASSERT(m_shared, AssertNoTimerEventMgr);
         return m_shared;
     }
 
+    void add(TimerEvent*);
+    void remove(TimerEvent*);
+
+    uint16_t intervalsFromMilliseconds(uint16_t) const;
+    
 protected:
-	TimerEventMgrBase(uint16_t usPerInterval)
-        : m_head(0)
-        , m_free(0)
-        , m_nextIdentifier(1)
-        , m_usPerInterval(usPerInterval)
-    {
-        ASSERT(!m_shared, AssertSglTimerEventMgr);
-        m_shared = this;
-    }
+	TimerEventMgrBase(uint16_t usPerInterval);
+    
+    // EventListener override
+    virtual void handleEvent(EventType, uint8_t identifier);
 
 private:
-    TimerEvent* alloc(uint16_t intervals, TimerEventMode mode);
-    void add(TimerEvent* event);
-
     TimerEvent* m_head;
     TimerEvent* m_free;
-    uint8_t m_nextIdentifier;
     uint16_t m_usPerInterval;
+    uint32_t m_currentInterval;
     
     static TimerEventMgrBase* m_shared;
 };
 
 template <class Timer>
 class TimerEventMgr : public TimerEventMgrBase {
-    class MyTimer : public Timer {
-    public:
-        MyTimer(TimerEventMgrBase* base) : m_timerEventMgrBase(base) { }
-    
-    private:
-        // EventListener override
-        virtual bool handleEvent(EventType type, uint8_t identifier)
-        {
-            if (type != EV_TIMER1_COMPA)
-                return false;
-            m_timerEventMgrBase->fireInterval();
-        }
-        
-        TimerEventMgrBase* m_timerEventMgrBase;
-    };
-    
 public:
 	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t usPerInterval)
         : TimerEventMgrBase(usPerInterval)
@@ -157,7 +94,7 @@ public:
     }
     
 private:
-    MyTimer m_timer;
+    Timer m_timer;
 };
 
 }

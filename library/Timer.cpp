@@ -44,6 +44,34 @@ Timer0* Timer0::m_shared = 0;
 Timer1* Timer1::m_shared = 0;
 Timer2* Timer2::m_shared = 0;
 
+Timer0::Timer0(EventListener* listener)
+    : m_outputCmpMatchAEvent(listener, EV_TIMER0_COMPA)
+    , m_outputCmpMatchBEvent(listener, EV_TIMER0_COMPB)
+    , m_overflowEvent(listener, EV_TIMER0_OVF)
+{
+    ASSERT(!m_shared, AssertSglTimer0);
+    m_shared = this;
+}
+
+Timer1::Timer1(EventListener* listener)
+    : m_outputCmpMatchAEvent(listener, EV_TIMER1_COMPA)
+    , m_outputCmpMatchBEvent(listener, EV_TIMER1_COMPB)
+    , m_overflowEvent(listener, EV_TIMER1_OVF)
+    , m_inputCapEvent(listener, EV_TIMER1_CAPT)
+{
+    ASSERT(!m_shared, AssertSglTimer1);
+    m_shared = this;
+}
+
+Timer2::Timer2(EventListener* listener)
+    : m_outputCmpMatchAEvent(listener, EV_TIMER2_COMPA)
+    , m_outputCmpMatchBEvent(listener, EV_TIMER2_COMPB)
+    , m_overflowEvent(listener, EV_TIMER2_OVF)
+{
+    ASSERT(!m_shared, AssertSglTimer2);
+    m_shared = this;
+}
+
 // Interrupt handlers
 ISR(TIMER0_OVF_vect)
 {

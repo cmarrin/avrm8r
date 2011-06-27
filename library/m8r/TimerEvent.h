@@ -38,44 +38,37 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
+#include "m8r/Event.h"
+#include "m8r/EventListener.h"
 
 namespace m8r {
+
+enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
 
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: TimerEvent
 //
-//  Timer events managed by TimerEventManager
+//  Timer events managed by TimerEventMgr
 //
 //////////////////////////////////////////////////////////////////////////////
     
-enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
 
 class TimerEvent {
-    friend class TimerEventManagerBase;
+    friend class TimerEventMgrBase;
     
-protected:
-	TimerEvent(uint16_t intervals, TimerEventMode mode, uint8_t identifier)
-    : m_intervals(intervals ? intervals : 1)
-    , m_remainingIntervals(intervals)
-    , m_mode(mode)
-    , m_identifier(identifier)
-    , m_next(0) { }
-
-    ~TimerEvent();
+public:
+    TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode);
+    ~TimerEvent() { stop(); }
     
-    uint16_t intervals() const { return m_intervals; }
-    uint16_t remainingIntervals() const { return m_remainingIntervals; }
-    TimerEventMode mode() const { return m_mode; }
-    uint8_t identifier() const { return m_identifier; }
-    
-    void setNext(TimerEvent* event) { m_next = event; }
-    TimerEvent* next() { return m_next; }
+    void start();
+    void stop();
 
 private:
-    uint16_t m_intervals, m_remainingIntervals;
+    uint16_t m_intervals;
+    uint16_t m_endInterval;
     TimerEventMode m_mode;
-    uint8_t m_identifier;
+    EventListener* m_eventListener;
     TimerEvent* m_next;
 };
 

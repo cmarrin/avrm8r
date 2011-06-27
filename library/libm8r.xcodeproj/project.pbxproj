@@ -27,9 +27,11 @@
 /* Begin PBXBuildFile section */
 		490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */ = {isa = PBXBuildFile; fileRef = 490EBD531348B4C800FAD91C /* m8r.h */; };
 		4922582B13A27AF7008A024A /* Event.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4922582A13A27AE5008A024A /* Event.h */; };
-		4922582D13A281C6008A024A /* Event.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4922582C13A2806F008A024A /* Event.cpp */; };
+		4922582D13A281C6008A024A /* EventListener.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4922582C13A2806F008A024A /* EventListener.cpp */; };
 		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
 		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
+		493914E413B808C10031A93D /* TimerEvent.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 493914E213B774740031A93D /* TimerEvent.h */; };
+		493914E513B808D60031A93D /* TimerEvent.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 493914E313B774ED0031A93D /* TimerEvent.cpp */; };
 		4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4947159513A40DCF009178CB /* BlinkErrorReporter.h */; };
 		4947159913A5C171009178CB /* Timer.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4980957C13A296B6000B717B /* Timer.h */; };
 		494715A313A7991C009178CB /* Timer.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAB13A6D82D0085ECC6 /* Timer.cpp */; };
@@ -89,6 +91,7 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				493914E413B808C10031A93D /* TimerEvent.h in Copy Headers */,
 				494715B813A9022A009178CB /* EventListener.h in Copy Headers */,
 				494715A513A79926009178CB /* TimerEventMgr.h in Copy Headers */,
 				4947159913A5C171009178CB /* Timer.h in Copy Headers */,
@@ -111,9 +114,10 @@
 			dstPath = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
 			dstSubfolderSpec = 0;
 			files = (
+				493914E513B808D60031A93D /* TimerEvent.cpp in Copy Sources */,
 				494715A313A7991C009178CB /* Timer.cpp in Copy Sources */,
 				494715A413A7991C009178CB /* TimerEventMgr.cpp in Copy Sources */,
-				4922582D13A281C6008A024A /* Event.cpp in Copy Sources */,
+				4922582D13A281C6008A024A /* EventListener.cpp in Copy Sources */,
 				49282A46134BACF8009E0FE6 /* main.c in Copy Sources */,
 				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
 				49EF3973134571C800519468 /* ADC.cpp in Copy Sources */,
@@ -134,8 +138,10 @@
 		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m8r.h; sourceTree = "<group>"; };
 		4922582A13A27AE5008A024A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = m8r/Event.h; sourceTree = "<group>"; };
-		4922582C13A2806F008A024A /* Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Event.cpp; sourceTree = "<group>"; };
+		4922582C13A2806F008A024A /* EventListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventListener.cpp; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		493914E213B774740031A93D /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = m8r/TimerEvent.h; sourceTree = "<group>"; };
+		493914E313B774ED0031A93D /* TimerEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimerEvent.cpp; sourceTree = "<group>"; };
 		4947159513A40DCF009178CB /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		494715B713A90023009178CB /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = m8r/EventListener.h; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -172,12 +178,13 @@
 			children = (
 				4900A1A7133F92730036518B /* Application.cpp */,
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
-				4922582C13A2806F008A024A /* Event.cpp */,
+				4922582C13A2806F008A024A /* EventListener.cpp */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
+				4900A1EE133F9C5B0036518B /* RTC.cpp */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
 				4972DBAB13A6D82D0085ECC6 /* Timer.cpp */,
+				493914E313B774ED0031A93D /* TimerEvent.cpp */,
 				4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */,
-				4900A1EE133F9C5B0036518B /* RTC.cpp */,
 				495F1CB3134A1F920059E738 /* main.c */,
 			);
 			name = Source;
@@ -211,6 +218,7 @@
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
 				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
 				4980957C13A296B6000B717B /* Timer.h */,
+				493914E213B774740031A93D /* TimerEvent.h */,
 				4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */,
 				4999818313514A3B0072EEA4 /* RTC.h */,
 			);

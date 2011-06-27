@@ -13,17 +13,21 @@ using namespace m8r;
 
 #define NumBrightnessValuesToAccumulate 100
 
-class MyApp : public Application, public EventListener {
+class MyApp : public Application, public EventListener, public IdleEventListener, public ErrorConditionHandler {
+    
 public:
     MyApp()
-    : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
-    , m_timerEventMgr(TimerClockDIV1, 6249, 1000) // 1ms timer
-    , m_accumulatedBrightness(0)
-    , m_numAccumulatedBrightness(0)
-    , m_currentBrightness(0)
-    , m_brightnessCount(0)
+        : m_adc(this, 0, ADC_PS_DIV128, ADC_REF_AVCC)
+        , m_timerEventMgr(TimerClockDIV1, 6249, 1000) // 1ms timer
+        , m_timerEvent(this, 5000, TimerEventOneShot)
+        , m_clock(this)
+        , m_accumulatedBrightness(0)
+        , m_numAccumulatedBrightness(0)
+        , m_currentBrightness(0)
+        , m_brightnessCount(0)
     {
-        Application::application()->setEventOnIdle(true);
+        Application::setErrorConditionHandler(this);
+        Application::setEventOnIdle(true);
         
         // Testing
         m_shiftReg.setChar('8', true);
@@ -32,7 +36,7 @@ public:
         m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
         
-        m_timerEventMgr.createTimerEvent(5000, TimerEventOneShot);
+        m_timerEvent.start();
         
         m_adc.setEnabled(true);
         
@@ -43,8 +47,17 @@ public:
     // Application overrides
     virtual void setErrorCondition(ErrorType, ErrorConditionType);
     
-    // EventListener overrides
-    virtual bool handleEvent(EventType type, uint8_t identifier);
+    // EventListener override
+    virtual void handleEvent(EventType type, uint8_t identifier);
+    
+    // IdleEventListener override
+    virtual void handleIdleEvent();
+    
+    // ErrorConditionHandler override
+    virtual void handleErrorCondition(ErrorType type, ErrorConditionType condition)
+    {
+        m_errorReporter.reportError(type, condition);
+    }    
     
     uint8_t brightness() const { return m_currentBrightness; }
 
@@ -64,6 +77,7 @@ private:
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     TimerEventMgr<Timer1> m_timerEventMgr;
+    TimerEvent m_timerEvent;
     RTC m_clock;
     
     uint16_t m_accumulatedBrightness;
@@ -86,7 +100,7 @@ MyApp::setErrorCondition(ErrorType error, ErrorConditionType condition)
     m_errorReporter.reportError(error, condition);
 }
 
-bool
+void
 MyApp::handleEvent(EventType type, uint8_t identifier)
 {
     switch(type)
@@ -98,17 +112,19 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
         case EV_TIMER_EVENT:
             NOTE(0x12);
             break;
-        case EV_IDLE:
-            if (++m_brightnessCount == 0) {
-                m_shiftReg.setOutputEnable(true);
-                m_brightnessMatch = brightness();
-            }
-            else if (m_brightnessCount == m_brightnessMatch)
-                m_shiftReg.setOutputEnable(false);
-            break;
         default:
             break;
     }
-    
-    return false;
 }
+
+void
+MyApp::handleIdleEvent()
+{
+    if (++m_brightnessCount == 0) {
+        m_shiftReg.setOutputEnable(true);
+        m_brightnessMatch = brightness();
+    }
+    else if (m_brightnessCount == m_brightnessMatch)
+        m_shiftReg.setOutputEnable(false);
+}
+
