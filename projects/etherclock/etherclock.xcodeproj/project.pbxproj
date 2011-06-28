@@ -284,9 +284,10 @@
 				AVRDUDE_PROGRAMMER = "$(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))";
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
-				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} ${DEBUG_SETTING} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				DEBUG = NDEBUG;
+				DEBUG_SETTING = "";
 				FREQUENCY = 8000000;
 				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
 				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
@@ -327,9 +328,10 @@
 				AVRDUDE_PROGRAMMER = "$(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))";
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
-				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} ${DEBUG_SETTING} -D$(DEBUG) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				DEBUG = DEBUG;
+				DEBUG_SETTING = "-g";
 				FREQUENCY = 8000000;
 				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
 				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";

@@ -14,6 +14,10 @@ OPT = s
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
 
+ifeq ($(DEBUG), DEBUG)
+DEBUG_FLAG = -g
+endif
+
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
 #  -O*:          optimization level
@@ -22,7 +26,7 @@ CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
-CFLAGS += -O$(OPT)
+CFLAGS += $(DEBUG_FLAG) -O$(OPT)
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -finline-limit=3 -fno-inline-small-functions
 CFLAGS += -ffunction-sections -fdata-sections
@@ -38,7 +42,7 @@ CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CPPFLAGS = $(CDEFS)
-CPPFLAGS += -O$(OPT)
+CPPFLAGS += $(DEBUG_FLAG) -O$(OPT)
 CPPFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CPPFLAGS += -finline-limit=10
 CPPFLAGS += -ffunction-sections -fdata-sections -ffreestanding 
