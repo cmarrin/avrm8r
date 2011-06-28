@@ -73,7 +73,7 @@ public:
     
 class Application {
 public:
-	static void _INLINE_ addEvent(Event* event)
+	static void _NO_INLINE_ addEvent(Event* event)
     {
         if (event->m_active)
             return;
