@@ -80,12 +80,10 @@ public:
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
                 flicker(10);
-                Application::delay(delayCount1000ms);
-                Application::delay(delayCount1000ms);
+                Application::delay(delayCount2000ms);
             }
             blinkCode(code);
-            Application::delay(delayCount1000ms);
-            Application::delay(delayCount1000ms);
+            Application::delay(delayCount2000ms);
         }
     }
     
@@ -114,8 +112,7 @@ private:
             blink(delayCount1000ms, delayCount250ms);
         for ( ; digit > 0; --digit)
             blink(delayCount250ms, delayCount250ms);
-        Application::delay(delayCount1000ms);
-        Application::delay(delayCount1000ms);
+        Application::delay(delayCount2000ms);
     }
     
     void _NO_INLINE_ blinkCode(uint8_t code)

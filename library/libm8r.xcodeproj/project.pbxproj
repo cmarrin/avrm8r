@@ -281,7 +281,7 @@
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
 				DEBUG = NDEBUG;
-				FREQUENCY = 8000000;
+				FREQUENCY = 12500000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;
 				ONLY_ACTIVE_ARCH = NO;
@@ -305,7 +305,7 @@
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
 				DEBUG = DEBUG;
-				FREQUENCY = 8000000;
+				FREQUENCY = 12500000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;
 				ONLY_ACTIVE_ARCH = NO;

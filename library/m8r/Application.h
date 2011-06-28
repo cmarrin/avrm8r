@@ -49,16 +49,18 @@ void operator delete(void * ptr);
 
 namespace m8r {
 
-const uint16_t delayCountMultiplier = F_CPU / 3000;
-const uint16_t delayCount100ms = (100UL * delayCountMultiplier) >> 8;
-const uint16_t delayCount250ms = (250UL * delayCountMultiplier) >> 8;
-const uint16_t delayCount1000ms = (1000UL * delayCountMultiplier) >> 8;
+const uint32_t innerDelayCount = (uint32_t) 1539;
+const uint32_t delayCountMultiplier = (uint32_t) F_CPU / innerDelayCount;
+const uint16_t delayCount100ms = (delayCountMultiplier * (uint32_t) 100) / (uint32_t) 1000;
+const uint16_t delayCount250ms = (delayCountMultiplier * (uint32_t) 250) / (uint32_t) 1000;
+const uint16_t delayCount1000ms = (delayCountMultiplier * (uint32_t) 1000) / (uint32_t) 1000;
+const uint16_t delayCount2000ms = (delayCountMultiplier * (uint32_t) 2000) / (uint32_t) 1000;
 
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application
 //
-//  Main application for AVR apps. Singleton
+//  Main application for AVR apps. Static class
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -99,25 +101,27 @@ public:
     static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
     static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
     
-    static void delay(uint16_t count)
+    // delay count = ((6 * 256 - 1) + 4) * count = 1539 * count
+    // Can handle up to 5000ms delay at 20MHz
+    static void _INLINE_ delay(uint16_t count)
     {
-        for (uint16_t i = count; i; --i)
-            delay256();
+        __asm__ volatile (
+            "mov __tmp_reg__, __zero_reg__ \n\t"
+            "1: nop \n\t"
+            "nop \n\t"
+            "nop \n\t"
+            "inc __tmp_reg__ \n\t"
+            "brne 1b \n\t"
+            "sbiw %0, 1 \n\t"
+            "brne 1b \n\t"
+            : "=w" (count)
+            : "0" (count)
+        );
     }
     
 private:
     static void wait()
     {
-    }
-    
-    static void _INLINE_ delay256()
-    {
-        __asm__ volatile (
-            "mov __tmp_reg__, __zero_reg__ \n\t"
-            "1: dec __tmp_reg__ \n\t"
-            "brne 1b \n\t"
-            : :
-        );
     }
 
     static ErrorConditionHandler* m_errorConditionHandler;
