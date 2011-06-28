@@ -49,9 +49,10 @@ void operator delete(void * ptr);
 
 namespace m8r {
 
-#define EVENT_QUEUE_SIZE 10
-
-const uint8_t MaxEventAllocs = 100;
+const uint16_t delayCountMultiplier = F_CPU / 3000;
+const uint16_t delayCount100ms = (100UL * delayCountMultiplier) >> 8;
+const uint16_t delayCount250ms = (250UL * delayCountMultiplier) >> 8;
+const uint16_t delayCount1000ms = (1000UL * delayCountMultiplier) >> 8;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -95,20 +96,13 @@ public:
     
     static void run() __attribute__((noreturn));
     
-    
     static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
     static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
     
-    // Delays of 16ms are possible down to F_CPU of 1MHz
-    static void usDelay(uint16_t us)
+    static void delay(uint16_t count)
     {
-        _delay_loop_2((uint32_t) us * 4000000 / F_CPU);
-    }
-    
-    static void msDelay(uint16_t ms)
-    {
-        for ( ; ms > 0; --ms)
-            usDelay(1000);
+        for (uint16_t i = count; i; --i)
+            delay256();
     }
     
 private:
@@ -116,6 +110,16 @@ private:
     {
     }
     
+    static void _INLINE_ delay256()
+    {
+        __asm__ volatile (
+            "mov __tmp_reg__, __zero_reg__ \n\t"
+            "1: dec __tmp_reg__ \n\t"
+            "brne 1b \n\t"
+            : :
+        );
+    }
+
     static ErrorConditionHandler* m_errorConditionHandler;
     
     static bool m_eventOnIdle;
