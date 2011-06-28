@@ -2,9 +2,60 @@
 # Build archive of marrinator source files for the passed flags
 #----------------------------------------------------------------------------
 
+ifndef ($(TOOLS_DIR))
+TOOLS_DIR = /usr/local/avrtools
+endif
+
+ifndef ($(M8R_SRC_DIR))
+M8R_SRC_DIR = .
+endif
+
+ifndef ($(OBJECT_FILE_DIR))
+OBJECT_FILE_DIR = $(M8R_SRC_DIR)/obj
+endif
+
+ifndef ($(FREQUENCY))
+FREQUENCY = 12500000
+endif
+
+ifndef ($(MCU))
+MCU = atmega168
+endif
+
+INSTALL_DIR = ~/Library/m8r
+
+HEADER_DIR = $(M8R_SRC_DIR)/m8r
+
 TARGET = libm8r
 CSRC = main.c
-CPPSRC = Application.cpp ADC.cpp EventListener.cpp MAX6969.cpp RTC.cpp ShiftReg.cpp Timer.cpp TimerEvent.cpp TimerEventMgr.cpp
+
+MAIN_HEADER = m8r.h
+
+HEADERS = \
+    ADC.h \
+    Application.h \
+    BlinkErrorReporter.h \
+    Event.h \
+    EventListener.h \
+    EventSourceEnums.h \
+    MAX6969.h \
+    RTC.h \
+    ShiftReg.h \
+    STP08CDC596.h \
+    Timer.h \
+    TimerEvent.h \
+    TimerEventMgr.h \
+
+CPPSRC = \
+    ADC.cpp \
+    Application.cpp \
+    EventListener.cpp \
+    MAX6969.cpp \
+    RTC.cpp \
+    ShiftReg.cpp \
+    Timer.cpp \
+    TimerEvent.cpp \
+    TimerEventMgr.cpp
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
 #     0 = turn off optimization. s = optimize for size.
@@ -13,10 +64,6 @@ OPT = s
 
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
-
-ifeq ($(DEBUG), DEBUG)
-DEBUG_FLAG = -g
-endif
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
@@ -111,9 +158,12 @@ MSG_ARCHIVING = Archiving:
 MSG_COMPILING = Compiling:
 MSG_ASSEMBLING = Assembling:
 MSG_CLEANING = Cleaning project:
+MSG_INSTALLING = Installing project:
 
 # Define all object files.
 OBJ := ${CSRC:%.c=${OBJECT_FILE_DIR}/%.o} ${CPPSRC:%.cpp=${OBJECT_FILE_DIR}/%.o} ${ASRC:%.S=${OBJECT_FILE_DIR}/%.o}
+
+HDR := ${HEADERS:%.h=${HEADER_DIR}/%.h}
 
 SRCDIR = $(M8R_SRC_DIR)
 
@@ -128,6 +178,25 @@ ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 # Default target.
+release: DEBUG = NDEBUG
+release: DEBUG_FLAG =
+release: all
+
+debug: DEBUG = DEBUG
+debug: DEBUG_FLAG = -g
+debug: all
+    
+install:
+	@echo
+	@echo $(MSG_INSTALLING) $@
+	$(MKDIR) -p $(INSTALL_DIR)/Headers/m8r
+	$(MKDIR) -p $(INSTALL_DIR)/Sources/m8r
+	$(COPY) $(MAIN_HEADER) $(INSTALL_DIR)/Headers
+	$(COPY) $(HDR) $(INSTALL_DIR)/Headers/m8r
+	$(COPY) $(CPPSRC) $(INSTALL_DIR)/Sources/m8r
+	$(COPY) $(CSRC) $(INSTALL_DIR)/Sources/m8r
+	$(COPY) Makefile $(INSTALL_DIR)/
+
 all: begin gccversion sizebefore build sizeafter end
 
 build: ar
