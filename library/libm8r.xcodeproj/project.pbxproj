@@ -230,11 +230,12 @@
 /* Begin PBXLegacyTarget section */
 		4928295E134B8866009E0FE6 /* Make */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$(ACTION)";
+			buildArgumentsString = "$(BUILD_TYPE)";
 			buildConfigurationList = 49282968134B88B5009E0FE6 /* Build configuration list for PBXLegacyTarget "Make" */;
 			buildPhases = (
 			);
 			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "";
 			dependencies = (
 			);
 			name = Make;
@@ -278,9 +279,9 @@
 		1DEB912008733D790010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_TYPE = release;
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
-				DEBUG = NDEBUG;
 				FREQUENCY = 12500000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;
@@ -302,9 +303,9 @@
 		49A5D67613A7F6D300E4C97D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_TYPE = debug;
 				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
 				C_INCLUDE_PATH = "${PROJECT_DIR}/";
-				DEBUG = DEBUG;
 				FREQUENCY = 12500000;
 				M8R_SRC_DIR = "$(PROJECT_DIR)";
 				MCU = atmega168;

@@ -2,23 +2,23 @@
 # Build archive of marrinator source files for the passed flags
 #----------------------------------------------------------------------------
 
-ifndef ($(TOOLS_DIR))
+ifndef TOOLS_DIR
 TOOLS_DIR = /usr/local/avrtools
 endif
 
-ifndef ($(M8R_SRC_DIR))
+ifndef M8R_SRC_DIR
 M8R_SRC_DIR = .
 endif
 
-ifndef ($(OBJECT_FILE_DIR))
+ifndef OBJECT_FILE_DIR
 OBJECT_FILE_DIR = $(M8R_SRC_DIR)/obj
 endif
 
-ifndef ($(FREQUENCY))
+ifndef FREQUENCY
 FREQUENCY = 12500000
 endif
 
-ifndef ($(MCU))
+ifndef MCU
 MCU = atmega168
 endif
 
@@ -63,7 +63,7 @@ CPPSRC = \
 OPT = s
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
+CDEFS = -DF_CPU=$(FREQUENCY)UL
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
@@ -73,7 +73,7 @@ CDEFS = -DF_CPU=$(FREQUENCY)UL -D$(DEBUG)
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
-CFLAGS += $(DEBUG_FLAG) -O$(OPT)
+CFLAGS += -O$(OPT)
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -finline-limit=3 -fno-inline-small-functions
 CFLAGS += -ffunction-sections -fdata-sections
@@ -170,7 +170,6 @@ SRCDIR = $(M8R_SRC_DIR)
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
 
-
 # Combine all necessary flags and optional flags.
 # Add target processor to flags.
 ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
@@ -178,13 +177,11 @@ ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 # Default target.
-release: DEBUG = NDEBUG
-release: DEBUG_FLAG =
-release: all
-
-debug: DEBUG = DEBUG
-debug: DEBUG_FLAG = -g
+debug: override CDEFS += -DDEBUG -g
 debug: all
+
+release: override CDEFS += -DNDEBUG
+release: all
     
 install:
 	@echo

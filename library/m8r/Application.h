@@ -49,7 +49,7 @@ void operator delete(void * ptr);
 
 namespace m8r {
 
-const uint32_t innerDelayCount = (uint32_t) 1539;
+const uint32_t innerDelayCount = (uint32_t) 1539 * 2;
 const uint32_t delayCountMultiplier = (uint32_t) F_CPU / innerDelayCount;
 const uint16_t delayCount100ms = (delayCountMultiplier * (uint32_t) 100) / (uint32_t) 1000;
 const uint16_t delayCount250ms = (delayCountMultiplier * (uint32_t) 250) / (uint32_t) 1000;
