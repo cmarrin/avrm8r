@@ -1,9 +1,7 @@
 //
-//  TimerEventMgr.h
+//  SineAnimation.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
-//
-//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -35,68 +33,30 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+#include "m8r/SineAnimation.h"
 
-#include "m8r/EventListener.h"
-#include "m8r/Timer.h"
+static uint8_t g_sineTable[ ] = { 0, 49, 90, 117, 127 };
 
-namespace m8r {
+static uint8_t interpSine(uint8_t t)
+{
+    uint8_t i = t >> 4;
+    return ((uint16_t) (g_sineTable[i + 1] - g_sineTable[i]) * (uint16_t) (t & 0x0F)) >> 4;
+}
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: TimerEventMgr
-//
-//  Manage list of events which fire at given intervals
-//
-//////////////////////////////////////////////////////////////////////////////
+static uint8_t sine(uint8_t t)
+{
+    if (t < 64)
+        return interpSine(t) + 128;
+    if (t < 128)
+        return interpSine(127 - t) + 128;
+    if (t < 192)
+        return 127 - interpSine(t - 128);
+    return 127 - interpSine(255 - t);
+}
 
-class TimerEvent;
-
-class TimerEventMgrBase : public EventListener {
-public:
-    static TimerEventMgrBase* shared()
-    {
-        ASSERT(m_shared, AssertNoTimerEventMgr);
-        return m_shared;
-    }
-
-    void add(TimerEvent*);
-    void remove(TimerEvent*);
-
-    uint16_t intervalsFromMilliseconds(uint16_t) const;
-    
-    uint32_t currentInterval() const { return m_currentInterval; }
-    
-protected:
-	TimerEventMgrBase(uint16_t usPerInterval);
-    
-    // EventListener override
-    virtual void handleEvent(EventType, uint8_t identifier);
-
-private:
-    TimerEvent* m_head;
-    TimerEvent* m_free;
-    uint16_t m_usPerInterval;
-    uint32_t m_currentInterval;
-    
-    static TimerEventMgrBase* m_shared;
-};
-
-template <class Timer>
-class TimerEventMgr : public TimerEventMgrBase {
-public:
-	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t usPerInterval)
-        : TimerEventMgrBase(usPerInterval)
-        , m_timer(this)
-    {
-        m_timer.setTimerClockMode(prescaler);
-        m_timer.setOutputCompareA(count);
-        m_timer.setWaveGenMode(TimerWaveGenCTC);
-        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
-    }
-    
-private:
-    Timer m_timer;
-};
-
+uint8_t
+SineAnimation::currentValue() const
+{
+    uint8_t t = ((TimerEventMgr::shared()->currentInterval() - m_startInterval) % m_intervalsPerIteration) / m_rate;
+    return sine(t);
 }

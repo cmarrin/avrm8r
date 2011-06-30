@@ -1,7 +1,7 @@
 //
-//  TimerEventMgr.h
+//  SineAnimation.h
 //
-//  Created by Chris Marrin on 3/19/2011.
+//  Created by Chris Marrin on 6/30/2011.
 //
 //
 
@@ -37,66 +37,31 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/EventListener.h"
-#include "m8r/Timer.h"
-
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: TimerEventMgr
+//  Class: SineAnimation
 //
-//  Manage list of events which fire at given intervals
+//  generate a periodic sine wave value
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TimerEvent;
-
-class TimerEventMgrBase : public EventListener {
+class SineAnimation {
 public:
-    static TimerEventMgrBase* shared()
+    SineAnimation(EventListener* listener, uint8_t msRate)
+        : m_timerEvent(listener, msRate, TimerEventRepeating)
+        , m_startInterval(TimerEventMgr::shared()->currentInterval())
+        , m_intervalsPerIteration((uint16_t) msRate << 8)
+        , m_rate(msRate)
     {
-        ASSERT(m_shared, AssertNoTimerEventMgr);
-        return m_shared;
-    }
-
-    void add(TimerEvent*);
-    void remove(TimerEvent*);
-
-    uint16_t intervalsFromMilliseconds(uint16_t) const;
-    
-    uint32_t currentInterval() const { return m_currentInterval; }
-    
-protected:
-	TimerEventMgrBase(uint16_t usPerInterval);
-    
-    // EventListener override
-    virtual void handleEvent(EventType, uint8_t identifier);
-
-private:
-    TimerEvent* m_head;
-    TimerEvent* m_free;
-    uint16_t m_usPerInterval;
-    uint32_t m_currentInterval;
-    
-    static TimerEventMgrBase* m_shared;
-};
-
-template <class Timer>
-class TimerEventMgr : public TimerEventMgrBase {
-public:
-	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t usPerInterval)
-        : TimerEventMgrBase(usPerInterval)
-        , m_timer(this)
-    {
-        m_timer.setTimerClockMode(prescaler);
-        m_timer.setOutputCompareA(count);
-        m_timer.setWaveGenMode(TimerWaveGenCTC);
-        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
     }
     
-private:
-    Timer m_timer;
-};
+    uint8_t currentValue() const;
 
-}
+private:
+    TimerEvent m_timerEvent;
+    uint32_t m_startInterval;
+    uint16_t m_intervalsPerIteration;
+    uint8_t m_rate;
+};
