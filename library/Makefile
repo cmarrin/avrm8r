@@ -35,12 +35,14 @@ HEADERS = \
     ADC.h \
     Application.h \
     BlinkErrorReporter.h \
+    ENC28J60.h \
     Event.h \
     EventListener.h \
     EventSourceEnums.h \
     MAX6969.h \
     RTC.h \
     ShiftReg.h \
+    SPI.h \
     STP08CDC596.h \
     Timer.h \
     TimerEvent.h \
@@ -49,6 +51,7 @@ HEADERS = \
 CPPSRC = \
     ADC.cpp \
     Application.cpp \
+    ENC28J60.cpp \
     EventListener.cpp \
     MAX6969.cpp \
     RTC.cpp \

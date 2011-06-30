@@ -19,7 +19,7 @@ are permitted provided that the following conditions are met:
       this list of conditions and the following disclaimer in the documentation 
       and/or other materials provided with the distribution.
 
-    - Neither the name of Video Monkey nor the names of its contributors may be 
+    - Neither the name of Marrinator nor the names of its contributors may be 
       used to endorse or promote products derived from this software without 
       specific prior written permission.
 
@@ -49,12 +49,15 @@ void operator delete(void * ptr);
 
 namespace m8r {
 
-const uint32_t innerDelayCount = (uint32_t) 1539 * 2;
+const uint32_t innerDelayCount = (uint32_t) 1539;
 const uint32_t delayCountMultiplier = (uint32_t) F_CPU / innerDelayCount;
-const uint16_t delayCount100ms = (delayCountMultiplier * (uint32_t) 100) / (uint32_t) 1000;
-const uint16_t delayCount250ms = (delayCountMultiplier * (uint32_t) 250) / (uint32_t) 1000;
-const uint16_t delayCount1000ms = (delayCountMultiplier * (uint32_t) 1000) / (uint32_t) 1000;
-const uint16_t delayCount2000ms = (delayCountMultiplier * (uint32_t) 2000) / (uint32_t) 1000;
+
+static inline uint16_t countFromMS(uint16_t ms) { return (uint16_t)((delayCountMultiplier * (uint32_t) ms) / (uint32_t) 1000); }
+
+const uint16_t delayCount100ms = countFromMS(100);
+const uint16_t delayCount250ms = countFromMS(250);
+const uint16_t delayCount1000ms = countFromMS(1000);
+const uint16_t delayCount2000ms = countFromMS(2000);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -100,6 +103,8 @@ public:
     
     static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
     static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
+    
+    static void _INLINE_ delayMS(uint16_t ms) { delay(countFromMS(ms)); }
     
     // delay count = ((6 * 256 - 1) + 4) * count = 1539 * count
     // Can handle up to 5000ms delay at 20MHz

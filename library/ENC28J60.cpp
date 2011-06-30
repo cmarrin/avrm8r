@@ -1,7 +1,9 @@
 //
-//  ShiftReg.cpp
+//  ENC28J60.cpp
 //
-//  Created by Chris Marrin on 3/19/2011.
+//  Created by Chris Marrin on 6/30/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -17,7 +19,7 @@ are permitted provided that the following conditions are met:
       this list of conditions and the following disclaimer in the documentation 
       and/or other materials provided with the distribution.
 
-    - Neither the name of Video Monkey nor the names of its contributors may be 
+    - Neither the name of Marrinator nor the names of its contributors may be 
       used to endorse or promote products derived from this software without 
       specific prior written permission.
 
@@ -33,6 +35,37 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/ShiftReg.h"
+#include "m8r/ENC28J60.h"
+
+#define CSACTIVE SPI_PORT &= ~_BV(SS_BIT)
+#define CSPASSIVE SPI_PORT |= _BV(SS_BIT)
+#define waitspi() while(!(SPSR & _BV(SPIF)))
 
 using namespace m8r;
+
+ENC28J60Base::ENC28J60Base()
+{
+}
+
+void
+ENC28J60Base::writeOp(uint8_t op, uint8_t address, uint8_t data)
+{
+    CSACTIVE;
+    SPDR = op | (address & ADDR_MASK);
+    waitspi();
+
+    SPDR = data;
+    waitspi();
+    CSPASSIVE;
+}
+
+void
+ENC28J60Base::setBank(uint8_t address)
+{
+    if ((address & BANK_MASK) != m_bank) {
+        writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_BSEL1 | ECON1_BSEL0);
+        writeOp(ENC28J60_BIT_FIELD_SET, ECON1, (address & BANK_MASK) >> 5);
+        m_bank = (address & BANK_MASK);
+    }
+}
+
