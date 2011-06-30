@@ -11,10 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 49EF39661345711000519468 /* Build configuration list for PBXAggregateTarget "Install" */;
 			buildPhases = (
-				490EBD671348B60E00FAD91C /* Copy Main Header */,
-				49EF3962134570F100519468 /* Copy Headers */,
-				49EF397B134571E600519468 /* Copy Sources */,
-				492829E1134B990E009E0FE6 /* Copy Makefile */,
+				49CF367413BCB9AB001EB1B8 /* ShellScript */,
 			);
 			dependencies = (
 				49B59EF61375937D006090D7 /* PBXTargetDependency */,
@@ -23,34 +20,6 @@
 			productName = Marrinator;
 		};
 /* End PBXAggregateTarget section */
-
-/* Begin PBXBuildFile section */
-		490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */ = {isa = PBXBuildFile; fileRef = 490EBD531348B4C800FAD91C /* m8r.h */; };
-		4922582B13A27AF7008A024A /* Event.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4922582A13A27AE5008A024A /* Event.h */; };
-		4922582D13A281C6008A024A /* EventListener.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4922582C13A2806F008A024A /* EventListener.cpp */; };
-		492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */ = {isa = PBXBuildFile; fileRef = 49282959134B852C009E0FE6 /* Makefile */; };
-		49282A46134BACF8009E0FE6 /* main.c in Copy Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
-		493914E413B808C10031A93D /* TimerEvent.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 493914E213B774740031A93D /* TimerEvent.h */; };
-		493914E513B808D60031A93D /* TimerEvent.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 493914E313B774ED0031A93D /* TimerEvent.cpp */; };
-		4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4947159513A40DCF009178CB /* BlinkErrorReporter.h */; };
-		4947159913A5C171009178CB /* Timer.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4980957C13A296B6000B717B /* Timer.h */; };
-		494715A313A7991C009178CB /* Timer.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAB13A6D82D0085ECC6 /* Timer.cpp */; };
-		494715A413A7991C009178CB /* TimerEventMgr.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */; };
-		494715A513A79926009178CB /* TimerEventMgr.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */; };
-		494715B813A9022A009178CB /* EventListener.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 494715B713A90023009178CB /* EventListener.h */; };
-		4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817913514A3B0072EEA4 /* ADC.h */; };
-		4999819713514A6B0072EEA4 /* Application.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817A13514A3B0072EEA4 /* Application.h */; };
-		4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817C13514A3B0072EEA4 /* EventSourceEnums.h */; };
-		4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817E13514A3B0072EEA4 /* MAX6969.h */; };
-		4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999817F13514A3B0072EEA4 /* ShiftReg.h */; };
-		4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818013514A3B0072EEA4 /* STP08CDC596.h */; };
-		499981A013514A6B0072EEA4 /* RTC.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 4999818313514A3B0072EEA4 /* RTC.h */; };
-		49EF3972134571C800519468 /* Application.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
-		49EF3973134571C800519468 /* ADC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
-		49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A3CA1340F8DF0036518B /* MAX6969.cpp */; };
-		49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
-		49EF397A134571C800519468 /* RTC.cpp in Copy Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* RTC.cpp */; };
-/* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		49B59EF51375937D006090D7 /* PBXContainerItemProxy */ = {
@@ -61,74 +30,6 @@
 			remoteInfo = Make;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		490EBD671348B60E00FAD91C /* Copy Main Header */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers";
-			dstSubfolderSpec = 0;
-			files = (
-				490EBD571348B59D00FAD91C /* m8r.h in Copy Main Header */,
-			);
-			name = "Copy Main Header";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		492829E1134B990E009E0FE6 /* Copy Makefile */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(USER_LIBRARY_DIR)/m8r/";
-			dstSubfolderSpec = 0;
-			files = (
-				492829EA134B99B2009E0FE6 /* Makefile in Copy Makefile */,
-			);
-			name = "Copy Makefile";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		49EF3962134570F100519468 /* Copy Headers */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(USER_LIBRARY_DIR)/m8r/Headers/m8r";
-			dstSubfolderSpec = 0;
-			files = (
-				493914E413B808C10031A93D /* TimerEvent.h in Copy Headers */,
-				494715B813A9022A009178CB /* EventListener.h in Copy Headers */,
-				494715A513A79926009178CB /* TimerEventMgr.h in Copy Headers */,
-				4947159913A5C171009178CB /* Timer.h in Copy Headers */,
-				4947159713A41096009178CB /* BlinkErrorReporter.h in Copy Headers */,
-				4922582B13A27AF7008A024A /* Event.h in Copy Headers */,
-				4999819613514A6B0072EEA4 /* ADC.h in Copy Headers */,
-				4999819713514A6B0072EEA4 /* Application.h in Copy Headers */,
-				4999819913514A6B0072EEA4 /* EventSourceEnums.h in Copy Headers */,
-				4999819B13514A6B0072EEA4 /* MAX6969.h in Copy Headers */,
-				4999819C13514A6B0072EEA4 /* ShiftReg.h in Copy Headers */,
-				4999819D13514A6B0072EEA4 /* STP08CDC596.h in Copy Headers */,
-				499981A013514A6B0072EEA4 /* RTC.h in Copy Headers */,
-			);
-			name = "Copy Headers";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		49EF397B134571E600519468 /* Copy Sources */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(USER_LIBRARY_DIR)/m8r/Sources/m8r";
-			dstSubfolderSpec = 0;
-			files = (
-				493914E513B808D60031A93D /* TimerEvent.cpp in Copy Sources */,
-				494715A313A7991C009178CB /* Timer.cpp in Copy Sources */,
-				494715A413A7991C009178CB /* TimerEventMgr.cpp in Copy Sources */,
-				4922582D13A281C6008A024A /* EventListener.cpp in Copy Sources */,
-				49282A46134BACF8009E0FE6 /* main.c in Copy Sources */,
-				49EF3972134571C800519468 /* Application.cpp in Copy Sources */,
-				49EF3973134571C800519468 /* ADC.cpp in Copy Sources */,
-				49EF3975134571C800519468 /* MAX6969.cpp in Copy Sources */,
-				49EF3976134571C800519468 /* ShiftReg.cpp in Copy Sources */,
-				49EF397A134571C800519468 /* RTC.cpp in Copy Sources */,
-			);
-			name = "Copy Sources";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
@@ -157,6 +58,9 @@
 		4999818013514A3B0072EEA4 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = m8r/STP08CDC596.h; sourceTree = "<group>"; };
 		4999818313514A3B0072EEA4 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RTC.h; path = m8r/RTC.h; sourceTree = "<group>"; };
 		499981C713514F660072EEA4 /* create_event_enums.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = create_event_enums.c; sourceTree = "<group>"; };
+		49CF367013BCA779001EB1B8 /* ENC28J60.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ENC28J60.cpp; sourceTree = "<group>"; };
+		49CF367113BCA779001EB1B8 /* ENC28J60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENC28J60.h; path = m8r/ENC28J60.h; sourceTree = "<group>"; };
+		49CF367213BCA892001EB1B8 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = m8r/SPI.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -178,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
+				49CF367013BCA779001EB1B8 /* ENC28J60.cpp */,
 				4922582C13A2806F008A024A /* EventListener.cpp */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
 				4900A1EE133F9C5B0036518B /* RTC.cpp */,
@@ -211,15 +116,17 @@
 				4999817913514A3B0072EEA4 /* ADC.h */,
 				4999817A13514A3B0072EEA4 /* Application.h */,
 				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
+				49CF367113BCA779001EB1B8 /* ENC28J60.h */,
 				4922582A13A27AE5008A024A /* Event.h */,
 				494715B713A90023009178CB /* EventListener.h */,
 				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
 				4999817E13514A3B0072EEA4 /* MAX6969.h */,
+				4999818313514A3B0072EEA4 /* RTC.h */,
 				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
+				49CF367213BCA892001EB1B8 /* SPI.h */,
 				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
 				4980957C13A296B6000B717B /* Timer.h */,
 				493914E213B774740031A93D /* TimerEvent.h */,
-				4999818313514A3B0072EEA4 /* RTC.h */,
 				4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */,
 			);
 			name = Headers;
@@ -266,6 +173,22 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		49CF367413BCB9AB001EB1B8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/make install";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		49B59EF61375937D006090D7 /* PBXTargetDependency */ = {

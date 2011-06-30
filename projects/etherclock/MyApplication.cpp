@@ -2,6 +2,7 @@
 #include <m8r/Application.h>
 #include <m8r/ADC.h>
 #include <m8r/BlinkErrorReporter.h>
+#include <m8r/ENC28J60.h>
 #include <m8r/MAX6969.h>
 #include <m8r/RTC.h>
 #include <m8r/TimerEventMgr.h>
@@ -21,6 +22,7 @@ public:
         , m_timerEventMgr(TimerClockDIV1, 6249, 1000) // 1ms timer
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
+        , m_ethernet(ClockOutDiv2)
         , m_accumulatedBrightness(0)
         , m_numAccumulatedBrightness(0)
         , m_currentBrightness(0)
@@ -79,6 +81,7 @@ private:
     TimerEventMgr<Timer1> m_timerEventMgr;
     TimerEvent m_timerEvent;
     RTC m_clock;
+    ENC28J60<_BV(MSTR), _BV(SPI2X)> m_ethernet;
     
     uint16_t m_accumulatedBrightness;
     uint8_t m_numAccumulatedBrightness;
