@@ -54,8 +54,10 @@ const uint32_t delayCountMultiplier = (uint32_t) F_CPU / innerDelayCount;
 
 static inline uint16_t countFromMS(uint16_t ms) { return (uint16_t)((delayCountMultiplier * (uint32_t) ms) / (uint32_t) 1000); }
 
+const uint16_t delayCount50ms = countFromMS(50);
 const uint16_t delayCount100ms = countFromMS(100);
 const uint16_t delayCount250ms = countFromMS(250);
+const uint16_t delayCount500ms = countFromMS(500);
 const uint16_t delayCount1000ms = countFromMS(1000);
 const uint16_t delayCount2000ms = countFromMS(2000);
 

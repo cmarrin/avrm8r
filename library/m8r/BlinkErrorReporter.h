@@ -76,14 +76,14 @@ public:
     void _NO_INLINE_ reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);
-        Application::delay(delayCount1000ms);
+        Application::delay(delayCount500ms);
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
                 flicker(10);
-                Application::delay(delayCount2000ms);
+                Application::delay(delayCount1000ms);
             }
             blinkCode(code);
-            Application::delay(delayCount2000ms);
+            Application::delay(delayCount1000ms);
         }
     }
     
@@ -91,8 +91,8 @@ private:
     void _NO_INLINE_ flicker(uint8_t num)
     {
         while (--num > 0)
-            blink(delayCount100ms, delayCount100ms);
-        Application::delay(delayCount250ms);
+            blink(delayCount50ms, delayCount50ms);
+        Application::delay(delayCount100ms);
     }
     
     void blink(uint16_t duration, uint16_t delay)
@@ -109,10 +109,10 @@ private:
             flicker(4);
         
         for ( ; digit >= 4; digit -= 4)
-            blink(delayCount1000ms, delayCount250ms);
+            blink(delayCount500ms, delayCount100ms);
         for ( ; digit > 0; --digit)
-            blink(delayCount250ms, delayCount250ms);
-        Application::delay(delayCount2000ms);
+            blink(delayCount100ms, delayCount100ms);
+        Application::delay(delayCount1000ms);
     }
     
     void _NO_INLINE_ blinkCode(uint8_t code)
