@@ -37,17 +37,17 @@
 		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShiftReg.cpp; sourceTree = "<group>"; };
 		4900A1EE133F9C5B0036518B /* RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
-		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m8r.h; sourceTree = "<group>"; };
+		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = m8r.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		4922582A13A27AE5008A024A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = m8r/Event.h; sourceTree = "<group>"; };
 		4922582C13A2806F008A024A /* EventListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventListener.cpp; sourceTree = "<group>"; };
-		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		493914E213B774740031A93D /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = m8r/TimerEvent.h; sourceTree = "<group>"; };
-		493914E313B774ED0031A93D /* TimerEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimerEvent.cpp; sourceTree = "<group>"; };
+		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; lineEnding = 0; path = Makefile; sourceTree = "<group>"; };
+		493914E213B774740031A93D /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = TimerEvent.h; path = m8r/TimerEvent.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		493914E313B774ED0031A93D /* TimerEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TimerEvent.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		4947159513A40DCF009178CB /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		494715B713A90023009178CB /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = m8r/EventListener.h; sourceTree = "<group>"; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = m8r/TimerEventMgr.h; sourceTree = "<group>"; };
-		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimerEventMgr.cpp; sourceTree = "<group>"; };
+		4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = TimerEventMgr.h; path = m8r/TimerEventMgr.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TimerEventMgr.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		4972DBAB13A6D82D0085ECC6 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
@@ -56,11 +56,13 @@
 		4999817E13514A3B0072EEA4 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = m8r/MAX6969.h; sourceTree = "<group>"; };
 		4999817F13514A3B0072EEA4 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = m8r/ShiftReg.h; sourceTree = "<group>"; };
 		4999818013514A3B0072EEA4 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = m8r/STP08CDC596.h; sourceTree = "<group>"; };
-		4999818313514A3B0072EEA4 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RTC.h; path = m8r/RTC.h; sourceTree = "<group>"; };
+		4999818313514A3B0072EEA4 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = RTC.h; path = m8r/RTC.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		499981C713514F660072EEA4 /* create_event_enums.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = create_event_enums.c; sourceTree = "<group>"; };
 		49CF367013BCA779001EB1B8 /* ENC28J60.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ENC28J60.cpp; sourceTree = "<group>"; };
 		49CF367113BCA779001EB1B8 /* ENC28J60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENC28J60.h; path = m8r/ENC28J60.h; sourceTree = "<group>"; };
 		49CF367213BCA892001EB1B8 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = m8r/SPI.h; sourceTree = "<group>"; };
+		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Animator.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		49CF367613BDF945001EB1B8 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Animator.h; path = m8r/Animator.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -69,7 +71,6 @@
 			children = (
 				4999817813514A1B0072EEA4 /* Headers */,
 				49282959134B852C009E0FE6 /* Makefile */,
-				4900A1A7133F92730036518B /* Application.cpp */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				499981C713514F660072EEA4 /* create_event_enums.c */,
 				4900A2A1133FDCC90036518B /* Resources */,
@@ -82,6 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
+				49CF367513BDF945001EB1B8 /* Animator.cpp */,
+				4900A1A7133F92730036518B /* Application.cpp */,
 				49CF367013BCA779001EB1B8 /* ENC28J60.cpp */,
 				4922582C13A2806F008A024A /* EventListener.cpp */,
 				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
@@ -114,6 +117,7 @@
 			children = (
 				490EBD531348B4C800FAD91C /* m8r.h */,
 				4999817913514A3B0072EEA4 /* ADC.h */,
+				49CF367613BDF945001EB1B8 /* Animator.h */,
 				4999817A13514A3B0072EEA4 /* Application.h */,
 				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
 				49CF367113BCA779001EB1B8 /* ENC28J60.h */,

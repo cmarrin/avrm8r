@@ -41,11 +41,15 @@ DAMAGE.
 
 using namespace m8r;
 
-TimerEvent::TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode)
+uint8_t TimerEvent::m_nextIdentifier = 1;
+
+TimerEvent::TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode, EventType type)
     : m_intervals(TimerEventMgrBase::shared()->intervalsFromMilliseconds(ms))
     , m_mode(mode)
     , m_eventListener(listener)
     , m_next(0)
+    , m_identifier(m_nextIdentifier++)
+    , m_type(type)
 {
 }
     

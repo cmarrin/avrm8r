@@ -58,11 +58,13 @@ class TimerEvent {
     friend class TimerEventMgrBase;
     
 public:
-    TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode);
+    TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode, EventType type = EV_TIMER_EVENT);
     ~TimerEvent() { stop(); }
     
     void start();
     void stop();
+    
+    uint8_t identifier() const { return m_identifier; }
 
 private:
     uint16_t m_intervals;
@@ -70,6 +72,10 @@ private:
     TimerEventMode m_mode;
     EventListener* m_eventListener;
     TimerEvent* m_next;
+    uint8_t m_identifier;
+    EventType m_type;
+    
+    static uint8_t m_nextIdentifier;
 };
 
 }

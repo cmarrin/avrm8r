@@ -125,36 +125,37 @@ public:
 	ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference);
 	~ADC() { }
 	
-	void setEnabled(bool e);
-	bool isEnabled() const _INLINE_ { return ADCSRA | _BV(ADEN); }
+	static void setEnabled(bool e);
+	static bool isEnabled() _INLINE_ { return ADCSRA | _BV(ADEN); }
 	
-	void setPrescaler(uint8_t prescale);
-	uint8_t	prescaler() const
+	static void setPrescaler(uint8_t prescale);
+	static uint8_t	prescaler()
     {
         uint8_t psval = ADCSRA;
         return (((psval & (1 << ADPS0)) != 0) | (((psval & (1 << ADPS1)) != 0) << 1) | (((psval & (1 << ADPS2)) != 0) << 2));
     }
 	
-	void setReference(uint8_t ref);
-	uint8_t reference() const { return (ADMUX & 0x03) >> 6; }
+	static void setReference(uint8_t ref);
+	static uint8_t reference() { return (ADMUX & 0x03) >> 6; }
 	
-	void setChannel(uint8_t channel);
-	uint8_t channel() const { return ADMUX & ADC_MUX_MASK; }
+	static void setChannel(uint8_t channel);
+	static uint8_t channel() { return ADMUX & ADC_MUX_MASK; }
 	
-	void startConversion() _INLINE_ { ADCSRA |= _BV(ADSC); }
+	static void startConversion() _INLINE_ { ADCSRA |= _BV(ADSC); }
     
     static void setLastConversion(uint16_t v) _INLINE_ { m_lastConversion = v; }
     static uint16_t lastConversion10Bit() _INLINE_ { return m_lastConversion; }
     static uint8_t lastConversion8Bit() _INLINE_ { return lastConversion10Bit() >> 2; }
 	
-    uint16_t convert10Bit();
-    uint16_t convert8Bit() _INLINE_ { return convert10Bit() >> 2; }
+    static uint16_t convert10Bit();
+    static uint16_t convert8Bit() _INLINE_ { return convert10Bit() >> 2; }
     
-	bool isConversionComplete() const _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
+	static bool isConversionComplete() _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
     
     static void addEvent() _INLINE_ 
     {
         ASSERT(m_event, AssertNoADCEvent);
+        m_event->setIdentifier(channel());
         Application::addEvent(m_event);
     }
     

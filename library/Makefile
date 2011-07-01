@@ -33,6 +33,7 @@ MAIN_HEADER = m8r.h
 
 HEADERS = \
     ADC.h \
+    Animator.h \
     Application.h \
     BlinkErrorReporter.h \
     ENC28J60.h \
@@ -50,6 +51,7 @@ HEADERS = \
 
 CPPSRC = \
     ADC.cpp \
+    Animator.cpp \
     Application.cpp \
     ENC28J60.cpp \
     EventListener.cpp \

@@ -1,4 +1,5 @@
 #include <m8r.h>
+#include <m8r/Animator.h>
 #include <m8r/Application.h>
 #include <m8r/ADC.h>
 #include <m8r/BlinkErrorReporter.h>
@@ -23,10 +24,13 @@ public:
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
         , m_ethernet(ClockOutDiv2)
+        , m_colonAnimator(this, 10)
         , m_accumulatedBrightness(0)
         , m_numAccumulatedBrightness(0)
         , m_currentBrightness(0)
         , m_brightnessCount(0)
+        , m_brightnessMatch(0)
+        , m_animationValue(0)
     {
         Application::setErrorConditionHandler(this);
         Application::setEventOnIdle(true);
@@ -44,10 +48,9 @@ public:
         
         sei();
         m_adc.startConversion();
+        
+        //m_colonAnimator.start();
     }
-    
-    // Application overrides
-    virtual void setErrorCondition(ErrorType, ErrorConditionType);
     
     // EventListener override
     virtual void handleEvent(EventType type, uint8_t identifier);
@@ -82,6 +85,7 @@ private:
     TimerEvent m_timerEvent;
     RTC m_clock;
     ENC28J60<_BV(MSTR), _BV(SPI2X)> m_ethernet;
+    Animator m_colonAnimator;
     
     uint16_t m_accumulatedBrightness;
     uint8_t m_numAccumulatedBrightness;
@@ -89,6 +93,7 @@ private:
     
     uint8_t m_brightnessCount;
     uint8_t m_brightnessMatch;
+    uint8_t m_animationValue;
     
     static uint8_t g_brightnessTable[8];
 };
@@ -96,12 +101,6 @@ private:
 uint8_t MyApp::g_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
 
 MyApp g_myApp;
-
-void
-MyApp::setErrorCondition(ErrorType error, ErrorConditionType condition)
-{
-    m_errorReporter.reportError(error, condition);
-}
 
 void
 MyApp::handleEvent(EventType type, uint8_t identifier)
@@ -112,8 +111,11 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
             accumulateBrightnessValue(m_adc.lastConversion8Bit());
             m_adc.startConversion();
             break;
+        case EV_ANIMATOR_EVENT:
+            m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
+            break;            
         case EV_TIMER_EVENT:
-            NOTE(0x12);
+            NOTE(0x5a);
             break;
         case EV_RTC_MINUTES_EVENT: {
             RTCTime t;

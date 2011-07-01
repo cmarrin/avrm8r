@@ -117,7 +117,7 @@ TimerEventMgrBase::handleEvent(EventType, uint8_t identifier)
         TimerEvent* event = m_head;
         
         if (event->m_endInterval <= m_currentInterval) {
-            event->m_eventListener->handleEvent(EV_TIMER_EVENT, 0);
+            event->m_eventListener->handleEvent(event->m_type, event->m_identifier);
             
             m_head = m_head->m_next;
             

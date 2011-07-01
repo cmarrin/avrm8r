@@ -431,6 +431,7 @@ enum EventType {
     EV_TIMER_EVENT = 0x80,
     EV_RTC_SECONDS_EVENT = 0x81,
     EV_RTC_MINUTES_EVENT = 0x82,
+    EV_ANIMATOR_EVENT = 0x83,
     EV_LAST
 };
 

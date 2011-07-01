@@ -65,6 +65,8 @@ public:
         , m_next(0)
     { }
     
+    void setIdentifier(uint8_t identifier) { m_identifier = identifier; }
+    
 private:
     EventListener* m_listener;
     EventType m_type;
