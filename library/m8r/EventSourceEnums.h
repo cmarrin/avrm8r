@@ -432,7 +432,8 @@ enum EventType {
     EV_RTC_SECONDS_EVENT = 0x81,
     EV_RTC_MINUTES_EVENT = 0x82,
     EV_ANIMATOR_EVENT = 0x83,
-    EV_LAST
+    EV_LAST, 
+    EV_USER0 = 0xf0
 };
 
 #define EV_SIZE ((EV_LAST + 7) / 8)

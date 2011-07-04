@@ -20,7 +20,7 @@ class MyApp : public Application, public EventListener, public IdleEventListener
 public:
     MyApp()
         : m_adc(this, 0, ADC_PS_DIV128, ADC_REF_AVCC)
-        , m_timerEventMgr(TimerClockDIV1, 6249, 1000) // 1ms timer
+        , m_timerEventMgr(TimerClockDIV1, 12499, 1000) // 1ms timer
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
         , m_ethernet(ClockOutDiv2)
@@ -49,7 +49,7 @@ public:
         sei();
         m_adc.startConversion();
         
-        //m_colonAnimator.start();
+        m_colonAnimator.start();
     }
     
     // EventListener override
@@ -112,10 +112,10 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
             m_adc.startConversion();
             break;
         case EV_ANIMATOR_EVENT:
-            m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
+            m_animationValue = /*Animator::sineValue(*/m_colonAnimator.currentValue()/*)*/;
             break;            
         case EV_TIMER_EVENT:
-            NOTE(0x5a);
+            NOTE(0x12);
             break;
         case EV_RTC_MINUTES_EVENT: {
             RTCTime t;
@@ -134,11 +134,14 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
 void
 MyApp::handleIdleEvent()
 {
-    if (++m_brightnessCount == 0) {
-        m_shiftReg.setOutputEnable(true);
-        m_brightnessMatch = brightness();
+    if (m_brightnessCount == 0) {
+        m_brightnessMatch = m_animationValue; //((uint16_t) brightness() * (uint16_t) m_animationValue) >> 8;
+        if (m_brightnessMatch)
+            m_shiftReg.setOutputEnable(true);
     }
     else if (m_brightnessCount == m_brightnessMatch)
         m_shiftReg.setOutputEnable(false);
+        
+    ++m_brightnessCount;
 }
 

@@ -114,17 +114,16 @@ TimerEventMgrBase::handleEvent(EventType, uint8_t identifier)
     TimerEvent* newEvents = 0;
     
     while (m_head) {
-        TimerEvent* event = m_head;
-        
-        if (event->m_endInterval <= m_currentInterval) {
-            event->m_eventListener->handleEvent(event->m_type, event->m_identifier);
+        if (m_head->m_endInterval <= m_currentInterval) {
+            m_head->m_eventListener->handleEvent(m_head->m_type, m_head->m_identifier);
+            TimerEvent* nextEvent = m_head->m_next;
             
-            m_head = m_head->m_next;
-            
-            if (event->m_mode == TimerEventRepeating) {
-                event->m_next = newEvents;
+            if (m_head->m_mode == TimerEventRepeating) {
+                m_head->m_next = newEvents;
                 newEvents = m_head;
             }
+            
+            m_head = nextEvent;
         }
         else
             break;
