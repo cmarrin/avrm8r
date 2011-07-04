@@ -13,7 +13,8 @@ using namespace m8r;
 #define ErrorPort Port<B>
 #define ErrorBit 1
 
-#define NumBrightnessValuesToAccumulate 100
+const uint8_t NumLightSensorValuesToAccumulate = 250;
+const uint8_t NumNextBrightnessValuesToMatch = 10;
 
 class MyApp : public Application, public EventListener, public IdleEventListener, public ErrorConditionHandler {
     
@@ -24,13 +25,13 @@ public:
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
         , m_ethernet(ClockOutDiv2)
-        , m_colonAnimator(this, 10)
-        , m_accumulatedBrightness(0)
-        , m_numAccumulatedBrightness(0)
+        , m_accumulatedLightSensorValues(0)
+        , m_numAccumulatedLightSensorValues(0)
+        , m_numTimesNextBrightnessMatch(0)
         , m_currentBrightness(0)
+        , m_nextBrightness(0)
         , m_brightnessCount(0)
         , m_brightnessMatch(0)
-        , m_animationValue(0)
     {
         Application::setErrorConditionHandler(this);
         Application::setEventOnIdle(true);
@@ -42,14 +43,12 @@ public:
         m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
         
-        m_timerEvent.start();
+        //m_timerEvent.start();
         
         m_adc.setEnabled(true);
         
         sei();
         m_adc.startConversion();
-        
-        m_colonAnimator.start();
     }
     
     // EventListener override
@@ -69,11 +68,22 @@ public:
 protected:
     void accumulateBrightnessValue(uint8_t value)
     {
-        m_accumulatedBrightness += value;
-        if (++m_numAccumulatedBrightness >= NumBrightnessValuesToAccumulate) {
-            m_currentBrightness = g_brightnessTable[m_accumulatedBrightness / NumBrightnessValuesToAccumulate / 32];
-            m_accumulatedBrightness = 0;
-            m_numAccumulatedBrightness = 0;
+        m_accumulatedLightSensorValues += value;
+        if (++m_numAccumulatedLightSensorValues >= NumLightSensorValuesToAccumulate) {
+            uint8_t newBrightness = g_brightnessTable[m_accumulatedLightSensorValues / NumLightSensorValuesToAccumulate / 32];
+            m_accumulatedLightSensorValues = 0;
+            m_numAccumulatedLightSensorValues = 0;
+            
+            if (m_nextBrightness == newBrightness) {
+                if (++m_numTimesNextBrightnessMatch >= NumNextBrightnessValuesToMatch) {
+                    m_currentBrightness = m_nextBrightness;
+                    m_numTimesNextBrightnessMatch = 0;
+                }
+            }
+            else {
+                m_nextBrightness = newBrightness;
+                m_numTimesNextBrightnessMatch = 0;
+            }
         }
     }
     
@@ -85,12 +95,11 @@ private:
     TimerEvent m_timerEvent;
     RTC m_clock;
     ENC28J60<_BV(MSTR), _BV(SPI2X)> m_ethernet;
-    Animator m_colonAnimator;
     
-    uint16_t m_accumulatedBrightness;
-    uint8_t m_numAccumulatedBrightness;
-    uint8_t m_currentBrightness;
-    
+    uint16_t m_accumulatedLightSensorValues;
+    uint8_t m_numAccumulatedLightSensorValues;
+    uint8_t m_numTimesNextBrightnessMatch;
+    uint8_t m_currentBrightness, m_nextBrightness;
     uint8_t m_brightnessCount;
     uint8_t m_brightnessMatch;
     uint8_t m_animationValue;
@@ -111,9 +120,6 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
             accumulateBrightnessValue(m_adc.lastConversion8Bit());
             m_adc.startConversion();
             break;
-        case EV_ANIMATOR_EVENT:
-            m_animationValue = /*Animator::sineValue(*/m_colonAnimator.currentValue()/*)*/;
-            break;            
         case EV_TIMER_EVENT:
             NOTE(0x12);
             break;
@@ -135,7 +141,7 @@ void
 MyApp::handleIdleEvent()
 {
     if (m_brightnessCount == 0) {
-        m_brightnessMatch = m_animationValue; //((uint16_t) brightness() * (uint16_t) m_animationValue) >> 8;
+        m_brightnessMatch = brightness();
         if (m_brightnessMatch)
             m_shiftReg.setOutputEnable(true);
     }
