@@ -25,6 +25,7 @@ public:
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
         , m_ethernet(ClockOutDiv2)
+        , m_colonAnimator(this, 40)
         , m_accumulatedLightSensorValues(0)
         , m_numAccumulatedLightSensorValues(0)
         , m_numTimesNextBrightnessMatch(0)
@@ -32,6 +33,7 @@ public:
         , m_nextBrightness(0)
         , m_brightnessCount(0)
         , m_brightnessMatch(0)
+        , m_animationValue(0)
     {
         Application::setErrorConditionHandler(this);
         Application::setEventOnIdle(true);
@@ -43,12 +45,19 @@ public:
         m_shiftReg.setChar('8', true);
         m_shiftReg.latch();
         
-        //m_timerEvent.start();
+        m_colonPort.setBitOutput(0);
+        m_colonPort.setBitOutput(1);
+        m_colonPort.setPortBit(0);
+        m_colonPort.setPortBit(1);
+        
+        m_timerEvent.start();
         
         m_adc.setEnabled(true);
         
         sei();
         m_adc.startConversion();
+        
+        m_colonAnimator.start();
     }
     
     // EventListener override
@@ -95,6 +104,8 @@ private:
     TimerEvent m_timerEvent;
     RTC m_clock;
     ENC28J60<_BV(MSTR), _BV(SPI2X)> m_ethernet;
+    Animator m_colonAnimator;
+    Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
     uint8_t m_numAccumulatedLightSensorValues;
@@ -120,6 +131,9 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
             accumulateBrightnessValue(m_adc.lastConversion8Bit());
             m_adc.startConversion();
             break;
+        case EV_ANIMATOR_EVENT:
+            m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
+            break;            
         case EV_TIMER_EVENT:
             NOTE(0x12);
             break;
@@ -141,12 +155,17 @@ void
 MyApp::handleIdleEvent()
 {
     if (m_brightnessCount == 0) {
-        m_brightnessMatch = brightness();
-        if (m_brightnessMatch)
-            m_shiftReg.setOutputEnable(true);
+        m_brightnessMatch = ((uint16_t) brightness() * (uint16_t) m_animationValue) >> 8;
+        if (m_brightnessMatch) {
+            m_colonPort.clearPortBit(0);
+            m_colonPort.clearPortBit(1);
+        }
+;
     }
-    else if (m_brightnessCount == m_brightnessMatch)
-        m_shiftReg.setOutputEnable(false);
+    else if (m_brightnessCount == m_brightnessMatch) {
+        m_colonPort.setPortBit(0);
+        m_colonPort.setPortBit(1);
+    }
         
     ++m_brightnessCount;
 }
