@@ -15,6 +15,8 @@ using namespace m8r;
 
 const uint8_t NumLightSensorValuesToAccumulate = 250;
 const uint8_t NumNextBrightnessValuesToMatch = 10;
+const uint16_t NumBrightnessIterations = 1000;
+const uint16_t MinColonBrightness = 50 * NumBrightnessIterations / 256;
 
 class MyApp : public Application, public EventListener, public IdleEventListener, public ErrorConditionHandler {
     
@@ -25,7 +27,7 @@ public:
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
         , m_ethernet(ClockOutDiv2)
-        , m_colonAnimator(this, 40)
+        , m_colonAnimator(this, 30)
         , m_accumulatedLightSensorValues(0)
         , m_numAccumulatedLightSensorValues(0)
         , m_numTimesNextBrightnessMatch(0)
@@ -50,7 +52,7 @@ public:
         m_colonPort.setPortBit(0);
         m_colonPort.setPortBit(1);
         
-        m_timerEvent.start();
+        //m_timerEvent.start();
         
         m_adc.setEnabled(true);
         
@@ -72,14 +74,14 @@ public:
         m_errorReporter.reportError(type, condition);
     }    
     
-    uint8_t brightness() const { return m_currentBrightness; }
+    uint16_t brightness() const { return m_currentBrightness; }
 
 protected:
     void accumulateBrightnessValue(uint8_t value)
     {
         m_accumulatedLightSensorValues += value;
         if (++m_numAccumulatedLightSensorValues >= NumLightSensorValuesToAccumulate) {
-            uint8_t newBrightness = g_brightnessTable[m_accumulatedLightSensorValues / NumLightSensorValuesToAccumulate / 32];
+            uint16_t newBrightness = ((uint16_t) (g_brightnessTable[m_accumulatedLightSensorValues / NumLightSensorValuesToAccumulate / 32] * NumBrightnessIterations)) >> 8;
             m_accumulatedLightSensorValues = 0;
             m_numAccumulatedLightSensorValues = 0;
             
@@ -110,9 +112,10 @@ private:
     uint16_t m_accumulatedLightSensorValues;
     uint8_t m_numAccumulatedLightSensorValues;
     uint8_t m_numTimesNextBrightnessMatch;
-    uint8_t m_currentBrightness, m_nextBrightness;
-    uint8_t m_brightnessCount;
-    uint8_t m_brightnessMatch;
+    uint16_t m_currentBrightness, m_nextBrightness;
+    uint16_t m_brightnessCount;
+    uint16_t m_brightnessMatch;
+    uint16_t m_colonBrightnessMatch;
     uint8_t m_animationValue;
     
     static uint8_t g_brightnessTable[8];
@@ -155,18 +158,30 @@ void
 MyApp::handleIdleEvent()
 {
     if (m_brightnessCount == 0) {
-        m_brightnessMatch = ((uint16_t) brightness() * (uint16_t) m_animationValue) >> 8;
-        if (m_brightnessMatch) {
+        uint16_t b = brightness();
+        m_brightnessMatch = (uint16_t) b * NumBrightnessIterations;
+        b = (b < MinColonBrightness) ? MinColonBrightness : b;
+        m_colonBrightnessMatch = ((uint32_t) b * (uint32_t) m_animationValue) >> 8;
+        
+        if (m_brightnessMatch)
+            m_shiftReg.setOutputEnable(true);
+
+        if (m_colonBrightnessMatch) {
             m_colonPort.clearPortBit(0);
             m_colonPort.clearPortBit(1);
         }
-;
     }
-    else if (m_brightnessCount == m_brightnessMatch) {
-        m_colonPort.setPortBit(0);
-        m_colonPort.setPortBit(1);
+    else {
+        if (m_brightnessCount == m_brightnessMatch)
+            m_shiftReg.setOutputEnable(false);
+
+        if (m_brightnessCount == m_colonBrightnessMatch) {
+            m_colonPort.setPortBit(0);
+            m_colonPort.setPortBit(1);
+        }
     }
-        
-    ++m_brightnessCount;
+    
+    if (++m_brightnessCount >= NumBrightnessIterations)
+        m_brightnessCount = 0;
 }
 
