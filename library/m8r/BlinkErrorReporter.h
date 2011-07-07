@@ -53,13 +53,14 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 template <class ErrorPort, uint8_t ErrorBit>
-class BlinkErrorReporter {
+class BlinkErrorReporter : public ErrorConditionHandler {
 public:
 	_NO_INLINE_ BlinkErrorReporter()
     {
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
+        Application::setErrorConditionHandler(this);        
     }
         
     void _NO_INLINE_ setError(bool error)
@@ -76,31 +77,37 @@ public:
     void _NO_INLINE_ reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);
-        Application::delay(delayCount500ms);
+        Application::msDelay<500>();
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
                 flicker(10);
-                Application::delay(delayCount1000ms);
+                Application::msDelay<1000>();
             }
             blinkCode(code);
-            Application::delay(delayCount1000ms);
+            Application::msDelay<1000>();
         }
     }
+    
+    // ErrorConditionHandler override
+    virtual void handleErrorCondition(ErrorType type, ErrorConditionType condition)
+    {
+        reportError(type, condition);
+    }    
     
 private:
     void _NO_INLINE_ flicker(uint8_t num)
     {
         while (--num > 0)
-            blink(delayCount50ms, delayCount50ms);
-        Application::delay(delayCount100ms);
+            blink<50, 50>();
+        Application::msDelay<100>();
     }
     
-    void blink(uint16_t duration, uint16_t delay)
+    template <uint16_t duration, uint16_t delay> void blink()
     {
         setError(true);
-            Application::delay(duration);
+            Application::msDelay<duration>();
         setError(false);
-            Application::delay(delay);
+            Application::msDelay<delay>();
     }
     
     void _NO_INLINE_ blinkDigit(uint8_t digit)
@@ -109,10 +116,10 @@ private:
             flicker(4);
         
         for ( ; digit >= 4; digit -= 4)
-            blink(delayCount500ms, delayCount100ms);
+            blink<500, 100>();
         for ( ; digit > 0; --digit)
-            blink(delayCount100ms, delayCount100ms);
-        Application::delay(delayCount1000ms);
+            blink<100, 100>();
+        Application::msDelay<1000>();
     }
     
     void _NO_INLINE_ blinkCode(uint8_t code)

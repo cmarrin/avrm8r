@@ -297,13 +297,18 @@ enum ENC28J60ClockOutType {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class ENC28J60Base {
+class ENC28J60 {
+public:
+    ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr);
+    
+    void sendPacket(uint16_t len, uint8_t* packet);
+    uint16_t receivePacket(uint16_t maxlen, uint8_t* packet);
+    bool hasRxPkt(void);
+    bool linkup();
+    
+    uint8_t chipRev();
+
 protected:
-    ENC28J60Base();
-    
-    void writeOp(uint8_t op, uint8_t address, uint8_t data);
-    void setBank(uint8_t address);
-    
     void write(uint8_t address, uint8_t data)
     {
         setBank(address);
@@ -311,19 +316,24 @@ protected:
     }
 
 private:
-    uint8_t m_bank;
-};
-
-template <uint8_t spcr, uint8_t spsr>
-class ENC28J60 : ENC28J60Base {
-public:
-	ENC28J60(ENC28J60ClockOutType clockOut)
+    uint8_t readOp(uint8_t op, uint8_t address);
+    void writeOp(uint8_t op, uint8_t address, uint8_t data);
+    void readBuffer(uint16_t len, uint8_t* data);
+    void writeBuffer(uint16_t len, uint8_t* data);
+    
+    void setBank(uint8_t address);
+    
+    uint8_t read(uint8_t address)
     {
-        write(ECOCON, clockOut & 0x7);
+        setBank(address);
+        return readOp(ENC28J60_READ_CTRL_REG, address);
     }
     
-private:    
-    SPI<_BV(MSTR), _BV(SPI2X)> m_spi;
+    void phyWrite(uint8_t address, uint16_t data);
+
+    SPI m_spi;
+    uint8_t m_bank;
+    int16_t m_nextPacketPtr;
 };
 
 }

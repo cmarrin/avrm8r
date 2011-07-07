@@ -49,17 +49,13 @@ void operator delete(void * ptr);
 
 namespace m8r {
 
-const uint32_t innerDelayCount = (uint32_t) 1539;
-const uint32_t delayCountMultiplier = (uint32_t) F_CPU / innerDelayCount;
+const uint32_t shortInnerDelayCount = (uint32_t) 4;
+const uint32_t shortDelayCountMultiplier = (uint32_t) F_CPU / shortInnerDelayCount;
+const uint32_t longInnerDelayCount = (uint32_t) 1539;
+const uint32_t longDelayCountMultiplier = (uint32_t) F_CPU / longInnerDelayCount;
 
-static inline uint16_t countFromMS(uint16_t ms) { return (uint16_t)((delayCountMultiplier * (uint32_t) ms) / (uint32_t) 1000); }
-
-const uint16_t delayCount50ms = countFromMS(50);
-const uint16_t delayCount100ms = countFromMS(100);
-const uint16_t delayCount250ms = countFromMS(250);
-const uint16_t delayCount500ms = countFromMS(500);
-const uint16_t delayCount1000ms = countFromMS(1000);
-const uint16_t delayCount2000ms = countFromMS(2000);
+static inline uint16_t shortCountFromUS(uint16_t us) { return (uint16_t)((shortDelayCountMultiplier * (uint32_t) us) / (uint32_t) 1000000); }
+static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDelayCountMultiplier * (uint32_t) ms) / (uint32_t) 1000); }
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -106,11 +102,12 @@ public:
     static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
     static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
     
-    static void _INLINE_ delayMS(uint16_t ms) { delay(countFromMS(ms)); }
+    template <uint16_t ms> static void _INLINE_ msDelay() { longDelay(longCountFromMS(ms)); }
+    template <uint16_t us> static void _INLINE_ usDelay() { _delay_loop_2(shortCountFromUS(us)); }
     
     // delay count = ((6 * 256 - 1) + 4) * count = 1539 * count
     // Can handle up to 5000ms delay at 20MHz
-    static void _INLINE_ delay(uint16_t count)
+    static void _INLINE_ longDelay(uint16_t count)
     {
         __asm__ volatile (
             "mov __tmp_reg__, __zero_reg__ \n\t"

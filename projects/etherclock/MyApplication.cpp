@@ -17,8 +17,9 @@ const uint8_t NumLightSensorValuesToAccumulate = 250;
 const uint8_t NumNextBrightnessValuesToMatch = 10;
 const uint16_t NumBrightnessIterations = 1000;
 const uint16_t MinColonBrightness = 50 * NumBrightnessIterations / 256;
+const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 
-class MyApp : public Application, public EventListener, public IdleEventListener, public ErrorConditionHandler {
+class MyApp : public Application, public EventListener, public IdleEventListener {
     
 public:
     MyApp()
@@ -26,7 +27,7 @@ public:
         , m_timerEventMgr(TimerClockDIV1, 12499, 1000) // 1ms timer
         , m_timerEvent(this, 5000, TimerEventOneShot)
         , m_clock(this)
-        , m_ethernet(ClockOutDiv2)
+        , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
         , m_colonAnimator(this, 30)
         , m_accumulatedLightSensorValues(0)
         , m_numAccumulatedLightSensorValues(0)
@@ -37,8 +38,9 @@ public:
         , m_brightnessMatch(0)
         , m_animationValue(0)
     {
-        Application::setErrorConditionHandler(this);
         Application::setEventOnIdle(true);
+        
+        NOTE(m_ethernet.chipRev());
         
         // Testing
         m_shiftReg.setChar('8', true);
@@ -68,12 +70,6 @@ public:
     // IdleEventListener override
     virtual void handleIdleEvent();
     
-    // ErrorConditionHandler override
-    virtual void handleErrorCondition(ErrorType type, ErrorConditionType condition)
-    {
-        m_errorReporter.reportError(type, condition);
-    }    
-    
     uint16_t brightness() const { return m_currentBrightness; }
 
 protected:
@@ -99,13 +95,13 @@ protected:
     }
     
 private:
+    BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
-    BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     TimerEventMgr<Timer1> m_timerEventMgr;
     TimerEvent m_timerEvent;
     RTC m_clock;
-    ENC28J60<_BV(MSTR), _BV(SPI2X)> m_ethernet;
+    ENC28J60 m_ethernet;
     Animator m_colonAnimator;
     Port<D> m_colonPort;
     

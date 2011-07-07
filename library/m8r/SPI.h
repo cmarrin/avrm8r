@@ -74,10 +74,9 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-template <uint8_t spcr, uint8_t spsr>
 class SPI {
 public:
-	SPI()
+	SPI(uint8_t spcr, uint8_t spsr)
     {
         SPI_DDR |= _BV(SS_BIT) | _BV(SCLK_BIT) | _BV(MOSI_BIT);
         SPI_PORT |= _BV(SCLK_BIT) | _BV(MOSI_BIT);
@@ -85,11 +84,13 @@ public:
         SPSR |= spsr;
     }
     
+    void write(uint8_t d) { SPDR = d; }
+    uint8_t read() const { return SPDR; }
+    void wait() { while(!(SPSR & _BV(SPIF))) ; }
+    
     void send(uint8_t v, uint8_t n)
     {        
     }
-    	
-private:
 };
 
 }
