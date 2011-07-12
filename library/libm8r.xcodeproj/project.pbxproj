@@ -50,6 +50,8 @@
 		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TimerEventMgr.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		4972DBAB13A6D82D0085ECC6 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
+		498C20EF13C69C190074B1FA /* config.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = config.mak; path = ../../../../../Personal/Projects/git/marrinator/library/config.mak; sourceTree = "<group>"; };
+		498C20F013C69C190074B1FA /* shared.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = shared.mak; path = ../../../../../Personal/Projects/git/marrinator/library/shared.mak; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
 		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
 		4999817C13514A3B0072EEA4 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = m8r/EventSourceEnums.h; sourceTree = "<group>"; };
@@ -71,6 +73,8 @@
 			children = (
 				4999817813514A1B0072EEA4 /* Headers */,
 				49282959134B852C009E0FE6 /* Makefile */,
+				498C20EF13C69C190074B1FA /* config.mak */,
+				498C20F013C69C190074B1FA /* shared.mak */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				499981C713514F660072EEA4 /* create_event_enums.c */,
 				4900A2A1133FDCC90036518B /* Resources */,
