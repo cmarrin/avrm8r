@@ -21,10 +21,6 @@ ifndef OPT
 OPT = s
 endif
 
-ifndef INSTALL_DIR
-INSTALL_DIR = ~/Library/m8r
-endif
-
 ifndef HEADER_DIR
 HEADER_DIR = $(M8R_SRC_DIR)/m8r
 endif
@@ -146,6 +142,9 @@ REMOVE = rm -f
 COPY = cp
 MKDIR = mkdir
 
+HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
+ELFSIZE = $(SIZE) -A $(TARGET).elf
+
 # Define Messages
 # English
 MSG_ERRORS_NONE = Errors: none
@@ -197,11 +196,29 @@ install:
 	$(COPY) shared.mk $(INSTALL_DIR)/
 	$(COPY) config.mk $(INSTALL_DIR)/
 
-all: begin gccversion sizebefore build sizeafter end
+all: begin gccversion sizebefore build sizeafter finished end
 
 build: ar
 
 ar: $(OBJECT_FILE_DIR)/$(TARGET).a
+
+begin:
+	@echo
+	@echo $(MSG_BEGIN)
+
+finished:
+	@echo $(MSG_ERRORS_NONE)
+
+end:
+	@echo $(MSG_END)
+	@echo
+
+# Display size of file.
+sizebefore:
+	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_BEFORE); $(ELFSIZE); echo; fi
+
+sizeafter:
+	@if [ -f $(TARGET).elf ]; then echo; echo $(MSG_SIZE_AFTER); $(ELFSIZE); echo; fi
 
 # Display compiler version information.
 gccversion : 
@@ -273,10 +290,5 @@ clean_list :
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
-
 # Listing of phony targets.
-.PHONY : all begin finish end sizebefore sizeafter gccversion \
-build ar clean clean_list
-
-
-
+.PHONY : debug release install

@@ -8,8 +8,6 @@ MCU = atmega168
 MAKEFILE_DIR = .
 INSTALL_DIR = ~/Library/m8r
 
-HEADER_DIR = $(M8R_SRC_DIR)/m8r
-
 TARGET = libm8r
 
 CSRC = main.c
