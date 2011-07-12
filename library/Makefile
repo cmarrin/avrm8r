@@ -2,7 +2,7 @@
 # Makefile for marrinator and projects
 #----------------------------------------------------------------------------
 
-include config.mak
-include $(MAKEFILE_DIR)/shared.mak
+include config.mk
+include $(MAKEFILE_DIR)/shared.mk
 
 default: debug

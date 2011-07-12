@@ -91,7 +91,6 @@ CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CPPFLAGS = $(CDEFS)
-CPPFLAGS += -O$(OPT)
 CPPFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CPPFLAGS += -finline-limit=10
 CPPFLAGS += -ffunction-sections -fdata-sections -ffreestanding 
@@ -195,6 +194,8 @@ install:
 	$(COPY) $(CPPSRC) $(INSTALL_DIR)/Sources/m8r
 	$(COPY) $(CSRC) $(INSTALL_DIR)/Sources/m8r
 	$(COPY) Makefile $(INSTALL_DIR)/
+	$(COPY) shared.mk $(INSTALL_DIR)/
+	$(COPY) config.mk $(INSTALL_DIR)/
 
 all: begin gccversion sizebefore build sizeafter end
 
