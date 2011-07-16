@@ -186,12 +186,11 @@ release: all
 install:
 	@echo
 	@echo $(MSG_INSTALLING) $@
-	$(MKDIR) -p $(INSTALL_DIR)/Headers/m8r
-	$(MKDIR) -p $(INSTALL_DIR)/Sources/m8r
-	$(COPY) $(MAIN_HEADER) $(INSTALL_DIR)/Headers
-	$(COPY) $(HDR) $(INSTALL_DIR)/Headers/m8r
-	$(COPY) $(CPPSRC) $(INSTALL_DIR)/Sources/m8r
-	$(COPY) $(CSRC) $(INSTALL_DIR)/Sources/m8r
+	$(MKDIR) -p $(INSTALL_DIR)/m8r
+	$(COPY) $(MAIN_HEADER) $(INSTALL_DIR)/
+	$(COPY) $(HDR) $(INSTALL_DIR)/m8r
+	$(COPY) $(CPPSRC) $(INSTALL_DIR)/
+	$(COPY) $(CSRC) $(INSTALL_DIR)/
 	$(COPY) Makefile $(INSTALL_DIR)/
 	$(COPY) shared.mk $(INSTALL_DIR)/
 	$(COPY) config.mk $(INSTALL_DIR)/
