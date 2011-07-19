@@ -3,7 +3,7 @@
 #----------------------------------------------------------------------------
 
 include config.mk
+include $(M8R_SRC_DIR)/shared.mk
 
-debug release:
-	make $@ -C $(M8R_SRC_DIR)
+build: ar
 
