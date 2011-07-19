@@ -2,13 +2,24 @@
 # General build file for marrinator. You should not have to change this file
 #----------------------------------------------------------------------------
 
+# Default values in case they are not defined
+ifndef FREQUENCY
+FREQUENCY = 8000000
+endif
+
+ifndef MCU
+MCU = atmega168
+endif
+
 ifndef TOOLS_DIR
 TOOLS_DIR = /usr/local/avrtools
 endif
 
 ifndef M8R_SRC_DIR
-M8R_SRC_DIR = .
+M8R_SRC_DIR = ~/Library/m8r
 endif
+
+C_INCLUDE_PATH = $(M8R_SRC_DIR)
 
 ifndef OBJECT_FILE_DIR
 OBJECT_FILE_DIR = $(M8R_SRC_DIR)/obj
@@ -21,16 +32,12 @@ ifndef OPT
 OPT = s
 endif
 
-ifndef HEADER_DIR
-HEADER_DIR = $(M8R_SRC_DIR)/m8r
-endif
+LIB_HEADER_DIR = $(M8R_SRC_DIR)/m8r
+LIB_TARGET = libm8r
 
-TARGET = libm8r
-CSRC = main.c
+LIB_MAIN_HEADER = m8r.h
 
-MAIN_HEADER = m8r.h
-
-HEADERS = \
+LIB_HEADERS = \
     ADC.h \
     Animator.h \
     Application.h \
@@ -48,7 +55,8 @@ HEADERS = \
     TimerEvent.h \
     TimerEventMgr.h \
 
-CPPSRC = \
+LIB_SRC = \
+    main.c \
     ADC.cpp \
     Animator.cpp \
     Application.cpp \
@@ -61,8 +69,15 @@ CPPSRC = \
     TimerEvent.cpp \
     TimerEventMgr.cpp
 
+LIB_OBJ := $(LIB_SRC)
+LIB_OBJ := $(LIB_OBJ:%.c=$(OBJECT_FILE_DIR)/%.o)
+LIB_OBJ := $(LIB_OBJ:%.cpp=$(OBJECT_FILE_DIR)/%.o)
+LIB_OBJ := $(LIB_OBJ:%.S=$(OBJECT_FILE_DIR)/%.o)
+LIB_SRC := ${LIB_SRC:%=${M8R_SRC_DIR}/%}
+
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(FREQUENCY)UL
+CDEFS += $(if $(filter yes true 1, $(DEBUG)), -DDEBUG -g -O0, -DNDEBUG -O$(OPT))
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
@@ -72,8 +87,10 @@ CDEFS = -DF_CPU=$(FREQUENCY)UL
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
+CFLAGS += $(if $(filter yes true 1, $(DEBUG)), -DDEBUG -g -O0, -DNDEBUG -O$(OPT))
+CFLAGS += -mmcu=$(MCU) -I.
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS += -finline-limit=3 -fno-inline-small-functions
+CFLAGS += -finline-limit=10
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -ffreestanding
 CFLAGS += -Wall
@@ -86,12 +103,7 @@ CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 #  -Wall...:     warning level
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
-CPPFLAGS = $(CDEFS)
-CPPFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CPPFLAGS += -finline-limit=10
-CPPFLAGS += -ffunction-sections -fdata-sections -ffreestanding 
-CPPFLAGS += -Wall 
-CPPFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
+CPPFLAGS = -fno-exceptions 
 
 #---------------- Assembler Options ----------------
 #  -Wa,...:   tell GCC to pass this to the assembler.
@@ -101,7 +113,6 @@ CPPFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 #             and function names needs to be present in the assembler source
 #             files -- see avr-libc docs [FIXME: not yet described there]
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
-
 
 #---------------- Library Options ----------------
 # Minimalistic printf version
@@ -160,13 +171,6 @@ MSG_ASSEMBLING = Assembling:
 MSG_CLEANING = Cleaning project:
 MSG_INSTALLING = Installing project:
 
-# Define all object files.
-OBJ := ${CSRC:%.c=${OBJECT_FILE_DIR}/%.o} ${CPPSRC:%.cpp=${OBJECT_FILE_DIR}/%.o} ${ASRC:%.S=${OBJECT_FILE_DIR}/%.o}
-
-HDR := ${HEADERS:%.h=${HEADER_DIR}/%.h}
-
-SRCDIR = $(M8R_SRC_DIR)
-
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
 
@@ -177,33 +181,21 @@ ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 # Default target.
-debug: override CDEFS += -DDEBUG -g -O0
-debug: all
+#all: begin gccversion sizebefore build sizeafter finished end
 
-release: override CDEFS += -DNDEBUG -O$(OPT)
-release: all
-    
-install:
+ar: begin gccversion $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished end
+
+# Archive: create library archive from library object files.
+$(OBJECT_FILE_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)
 	@echo
-	@echo $(MSG_INSTALLING) $@
-	$(MKDIR) -p $(INSTALL_DIR)/m8r
-	$(COPY) $(MAIN_HEADER) $(INSTALL_DIR)/
-	$(COPY) $(HDR) $(INSTALL_DIR)/m8r
-	$(COPY) $(CPPSRC) $(INSTALL_DIR)/
-	$(COPY) $(CSRC) $(INSTALL_DIR)/
-	$(COPY) Makefile $(INSTALL_DIR)/
-	$(COPY) shared.mk $(INSTALL_DIR)/
-	$(COPY) config.mk $(INSTALL_DIR)/
-
-all: begin gccversion sizebefore build sizeafter finished end
-
-build: ar
-
-ar: $(OBJECT_FILE_DIR)/$(TARGET).a
+	@echo $(MSG_ARCHIVING) $@
+	$(AR) rcs $@ $^
+	$(REMOVE) $^
 
 begin:
 	@echo
 	@echo $(MSG_BEGIN)
+	@$(MKDIR) -p $(OBJECT_FILE_DIR)
 
 finished:
 	@echo $(MSG_ERRORS_NONE)
@@ -223,55 +215,34 @@ sizeafter:
 gccversion : 
 	@$(CC) --version
 
-# Archive: create archive output file from object files.
-.SECONDARY : $(OBJECT_FILE_DIR)/$(TARGET).a
-.PRECIOUS : $(OBJ)
-$(OBJECT_FILE_DIR)/%.a: $(OBJ)
-	@echo
-	@echo $(MSG_ARCHIVING) $@
-	$(AR) rcs $@ $^
-	$(REMOVE) $^
+#### Generating assembly ####
+# asm from C
+%.s: %.c
+	$(CC) -S $(CFLAGS) $< -o $(OBJECT_FILE_DIR)/$@
 
+# asm from (hand coded) asm
+%.s: %.S
+	$(CC) -S $(ASMFLAGS) $< > $(OBJECT_FILE_DIR)/$@
 
-# Compile: create object files from C source files.
-$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.c
-	@echo
-	@echo $(MSG_COMPILING) $<
-	$(MKDIR) -p $(OBJECT_FILE_DIR)
-	$(CC) -c $(ALL_CFLAGS) $< -o $@ 
+# asm from C++
+.cpp.s .cc.s .C.s :
+	$(CC) -S $(CFLAGS) $(CPPFLAGS) $< -o $(OBJECT_FILE_DIR)/$@
 
-# Compile: create object files from C++ source files.
-$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.cpp
-	@echo
-	@echo $(MSG_COMPILING) $<
-	$(MKDIR) -p $(OBJECT_FILE_DIR)
-	$(CC) -c $(ALL_CPPFLAGS) $< -o $@ 
+#### Generating object files ####
+# object from C
+#.c.o: 
+$(OBJECT_FILE_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# object from C++ (.cc, .cpp, .C files)
+#.cc.o .cpp.o .C.o :
+$(OBJECT_FILE_DIR)/%.o: %.cpp
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-# Compile: create assembler files from C source files.
-%.s : %.c
-	$(CC) -S $(ALL_CFLAGS) $< -o $@
-
-# Compile: create assembler files from C++ source files.
-%.s : %.cpp
-	$(CC) -S $(ALL_CPPFLAGS) $< -o $@
-
-
-# Assemble: create object files from assembler source files.
-$(OBJECT_FILE_DIR)/%.o : $(SRCDIR)/%.S
-	@echo
-	@echo $(MSG_ASSEMBLING) $<
-	$(MKDIR) -p $(OBJECT_FILE_DIR)
-	$(CC) -c $(ALL_ASFLAGS) $< -o $@
-
-# Create preprocessed source for use in sending a bug report.
-%.i : %.c
-	$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $@ 
-
-# Create preprocessed source for use in sending a bug report.
-%.i : %.cpp
-	$(CC) -E -mmcu=$(MCU) -I. $(CPPFLAGS) $< -o $@ 
-
+# object from asm
+#.S.o :
+$(OBJECT_FILE_DIR)/%.o: %.S
+	$(CC) $(ASMFLAGS) -c $< -o $@
 
 # Target: clean project.
 clean: begin clean_list end
@@ -290,4 +261,4 @@ clean_list :
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
 # Listing of phony targets.
-.PHONY : debug release install
+.PHONY : all install
