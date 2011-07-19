@@ -22,7 +22,7 @@ endif
 C_INCLUDE_PATH = $(M8R_SRC_DIR)
 
 ifndef OBJECT_FILE_DIR
-OBJECT_FILE_DIR = $(M8R_SRC_DIR)/obj
+OBJECT_FILE_DIR = $(CURDIR)/obj
 endif
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
@@ -31,49 +31,6 @@ endif
 ifndef OPT
 OPT = s
 endif
-
-LIB_HEADER_DIR = $(M8R_SRC_DIR)/m8r
-LIB_TARGET = libm8r
-
-LIB_MAIN_HEADER = m8r.h
-
-LIB_HEADERS = \
-    ADC.h \
-    Animator.h \
-    Application.h \
-    BlinkErrorReporter.h \
-    ENC28J60.h \
-    Event.h \
-    EventListener.h \
-    EventSourceEnums.h \
-    MAX6969.h \
-    RTC.h \
-    ShiftReg.h \
-    SPI.h \
-    STP08CDC596.h \
-    Timer.h \
-    TimerEvent.h \
-    TimerEventMgr.h \
-
-LIB_SRC = \
-    main.c \
-    ADC.cpp \
-    Animator.cpp \
-    Application.cpp \
-    ENC28J60.cpp \
-    EventListener.cpp \
-    MAX6969.cpp \
-    RTC.cpp \
-    ShiftReg.cpp \
-    Timer.cpp \
-    TimerEvent.cpp \
-    TimerEventMgr.cpp
-
-LIB_OBJ := $(LIB_SRC)
-LIB_OBJ := $(LIB_OBJ:%.c=$(OBJECT_FILE_DIR)/%.o)
-LIB_OBJ := $(LIB_OBJ:%.cpp=$(OBJECT_FILE_DIR)/%.o)
-LIB_OBJ := $(LIB_OBJ:%.S=$(OBJECT_FILE_DIR)/%.o)
-LIB_SRC := ${LIB_SRC:%=${M8R_SRC_DIR}/%}
 
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(FREQUENCY)UL
@@ -187,13 +144,14 @@ ar: begin gccversion $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished end
 
 # Archive: create library archive from library object files.
 $(OBJECT_FILE_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)
-	@echo
+	@echo "targ=" $(OBJECT_FILE_DIR)/$(LIB_TARGET).a
 	@echo $(MSG_ARCHIVING) $@
 	$(AR) rcs $@ $^
 	$(REMOVE) $^
 
 begin:
 	@echo
+	@echo "targ=" $(OBJECT_FILE_DIR)/$(LIB_TARGET).a
 	@echo $(MSG_BEGIN)
 	@$(MKDIR) -p $(OBJECT_FILE_DIR)
 
