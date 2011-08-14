@@ -1,14 +1,14 @@
 #----------------------------------------------------------------------------
-# Configuration file for marrinator
+# Configuration file for etherclock
 #----------------------------------------------------------------------------
 
 FREQUENCY = 12500000
 MCU = atmega168
 
-M8R_SRC_DIR = ~/Library/m8r
+TARGET = etherclock
 
-CSRC = 
+M8R_SRC_DIR = ~/Library/m8r
 
 HEADERS = 
 
-CPPSRC = MyApplication.cpp
+SRC = MyApplication.cpp
