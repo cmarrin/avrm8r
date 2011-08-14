@@ -227,11 +227,6 @@ install_library: FORCE
 
 FORCE:
 
-$(OBJECT_FILE_DIR)/main.o: ${M8R_SRC_DIR}/main.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-
-
 #### Generating object files ####
 # object from C
 #.c.o: 
