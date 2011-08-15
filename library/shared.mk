@@ -122,10 +122,28 @@ CPPFLAGS = -fno-exceptions
 #             files -- see avr-libc docs [FIXME: not yet described there]
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 
-LDFLAGS = -lm8r 
+LDFLAGS = -L$(OBJECT_FILE_DIR) -lm8r 
 LDFLAGS += -Wl,-gc-sections
 LDFLAGS += -Wl,-Map=$(OBJECT_FILE_DIR)/$(TARGET).map,--cref
-LDFLAGS += -mmcu=$(MCU) 
+LDFLAGS += -mmcu=$(MCU)
+
+# -------- AVR Dude ----------
+ifndef AVRDUDE_DEVICE
+AVRDUDE_DEVICE = STK500
+endif
+
+ifndef AVRDUDE_PORT
+AVRDUDE_PORT = $(AVRDUDE_PORT_$(AVRDUDE_DEVICE))
+endif
+
+ifndef AVRDUDE_PROGRAMMER
+AVRDUDE_PROGRAMMER = $(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))
+endif
+
+AVRDUDE_PORT_DRAGON = usb
+AVRDUDE_PORT_STK500 = /dev/cu.usbserial
+AVRDUDE_PROGRAMMER_DRAGON = dragon_isp
+AVRDUDE_PROGRAMMER_STK500 = stk500v1
 
 #---------------- Library Options ----------------
 # Minimalistic printf version
@@ -161,6 +179,7 @@ AR = ${TOOLS_DIR}/bin/avr-ar
 OBJCOPY = ${TOOLS_DIR}/bin/avr-objcopy
 OBJDUMP = ${TOOLS_DIR}/bin/avr-objdump
 SIZE = ${TOOLS_DIR}/bin/avr-size
+AVRDUDE = ${TOOLS_DIR}/bin/avrdude
 NM = ${TOOLS_DIR}/bin/avr-nm
 REMOVE = rm -f
 COPY = cp
@@ -168,15 +187,6 @@ MKDIR = mkdir
 
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
 ELFSIZE = sh $(M8R_SRC_DIR)/section_sizes $(SIZE) $(OBJECT_FILE_DIR)/$(TARGET).elf; echo "================================="
-
-# Define Messages
-# English
-MSG_COFF = Converting to AVR COFF:
-MSG_EXTENDED_COFF = Converting to AVR Extended COFF:
-MSG_COMPILING = Compiling:
-MSG_ASSEMBLING = Assembling:
-MSG_CLEANING = Cleaning project:
-MSG_INSTALLING = Installing project:
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
@@ -187,23 +197,35 @@ ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
 ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
-build_library: begin $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished
+build_library: $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished
 
 # Archive: create library archive from library object files.
 $(OBJECT_FILE_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)
+	@echo
 	@echo "Archiving:" $@
 	$(AR) rcs $@ $^
 	$(REMOVE) $^
 
-build_app: build_library $(OBJECT_FILE_DIR)/$(TARGET).hex $(OBJECT_FILE_DIR)/$(TARGET).lss
+build_app: build_library sizebefore $(OBJECT_FILE_DIR)/$(TARGET).hex $(OBJECT_FILE_DIR)/$(TARGET).lss sizeafter
 
+program_app: build_app
+	@echo
+	@echo Programming:
+	@echo
+	$(AVRDUDE) -C $(TOOLS_DIR)/etc/avrdude.conf -c $(AVRDUDE_PROGRAMMER) -P $(AVRDUDE_PORT) -p $(MCU) -U flash:w:$(OBJECT_FILE_DIR)/$(TARGET).hex:i
 begin:
 	@echo
 	@echo "-------- begin --------"
 	@$(MKDIR) -p $(OBJECT_FILE_DIR)
 
 finished:
+	@echo
 	@echo "Errors: none"
+
+end:
+	@echo
+	@echo "-------- end --------"
+	@$(MKDIR) -p $(OBJECT_FILE_DIR)
 
 # Display size of file.
 sizebefore:
@@ -218,7 +240,8 @@ gccversion :
 
 install_library: FORCE
 	@echo
-	@echo $(MSG_INSTALLING) $@
+	@echo "Installing:"
+	@echo
 	$(MKDIR) -p $(INSTALL_DIR)/m8r
 	$(COPY) $(LIB_MAIN_HEADER) $(INSTALL_DIR)/
 	$(COPY) ${LIB_HEADERS:%.h=${LIB_HEADER_DIR}/%.h} $(INSTALL_DIR)/m8r
@@ -238,29 +261,39 @@ $(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.c
 $(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
+$(OBJECT_FILE_DIR)/%.o: %.cpp
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+
 # object from asm
 #.S.o :
 $(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.S
 	$(CC) $(ASMFLAGS) -c $< -o $@
 
 $(OBJECT_FILE_DIR)/$(TARGET).elf: $(OBJECT_FILE_DIR)/$(LIB_TARGET).a $(OBJ)
-	echo "Linking"
+	@echo
+	@echo "Linking"
+	@echo
 	$(CC) $(OBJ) $(LDFLAGS) -o $(OBJECT_FILE_DIR)/$(TARGET).elf
 
 $(OBJECT_FILE_DIR)/$(TARGET).hex: $(OBJECT_FILE_DIR)/$(TARGET).elf
-	echo "Creating .hex file"
+	@echo
+	@echo "Creating .hex file"
+	@echo
 	$(OBJCOPY) -O ihex $(OBJECT_FILE_DIR)/$(TARGET).elf $(OBJECT_FILE_DIR)/$(TARGET).hex 
 
-$(OBJECT_FILE_DIR)/$(TARGET).lss: ${OBJECT_FILE_DIR}/$(TARGET).elf
-	echo "Creating listing file"
-	${TOOLS_DIR}/bin/avr-objdump -lhS --demangle ${OBJECT_FILE_DIR}/$(TARGET).elf > ${TARGET_BUILD_DIR}/$(TARGET).lss
+$(OBJECT_FILE_DIR)/$(TARGET).lss: $(OBJECT_FILE_DIR)/$(TARGET).elf
+	@echo
+	@echo "Creating listing file"
+	@echo
+	${TOOLS_DIR}/bin/avr-objdump -lhS --demangle $(OBJECT_FILE_DIR)/$(TARGET).elf > $(OBJECT_FILE_DIR)/$(TARGET).lss
 
 # Target: clean project.
 clean: begin clean_list end
 
 clean_list :
 	@echo
-	@echo $(MSG_CLEANING)
+	@echo "Cleaning project:"
+	@echo
 	$(REMOVE) -rf $(OBJECT_FILE_DIR)/*
 	$(REMOVE) $(CSRC:.c=.d)
 	$(REMOVE) $(CPPSRC:.cpp=.d)

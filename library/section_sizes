@@ -1,0 +1,18 @@
+#!/bin/sh
+
+SIZE=$1
+ELF=$2
+i=0
+for s in `$SIZE -td $ELF`
+do
+	array[$i]=$s
+	((i++))
+done
+echo
+echo Executable size:
+printf "\ttext:\t\t%d\t\t(0x%x)\n" "${array[6]}" "${array[6]}"
+printf "\tdata:\t\t%d\t\t(0x%x)\n" "${array[7]}" "${array[7]}"
+printf "\tbss:\t\t%d\t\t(0x%x)\n" "${array[8]}" "${array[8]}"
+echo 
+echo Total: ${array[9]} \(0x${array[10]}\)
+echo

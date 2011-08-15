@@ -2,7 +2,7 @@
 # Makefile to build and install library
 #----------------------------------------------------------------------------
 
-default: build_library install_library
+default: begin build_library install_library end
 	
 include shared.mk
 
