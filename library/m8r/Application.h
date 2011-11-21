@@ -37,15 +37,13 @@ DAMAGE.
 
 #pragma once
 
+#include "m8r.h"
+
+#include "EventSourceEnums.h"
+
 #include <stdlib.h>
 #include <avr/interrupt.h>
 #include <util/delay_basic.h>
-#include "m8r/Event.h"
-#include "m8r/EventListener.h"
-
-// Setup for C++ operation
-void * operator new(size_t size); 
-void operator delete(void * ptr); 
 
 namespace m8r {
 
@@ -65,42 +63,13 @@ static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDel
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class EventListener;
-
-class ErrorConditionHandler {
-public:
-    virtual void handleErrorCondition(ErrorType, ErrorConditionType) = 0;
-};
-    
 class Application {
 public:
-	static void _NO_INLINE_ addEvent(Event* event)
-    {
-        if (event->m_active)
-            return;
-        event->m_next = m_eventHead;
-        m_eventHead = event;
-        event->m_active = true;
-    }
-    
-    static void _INLINE_ addIdleEventListener(IdleEventListener* listener)
-    {
-        listener->m_next = m_idleEventListeners;
-        m_idleEventListeners = listener;
-    }
-
-    static void removeIdleEventListener(IdleEventListener* listener);
-
-    static void handleErrorCondition(ErrorType type, ErrorConditionType condition)
-    {
-        if (m_errorConditionHandler)
-            m_errorConditionHandler->handleErrorCondition(type, condition);
-    }
+    static void handleErrorCondition(ErrorType, ErrorConditionType);
+    static void handleISR(EventType, void* = 0);
+    static void handleIdle();
     
     static void run() __attribute__((noreturn));
-    
-    static void setEventOnIdle(bool b) { m_eventOnIdle = b; }
-    static void setErrorConditionHandler(ErrorConditionHandler* handler) { m_errorConditionHandler = handler; }
     
     template <uint16_t ms> static void _INLINE_ msDelay() { longDelay(longCountFromMS(ms)); }
     template <uint16_t us> static void _INLINE_ usDelay() { _delay_loop_2(shortCountFromUS(us)); }
@@ -127,13 +96,6 @@ private:
     static void wait()
     {
     }
-
-    static ErrorConditionHandler* m_errorConditionHandler;
-    
-    static bool m_eventOnIdle;
-    static IdleEventListener* m_idleEventListeners;
-    
-    static Event* m_eventHead;
 };
 
 }

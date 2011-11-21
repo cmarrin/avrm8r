@@ -46,21 +46,30 @@ namespace m8r {
 //
 //  Class: BlinkErrorReporter
 //
-//  Blinks out error codes. One long dash for every 5 and 1 short dot for
-//  every 1. So a code of 12 would be long, long, short, short. Delay
-//  1s after each set of blinks and 2 seconds after the last.
+//  Blinks out error codes. One long dash for every 4 and 1 short dot for
+//  every 1. So a code of 10 would be long, long, short, short. Delay
+//  1s after each set of blinks and 2 seconds after the last. Zero is a
+//  400ms burst of quick pulses.
+//
+//  ErrorConditionType codes:
+//
+//      ErrorConditionNote      - Prefix blink code with 1 sec burst of quick 
+//                                pulses, and repeat code 3 times then return.
+//
+//      ErrorConditionWarning   - Repeat blink code 3 times then return.
+//
+//      ErrorConditionFatal     - Repeat blink code forever.
 //
 //////////////////////////////////////////////////////////////////////////////
 
 template <class ErrorPort, uint8_t ErrorBit>
-class BlinkErrorReporter : public ErrorConditionHandler {
+class BlinkErrorReporter {
 public:
 	_NO_INLINE_ BlinkErrorReporter()
     {
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
-        Application::setErrorConditionHandler(this);        
     }
         
     void _NO_INLINE_ setError(bool error)
@@ -73,7 +82,7 @@ public:
     
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
-    // Blink out the code 3 times then repeat if 'hang' is true, otherwise return
+    // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
     void _NO_INLINE_ reportError(uint8_t code, ErrorConditionType condition)
     {
         setError(false);

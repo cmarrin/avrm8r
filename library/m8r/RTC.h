@@ -37,8 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/EventListener.h"
-#include "m8r/TimerEvent.h"
+#include "m8r/Timer.h"
 #include <avr/interrupt.h>
 
 namespace m8r {
@@ -58,15 +57,15 @@ struct RTCTime {
     uint8_t day, date, month;
     uint16_t year;    
 };
-    
-class RTC : public EventListener {
+
+class RTCBase
+{
 public:
-	RTC(EventListener* listener)
-        : m_timerEvent(this, 1000, TimerEventRepeating)
+    RTCBase(uint16_t intervalsPerSecond) 
+        : m_intervalsPerSecond(intervalsPerSecond)
         , m_minutes(0)
         , m_seconds(0)
-        , m_secondsEvent(listener, EV_RTC_SECONDS_EVENT)
-        , m_minutesEvent(listener, EV_RTC_MINUTES_EVENT)
+        , m_intervalsRemaining(intervalsPerSecond)
     {
     }
     
@@ -75,16 +74,35 @@ public:
         m_minutes = t / 60;
         m_seconds = t % 60;
     }
+
     void currentTime(RTCTime& rtc);
 
-    // EventListener override
-    virtual void handleEvent(EventType, uint8_t identifier);
+protected:
+    static void handleISR(EventType, void*);
     
 private:
-    TimerEvent m_timerEvent;
+    uint16_t m_intervalsPerSecond;
     uint32_t m_minutes;
     uint8_t m_seconds;
-    Event m_secondsEvent, m_minutesEvent;
+    uint16_t m_intervalsRemaining;
+};
+
+template <class Timer>
+class RTC : public RTCBase {
+public:
+	RTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
+        : RTCBase(intervalsPerSecond)
+        , m_timer(&handleISR, this)
+    {
+NOTE(count / 10);
+        m_timer.setTimerClockMode(prescaler);
+        m_timer.setOutputCompareA(count);
+        m_timer.setWaveGenMode(TimerWaveGenCTC);
+        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
+    }
+    
+private:
+    Timer m_timer;
 };
 
 }

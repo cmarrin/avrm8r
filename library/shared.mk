@@ -12,7 +12,7 @@ MCU = atmega168
 endif
 
 ifndef TOOLS_DIR
-TOOLS_DIR = /usr/local/avrtools
+TOOLS_DIR = /sw
 endif
 
 ifndef M8R_SRC_DIR
@@ -41,12 +41,9 @@ LIB_MAIN_HEADER = m8r.h
 
 LIB_HEADERS = \
     ADC.h \
-    Animator.h \
     Application.h \
     BlinkErrorReporter.h \
     ENC28J60.h \
-    Event.h \
-    EventListener.h \
     EventSourceEnums.h \
     MAX6969.h \
     RTC.h \
@@ -54,22 +51,16 @@ LIB_HEADERS = \
     SPI.h \
     STP08CDC596.h \
     Timer.h \
-    TimerEvent.h \
-    TimerEventMgr.h \
 
 LIB_SRC = \
     main.c \
     ADC.cpp \
-    Animator.cpp \
     Application.cpp \
     ENC28J60.cpp \
-    EventListener.cpp \
     MAX6969.cpp \
     RTC.cpp \
     ShiftReg.cpp \
     Timer.cpp \
-    TimerEvent.cpp \
-    TimerEventMgr.cpp
 
 LIB_OBJ := $(LIB_SRC)
 LIB_OBJ := $(LIB_OBJ:%.c=$(OBJECT_FILE_DIR)/%.o)
@@ -85,7 +76,16 @@ SRC := ${SRC:%=${M8R_SRC_DIR}/%}
 
 # Place -D or -U options here
 CDEFS = -DF_CPU=$(FREQUENCY)UL
-CDEFS += $(if $(filter yes true 1, $(DEBUG)), -DDEBUG -g -O0, -DNDEBUG -O$(OPT))
+
+# Set DEBUG flag in the environment:
+#
+#	'no'     - no debugging
+#	'yes'    - full debugging (usually only needed when reading listing file)
+#	'report' - compile in debugging statements (error reporting, asserts, etc.)
+#
+CDEFS += $(if $(filter release no false 0, $(DEBUG)), -DNDEBUG -O$(OPT), )
+CDEFS += $(if $(filter debug yes true 1, $(DEBUG)), -DDEBUG -g -O0, )
+CDEFS += $(if $(filter report 2, $(DEBUG)), -DDEBUG -O$(OPT), )
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
@@ -95,12 +95,13 @@ CDEFS += $(if $(filter yes true 1, $(DEBUG)), -DDEBUG -g -O0, -DNDEBUG -O$(OPT))
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
-CFLAGS += $(if $(filter yes true 1, $(DEBUG)), -DDEBUG -g -O0, -DNDEBUG -O$(OPT))
 CFLAGS += -mmcu=$(MCU) -I.
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
-CFLAGS += -finline-limit=10
 CFLAGS += -ffunction-sections -fdata-sections
+CFLAGS += -finline-limit=10 -fno-inline-small-functions 
 CFLAGS += -ffreestanding
+CFLAGS += -mcall-prologues 
+
 CFLAGS += -Wall
 CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
 
@@ -123,7 +124,7 @@ CPPFLAGS = -fno-exceptions
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 
 LDFLAGS = -L$(OBJECT_FILE_DIR) -lm8r 
-LDFLAGS += -Wl,-gc-sections
+LDFLAGS += -Wl,-gc-sections -Wl,--relax
 LDFLAGS += -Wl,-Map=$(OBJECT_FILE_DIR)/$(TARGET).map,--cref
 LDFLAGS += -mmcu=$(MCU)
 
@@ -197,7 +198,7 @@ ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
 ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
-build_library: $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished
+build_library: begin $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished
 
 # Archive: create library archive from library object files.
 $(OBJECT_FILE_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)

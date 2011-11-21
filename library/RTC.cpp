@@ -36,7 +36,6 @@ DAMAGE.
 #include "m8r/RTC.h"
 
 #include "m8r/Application.h"
-#include "m8r/Event.h"
 #include <avr/pgmspace.h>
 
 const uint32_t minutesPerDay = 24UL * 60UL;
@@ -61,7 +60,7 @@ isLeapYear(uint16_t year)
 }
 
 void
-RTC::currentTime(RTCTime& rtc)
+RTCBase::currentTime(RTCTime& rtc)
 {
     uint32_t minutesInDay = m_minutes % minutesPerDay;
 	uint16_t days = m_minutes / minutesPerDay;
@@ -98,14 +97,21 @@ RTC::currentTime(RTCTime& rtc)
 }
 
 void
-RTC::handleEvent(EventType, uint8_t)
+RTCBase::handleISR(EventType, void* data)
 {
-    if (++m_seconds >= 60) {
-        m_seconds = 0;
-        m_minutes++;
-        Application::addEvent(&m_minutesEvent);
+    RTCBase* rtc = (RTCBase*) data;
+    
+    if (--rtc->m_intervalsRemaining > 0)
+        return;
+        
+    rtc->m_intervalsRemaining = rtc->m_intervalsPerSecond;
+    
+    if (++rtc->m_seconds >= 60) {
+        rtc->m_seconds = 0;
+        rtc->m_minutes++;
+        Application::handleISR(EV_RTC_MINUTES_EVENT);
     }
     
-    Application::addEvent(&m_secondsEvent);
+    Application::handleISR(EV_RTC_SECONDS_EVENT);
 }
 

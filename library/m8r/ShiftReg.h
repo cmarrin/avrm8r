@@ -52,14 +52,8 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class ShiftRegBase {
-protected:
-    void send(volatile uint8_t& clk, uint8_t clkBit, volatile uint8_t& data, uint8_t dataBit, 
-              uint8_t v, uint8_t n, bool rising, bool msbFirst);
-};
-
 template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit>
-class ShiftReg : ShiftRegBase {
+class ShiftReg {
 public:
 	ShiftReg(bool rising, bool msbFirst)
     : m_rising(rising)
@@ -72,8 +66,6 @@ public:
         else
             m_clockPort.setPortBit(ClockBit);
     }
-    
-    void clear() { send(0); }
     
     void send(uint8_t v, uint8_t n)
     {        

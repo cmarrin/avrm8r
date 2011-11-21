@@ -39,13 +39,9 @@ DAMAGE.
 using namespace m8r;
 
 uint16_t ADC::m_lastConversion = 0;
-Event*ADC::m_event = 0;
 
-ADC::ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference)
+ADC::ADC(uint8_t channel, uint8_t prescale, uint8_t reference)
 {
-    ASSERT(!m_event, AssertSglADCEvent);
-    m_event = new Event(listener, EV_ADC);
-
     // Set prescaler
     ADCSRA &= ~ADC_PS_MASK;
     ADCSRA |= prescale;
@@ -118,8 +114,9 @@ ADC::convert10Bit()
 // Interrupt handler for ADC complete interrupt.
 ISR(ADC_vect)
 {
+NOTE(1);
     ADC::setLastConversion(ADCW);
-    ADC::addEvent();
+    Application::handleISR(EV_ADC);
 }
 
 

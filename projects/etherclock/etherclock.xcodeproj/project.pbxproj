@@ -101,7 +101,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
 			buildPhases = (
-				49282A0E134BA95A009E0FE6 /* Install libm8r.a */,
+				49282A0E134BA95A009E0FE6 /* build libm8r.a */,
 				499940C6147873B00059CA5A /* Build application */,
 				4955B5661343FBFF001EDD20 /* Create elf */,
 				493469131344045F005C85D6 /* Create hex */,
@@ -146,14 +146,14 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		49282A0E134BA95A009E0FE6 /* Install libm8r.a */ = {
+		49282A0E134BA95A009E0FE6 /* build libm8r.a */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Install libm8r.a";
+			name = "build libm8r.a";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +359,49 @@
 			};
 			name = Debug;
 		};
+		49EE68A3147AA67B00FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AVRDUDE_DEVICE = DRAGON;
+				AVRDUDE_PORT = "$(AVRDUDE_PORT_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PORT_DRAGON = usb;
+				AVRDUDE_PORT_STK500 = /dev/cu.usbserial;
+				AVRDUDE_PROGRAMMER = "$(AVRDUDE_PROGRAMMER_$(AVRDUDE_DEVICE))";
+				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
+				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
+				BUILD_TYPE = report;
+				CFLAGS = "-DNDEBUG -Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
+				FREQUENCY = 12500000;
+				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
+				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r";
+				MCU = atmega168;
+				PRODUCT_NAME = etherclock;
+				TOOLS_DIR = /sw;
+			};
+			name = Report;
+		};
+		49EE68A4147AA67B00FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = Build;
+			};
+			name = Report;
+		};
+		49EE68A5147AA67B00FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Clean;
+			};
+			name = Report;
+		};
+		49EE68A6147AA67B00FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Report;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -366,6 +409,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01706F370A34762900E43B08 /* Release */,
+				49EE68A3147AA67B00FA3113 /* Report */,
 				49A5D67F13A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -375,6 +419,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				01706F570A347F8800E43B08 /* Release */,
+				49EE68A4147AA67B00FA3113 /* Report */,
 				49A5D68013A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -384,6 +429,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4934690A134403EF005C85D6 /* Release */,
+				49EE68A5147AA67B00FA3113 /* Report */,
 				49A5D68113A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -393,6 +439,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4990FD951344BAD700F96FEF /* Release */,
+				49EE68A6147AA67B00FA3113 /* Report */,
 				49A5D68213A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;

@@ -432,9 +432,28 @@ enum EventType {
     EV_RTC_SECONDS_EVENT = 0x81,
     EV_RTC_MINUTES_EVENT = 0x82,
     EV_ANIMATOR_EVENT = 0x83,
-    EV_LAST, 
-    EV_USER0 = 0xf0
+    EV_USER0 = 0x84,
+    EV_USER1 = 0x85,
+    EV_USER2 = 0x86,
+    EV_USER3 = 0x87,
+    EV_USER4 = 0x88,
+    EV_USER5 = 0x89,
+    EV_USER6 = 0x8a,
+    EV_USER7 = 0x8b,
+    EV_USER8 = 0x8c,
+    EV_USER9 = 0x8d,
+    EV_USERA = 0x8e,
+    EV_USERB = 0x8f,
+    EV_USERC = 0x90,
+    EV_USERD = 0x91,
+    EV_USERE = 0x92,
+    EV_USERF = 0x93,
+    
+    EV_ANY_EVENT = 0x94,
+    EV_LAST,
 };
 
 #define EV_SIZE ((EV_LAST + 7) / 8)
+
+typedef void (*ISRCallback)(EventType, void*);
 

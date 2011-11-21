@@ -37,7 +37,9 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/Application.h"
+#include "m8r.h"
+#include "Application.h"
+#include "EventSourceEnums.h"
 
 /*
  Timers share some common functionality (e.g., prescalers, compare, interrupts).
@@ -292,13 +294,15 @@ class Timer0 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer0(EventListener* listener);
+    Timer0(ISRCallback isrCallback = 0, void* data = 0)
+    {
+        ASSERT(!m_isrCallback, AssertSingleTimer0);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
+    }
     
-    static Event* m_outputCmpMatchAEvent;
-    static Event* m_outputCmpMatchBEvent;
-    static Event* m_overflowEvent;
-
-private:
+    static ISRCallback m_isrCallback;
+    static void* m_data;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -320,7 +324,13 @@ class Timer1 : public TimerBase<uint16_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer1(EventListener* listener);
+    Timer1(ISRCallback isrCallback = 0, void* data = 0)
+    {
+NOTE(5);
+        ASSERT(!m_isrCallback, AssertSingleTimer1);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
+    }
     
     void setWaveGenMode(TimerWaveGenMode mode)
     {
@@ -339,10 +349,8 @@ public:
     
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
 
-    static Event* m_outputCmpMatchAEvent;
-    static Event* m_outputCmpMatchBEvent;
-    static Event* m_overflowEvent;
-    static Event* m_inputCapEvent;
+    static ISRCallback m_isrCallback;
+    static void* m_data;
 
 private:
     Reg8<_TCCR1C> m_controlPortC;
@@ -368,7 +376,12 @@ class Timer2 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer2(EventListener* listener);
+    Timer2(ISRCallback isrCallback = 0, void* data = 0)
+    {
+        ASSERT(!m_isrCallback, AssertSingleTimer2);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
+    }
         
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
     void setExtClk(bool e) { m_asyncStatusPort.setMaskedBits(Timer2ExtClk, e); }
@@ -380,9 +393,8 @@ public:
     bool isOCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRB2Busy); }
     bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
 
-    static Event* m_outputCmpMatchAEvent;
-    static Event* m_outputCmpMatchBEvent;
-    static Event* m_overflowEvent;
+    static ISRCallback m_isrCallback;
+    static void* m_data;
 
 private:
     Reg8<_ASSR> m_asyncStatusPort;

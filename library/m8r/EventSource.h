@@ -45,34 +45,17 @@ namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Event
+//  Class: EventSource
 //
-//  Linked list of current events
+//  Source of events
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class EventListener;
-
-class Event {
-    friend class Application;
-    
+template <EventType type>
+class EventSource {
 public:
-    Event(EventListener* listener, EventType type, uint8_t identifier = 0)
-        : m_listener(listener)
-        , m_type(type)
-        , m_identifier(identifier)
-        , m_active(false)
-        , m_next(0)
-    { }
-    
-    void setIdentifier(uint8_t identifier) { m_identifier = identifier; }
-    
-private:
-    EventListener* m_listener;
-    EventType m_type;
-    uint8_t m_identifier;
-    bool m_active;
-    Event* m_next;
+    EventSource() { }
+    static void fire() { Application::handleISR(type); }
 };
 
 }

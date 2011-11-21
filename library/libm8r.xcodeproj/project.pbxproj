@@ -14,22 +14,11 @@
 				49CF367413BCB9AB001EB1B8 /* ShellScript */,
 			);
 			dependencies = (
-				49B59EF61375937D006090D7 /* PBXTargetDependency */,
 			);
 			name = Install;
 			productName = Marrinator;
 		};
 /* End PBXAggregateTarget section */
-
-/* Begin PBXContainerItemProxy section */
-		49B59EF51375937D006090D7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4928295E134B8866009E0FE6;
-			remoteInfo = Make;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
@@ -38,7 +27,7 @@
 		4900A1EE133F9C5B0036518B /* RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		4900A3CA1340F8DF0036518B /* MAX6969.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MAX6969.cpp; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = m8r.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		4922582A13A27AE5008A024A /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = m8r/Event.h; sourceTree = "<group>"; };
+		4922582A13A27AE5008A024A /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = m8r/EventSource.h; sourceTree = "<group>"; };
 		4922582C13A2806F008A024A /* EventListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventListener.cpp; sourceTree = "<group>"; };
 		49282959134B852C009E0FE6 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; lineEnding = 0; path = Makefile; sourceTree = "<group>"; };
 		493914E213B774740031A93D /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = TimerEvent.h; path = m8r/TimerEvent.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -50,8 +39,6 @@
 		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TimerEventMgr.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		4972DBAB13A6D82D0085ECC6 /* Timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timer.cpp; sourceTree = "<group>"; };
 		4980957C13A296B6000B717B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = m8r/Timer.h; sourceTree = "<group>"; };
-		498C20EF13C69C190074B1FA /* config.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = config.mak; path = ../../../../../Personal/Projects/git/marrinator/library/config.mak; sourceTree = "<group>"; };
-		498C20F013C69C190074B1FA /* shared.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = shared.mak; path = ../../../../../Personal/Projects/git/marrinator/library/shared.mak; sourceTree = "<group>"; };
 		4999817913514A3B0072EEA4 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = m8r/ADC.h; sourceTree = "<group>"; };
 		4999817A13514A3B0072EEA4 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = m8r/Application.h; sourceTree = "<group>"; };
 		4999817C13514A3B0072EEA4 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = m8r/EventSourceEnums.h; sourceTree = "<group>"; };
@@ -65,16 +52,15 @@
 		49CF367213BCA892001EB1B8 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = m8r/SPI.h; sourceTree = "<group>"; };
 		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Animator.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		49CF367613BDF945001EB1B8 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Animator.h; path = m8r/Animator.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		49EE689E147A94F900FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = shared.mk; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		089C166AFE841209C02AAC07 /* libm8r */ = {
 			isa = PBXGroup;
 			children = (
-				4999817813514A1B0072EEA4 /* Headers */,
+				49EE689E147A94F900FA3113 /* shared.mk */,
 				49282959134B852C009E0FE6 /* Makefile */,
-				498C20EF13C69C190074B1FA /* config.mak */,
-				498C20F013C69C190074B1FA /* shared.mak */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
 				499981C713514F660072EEA4 /* create_event_enums.c */,
 				4900A2A1133FDCC90036518B /* Resources */,
@@ -86,18 +72,35 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				4900A1E4133F9C5B0036518B /* ADC.cpp */,
-				49CF367513BDF945001EB1B8 /* Animator.cpp */,
-				4900A1A7133F92730036518B /* Application.cpp */,
-				49CF367013BCA779001EB1B8 /* ENC28J60.cpp */,
-				4922582C13A2806F008A024A /* EventListener.cpp */,
-				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
-				4900A1EE133F9C5B0036518B /* RTC.cpp */,
-				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
-				4972DBAB13A6D82D0085ECC6 /* Timer.cpp */,
-				493914E313B774ED0031A93D /* TimerEvent.cpp */,
-				4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */,
+				490EBD531348B4C800FAD91C /* m8r.h */,
 				495F1CB3134A1F920059E738 /* main.c */,
+				4900A1E4133F9C5B0036518B /* ADC.cpp */,
+				4999817913514A3B0072EEA4 /* ADC.h */,
+				49CF367513BDF945001EB1B8 /* Animator.cpp */,
+				49CF367613BDF945001EB1B8 /* Animator.h */,
+				4900A1A7133F92730036518B /* Application.cpp */,
+				4999817A13514A3B0072EEA4 /* Application.h */,
+				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
+				49CF367013BCA779001EB1B8 /* ENC28J60.cpp */,
+				49CF367113BCA779001EB1B8 /* ENC28J60.h */,
+				4922582A13A27AE5008A024A /* EventSource.h */,
+				4922582C13A2806F008A024A /* EventListener.cpp */,
+				494715B713A90023009178CB /* EventListener.h */,
+				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
+				4900A3CA1340F8DF0036518B /* MAX6969.cpp */,
+				4999817E13514A3B0072EEA4 /* MAX6969.h */,
+				4900A1EE133F9C5B0036518B /* RTC.cpp */,
+				4999818313514A3B0072EEA4 /* RTC.h */,
+				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
+				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
+				49CF367213BCA892001EB1B8 /* SPI.h */,
+				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
+				4972DBAB13A6D82D0085ECC6 /* Timer.cpp */,
+				4980957C13A296B6000B717B /* Timer.h */,
+				493914E313B774ED0031A93D /* TimerEvent.cpp */,
+				493914E213B774740031A93D /* TimerEvent.h */,
+				4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */,
+				4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -114,30 +117,6 @@
 			children = (
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		4999817813514A1B0072EEA4 /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				490EBD531348B4C800FAD91C /* m8r.h */,
-				4999817913514A3B0072EEA4 /* ADC.h */,
-				49CF367613BDF945001EB1B8 /* Animator.h */,
-				4999817A13514A3B0072EEA4 /* Application.h */,
-				4947159513A40DCF009178CB /* BlinkErrorReporter.h */,
-				49CF367113BCA779001EB1B8 /* ENC28J60.h */,
-				4922582A13A27AE5008A024A /* Event.h */,
-				494715B713A90023009178CB /* EventListener.h */,
-				4999817C13514A3B0072EEA4 /* EventSourceEnums.h */,
-				4999817E13514A3B0072EEA4 /* MAX6969.h */,
-				4999818313514A3B0072EEA4 /* RTC.h */,
-				4999817F13514A3B0072EEA4 /* ShiftReg.h */,
-				49CF367213BCA892001EB1B8 /* SPI.h */,
-				4999818013514A3B0072EEA4 /* STP08CDC596.h */,
-				4980957C13A296B6000B717B /* Timer.h */,
-				493914E213B774740031A93D /* TimerEvent.h */,
-				4972DBA713A6D7FE0085ECC6 /* TimerEventMgr.h */,
-			);
-			name = Headers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,17 +173,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/make install";
+			shellScript = "/usr/bin/make DEBUG=${BUILD_TYPE}";
 		};
 /* End PBXShellScriptBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		49B59EF61375937D006090D7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4928295E134B8866009E0FE6 /* Make */;
-			targetProxy = 49B59EF51375937D006090D7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1DEB912008733D790010E9CD /* Release */ = {
@@ -221,7 +192,7 @@
 				PRODUCT_NAME = libm8r;
 				SDKROOT = "";
 				TARGET = "";
-				TOOLS_DIR = /usr/local/avrtools;
+				TOOLS_DIR = /sw;
 			};
 			name = Release;
 		};
@@ -245,7 +216,7 @@
 				PRODUCT_NAME = libm8r;
 				SDKROOT = "";
 				TARGET = "";
-				TOOLS_DIR = /usr/local/avrtools;
+				TOOLS_DIR = /sw;
 			};
 			name = Debug;
 		};
@@ -253,6 +224,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				TOOLS_DIR = "";
 			};
 			name = Debug;
 		};
@@ -262,10 +234,45 @@
 			};
 			name = Debug;
 		};
+		49EE68AE147AA80500FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_TYPE = report;
+				CFLAGS = "-I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums --param inline-call-cost=2 -ffunction-sections -fdata-sections";
+				C_INCLUDE_PATH = "${PROJECT_DIR}/";
+				FREQUENCY = 12500000;
+				M8R_SRC_DIR = "$(PROJECT_DIR)";
+				MCU = atmega168;
+				ONLY_ACTIVE_ARCH = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = libm8r;
+				SDKROOT = "";
+				TARGET = "";
+				TOOLS_DIR = /sw;
+			};
+			name = Report;
+		};
+		49EE68AF147AA80500FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_TYPE = report;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				TOOLS_DIR = "";
+			};
+			name = Report;
+		};
+		49EE68B0147AA80500FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_TYPE = report;
+			};
+			name = Report;
+		};
 		49EF3965134570F200519468 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				TOOLS_DIR = "";
 			};
 			name = Release;
 		};
@@ -276,6 +283,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB912008733D790010E9CD /* Release */,
+				49EE68AE147AA80500FA3113 /* Report */,
 				49A5D67613A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -285,6 +293,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49282960134B8867009E0FE6 /* Release */,
+				49EE68B0147AA80500FA3113 /* Report */,
 				49A5D67813A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -294,6 +303,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				49EF3965134570F200519468 /* Release */,
+				49EE68AF147AA80500FA3113 /* Report */,
 				49A5D67713A7F6D300E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;

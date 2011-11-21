@@ -59,14 +59,16 @@ enum ErrorType {
     AssertNoTimerEventMgr = 0x34,
     AssertSglTimerEventMgr = 0x35,
     AssertNoADCEvent = 0x36,
-    AssertSglADCEvent = 0x37,
+    AssertSingleADC = 0x37,
     AssertNoTimer0Event = 0x38,
-    AssertSglTimer0Event = 0x39,
+    AssertSingleTimer0 = 0x39,
     AssertNoTimer1Event = 0x3a,
-    AssertSglTimer1Event = 0x3b,
+    AssertSingleTimer1 = 0x3b,
     AssertNoTimer2Event = 0x3c,
-    AssertSglTimer2Event = 0x3d,
+    AssertSingleTimer2 = 0x3d,
     AssertTooManyEventAllocs = 0x3e,
+    AssertOutOfMem = 0x3f,
+    AssertPureVirtual = 0x40,
 };
 
 enum Ports {
@@ -252,7 +254,7 @@ extern "C" {
 #define NOTE(code) _showErrorCondition(code, ErrorConditionNote)
 #else
 #define ASSERT(expr, code)
-#define FATAL(code)
+#define FATAL(code) while(1)
 #define WARNING(code)
 #define NOTE(code)
 #endif

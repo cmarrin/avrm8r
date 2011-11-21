@@ -117,14 +117,12 @@ namespace m8r {
 //  Interface to the A/2 hardware on the chip
 //
 //////////////////////////////////////////////////////////////////////////////
-	
-class EventListener;
 
 class ADC {
 public:
-	ADC(EventListener* listener, uint8_t channel, uint8_t prescale, uint8_t reference);
+	ADC(uint8_t channel, uint8_t prescale, uint8_t reference);
 	~ADC() { }
-	
+
 	static void setEnabled(bool e);
 	static bool isEnabled() _INLINE_ { return ADCSRA | _BV(ADEN); }
 	
@@ -152,16 +150,8 @@ public:
     
 	static bool isConversionComplete() _INLINE_ { return (ADCSRA & (1 << ADSC)) == 0; }
     
-    static void addEvent() _INLINE_ 
-    {
-        ASSERT(m_event, AssertNoADCEvent);
-        m_event->setIdentifier(channel());
-        Application::addEvent(m_event);
-    }
-    
 private:
     static uint16_t m_lastConversion;
-    static Event* m_event;
 };
 
 }

@@ -37,71 +37,22 @@ DAMAGE.
 
 #include "m8r/Application.h"
 
-#include "m8r/EventListener.h"
-
 using namespace m8r;
-
-ErrorConditionHandler* Application::m_errorConditionHandler = 0;
-bool Application::m_eventOnIdle = 0;
-IdleEventListener* Application::m_idleEventListeners = 0;
-Event* Application::m_eventHead = 0;
-
-void
-Application::removeIdleEventListener(IdleEventListener* listener)
-{
-    if (listener == m_idleEventListeners) {
-        m_idleEventListeners = listener->m_next;
-        return;
-    }
-    
-    for (IdleEventListener* currentListener = m_idleEventListeners; ; currentListener = currentListener->m_next) {
-        if (!currentListener->m_next)
-            return;
-        if (currentListener->m_next == listener) {
-            currentListener->m_next = listener->m_next;
-            return;
-        }
-    }
-}
 
 void
 Application::run()
 {
     while (1) {
-        cli();
-        
-        if (m_eventHead) {
-            Event* event = m_eventHead;
-            m_eventHead = 0;
-            sei();
-            
-            for ( ; event; event = event->m_next) {
-                event->m_listener->handleEvent(event->m_type, event->m_identifier);
-                event->m_active = false;
-            }
-        }
-        else
-            sei();
-
-        for (IdleEventListener* listener = m_idleEventListeners; listener; listener = listener->m_next)
-            listener->handleIdleEvent();
-            
+        handleIdle();
         wait();
     }
 }
 
-void * operator new(size_t size) 
-{ 
-    return malloc(size); 
-} 
-
-void operator delete(void * ptr) 
-{ 
-  free(ptr); 
-}
-
 extern "C" {
-void __cxa_pure_virtual() { while (1); }
+void __cxa_pure_virtual()
+{
+    FATAL(AssertPureVirtual);
+}
 
 #ifdef DEBUG
 void _showErrorCondition(uint8_t code, ErrorConditionType condition)

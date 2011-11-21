@@ -38,7 +38,6 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
-#include "m8r/Event.h"
 #include "m8r/EventListener.h"
 
 namespace m8r {

@@ -81,56 +81,12 @@ using namespace m8r;
 const uint8_t NumLightSensorValuesToAccumulate = 250;
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 
-class MyApp : public Application, public EventListener, public IdleEventListener {
-    
+class MyApp {    
 public:
-    MyApp()
-        : m_adc(this, 0, ADC_PS_DIV128, ADC_REF_AVCC)
-        , m_timerEventMgr(TimerClockDIV1, 12499, 1000) // 1ms timer
-        , m_timerEvent(this, 5000, TimerEventOneShot)
-        , m_clock(this)
-        , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
-        , m_colonAnimator(this, 30)
-        , m_accumulatedLightSensorValues(0)
-        , m_numAccumulatedLightSensorValues(0)
-        , m_currentBrightness(0)
-        , m_brightnessCount(0)
-        , m_animationValue(0)
-    {
-        Application::setEventOnIdle(true);
-
-        // Testing
-        m_shiftReg.setChar('1', true);
-        m_shiftReg.setChar('2', true);
-        m_shiftReg.setChar('3', true);
-        m_shiftReg.setChar('4', false);
-        m_shiftReg.latch();
-        m_shiftReg.setOutputEnable(true);
-        
-        m_colonPort.setBitOutput(0);
-        m_colonPort.setBitOutput(1);
-        m_colonPort.setPortBit(0);
-        m_colonPort.setPortBit(1);
-        
-        //m_timerEvent.start();
-        
-        m_adc.setEnabled(true);
-        
-        sei();
-        m_adc.startConversion();
-        
-        m_colonAnimator.start();
-    }
-    
-    // EventListener override
-    virtual void handleEvent(EventType type, uint8_t identifier);
-    
-    // IdleEventListener override
-    virtual void handleIdleEvent();
+    MyApp();
     
     uint8_t brightness() const { return m_currentBrightness; }
 
-protected:
     void accumulateBrightnessValue(uint8_t value)
     {
         m_accumulatedLightSensorValues += value;
@@ -141,15 +97,11 @@ protected:
         }
     }
     
-private:
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
-    TimerEventMgr<Timer1> m_timerEventMgr;
-    TimerEvent m_timerEvent;
-    RTC m_clock;
+    RTC<Timer1> m_clock;
     ENC28J60 m_ethernet;
-    Animator m_colonAnimator;
     Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
@@ -163,33 +115,62 @@ private:
 
 uint8_t MyApp::g_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
 
-MyApp g_myApp;
+MyApp g_app;
 
+MyApp::MyApp()
+    : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
+    , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
+    , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
+    , m_accumulatedLightSensorValues(0)
+    , m_numAccumulatedLightSensorValues(0)
+    , m_currentBrightness(0)
+    , m_brightnessCount(0)
+    , m_animationValue(0)
+{
+    // Testing
+    m_shiftReg.setChar('1', true);
+    m_shiftReg.setChar('2', true);
+    m_shiftReg.setChar('3', true);
+    m_shiftReg.setChar('4', false);
+    m_shiftReg.latch();
+    m_shiftReg.setOutputEnable(true);
+    
+    m_colonPort.setBitOutput(0);
+    m_colonPort.setBitOutput(1);
+    m_colonPort.setPortBit(0);
+    m_colonPort.setPortBit(1);
+    
+    m_adc.setEnabled(true);
+    
+    sei();
+    m_adc.startConversion();
+}
+    
 void
-MyApp::handleEvent(EventType type, uint8_t identifier)
+Application::handleISR(EventType type, void*)
 {
     switch(type)
     {
         case EV_ADC:
-            accumulateBrightnessValue(m_adc.lastConversion8Bit());
-            m_adc.startConversion();
+            g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
+            g_app.m_adc.startConversion();
             break;
         case EV_ANIMATOR_EVENT:
-            m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
+            //m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
             break;            
         case EV_TIMER_EVENT:
             break;
         case EV_RTC_SECONDS_EVENT: {
             RTCTime t;
-            m_clock.currentTime(t);
+            g_app.m_clock.currentTime(t);
             
             // FIXME: This is bogus, just for testing
             uint8_t c = (t.seconds % 10) + '0';
-            m_shiftReg.setChar(c, false);
-            m_shiftReg.setChar(c, false);
-            m_shiftReg.setChar(c, false);
-            m_shiftReg.setChar(c, false);
-            m_shiftReg.latch();
+            g_app.m_shiftReg.setChar(c, false);
+            g_app.m_shiftReg.setChar(c, false);
+            g_app.m_shiftReg.setChar(c, false);
+            g_app.m_shiftReg.setChar(c, false);
+            g_app.m_shiftReg.latch();
             break;
         }
         default:
@@ -198,16 +179,23 @@ MyApp::handleEvent(EventType type, uint8_t identifier)
 }
 
 void
-MyApp::handleIdleEvent()
+Application::handleIdle()
 {
-    if (m_brightnessCount++ == brightness()) {
-        m_shiftReg.setOutputEnable(false);
-        m_colonPort.setPortBit(0);
-        m_colonPort.setPortBit(1);
-    } else if (m_brightnessCount == 0) {
-        m_shiftReg.setOutputEnable(true);
-        m_colonPort.clearPortBit(0);
-        m_colonPort.clearPortBit(1);
+    if (g_app.m_brightnessCount++ == g_app.brightness()) {
+        g_app.m_shiftReg.setOutputEnable(false);
+        g_app.m_colonPort.setPortBit(0);
+        g_app.m_colonPort.setPortBit(1);
+    } else if (g_app.m_brightnessCount == 0) {
+        g_app.m_shiftReg.setOutputEnable(true);
+        g_app.m_colonPort.clearPortBit(0);
+        g_app.m_colonPort.clearPortBit(1);
     }
 }
+
+void
+Application::handleErrorCondition(ErrorType type, ErrorConditionType condition)
+{
+    g_app.m_errorReporter.reportError(type, condition);
+}
+
 
