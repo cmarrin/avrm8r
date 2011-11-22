@@ -55,7 +55,7 @@ class AnimatorBase {
 public:
     AnimatorBase(uint8_t startValue, uint8_t endValue);
     
-    void start(uint8_t rate);
+    void start(uint16_t rate);
     void pause() { m_paused = true; }
     void resume() { m_paused = false; }
     
@@ -68,7 +68,7 @@ protected:
 private:
     bool m_paused;
     uint8_t m_startValue, m_endValue, m_currentValue;
-    uint8_t m_rate, m_count;
+    uint16_t m_rate, m_count;
 };
 
 template <class Timer>

@@ -56,7 +56,7 @@ AnimatorBase::AnimatorBase(uint8_t startValue, uint8_t endValue)
 }
 
 void
-AnimatorBase::start(uint8_t rate)
+AnimatorBase::start(uint16_t rate)
 {
     m_rate = rate;
     m_count = 0;
@@ -67,12 +67,13 @@ AnimatorBase::start(uint8_t rate)
 void
 AnimatorBase::handleISR(EventType, void* data)
 {
-NOTE(6);
     AnimatorBase* animator = (AnimatorBase*) data;
     
     if (animator->m_paused)
         return;
     
+    Application::handleISR(EV_ANIMATOR_TICK_EVENT);    
+
     if (++animator->m_count < animator->m_rate)
         return;
     
@@ -81,7 +82,7 @@ NOTE(6);
     if (animator->m_currentValue++ >= animator->m_endValue)
         animator->m_currentValue = animator->m_startValue;
         
-    Application::handleISR(EV_ANIMATOR_EVENT);    
+    Application::handleISR(EV_ANIMATOR_VALUE_CHANGED_EVENT);    
 }
 
 uint8_t

@@ -98,31 +98,31 @@ enum Ports {
     
     enum Registers {
 #ifdef TIFR0
-        _TIFR0 = 0x15,
+        _TIFR0 = 0x35,
 #endif
 #ifdef TIFR1
-        _TIFR1 = 0x16,
+        _TIFR1 = 0x36,
 #endif
 #ifdef TIFR1
-        _TIFR2 = 0x17,
+        _TIFR2 = 0x37,
 #endif
 #ifdef GTCCR
-        _GTCCR = 0x23,
+        _GTCCR = 0x43,
 #endif
 #ifdef TCCR0A
-        _TCCR0A = 0x24,
+        _TCCR0A = 0x44,
 #endif
 #ifdef TCCR0B
-        _TCCR0B = 0x25,
+        _TCCR0B = 0x45,
 #endif
 #ifdef TCNT0
-        _TCNT0 = 0x26,
+        _TCNT0 = 0x46,
 #endif
 #ifdef OCR0A
-        _OCR0A = 0x27,
+        _OCR0A = 0x47,
 #endif
 #ifdef OCR0B
-        _OCR0B = 0x28,
+        _OCR0B = 0x48,
 #endif
 #ifdef TIMSK0
         _TIMSK0 = 0x6e,
