@@ -35,7 +35,7 @@ DAMAGE.
 
 #include <string.h>
 
-#include "m8r/Application.h"
+#include "Application.h"
 
 using namespace m8r;
 

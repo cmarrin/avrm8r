@@ -33,6 +33,6 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/ShiftReg.h"
+#include "ShiftReg.h"
 
 using namespace m8r;

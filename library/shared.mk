@@ -21,8 +21,6 @@ endif
 
 INSTALL_DIR = ~/Library/m8r
 
-C_INCLUDE_PATH = $(M8R_SRC_DIR)
-
 ifndef BUILT_PRODUCTS_DIR
 BUILT_PRODUCTS_DIR = $(CURDIR)/obj
 endif
@@ -41,6 +39,7 @@ LIB_MAIN_HEADER = m8r.h
 
 LIB_HEADERS = \
     ADC.h \
+    Animator.h \
     Application.h \
     BlinkErrorReporter.h \
     ENC28J60.h \
@@ -55,6 +54,7 @@ LIB_HEADERS = \
 LIB_SRC = \
     main.c \
     ADC.cpp \
+    Animator.cpp \
     Application.cpp \
     ENC28J60.cpp \
     MAX6969.cpp \
@@ -103,7 +103,8 @@ CFLAGS += -ffreestanding
 CFLAGS += -mcall-prologues 
 
 CFLAGS += -Wall
-CFLAGS += $(patsubst %,-I%,$(C_INCLUDE_PATH))
+CFLAGS += $(patsubst %,-I%,$(M8R_SRC_DIR))
+CFLAGS += $(patsubst %,-I%,$(LIB_HEADER_DIR))
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information

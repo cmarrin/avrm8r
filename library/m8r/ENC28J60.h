@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/SPI.h"
+#include "SPI.h"
 
 // Variable definitions from:
 //      http://tuxgraphics.org/common/src2/article09051/eth_tcp_client_server-4.3.tar.gz
@@ -299,7 +299,7 @@ enum ENC28J60ClockOutType {
 
 class ENC28J60 {
 public:
-    ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr);
+    ENC28J60(const uint8_t macaddr[6], ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr);
     
     void sendPacket(uint16_t len, uint8_t* packet);
     uint16_t receivePacket(uint16_t maxlen, uint8_t* packet);

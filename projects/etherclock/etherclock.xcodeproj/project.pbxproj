@@ -89,8 +89,6 @@
 		49EE68C1147B18C000FA3113 /* Animator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Animator.cpp; path = ../../library/Animator.cpp; sourceTree = "<group>"; };
 		49EE68C2147B18C000FA3113 /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../../library/Application.cpp; sourceTree = "<group>"; };
 		49EE68C3147B18C000FA3113 /* ENC28J60.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ENC28J60.cpp; path = ../../library/ENC28J60.cpp; sourceTree = "<group>"; };
-		49EE68C4147B18C000FA3113 /* EventListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventListener.cpp; path = ../../library/EventListener.cpp; sourceTree = "<group>"; };
-		49EE68C5147B18C000FA3113 /* EventSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventSource.cpp; path = ../../library/EventSource.cpp; sourceTree = "<group>"; };
 		49EE68C6147B18C000FA3113 /* m8r.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = m8r.h; path = ../../library/m8r.h; sourceTree = "<group>"; };
 		49EE68C7147B18C000FA3113 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../../library/main.c; sourceTree = "<group>"; };
 		49EE68C8147B18C000FA3113 /* MAX6969.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MAX6969.cpp; path = ../../library/MAX6969.cpp; sourceTree = "<group>"; };
@@ -98,15 +96,11 @@
 		49EE68CA147B18C000FA3113 /* ShiftReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ShiftReg.cpp; path = ../../library/ShiftReg.cpp; sourceTree = "<group>"; };
 		49EE68CB147B18C000FA3113 /* STP08CDC596.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = STP08CDC596.cpp; path = ../../library/STP08CDC596.cpp; sourceTree = "<group>"; };
 		49EE68CC147B18C000FA3113 /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer.cpp; path = ../../library/Timer.cpp; sourceTree = "<group>"; };
-		49EE68CD147B18C000FA3113 /* TimerEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TimerEvent.cpp; path = ../../library/TimerEvent.cpp; sourceTree = "<group>"; };
-		49EE68CE147B18C000FA3113 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TimerEventMgr.cpp; path = ../../library/TimerEventMgr.cpp; sourceTree = "<group>"; };
 		49EE68CF147B18DF00FA3113 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = ../../library/m8r/ADC.h; sourceTree = "<group>"; };
 		49EE68D0147B18DF00FA3113 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animator.h; path = ../../library/m8r/Animator.h; sourceTree = "<group>"; };
 		49EE68D1147B18DF00FA3113 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = ../../library/m8r/Application.h; sourceTree = "<group>"; };
 		49EE68D2147B18DF00FA3113 /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = ../../library/m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		49EE68D3147B18DF00FA3113 /* ENC28J60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENC28J60.h; path = ../../library/m8r/ENC28J60.h; sourceTree = "<group>"; };
-		49EE68D4147B18DF00FA3113 /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = ../../library/m8r/EventListener.h; sourceTree = "<group>"; };
-		49EE68D5147B18DF00FA3113 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = ../../library/m8r/EventSource.h; sourceTree = "<group>"; };
 		49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = ../../library/m8r/EventSourceEnums.h; sourceTree = "<group>"; };
 		49EE68D7147B18DF00FA3113 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = ../../library/m8r/MAX6969.h; sourceTree = "<group>"; };
 		49EE68D8147B18DF00FA3113 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RTC.h; path = ../../library/m8r/RTC.h; sourceTree = "<group>"; };
@@ -114,8 +108,6 @@
 		49EE68DA147B18DF00FA3113 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = ../../library/m8r/SPI.h; sourceTree = "<group>"; };
 		49EE68DB147B18DF00FA3113 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = ../../library/m8r/STP08CDC596.h; sourceTree = "<group>"; };
 		49EE68DC147B18DF00FA3113 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = ../../library/m8r/Timer.h; sourceTree = "<group>"; };
-		49EE68DD147B18DF00FA3113 /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = ../../library/m8r/TimerEvent.h; sourceTree = "<group>"; };
-		49EE68DE147B18DF00FA3113 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = ../../library/m8r/TimerEventMgr.h; sourceTree = "<group>"; };
 		49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
 		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -167,10 +159,6 @@
 				49EE68D2147B18DF00FA3113 /* BlinkErrorReporter.h */,
 				49EE68C3147B18C000FA3113 /* ENC28J60.cpp */,
 				49EE68D3147B18DF00FA3113 /* ENC28J60.h */,
-				49EE68C4147B18C000FA3113 /* EventListener.cpp */,
-				49EE68D4147B18DF00FA3113 /* EventListener.h */,
-				49EE68C5147B18C000FA3113 /* EventSource.cpp */,
-				49EE68D5147B18DF00FA3113 /* EventSource.h */,
 				49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */,
 				49EE68C8147B18C000FA3113 /* MAX6969.cpp */,
 				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
@@ -183,10 +171,6 @@
 				49EE68DB147B18DF00FA3113 /* STP08CDC596.h */,
 				49EE68CC147B18C000FA3113 /* Timer.cpp */,
 				49EE68DC147B18DF00FA3113 /* Timer.h */,
-				49EE68CD147B18C000FA3113 /* TimerEvent.cpp */,
-				49EE68DD147B18DF00FA3113 /* TimerEvent.h */,
-				49EE68CE147B18C000FA3113 /* TimerEventMgr.cpp */,
-				49EE68DE147B18DF00FA3113 /* TimerEventMgr.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -588,6 +572,7 @@
 				49EE68ED147B19BB00FA3113 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
 		};
 /* End XCConfigurationList section */
 	};

@@ -38,7 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
-#include "m8r/ShiftReg.h"
+#include "ShiftReg.h"
 
 namespace m8r {
 

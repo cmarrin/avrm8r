@@ -33,9 +33,9 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/Animator.h"
+#include "Animator.h"
 
-#include "m8r/TimerEventMgr.h"
+#include "TimerEventMgr.h"
 
 using namespace m8r;
 
@@ -47,7 +47,45 @@ static uint8_t interpSine(uint8_t t)
     return (((uint16_t) (g_sineTable[i + 1] - g_sineTable[i]) * (uint16_t) (t & 0x0F)) >> 4) + g_sineTable[i];
 }
 
-static uint8_t sine(uint8_t t)
+AnimatorBase::AnimatorBase(uint8_t startValue, uint8_t endValue)
+    : m_paused(true)
+    , m_startValue(startValue)
+    , m_endValue(endValue)
+    , m_currentValue(startValue)
+{
+}
+
+void
+AnimatorBase::start(uint8_t rate)
+{
+    m_rate = rate;
+    m_count = 0;
+    m_currentValue = m_startValue;
+    resume();
+} 
+
+void
+AnimatorBase::handleISR(EventType, void* data)
+{
+NOTE(6);
+    AnimatorBase* animator = (AnimatorBase*) data;
+    
+    if (animator->m_paused)
+        return;
+    
+    if (++animator->m_count < animator->m_rate)
+        return;
+    
+    animator->m_count = 0;
+    
+    if (animator->m_currentValue++ >= animator->m_endValue)
+        animator->m_currentValue = animator->m_startValue;
+        
+    Application::handleISR(EV_ANIMATOR_EVENT);    
+}
+
+uint8_t
+AnimatorBase::sineValue(uint8_t t)
 {
     if (t < 64)
         return interpSine(t) + 128;
@@ -56,58 +94,4 @@ static uint8_t sine(uint8_t t)
     if (t < 192)
         return 127 - interpSine(t - 128);
     return 127 - interpSine(255 - t);
-}
-
-Animator::Animator(EventListener* listener, uint8_t msRate, uint8_t startValue, uint8_t endValue)
-    : m_timerEvent(listener, msRate, TimerEventRepeating, EV_ANIMATOR_EVENT)
-    , m_startInterval(0)
-    , m_pauseInterval(0)
-    , m_intervalsPerIteration((uint16_t) msRate << 8)
-    , m_rate(msRate)
-    , m_startValue(startValue)
-    , m_endValue(endValue)
-    , m_iterations(0)
-{
-}
-
-void
-Animator::start(uint8_t iterations)
-{
-    m_startInterval = TimerEventMgrBase::shared()->currentInterval();
-    m_pauseInterval = 0;
-    m_timerEvent.start();
-}
-
-void
-Animator::pause()
-{
-    if (!m_startInterval || m_pauseInterval)
-        return;
-    m_pauseInterval = TimerEventMgrBase::shared()->currentInterval();
-    m_timerEvent.stop();
-}
-
-void
-Animator::resume()
-{
-    if (!m_startInterval || !m_pauseInterval)
-        return;
-    m_startInterval += TimerEventMgrBase::shared()->currentInterval() - m_pauseInterval;
-    m_pauseInterval = 0;
-    m_timerEvent.start();    
-}
-
-uint8_t
-Animator::currentValue() const
-{
-    uint32_t endInterval = m_pauseInterval ? m_pauseInterval : TimerEventMgrBase::shared()->currentInterval();
-    uint16_t diff = (endInterval - m_startInterval) % (uint32_t) m_intervalsPerIteration;
-    uint16_t t = diff / (uint16_t) m_rate;
-    return ((uint16_t) (m_endValue - m_startValue) * t) / 255 + m_startValue;
-}
-
-uint8_t
-Animator::sineValue(uint8_t t)
-{
-    return sine(t);
 }

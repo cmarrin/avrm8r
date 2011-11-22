@@ -35,15 +35,14 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <m8r.h>
-#include <m8r/Animator.h>
-#include <m8r/Application.h>
-#include <m8r/ADC.h>
-#include <m8r/BlinkErrorReporter.h>
-#include <m8r/ENC28J60.h>
-#include <m8r/MAX6969.h>
-#include <m8r/RTC.h>
-#include <m8r/TimerEventMgr.h>
+#include "m8r.h"
+#include "Animator.h"
+#include "Application.h"
+#include "ADC.h"
+#include "BlinkErrorReporter.h"
+#include "ENC28J60.h"
+#include "MAX6969.h"
+#include "RTC.h"
 
 //
 // Etherclock
@@ -98,6 +97,7 @@ public:
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     RTC<Timer1> m_clock;
+    //Animator<Timer0> m_colonAnimator;
     ENC28J60 m_ethernet;
     Port<D> m_colonPort;
     
@@ -106,7 +106,10 @@ public:
     uint8_t m_averageLightSensorValue, m_lastAverageLightSensorValue;
     uint8_t m_currentBrightness;
     uint8_t m_brightnessCount;
-    uint8_t m_animationValue;
+    
+    uint8_t m_animationValue, m_previousAnimationValue;
+    uint8_t m_currentColonBrightness;
+    uint8_t m_colonBrightnessCount;
     
     static uint8_t m_brightnessTable[8];
 };
@@ -119,6 +122,7 @@ MyApp g_app;
 MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
+    //, m_colonAnimator(TimerClockDIV64, 195) // ~1ms timer
     , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
@@ -127,6 +131,9 @@ MyApp::MyApp()
     , m_currentBrightness(0)
     , m_brightnessCount(0)
     , m_animationValue(0)
+    , m_previousAnimationValue(0)
+    , m_currentColonBrightness(0)
+    , m_colonBrightnessCount(0)
 {
     // Testing
     m_shiftReg.setChar('1', true);
@@ -145,6 +152,8 @@ MyApp::MyApp()
     
     sei();
     m_adc.startConversion();
+    
+    //m_colonAnimator.start(20);
 }
     
 void
@@ -155,9 +164,9 @@ Application::handleISR(EventType type, void*)
         case EV_ADC:
             g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
             break;
-        case EV_ANIMATOR_EVENT:
-            //m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
-            break;            
+        //case EV_ANIMATOR_EVENT:
+        //    g_app.m_animationValue = g_app.m_colonAnimator.currentValue();
+        //    break;            
         case EV_TIMER_EVENT:
             break;
         case EV_RTC_SECONDS_EVENT: {
@@ -203,6 +212,21 @@ Application::handleIdle()
         g_app.m_lastAverageLightSensorValue = g_app.m_averageLightSensorValue;
         g_app.m_currentBrightness = MyApp::m_brightnessTable[g_app.m_averageLightSensorValue >> 5];
     }
+
+    if (g_app.m_animationValue != g_app.m_previousAnimationValue) {
+        g_app.m_previousAnimationValue = g_app.m_animationValue;
+        g_app.m_currentColonBrightness = AnimatorBase::sineValue(g_app.m_animationValue);
+    }
+    /*
+    if (g_app.m_colonBrightnessCount++ == g_app.m_currentColonBrightness) {
+        g_app.m_colonPort.setPortBit(0);
+        g_app.m_colonPort.setPortBit(1);
+    }
+    if (g_app.m_colonBrightnessCount == 0) {
+        g_app.m_colonPort.clearPortBit(0);
+        g_app.m_colonPort.clearPortBit(1);
+    }
+    */
 }
 
 void

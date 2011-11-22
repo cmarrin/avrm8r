@@ -38,8 +38,8 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
+#include "Application.h"
 #include <avr/interrupt.h>
-#include "m8r/Application.h"
 
 #undef ADC
 

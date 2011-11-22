@@ -33,9 +33,9 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/RTC.h"
+#include "RTC.h"
 
-#include "m8r/Application.h"
+#include "Application.h"
 #include <avr/pgmspace.h>
 
 const uint32_t minutesPerDay = 24UL * 60UL;

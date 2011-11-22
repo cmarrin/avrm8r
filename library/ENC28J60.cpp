@@ -35,9 +35,9 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/ENC28J60.h"
+#include "ENC28J60.h"
 
-#include "m8r/Application.h"
+#include "Application.h"
 
 #define CSACTIVE SPI_PORT &= ~_BV(SS_BIT)
 #define CSPASSIVE SPI_PORT |= _BV(SS_BIT)

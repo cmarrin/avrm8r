@@ -33,8 +33,8 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/ADC.h"
-#include "m8r/Application.h"
+#include "ADC.h"
+#include "Application.h"
 
 using namespace m8r;
 

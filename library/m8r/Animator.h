@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/TimerEvent.h"
+#include "Timer.h"
 
 namespace m8r {
 
@@ -51,29 +51,41 @@ namespace m8r {
 
 class EventListener;
 
-class Animator {
+class AnimatorBase {
 public:
-    // 0 iterations means infinite
-    Animator(EventListener* listener, uint8_t msRate, uint8_t startValue = 0, uint8_t endValue = 255);
-    ~Animator()
-    {
-        pause();
-    }
+    AnimatorBase(uint8_t startValue, uint8_t endValue);
     
-    void start(uint8_t iterations = 0);
-    void pause();
-    void resume();
+    void start(uint8_t rate);
+    void pause() { m_paused = true; }
+    void resume() { m_paused = false; }
     
-    uint8_t identifier() const { return m_timerEvent.identifier(); }
-    
-    uint8_t currentValue() const;
+    uint8_t currentValue() const { return m_currentValue; }
     static uint8_t sineValue(uint8_t);
 
+protected:
+    static void handleISR(EventType, void*);
+    
 private:
-    TimerEvent m_timerEvent;
-    uint32_t m_startInterval, m_pauseInterval;
-    uint16_t m_intervalsPerIteration;
-    uint8_t m_rate, m_startValue, m_endValue, m_iterations;
+    bool m_paused;
+    uint8_t m_startValue, m_endValue, m_currentValue;
+    uint8_t m_rate, m_count;
+};
+
+template <class Timer>
+class Animator : public AnimatorBase {
+public:
+	Animator(TimerClockMode prescaler, uint16_t count, uint8_t startValue = 0, uint8_t endValue = 255)
+        : AnimatorBase(startValue, endValue)
+        , m_timer(&handleISR, this)
+    {
+        m_timer.setTimerClockMode(prescaler);
+        m_timer.setOutputCompareA(count);
+        m_timer.setWaveGenMode(TimerWaveGenCTC);
+        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
+    }
+    
+private:
+    Timer m_timer;
 };
 
 }

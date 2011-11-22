@@ -33,8 +33,9 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
+#include "MAX6969.h"
+
 #include <avr/pgmspace.h>
-#include "m8r/MAX6969.h"
 
 extern const uint8_t mygCharTable[] PROGMEM;
 const uint8_t mygCharTable[] =
