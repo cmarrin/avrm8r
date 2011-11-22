@@ -78,20 +78,17 @@ using namespace m8r;
 #define ErrorPort Port<B>
 #define ErrorBit 1
 
-const uint8_t NumLightSensorValuesToAccumulate = 250;
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 
 class MyApp {    
 public:
     MyApp();
     
-    uint8_t brightness() const { return m_currentBrightness; }
-
     void accumulateBrightnessValue(uint8_t value)
     {
         m_accumulatedLightSensorValues += value;
-        if (++m_numAccumulatedLightSensorValues >= NumLightSensorValuesToAccumulate) {
-            m_currentBrightness = g_brightnessTable[m_accumulatedLightSensorValues / NumLightSensorValuesToAccumulate / 32];
+        if (++m_numAccumulatedLightSensorValues >= 4) {
+            m_averageLightSensorValue = m_accumulatedLightSensorValues >> 2;
             m_accumulatedLightSensorValues = 0;
             m_numAccumulatedLightSensorValues = 0;
         }
@@ -106,14 +103,16 @@ public:
     
     uint16_t m_accumulatedLightSensorValues;
     uint8_t m_numAccumulatedLightSensorValues;
+    uint8_t m_averageLightSensorValue, m_lastAverageLightSensorValue;
     uint8_t m_currentBrightness;
     uint8_t m_brightnessCount;
     uint8_t m_animationValue;
     
-    static uint8_t g_brightnessTable[8];
+    static uint8_t m_brightnessTable[8];
 };
 
-uint8_t MyApp::g_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
+uint8_t MyApp::m_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
+const int8_t Hysteresis = 10;
 
 MyApp g_app;
 
@@ -123,6 +122,8 @@ MyApp::MyApp()
     , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
+    , m_averageLightSensorValue(0)
+    , m_lastAverageLightSensorValue(0)
     , m_currentBrightness(0)
     , m_brightnessCount(0)
     , m_animationValue(0)
@@ -153,7 +154,6 @@ Application::handleISR(EventType type, void*)
     {
         case EV_ADC:
             g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
-            g_app.m_adc.startConversion();
             break;
         case EV_ANIMATOR_EVENT:
             //m_animationValue = Animator::sineValue(m_colonAnimator.currentValue());
@@ -161,6 +161,8 @@ Application::handleISR(EventType type, void*)
         case EV_TIMER_EVENT:
             break;
         case EV_RTC_SECONDS_EVENT: {
+            g_app.m_adc.startConversion();
+            
             RTCTime t;
             g_app.m_clock.currentTime(t);
             
@@ -181,14 +183,25 @@ Application::handleISR(EventType type, void*)
 void
 Application::handleIdle()
 {
-    if (g_app.m_brightnessCount++ == g_app.brightness()) {
+    if (g_app.m_brightnessCount++ == g_app.m_currentBrightness) {
         g_app.m_shiftReg.setOutputEnable(false);
         g_app.m_colonPort.setPortBit(0);
         g_app.m_colonPort.setPortBit(1);
-    } else if (g_app.m_brightnessCount == 0) {
+    }
+    if (g_app.m_brightnessCount == 0) {
         g_app.m_shiftReg.setOutputEnable(true);
         g_app.m_colonPort.clearPortBit(0);
         g_app.m_colonPort.clearPortBit(1);
+        
+        // Add some hysteresis to the brightness value
+        int8_t diff = (int16_t) g_app.m_lastAverageLightSensorValue - (int16_t) g_app.m_averageLightSensorValue;
+        if (diff < 0)
+            diff = -diff;
+        if (diff < Hysteresis)
+            return;
+            
+        g_app.m_lastAverageLightSensorValue = g_app.m_averageLightSensorValue;
+        g_app.m_currentBrightness = MyApp::m_brightnessTable[g_app.m_averageLightSensorValue >> 5];
     }
 }
 
