@@ -114,7 +114,6 @@ ADC::convert10Bit()
 // Interrupt handler for ADC complete interrupt.
 ISR(ADC_vect)
 {
-NOTE(1);
     ADC::setLastConversion(ADCW);
     Application::handleISR(EV_ADC);
 }

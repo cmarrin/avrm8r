@@ -71,17 +71,63 @@
 			remoteGlobalIDString = 4900A2E2133FDE330036518B;
 			remoteInfo = Build;
 		};
+		49EE68EF147B1A2500FA3113 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49EE68E7147B19BB00FA3113;
+			remoteInfo = libm8r.a;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
+		49EE68BD147B188700FA3113 /* create_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = create_event_enums.c; path = ../../library/create_event_enums.c; sourceTree = "<group>"; };
+		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
+		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
+		49EE68C0147B18C000FA3113 /* ADC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ADC.cpp; path = ../../library/ADC.cpp; sourceTree = "<group>"; };
+		49EE68C1147B18C000FA3113 /* Animator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Animator.cpp; path = ../../library/Animator.cpp; sourceTree = "<group>"; };
+		49EE68C2147B18C000FA3113 /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = ../../library/Application.cpp; sourceTree = "<group>"; };
+		49EE68C3147B18C000FA3113 /* ENC28J60.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ENC28J60.cpp; path = ../../library/ENC28J60.cpp; sourceTree = "<group>"; };
+		49EE68C4147B18C000FA3113 /* EventListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventListener.cpp; path = ../../library/EventListener.cpp; sourceTree = "<group>"; };
+		49EE68C5147B18C000FA3113 /* EventSource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = EventSource.cpp; path = ../../library/EventSource.cpp; sourceTree = "<group>"; };
+		49EE68C6147B18C000FA3113 /* m8r.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = m8r.h; path = ../../library/m8r.h; sourceTree = "<group>"; };
+		49EE68C7147B18C000FA3113 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../../library/main.c; sourceTree = "<group>"; };
+		49EE68C8147B18C000FA3113 /* MAX6969.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MAX6969.cpp; path = ../../library/MAX6969.cpp; sourceTree = "<group>"; };
+		49EE68C9147B18C000FA3113 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RTC.cpp; path = ../../library/RTC.cpp; sourceTree = "<group>"; };
+		49EE68CA147B18C000FA3113 /* ShiftReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ShiftReg.cpp; path = ../../library/ShiftReg.cpp; sourceTree = "<group>"; };
+		49EE68CB147B18C000FA3113 /* STP08CDC596.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = STP08CDC596.cpp; path = ../../library/STP08CDC596.cpp; sourceTree = "<group>"; };
+		49EE68CC147B18C000FA3113 /* Timer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer.cpp; path = ../../library/Timer.cpp; sourceTree = "<group>"; };
+		49EE68CD147B18C000FA3113 /* TimerEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TimerEvent.cpp; path = ../../library/TimerEvent.cpp; sourceTree = "<group>"; };
+		49EE68CE147B18C000FA3113 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TimerEventMgr.cpp; path = ../../library/TimerEventMgr.cpp; sourceTree = "<group>"; };
+		49EE68CF147B18DF00FA3113 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = ../../library/m8r/ADC.h; sourceTree = "<group>"; };
+		49EE68D0147B18DF00FA3113 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animator.h; path = ../../library/m8r/Animator.h; sourceTree = "<group>"; };
+		49EE68D1147B18DF00FA3113 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = ../../library/m8r/Application.h; sourceTree = "<group>"; };
+		49EE68D2147B18DF00FA3113 /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = ../../library/m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
+		49EE68D3147B18DF00FA3113 /* ENC28J60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ENC28J60.h; path = ../../library/m8r/ENC28J60.h; sourceTree = "<group>"; };
+		49EE68D4147B18DF00FA3113 /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = ../../library/m8r/EventListener.h; sourceTree = "<group>"; };
+		49EE68D5147B18DF00FA3113 /* EventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSource.h; path = ../../library/m8r/EventSource.h; sourceTree = "<group>"; };
+		49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = ../../library/m8r/EventSourceEnums.h; sourceTree = "<group>"; };
+		49EE68D7147B18DF00FA3113 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = ../../library/m8r/MAX6969.h; sourceTree = "<group>"; };
+		49EE68D8147B18DF00FA3113 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RTC.h; path = ../../library/m8r/RTC.h; sourceTree = "<group>"; };
+		49EE68D9147B18DF00FA3113 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = ../../library/m8r/ShiftReg.h; sourceTree = "<group>"; };
+		49EE68DA147B18DF00FA3113 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = ../../library/m8r/SPI.h; sourceTree = "<group>"; };
+		49EE68DB147B18DF00FA3113 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = ../../library/m8r/STP08CDC596.h; sourceTree = "<group>"; };
+		49EE68DC147B18DF00FA3113 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer.h; path = ../../library/m8r/Timer.h; sourceTree = "<group>"; };
+		49EE68DD147B18DF00FA3113 /* TimerEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = ../../library/m8r/TimerEvent.h; sourceTree = "<group>"; };
+		49EE68DE147B18DF00FA3113 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = ../../library/m8r/TimerEventMgr.h; sourceTree = "<group>"; };
+		49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
+		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		08FB7794FE84155DC02AAC07 /* etherclock */ = {
 			isa = PBXGroup;
 			children = (
+				49EE68BA147B184100FA3113 /* libm8r */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
+				49EE68E9147B19BB00FA3113 /* Products */,
 			);
 			name = etherclock;
 			sourceTree = "<group>";
@@ -89,9 +135,68 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				49EE68F1147B2DFD00FA3113 /* config.mk */,
+				49EE68F2147B2DFD00FA3113 /* Makefile */,
 				490EBD241348B13700FAD91C /* MyApplication.cpp */,
 			);
 			name = Source;
+			sourceTree = "<group>";
+		};
+		49EE68BA147B184100FA3113 /* libm8r */ = {
+			isa = PBXGroup;
+			children = (
+				49EE68BD147B188700FA3113 /* create_event_enums.c */,
+				49EE68BE147B188700FA3113 /* Makefile */,
+				49EE68BF147B188700FA3113 /* shared.mk */,
+				49EE68BB147B185900FA3113 /* Source */,
+			);
+			name = libm8r;
+			sourceTree = "<group>";
+		};
+		49EE68BB147B185900FA3113 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				49EE68C6147B18C000FA3113 /* m8r.h */,
+				49EE68C7147B18C000FA3113 /* main.c */,
+				49EE68C0147B18C000FA3113 /* ADC.cpp */,
+				49EE68CF147B18DF00FA3113 /* ADC.h */,
+				49EE68C1147B18C000FA3113 /* Animator.cpp */,
+				49EE68D0147B18DF00FA3113 /* Animator.h */,
+				49EE68C2147B18C000FA3113 /* Application.cpp */,
+				49EE68D1147B18DF00FA3113 /* Application.h */,
+				49EE68D2147B18DF00FA3113 /* BlinkErrorReporter.h */,
+				49EE68C3147B18C000FA3113 /* ENC28J60.cpp */,
+				49EE68D3147B18DF00FA3113 /* ENC28J60.h */,
+				49EE68C4147B18C000FA3113 /* EventListener.cpp */,
+				49EE68D4147B18DF00FA3113 /* EventListener.h */,
+				49EE68C5147B18C000FA3113 /* EventSource.cpp */,
+				49EE68D5147B18DF00FA3113 /* EventSource.h */,
+				49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */,
+				49EE68C8147B18C000FA3113 /* MAX6969.cpp */,
+				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
+				49EE68C9147B18C000FA3113 /* RTC.cpp */,
+				49EE68D8147B18DF00FA3113 /* RTC.h */,
+				49EE68CA147B18C000FA3113 /* ShiftReg.cpp */,
+				49EE68D9147B18DF00FA3113 /* ShiftReg.h */,
+				49EE68DA147B18DF00FA3113 /* SPI.h */,
+				49EE68CB147B18C000FA3113 /* STP08CDC596.cpp */,
+				49EE68DB147B18DF00FA3113 /* STP08CDC596.h */,
+				49EE68CC147B18C000FA3113 /* Timer.cpp */,
+				49EE68DC147B18DF00FA3113 /* Timer.h */,
+				49EE68CD147B18C000FA3113 /* TimerEvent.cpp */,
+				49EE68DD147B18DF00FA3113 /* TimerEvent.h */,
+				49EE68CE147B18C000FA3113 /* TimerEventMgr.cpp */,
+				49EE68DE147B18DF00FA3113 /* TimerEventMgr.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		49EE68E9147B19BB00FA3113 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -101,12 +206,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */;
 			buildPhases = (
-				49282A0E134BA95A009E0FE6 /* build libm8r.a */,
 				499940C6147873B00059CA5A /* Build application */,
-				4955B5661343FBFF001EDD20 /* Create elf */,
-				493469131344045F005C85D6 /* Create hex */,
-				49FC495C134D6B6100FD30CF /* Create listing */,
-				49282B70134CFEDE009E0FE6 /* Show size */,
 			);
 			buildRules = (
 				4955B5A41344028B001EDD20 /* PBXBuildRule */,
@@ -114,9 +214,25 @@
 				4900A2FB133FDEF10036518B /* PBXBuildRule */,
 			);
 			dependencies = (
+				49EE68F0147B1A2500FA3113 /* PBXTargetDependency */,
 			);
 			name = Build;
 			productName = Build;
+			productType = "com.apple.product-type.library.static";
+		};
+		49EE68E7147B19BB00FA3113 /* libm8r.a */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49EE68EA147B19BB00FA3113 /* Build configuration list for PBXNativeTarget "libm8r.a" */;
+			buildPhases = (
+				49EE68EE147B19D100FA3113 /* Build libm8r.a */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libm8r.a;
+			productName = libm8r.a;
+			productReference = 49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -135,45 +251,19 @@
 				German,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* etherclock */;
+			productRefGroup = 49EE68E9147B19BB00FA3113 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				4900A2E2133FDE330036518B /* Build */,
 				49346909134403EF005C85D6 /* Clean */,
 				4990FD941344BAD700F96FEF /* Program */,
+				49EE68E7147B19BB00FA3113 /* libm8r.a */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		49282A0E134BA95A009E0FE6 /* build libm8r.a */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "build libm8r.a";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd ${USER_LIBRARY_DIR}/m8r; make DEBUG=${BUILD_TYPE}\n";
-		};
-		49282B70134CFEDE009E0FE6 /* Show size */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Show size";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "i=0\nfor s in `${TOOLS_DIR}/bin/avr-size -td ${OBJECT_FILE_DIR}/${PROJECT}.elf`\ndo\n\tarray[$i]=$s\n\t((i++))\ndone\necho\necho '===================='\necho Executable size:\nprintf \"\\ttext:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[6]}\" \"${array[6]}\"\nprintf \"\\tdata:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[7]}\" \"${array[7]}\"\nprintf \"\\tbss:\\t\\t%d\\t\\t(0x%x)\\n\" \"${array[8]}\" \"${array[8]}\"\necho \necho Total: ${array[9]} \\(0x${array[10]}\\)\necho '===================='\necho\n";
-		};
 		49346908134403EF005C85D6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -186,39 +276,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rm -rf ${CONFIGURATION_BUILD_DIR}/*\nrm -rf ${CONFIGURATION_TEMP_DIR}/*\necho Removed all build products";
-		};
-		493469131344045F005C85D6 /* Create hex */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
-			);
-			name = "Create hex";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${PROJECT}.hex",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Creating .hex file\"\n${TOOLS_DIR}/bin/avr-objcopy -O ihex ${OBJECT_FILE_DIR}/${PROJECT}.elf ${TARGET_BUILD_DIR}/${PROJECT}.hex \n";
-		};
-		4955B5661343FBFF001EDD20 /* Create elf */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${OBJECT_FILE_DIR}/*.o",
-			);
-			name = "Create elf";
-			outputPaths = (
-				"${OBJECT_FILE_DIR}/${PROJECT}.elf",
-				"${TARGET_BUILD_DIR}/${PROJECT}.map",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"Linking\"\nmkdir ${TARGET_BUILD_DIR} 2> /dev/null\n${TOOLS_DIR}/bin/avr-gcc ${OBJECT_FILE_DIR}/*.o ${LDFLAGS} -Wl,-Map=${TARGET_BUILD_DIR}/${PROJECT}.map,--cref -mmcu=${MCU} -o ${OBJECT_FILE_DIR}/${PROJECT}.elf \n";
 		};
 		4990FD931344BAD700F96FEF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -248,19 +305,19 @@
 			shellPath = /bin/sh;
 			shellScript = "make DEBUG=${BUILD_TYPE}";
 		};
-		49FC495C134D6B6100FD30CF /* Create listing */ = {
+		49EE68EE147B19D100FA3113 /* Build libm8r.a */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Create listing";
+			name = "Build libm8r.a";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${TOOLS_DIR}/bin/avr-objdump -lhS --demangle ${OBJECT_FILE_DIR}/${PROJECT}.elf > ${TARGET_BUILD_DIR}/${PROJECT}.lss";
+			shellScript = "/usr/bin/make build_library DEBUG=${BUILD_TYPE}";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -269,6 +326,11 @@
 			isa = PBXTargetDependency;
 			target = 4900A2E2133FDE330036518B /* Build */;
 			targetProxy = 4990FD961344BAF000F96FEF /* PBXContainerItemProxy */;
+		};
+		49EE68F0147B1A2500FA3113 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49EE68E7147B19BB00FA3113 /* libm8r.a */;
+			targetProxy = 49EE68EF147B1A2500FA3113 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -284,11 +346,11 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = release;
-				CFLAGS = "-DNDEBUG -Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DNDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
-				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
-				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r";
+				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
+				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
 				TOOLS_DIR = /sw;
@@ -327,11 +389,11 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = debug;
-				CFLAGS = "-DDEBUG -g -Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DDEBUG -g -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
-				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
-				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r";
+				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
+				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
 				TOOLS_DIR = /sw;
@@ -370,11 +432,11 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = report;
-				CFLAGS = "-DNDEBUG -Wa,-adhlns=${OBJECT_FILE_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
-				LDFLAGS = "-L${OBJECT_FILE_DIR} -lm8r -Wl,-gc-sections";
-				M8R_SRC_DIR = "$(USER_LIBRARY_DIR)/m8r";
+				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
+				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
 				TOOLS_DIR = /sw;
@@ -401,6 +463,79 @@
 			buildSettings = {
 			};
 			name = Report;
+		};
+		49EE68EB147B19BB00FA3113 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				M8R_SRC_DIR = ../../library;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		49EE68EC147B19BB00FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				M8R_SRC_DIR = ../../library;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Report;
+		};
+		49EE68ED147B19BB00FA3113 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				EXECUTABLE_PREFIX = lib;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				M8R_SRC_DIR = ../../library;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -444,6 +579,15 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
+		};
+		49EE68EA147B19BB00FA3113 /* Build configuration list for PBXNativeTarget "libm8r.a" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49EE68EB147B19BB00FA3113 /* Release */,
+				49EE68EC147B19BB00FA3113 /* Report */,
+				49EE68ED147B19BB00FA3113 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

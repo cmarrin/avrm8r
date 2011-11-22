@@ -23,8 +23,8 @@ INSTALL_DIR = ~/Library/m8r
 
 C_INCLUDE_PATH = $(M8R_SRC_DIR)
 
-ifndef OBJECT_FILE_DIR
-OBJECT_FILE_DIR = $(CURDIR)/obj
+ifndef BUILT_PRODUCTS_DIR
+BUILT_PRODUCTS_DIR = $(CURDIR)/obj
 endif
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
@@ -63,15 +63,15 @@ LIB_SRC = \
     Timer.cpp \
 
 LIB_OBJ := $(LIB_SRC)
-LIB_OBJ := $(LIB_OBJ:%.c=$(OBJECT_FILE_DIR)/%.o)
-LIB_OBJ := $(LIB_OBJ:%.cpp=$(OBJECT_FILE_DIR)/%.o)
-LIB_OBJ := $(LIB_OBJ:%.S=$(OBJECT_FILE_DIR)/%.o)
+LIB_OBJ := $(LIB_OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)
+LIB_OBJ := $(LIB_OBJ:%.cpp=$(BUILT_PRODUCTS_DIR)/%.o)
+LIB_OBJ := $(LIB_OBJ:%.S=$(BUILT_PRODUCTS_DIR)/%.o)
 LIB_SRC := ${LIB_SRC:%=$(M8R_SRC_DIR)/%}
 
 OBJ := $(SRC)
-OBJ := $(OBJ:%.c=$(OBJECT_FILE_DIR)/%.o)
-OBJ := $(OBJ:%.cpp=$(OBJECT_FILE_DIR)/%.o)
-OBJ := $(OBJ:%.S=$(OBJECT_FILE_DIR)/%.o)
+OBJ := $(OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)
+OBJ := $(OBJ:%.cpp=$(BUILT_PRODUCTS_DIR)/%.o)
+OBJ := $(OBJ:%.S=$(BUILT_PRODUCTS_DIR)/%.o)
 SRC := ${SRC:%=${M8R_SRC_DIR}/%}
 
 # Place -D or -U options here
@@ -123,9 +123,9 @@ CPPFLAGS = -fno-exceptions
 #             files -- see avr-libc docs [FIXME: not yet described there]
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs 
 
-LDFLAGS = -L$(OBJECT_FILE_DIR) -lm8r 
+LDFLAGS = -L$(BUILT_PRODUCTS_DIR) -lm8r 
 LDFLAGS += -Wl,-gc-sections -Wl,--relax
-LDFLAGS += -Wl,-Map=$(OBJECT_FILE_DIR)/$(TARGET).map,--cref
+LDFLAGS += -Wl,-Map=$(BUILT_PRODUCTS_DIR)/$(TARGET).map,--cref
 LDFLAGS += -mmcu=$(MCU)
 
 # -------- AVR Dude ----------
@@ -187,7 +187,7 @@ COPY = cp
 MKDIR = mkdir
 
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
-ELFSIZE = sh $(M8R_SRC_DIR)/section_sizes $(SIZE) $(OBJECT_FILE_DIR)/$(TARGET).elf; echo "================================="
+ELFSIZE = sh $(M8R_SRC_DIR)/section_sizes $(SIZE) $(BUILT_PRODUCTS_DIR)/$(TARGET).elf; echo "================================="
 
 # Compiler flags to generate dependency files.
 GENDEPFLAGS = -MD -MP -MF .dep/$(@F).d
@@ -198,26 +198,26 @@ ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
 ALL_CPPFLAGS = -mmcu=$(MCU) -I. $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
-build_library: begin $(OBJECT_FILE_DIR)/$(LIB_TARGET).a finished
+build_library: begin $(BUILT_PRODUCTS_DIR)/$(LIB_TARGET).a finished
 
 # Archive: create library archive from library object files.
-$(OBJECT_FILE_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)
+$(BUILT_PRODUCTS_DIR)/$(LIB_TARGET).a: $(LIB_OBJ)
 	@echo
 	@echo "Archiving:" $@
 	$(AR) rcs $@ $^
 	$(REMOVE) $^
 
-build_app: build_library sizebefore $(OBJECT_FILE_DIR)/$(TARGET).hex $(OBJECT_FILE_DIR)/$(TARGET).lss sizeafter
+build_app: build_library sizebefore $(BUILT_PRODUCTS_DIR)/$(TARGET).hex $(BUILT_PRODUCTS_DIR)/$(TARGET).lss sizeafter
 
 program_app: build_app
 	@echo
 	@echo Programming:
 	@echo
-	$(AVRDUDE) -C $(TOOLS_DIR)/etc/avrdude.conf -c $(AVRDUDE_PROGRAMMER) -P $(AVRDUDE_PORT) -p $(MCU) -U flash:w:$(OBJECT_FILE_DIR)/$(TARGET).hex:i
+	$(AVRDUDE) -C $(TOOLS_DIR)/etc/avrdude.conf -c $(AVRDUDE_PROGRAMMER) -P $(AVRDUDE_PORT) -p $(MCU) -U flash:w:$(BUILT_PRODUCTS_DIR)/$(TARGET).hex:i
 begin:
 	@echo
 	@echo "-------- begin --------"
-	@$(MKDIR) -p $(OBJECT_FILE_DIR)
+	@$(MKDIR) -p $(BUILT_PRODUCTS_DIR)
 
 finished:
 	@echo
@@ -226,14 +226,13 @@ finished:
 end:
 	@echo
 	@echo "-------- end --------"
-	@$(MKDIR) -p $(OBJECT_FILE_DIR)
 
 # Display size of file.
 sizebefore:
-	@if [ -f $(OBJECT_FILE_DIR)/$(TARGET).elf ]; then echo; echo "========== size before =========="; $(ELFSIZE); fi
+	@if [ -f $(BUILT_PRODUCTS_DIR)/$(TARGET).elf ]; then echo; echo "========== size before =========="; $(ELFSIZE); fi
 
 sizeafter:
-	@if [ -f $(OBJECT_FILE_DIR)/$(TARGET).elf ]; then echo; echo "========== size after ==========="; $(ELFSIZE); fi
+	@if [ -f $(BUILT_PRODUCTS_DIR)/$(TARGET).elf ]; then echo; echo "========== size after ==========="; $(ELFSIZE); fi
 
 # Display compiler version information.
 gccversion : 
@@ -254,39 +253,39 @@ FORCE:
 #### Generating object files ####
 # object from C
 #.c.o: 
-$(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.c
+$(BUILT_PRODUCTS_DIR)/%.o: $(M8R_SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # object from C++ (.cc, .cpp, .C files)
 #.cc.o .cpp.o .C.o :
-$(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.cpp
+$(BUILT_PRODUCTS_DIR)/%.o: $(M8R_SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
-$(OBJECT_FILE_DIR)/%.o: %.cpp
+$(BUILT_PRODUCTS_DIR)/%.o: %.cpp
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 # object from asm
 #.S.o :
-$(OBJECT_FILE_DIR)/%.o: $(M8R_SRC_DIR)/%.S
+$(BUILT_PRODUCTS_DIR)/%.o: $(M8R_SRC_DIR)/%.S
 	$(CC) $(ASMFLAGS) -c $< -o $@
 
-$(OBJECT_FILE_DIR)/$(TARGET).elf: $(OBJECT_FILE_DIR)/$(LIB_TARGET).a $(OBJ)
+$(BUILT_PRODUCTS_DIR)/$(TARGET).elf: $(BUILT_PRODUCTS_DIR)/$(LIB_TARGET).a $(OBJ)
 	@echo
 	@echo "Linking"
 	@echo
-	$(CC) $(OBJ) $(LDFLAGS) -o $(OBJECT_FILE_DIR)/$(TARGET).elf
+	$(CC) $(OBJ) $(LDFLAGS) -o $(BUILT_PRODUCTS_DIR)/$(TARGET).elf
 
-$(OBJECT_FILE_DIR)/$(TARGET).hex: $(OBJECT_FILE_DIR)/$(TARGET).elf
+$(BUILT_PRODUCTS_DIR)/$(TARGET).hex: $(BUILT_PRODUCTS_DIR)/$(TARGET).elf
 	@echo
 	@echo "Creating .hex file"
 	@echo
-	$(OBJCOPY) -O ihex $(OBJECT_FILE_DIR)/$(TARGET).elf $(OBJECT_FILE_DIR)/$(TARGET).hex 
+	$(OBJCOPY) -O ihex $(BUILT_PRODUCTS_DIR)/$(TARGET).elf $(BUILT_PRODUCTS_DIR)/$(TARGET).hex 
 
-$(OBJECT_FILE_DIR)/$(TARGET).lss: $(OBJECT_FILE_DIR)/$(TARGET).elf
+$(BUILT_PRODUCTS_DIR)/$(TARGET).lss: $(BUILT_PRODUCTS_DIR)/$(TARGET).elf
 	@echo
 	@echo "Creating listing file"
 	@echo
-	${TOOLS_DIR}/bin/avr-objdump -lhS --demangle $(OBJECT_FILE_DIR)/$(TARGET).elf > $(OBJECT_FILE_DIR)/$(TARGET).lss
+	${TOOLS_DIR}/bin/avr-objdump -lhS --demangle $(BUILT_PRODUCTS_DIR)/$(TARGET).elf > $(BUILT_PRODUCTS_DIR)/$(TARGET).lss
 
 # Target: clean project.
 clean: begin clean_list end
@@ -295,7 +294,7 @@ clean_list :
 	@echo
 	@echo "Cleaning project:"
 	@echo
-	$(REMOVE) -rf $(OBJECT_FILE_DIR)/*
+	$(REMOVE) -rf $(BUILT_PRODUCTS_DIR)/*
 	$(REMOVE) $(CSRC:.c=.d)
 	$(REMOVE) $(CPPSRC:.cpp=.d)
 	$(REMOVE) .dep/*

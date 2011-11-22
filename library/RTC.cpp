@@ -101,10 +101,10 @@ RTCBase::handleISR(EventType, void* data)
 {
     RTCBase* rtc = (RTCBase*) data;
     
-    if (--rtc->m_intervalsRemaining > 0)
+    if (++rtc->m_intervalCount < rtc->m_intervalsPerSecond)
         return;
         
-    rtc->m_intervalsRemaining = rtc->m_intervalsPerSecond;
+    rtc->m_intervalCount = 0;
     
     if (++rtc->m_seconds >= 60) {
         rtc->m_seconds = 0;

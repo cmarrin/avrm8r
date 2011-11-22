@@ -65,36 +65,36 @@ ISR(TIMER0_COMPB_vect)
 
 ISR(TIMER1_OVF_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer0::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer1::m_data);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer0::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer1::m_data);
 }
 
 ISR(TIMER1_COMPB_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer0::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer1::m_data);
 }
 
 ISR(TIMER1_CAPT_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer0::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer1::m_data);
 }
 
 ISR(TIMER2_OVF_vect)
 {
-    Timer2::m_isrCallback(EV_TIMER2_OVF, Timer0::m_data);
+    Timer2::m_isrCallback(EV_TIMER2_OVF, Timer2::m_data);
 }
 
 ISR(TIMER2_COMPA_vect)
 {
-    Timer2::m_isrCallback(EV_TIMER2_COMPA, Timer0::m_data);
+    Timer2::m_isrCallback(EV_TIMER2_COMPA, Timer2::m_data);
 }
 
 ISR(TIMER2_COMPB_vect)
 {
-    Timer2::m_isrCallback(EV_TIMER2_COMPB, Timer0::m_data);
+    Timer2::m_isrCallback(EV_TIMER2_COMPB, Timer2::m_data);
 }
 

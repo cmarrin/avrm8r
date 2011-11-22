@@ -7,7 +7,7 @@ MCU = atmega168
 
 TARGET = etherclock
 
-M8R_SRC_DIR = $(HOME)/Library/m8r
+M8R_SRC_DIR = ../../library
 
 HEADERS = 
 

@@ -65,7 +65,7 @@ public:
         : m_intervalsPerSecond(intervalsPerSecond)
         , m_minutes(0)
         , m_seconds(0)
-        , m_intervalsRemaining(intervalsPerSecond)
+        , m_intervalCount(0)
     {
     }
     
@@ -84,7 +84,7 @@ private:
     uint16_t m_intervalsPerSecond;
     uint32_t m_minutes;
     uint8_t m_seconds;
-    uint16_t m_intervalsRemaining;
+    uint16_t m_intervalCount;
 };
 
 template <class Timer>
@@ -94,7 +94,6 @@ public:
         : RTCBase(intervalsPerSecond)
         , m_timer(&handleISR, this)
     {
-NOTE(count / 10);
         m_timer.setTimerClockMode(prescaler);
         m_timer.setOutputCompareA(count);
         m_timer.setWaveGenMode(TimerWaveGenCTC);

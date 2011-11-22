@@ -326,7 +326,6 @@ class Timer1 : public TimerBase<uint16_t,
 public:
     Timer1(ISRCallback isrCallback = 0, void* data = 0)
     {
-NOTE(5);
         ASSERT(!m_isrCallback, AssertSingleTimer1);
         m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
         m_data = data;
