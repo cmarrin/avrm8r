@@ -60,10 +60,8 @@ public:
     { }
     
 protected:
-    virtual void setClockBit() = 0;
-    virtual void clearClockBit() = 0;
-    virtual void setDataBit() = 0;
-    virtual void clearDataBit() = 0;
+    virtual void toggleClockBit(bool positive) = 0;
+    virtual void setDataBit(bool value) = 0;
     
     void send(uint8_t v, uint8_t n);
     
@@ -91,10 +89,25 @@ public:
             m_clockPort.setPortBit(ClockBit);
     }
     
-    virtual void setClockBit() { m_clockPort.setPortBit(ClockBit); }
-    virtual void clearClockBit() { m_clockPort.clearPortBit(ClockBit); }
-    virtual void setDataBit() { m_dataPort.setPortBit(DataBit); }
-    virtual void clearDataBit() { m_dataPort.clearPortBit(DataBit); }
+    virtual void toggleClockBit(bool positive)
+    {
+        if (positive) {
+            m_clockPort.setPortBit(ClockBit);
+            m_clockPort.clearPortBit(ClockBit);
+        } else {
+            m_clockPort.clearPortBit(ClockBit);
+            m_clockPort.setPortBit(ClockBit);
+        }
+            
+    }
+    
+    virtual void setDataBit(bool value)
+    {
+        if (value)
+            m_dataPort.setPortBit(DataBit);
+        else
+            m_dataPort.clearPortBit(DataBit);
+    }
 
 protected:
     uint8_t patternFromChar(uint8_t c) const;

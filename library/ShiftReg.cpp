@@ -70,21 +70,10 @@ ShiftRegBase::send(uint8_t v, uint8_t n)
 {        
     for (uint8_t mask = m_msbFirst ? 0x80 : 1; n > 0; --n) {
         // set data bit
-        uint8_t tmp = ((uint8_t) v) & ((uint8_t) mask);
-        if (tmp)
-            setDataBit();
-        else
-            clearDataBit();
+        setDataBit(((uint8_t) v) & ((uint8_t) mask));
 
         // clock in data
-        if (m_rising) {
-            setClockBit();
-            clearClockBit();
-        }
-        else {
-            clearClockBit();
-            setClockBit();
-        }
+        toggleClockBit(m_rising);
 
         mask = m_msbFirst ? (mask >> 1) : (mask << 1);
     }
