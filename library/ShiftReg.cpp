@@ -35,4 +35,58 @@ DAMAGE.
 
 #include "ShiftReg.h"
 
+#include <avr/pgmspace.h>
+
+extern const uint8_t g_charTable[] PROGMEM;
+const uint8_t g_charTable[] =
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+extern const uint8_t g_numTable[] PROGMEM;
+const uint8_t g_numTable[] = 
+    { 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f };
+
 using namespace m8r;
+
+uint8_t
+ShiftRegBase::patternFromChar(uint8_t c) const
+{
+    if (c < '0')
+        return 0;
+    if (c <= '9')
+        return pgm_read_byte_near(&(g_numTable[c-'0']));
+    if (c < 'A')
+        return 0;
+    if (c <= 'Z')
+        return pgm_read_byte_near(&(g_charTable[c-'A']));
+    if (c < 'a')
+        return 0;
+    if (c <= 'z')
+        return pgm_read_byte_near(&(g_charTable[c-'a']));
+    return 0;
+}
+
+void
+ShiftRegBase::send(uint8_t v, uint8_t n)
+{        
+    for (uint8_t mask = m_msbFirst ? 0x80 : 1; n > 0; --n) {
+        // set data bit
+        uint8_t tmp = ((uint8_t) v) & ((uint8_t) mask);
+        if (tmp)
+            setDataBit();
+        else
+            clearDataBit();
+
+        // clock in data
+        if (m_rising) {
+            setClockBit();
+            clearClockBit();
+        }
+        else {
+            clearClockBit();
+            setClockBit();
+        }
+
+        mask = m_msbFirst ? (mask >> 1) : (mask << 1);
+    }
+}
+    	

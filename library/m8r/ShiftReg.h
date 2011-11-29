@@ -52,12 +52,36 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class ShiftRegBase {
+public:
+    ShiftRegBase(bool rising, bool msbFirst)
+        : m_rising(rising)
+        , m_msbFirst(msbFirst)
+    { }
+    
+protected:
+    virtual void setClockBit() = 0;
+    virtual void clearClockBit() = 0;
+    virtual void setDataBit() = 0;
+    virtual void clearDataBit() = 0;
+    
+    void send(uint8_t v, uint8_t n);
+    
+    void sendChar(uint8_t c, bool dp = false)
+    {
+        send(patternFromChar(c) | (dp ? 0x80 : 0), 8);
+    }
+
+    uint8_t patternFromChar(uint8_t c) const;
+
+	bool m_rising, m_msbFirst;
+};
+
 template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit>
-class ShiftReg {
+class ShiftReg : public ShiftRegBase {
 public:
 	ShiftReg(bool rising, bool msbFirst)
-    : m_rising(rising)
-    , m_msbFirst(msbFirst)
+        : ShiftRegBase(rising, msbFirst)
     {
         m_clockPort.setBitOutput(ClockBit);
         m_dataPort.setBitOutput(DataBit);
@@ -67,34 +91,17 @@ public:
             m_clockPort.setPortBit(ClockBit);
     }
     
-    void send(uint8_t v, uint8_t n)
-    {        
-        for (uint8_t mask = m_msbFirst ? 0x80 : 1; n > 0; --n) {
-            // set data bit
-            uint8_t tmp = ((uint8_t) v) & ((uint8_t) mask);
-            if (tmp)
-                m_dataPort.setPortBit(DataBit);
-            else
-                m_dataPort.clearPortBit(DataBit);
+    virtual void setClockBit() { m_clockPort.setPortBit(ClockBit); }
+    virtual void clearClockBit() { m_clockPort.clearPortBit(ClockBit); }
+    virtual void setDataBit() { m_dataPort.setPortBit(DataBit); }
+    virtual void clearDataBit() { m_dataPort.clearPortBit(DataBit); }
 
-            // clock in data
-            if (m_rising) {
-                m_clockPort.setPortBit(ClockBit);
-                m_clockPort.clearPortBit(ClockBit);
-            }
-            else {
-                m_clockPort.clearPortBit(ClockBit);
-                m_clockPort.setPortBit(ClockBit);
-            }
+protected:
+    uint8_t patternFromChar(uint8_t c) const;
 
-            mask = m_msbFirst ? (mask >> 1) : (mask << 1);
-        }
-    }
-    	
 private:    
     ClockPort m_clockPort;
     DataPort m_dataPort;
-	bool m_rising, m_msbFirst;
 };
 
 }

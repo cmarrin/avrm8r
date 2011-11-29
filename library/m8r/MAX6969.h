@@ -50,14 +50,9 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class MAX6969Base {
-protected:
-    uint8_t patternFromChar(uint8_t c) const;
-};
-
 template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit,
           class LatchPort, uint8_t LatchBit, class EnablePort, uint8_t EnableBit>
-class MAX6969 : public ShiftReg<ClockPort, ClockBit, DataPort, DataBit>, public MAX6969Base {
+class MAX6969 : public ShiftReg<ClockPort, ClockBit, DataPort, DataBit> {
 public:
     MAX6969()
     : ShiftReg<ClockPort, ClockBit, DataPort, DataBit>(true, true)
@@ -90,7 +85,7 @@ public:
     
     void setChar(uint8_t c, bool dp = false) _INLINE_
     {
-        send(patternFromChar(c) | (dp ? 0x80 : 0), 8);
+        ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::sendChar(c, dp);
     }
     
 private:

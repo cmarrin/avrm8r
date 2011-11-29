@@ -59,7 +59,6 @@ LIB_SRC = \
     Animator.cpp \
     Application.cpp \
     ENC28J60.cpp \
-    MAX6969.cpp \
     Network.cpp \
     RTC.cpp \
     ShiftReg.cpp \
