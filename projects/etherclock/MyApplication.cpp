@@ -42,6 +42,7 @@ DAMAGE.
 #include "BlinkErrorReporter.h"
 #include "ENC28J60.h"
 #include "MAX6969.h"
+#include "Network.h"
 #include "RTC.h"
 
 //
@@ -78,6 +79,7 @@ using namespace m8r;
 #define ErrorBit 1
 
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
+const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 
 class MyApp {    
 public:
@@ -99,6 +101,7 @@ public:
     Animator<Timer0> m_animator;
     RTC<Timer1> m_clock;
     ENC28J60 m_ethernet;
+    Network<ENC28J60> m_network;
     Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
@@ -107,7 +110,6 @@ public:
     uint8_t m_currentBrightness;
     uint8_t m_brightnessCount;
     
-    uint8_t m_animationValue;
     uint8_t m_currentColonBrightness;
     uint8_t m_colonBrightnessCount;
     
@@ -127,13 +129,13 @@ MyApp::MyApp()
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
+    , m_network(&m_ethernet)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)
     , m_lastAverageLightSensorValue(0)
     , m_currentBrightness(0xff)
     , m_brightnessCount(0)
-    , m_animationValue(0)
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
     , m_needBrightnessUpdate(false)
@@ -157,6 +159,11 @@ MyApp::MyApp()
     m_adc.startConversion();
     
     m_animator.start(150);
+    
+    // Testing: Set time
+    m_clock.setTicks(1322119620);
+    
+    // Test ethernet
 }
 
 void
@@ -171,11 +178,14 @@ Application::handleISR(EventType type, void*)
             g_app.m_needBrightnessUpdate = true;
             break;
         case EV_ANIMATOR_VALUE_CHANGED_EVENT: {
-            g_app.m_animationValue = g_app.m_animator.currentValue();
-            uint16_t b = AnimatorBase::sineValue(g_app.m_animationValue);
-            b = b * 4 / 5 + 50;
-            b = (b * g_app.m_currentBrightness) >> 8;
-            g_app.m_currentColonBrightness = b;
+            uint8_t value = g_app.m_animator.currentValue();
+            if (value > 127)
+                value = 255 - value;
+            value <<=+ 1;
+            //uint16_t b = AnimatorBase::sineValue(value);
+            //b = b * 4 / 5 + 50;
+            //b = (b * g_app.m_currentBrightness) >> 8;
+            //g_app.m_currentColonBrightness = value;
             break;
         }
         case EV_TIMER_EVENT:
@@ -200,11 +210,10 @@ Application::handleIdle()
         g_app.m_clock.currentTime(t);
         
         // FIXME: This is bogus, just for testing
-        uint8_t c = (t.seconds % 10) + '0';
-        g_app.m_shiftReg.setChar(c, false);
-        g_app.m_shiftReg.setChar(c, false);
-        g_app.m_shiftReg.setChar(c, false);
-        g_app.m_shiftReg.setChar(c, false);
+        g_app.m_shiftReg.setChar((t.hours / 10) + '0', false);
+        g_app.m_shiftReg.setChar((t.hours % 10) + '0', false);
+        g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
+        g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
         g_app.m_shiftReg.latch();
     }
     
@@ -226,8 +235,10 @@ Application::handleIdle()
                 
             g_app.m_lastAverageLightSensorValue = g_app.m_averageLightSensorValue;
             g_app.m_currentBrightness = MyApp::m_brightnessTable[g_app.m_averageLightSensorValue >> 5];
+            g_app.m_currentColonBrightness = g_app.m_currentBrightness;
         }
         
+        cli();
         if (g_app.m_colonBrightnessCount++ == g_app.m_currentColonBrightness) {
             g_app.m_colonPort.setPortBit(0);
             g_app.m_colonPort.setPortBit(1);
@@ -237,6 +248,7 @@ Application::handleIdle()
             g_app.m_colonPort.clearPortBit(0);
             g_app.m_colonPort.clearPortBit(1);
         }
+        sei();
     }
 }
 

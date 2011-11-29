@@ -82,6 +82,10 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
+		49BBE057147E8B4400DC43EC /* Network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cpp; sourceTree = "<group>"; };
+		49BBE059147E8B5900DC43EC /* Network.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
+		49BBE05A147E8DDC00DC43EC /* NetworkInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkInterface.h; sourceTree = "<group>"; };
+		49BBE05C1485252700DC43EC /* MAX6969.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MAX6969.cpp; path = ../../library/MAX6969.cpp; sourceTree = "<group>"; };
 		49EE68BD147B188700FA3113 /* create_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = create_event_enums.c; path = ../../library/create_event_enums.c; sourceTree = "<group>"; };
 		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
 		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
@@ -91,7 +95,6 @@
 		49EE68C3147B18C000FA3113 /* ENC28J60.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ENC28J60.cpp; path = ../../library/ENC28J60.cpp; sourceTree = "<group>"; };
 		49EE68C6147B18C000FA3113 /* m8r.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = m8r.h; path = ../../library/m8r.h; sourceTree = "<group>"; };
 		49EE68C7147B18C000FA3113 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../../library/main.c; sourceTree = "<group>"; };
-		49EE68C8147B18C000FA3113 /* MAX6969.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MAX6969.cpp; path = ../../library/MAX6969.cpp; sourceTree = "<group>"; };
 		49EE68C9147B18C000FA3113 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RTC.cpp; path = ../../library/RTC.cpp; sourceTree = "<group>"; };
 		49EE68CA147B18C000FA3113 /* ShiftReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ShiftReg.cpp; path = ../../library/ShiftReg.cpp; sourceTree = "<group>"; };
 		49EE68CB147B18C000FA3113 /* STP08CDC596.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = STP08CDC596.cpp; path = ../../library/STP08CDC596.cpp; sourceTree = "<group>"; };
@@ -160,7 +163,10 @@
 				49EE68C3147B18C000FA3113 /* ENC28J60.cpp */,
 				49EE68D3147B18DF00FA3113 /* ENC28J60.h */,
 				49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */,
-				49EE68C8147B18C000FA3113 /* MAX6969.cpp */,
+				49BBE057147E8B4400DC43EC /* Network.cpp */,
+				49BBE059147E8B5900DC43EC /* Network.h */,
+				49BBE05A147E8DDC00DC43EC /* NetworkInterface.h */,
+				49BBE05C1485252700DC43EC /* MAX6969.cpp */,
 				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
 				49EE68C9147B18C000FA3113 /* RTC.cpp */,
 				49EE68D8147B18DF00FA3113 /* RTC.h */,

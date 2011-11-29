@@ -45,6 +45,8 @@ LIB_HEADERS = \
     ENC28J60.h \
     EventSourceEnums.h \
     MAX6969.h \
+    Network.h \
+    NetworkInterface.h \
     RTC.h \
     ShiftReg.h \
     SPI.h \
@@ -58,6 +60,7 @@ LIB_SRC = \
     Application.cpp \
     ENC28J60.cpp \
     MAX6969.cpp \
+    Network.cpp \
     RTC.cpp \
     ShiftReg.cpp \
     Timer.cpp \

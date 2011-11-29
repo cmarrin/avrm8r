@@ -39,7 +39,7 @@ DAMAGE.
 #include <avr/pgmspace.h>
 
 const uint32_t minutesPerDay = 24UL * 60UL;
-const uint16_t epochYear = 2000;
+const uint16_t epochYear = 1970;
 const uint8_t epochDayOfWeek = 6; // Saturday
 
 extern const uint8_t mygMonthDayTable[] PROGMEM;

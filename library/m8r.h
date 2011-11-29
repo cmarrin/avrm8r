@@ -69,6 +69,7 @@ enum ErrorType {
     AssertTooManyEventAllocs = 0x3e,
     AssertOutOfMem = 0x3f,
     AssertPureVirtual = 0x40,
+    AssertDeleteNotSupported = 0x41,
 };
 
 enum Ports {

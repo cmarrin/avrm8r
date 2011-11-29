@@ -307,6 +307,8 @@ public:
     bool linkup();
     
     uint8_t chipRev();
+    
+    void phyWrite(uint8_t address, uint16_t data);
 
 protected:
     void write(uint8_t address, uint8_t data)
@@ -329,8 +331,6 @@ private:
         return readOp(ENC28J60_READ_CTRL_REG, address);
     }
     
-    void phyWrite(uint8_t address, uint16_t data);
-
     SPI m_spi;
     uint8_t m_bank;
     int16_t m_nextPacketPtr;

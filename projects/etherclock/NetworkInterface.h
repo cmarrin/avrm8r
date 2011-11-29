@@ -1,7 +1,10 @@
 //
-//  Application.cpp
+//  NetworkInterface.h
+//  etherclock
 //
-//  Created by Chris Marrin on 3/19/2011.
+//  Created by Chris Marrin on 11/24/11.
+//  Copyright (c) 2011 Apple. All rights reserved.
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,43 +36,45 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <string.h>
+#pragma once
 
-#include "Application.h"
+#include "m8r.h"
 
-using namespace m8r;
+namespace m8r {
 
-void
-Application::run()
-{
-    while (1) {
-        handleIdle();
-        wait();
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: NetworkInterface
+//
+//  Abstract interface for network hardware
+//
+//////////////////////////////////////////////////////////////////////////////
+
+class NetworkInterface {
+public:
+    NetworkInterface(const uint8_t macaddr[6])
+    {
+        m_macaddr[0] = macaddr[0];
+        m_macaddr[1] = macaddr[1];
+        m_macaddr[2] = macaddr[2];
+        m_macaddr[3] = macaddr[3];
+        m_macaddr[4] = macaddr[4];
+        m_macaddr[5] = macaddr[5];
     }
-}
+    
+    virtual ~NetworkInterface() { }
+    
+    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
+    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
+    virtual bool hasRxPkt(void) = 0;
+    virtual bool linkup() = 0;
+    
+    virtual void phyWrite(uint8_t address, uint16_t data) = 0;
+    
+    const uint8_t* macaddr() const { return m_macaddr; }
+    
+private:
+    uint8_t m_macaddr[6];
+};
 
-void operator delete(void * ptr) 
-{ 
-  FATAL(AssertDeleteNotSupported);
 }
-
-extern "C" {
-void __cxa_pure_virtual()
-{
-    FATAL(AssertPureVirtual);
-}
-
-#ifdef DEBUG
-void _showErrorCondition(uint8_t code, ErrorConditionType condition)
-{
-    Application::handleErrorCondition((ErrorType) code, condition);
-}
-#endif
-
-void _main() __attribute__((noreturn));
-void _main()
-{
-    Application::run();
-}
-}
-

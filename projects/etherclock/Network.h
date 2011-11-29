@@ -1,7 +1,9 @@
 //
-//  Application.cpp
+//  Network.h
+//  etherclock
 //
-//  Created by Chris Marrin on 3/19/2011.
+//  Created by Chris Marrin on 11/24/11.
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,43 +35,36 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <string.h>
+#pragma once
 
-#include "Application.h"
+#include "m8r.h"
 
-using namespace m8r;
+namespace m8r {
 
-void
-Application::run()
-{
-    while (1) {
-        handleIdle();
-        wait();
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: Network
+//
+//  Core networking. ARP, IP, TCP and UDP server
+//
+//////////////////////////////////////////////////////////////////////////////
+
+class NetworkBase {
+public:
+
+private:
+};
+
+template <class NetworkInterface>
+class Network : public NetworkBase {
+public:
+    Network(NetworkInterface* interface)
+        : m_interface(interface)
+    {
     }
-}
+    
+private:
+    NetworkInterface* m_interface;
+};
 
-void operator delete(void * ptr) 
-{ 
-  FATAL(AssertDeleteNotSupported);
 }
-
-extern "C" {
-void __cxa_pure_virtual()
-{
-    FATAL(AssertPureVirtual);
-}
-
-#ifdef DEBUG
-void _showErrorCondition(uint8_t code, ErrorConditionType condition)
-{
-    Application::handleErrorCondition((ErrorType) code, condition);
-}
-#endif
-
-void _main() __attribute__((noreturn));
-void _main()
-{
-    Application::run();
-}
-}
-

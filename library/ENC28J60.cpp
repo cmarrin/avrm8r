@@ -51,6 +51,7 @@ ENC28J60::ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_
 {
 	CSPASSIVE;
     
+    // Set clkout to 2 (12.5MHz)
     write(ECOCON, clockOut & 0x7);
 	
     writeOp(ENC28J60_SOFT_RESET, 0, ENC28J60_SOFT_RESET);
