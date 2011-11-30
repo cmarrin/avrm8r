@@ -38,6 +38,7 @@ DAMAGE.
 #include "ENC28J60.h"
 
 #include "Application.h"
+#include <string.h>
 
 #define CSACTIVE SPI_PORT &= ~_BV(SS_BIT)
 #define CSPASSIVE SPI_PORT |= _BV(SS_BIT)
@@ -118,6 +119,7 @@ ENC28J60::ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_
 	// do bank 3 stuff
     // write MAC address
     // NOTE: MAC address in ENC28J60 is byte-backward
+    memcpy(m_macaddr, macaddr, 6);
     write(MAADR5, macaddr[0]);
     write(MAADR4, macaddr[1]);
     write(MAADR3, macaddr[2]);

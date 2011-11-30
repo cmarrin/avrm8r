@@ -309,6 +309,8 @@ public:
     uint8_t chipRev();
     
     void phyWrite(uint8_t address, uint16_t data);
+    
+    const uint8_t* macaddr() const { return m_macaddr; }
 
 protected:
     void write(uint8_t address, uint8_t data)
@@ -334,6 +336,7 @@ private:
     SPI m_spi;
     uint8_t m_bank;
     int16_t m_nextPacketPtr;
+    uint8_t m_macaddr[6];
 };
 
 }
