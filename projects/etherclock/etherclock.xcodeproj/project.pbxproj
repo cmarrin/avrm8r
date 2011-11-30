@@ -85,7 +85,7 @@
 		49BBE057147E8B4400DC43EC /* Network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cpp; sourceTree = "<group>"; };
 		49BBE059147E8B5900DC43EC /* Network.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
 		49BBE05A147E8DDC00DC43EC /* NetworkInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkInterface.h; sourceTree = "<group>"; };
-		49EE68BD147B188700FA3113 /* create_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = create_event_enums.c; path = ../../library/create_event_enums.c; sourceTree = "<group>"; };
+		49EE68BD147B188700FA3113 /* print_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = print_event_enums.c; path = ../../library/print_event_enums.c; sourceTree = "<group>"; };
 		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
 		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
 		49EE68C0147B18C000FA3113 /* ADC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ADC.cpp; path = ../../library/ADC.cpp; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		49EE68BA147B184100FA3113 /* libm8r */ = {
 			isa = PBXGroup;
 			children = (
-				49EE68BD147B188700FA3113 /* create_event_enums.c */,
+				49EE68BD147B188700FA3113 /* print_event_enums.c */,
 				49EE68BE147B188700FA3113 /* Makefile */,
 				49EE68BF147B188700FA3113 /* shared.mk */,
 				49EE68BB147B185900FA3113 /* Source */,

@@ -97,7 +97,7 @@ CDEFS += $(if $(filter report 2, $(DEBUG)), -DDEBUG -O$(OPT), )
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
 CFLAGS = $(CDEFS)
-CFLAGS += -mmcu=$(MCU) -I.
+CFLAGS += -DMCU=$(MCU) -mmcu=$(MCU) -I.
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -finline-limit=10 -fno-inline-small-functions 
@@ -301,6 +301,11 @@ clean_list :
 	$(REMOVE) $(CSRC:.c=.d)
 	$(REMOVE) $(CPPSRC:.cpp=.d)
 	$(REMOVE) .dep/*
+    
+show_event_enums:
+	@$(CC) -E $(CFLAGS) -I$(M8R_SRC_DIR)/m8r $(M8R_SRC_DIR)/print_event_enums.c > $(BUILT_PRODUCTS_DIR)/show_event_enums.c
+	@gcc $(BUILT_PRODUCTS_DIR)/show_event_enums.c -o $(BUILT_PRODUCTS_DIR)/show_event_enums
+	$(BUILT_PRODUCTS_DIR)/show_event_enums
 
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
