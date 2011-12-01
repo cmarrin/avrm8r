@@ -51,7 +51,10 @@ LIB_HEADERS = \
     ShiftReg.h \
     SPI.h \
     STP08CDC596.h \
-    Timer.h \
+    TimerBase.h \
+    Timer0.h \
+    Timer1.h \
+    Timer2.h \
 
 LIB_SRC = \
     main.c \
@@ -62,7 +65,9 @@ LIB_SRC = \
     Network.cpp \
     RTC.cpp \
     ShiftReg.cpp \
-    Timer.cpp \
+    Timer0.cpp \
+    Timer1.cpp \
+    Timer2.cpp \
 
 LIB_OBJ := $(LIB_SRC)
 LIB_OBJ := $(LIB_OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)

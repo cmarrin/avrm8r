@@ -46,6 +46,8 @@ DAMAGE.
 #include "MAX6969.h"
 #include "Network.h"
 #include "RTC.h"
+#include "Timer0.h"
+#include "Timer1.h"
 
 //
 // Etherclock

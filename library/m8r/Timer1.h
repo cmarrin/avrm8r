@@ -1,5 +1,5 @@
 //
-//  Timer1RTC.h
+//  Timer1.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -43,64 +43,53 @@ namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: RTC
+//  Class: Timer1
 //
-//  Real time clock
-//
-//  Sets up a 1 second timer and updates time and date on each event firing
+//  16 Bit timer
 //
 //////////////////////////////////////////////////////////////////////////////
 
-struct RTCTime {
-    uint8_t seconds, minutes, hours;
-    uint8_t day, date, month;
-    uint16_t year;    
-};
-
-class RTCBase
+class Timer1 : public TimerBase<uint16_t,
+                    Reg8<_TCCR1A>,
+                    Reg8<_TCCR1B>,
+                    Reg16<_TCNT1>,
+                    Reg16<_OCR1A>,
+                    Reg16<_OCR1B>,
+                    Reg8<_TIMSK1>,
+                    Reg8<_TIFR1>,
+                    Reg8<_GTCCR> >
 {
 public:
-    RTCBase(uint16_t intervalsPerSecond) 
-        : m_intervalsPerSecond(intervalsPerSecond)
-        , m_minutes(0)
-        , m_seconds(0)
-        , m_intervalCount(0)
+    Timer1(ISRCallback isrCallback = 0, void* data = 0)
     {
+        ASSERT(!m_isrCallback, AssertSingleTimer1);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
     }
     
-    void setTicks(uint32_t t)
+    void setWaveGenMode(TimerWaveGenMode mode)
     {
-        m_minutes = t / 60;
-        m_seconds = t % 60;
+        // Map values
+        switch(mode) {
+            case TimerWaveGenCTC: mode = Timer1WaveGenCTC; break;
+            case TimerWaveGenFastPWM: mode = Timer1WaveGenFastPWM8; break;
+            case TimerWaveGenPWM_PC_OCRA: mode = Timer1WaveGenPWM_PC_OCRA; break;
+            case TimerWaveGenFastPWM_OCRA: mode = Timer1WaveGenFastPWM_OCRA; break;
+            default: break;
+        }
+                
+        m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
+        m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, Timer1WaveGenMaskB);
     }
-
-    void currentTime(RTCTime& rtc);
-
-protected:
-    static void handleISR(EventType, void*);
     
+    void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
+
+    static ISRCallback m_isrCallback;
+    static void* m_data;
+
 private:
-    uint16_t m_intervalsPerSecond;
-    uint32_t m_minutes;
-    uint8_t m_seconds;
-    uint16_t m_intervalCount;
-};
-
-template <class Timer>
-class RTC : public RTCBase {
-public:
-	RTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
-        : RTCBase(intervalsPerSecond)
-        , m_timer(&handleISR, this)
-    {
-        m_timer.setTimerClockMode(prescaler);
-        m_timer.setOutputCompareA(count);
-        m_timer.setWaveGenMode(TimerWaveGenCTC);
-        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
-    }
-    
-private:
-    Timer m_timer;
+    Reg8<_TCCR1C> m_controlPortC;
+    Reg16<_ICR1> m_inputCapPort;
 };
 
 }

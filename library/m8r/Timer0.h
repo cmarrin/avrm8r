@@ -1,7 +1,9 @@
 //
-//  Timer.cpp
+//  Timer0.h
 //
 //  Created by Chris Marrin on 3/19/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,68 +35,40 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Timer.h"
+#pragma once
 
-#include "Application.h"
-#include <avr/interrupt.h>
+#include "TimerBase.h"
 
-using namespace m8r;
+namespace m8r {
 
-ISRCallback Timer0::m_isrCallback = 0;
-void* Timer0::m_data = 0;
-ISRCallback Timer1::m_isrCallback = 0;
-void* Timer1::m_data = 0;
-ISRCallback Timer2::m_isrCallback = 0;
-void* Timer2::m_data = 0;
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: Timer0
+//
+//  8 Bit timer
+//
+//////////////////////////////////////////////////////////////////////////////
 
-// Interrupt handlers
-ISR(TIMER0_OVF_vect)
+class Timer0 : public TimerBase<uint8_t,
+                    Reg8<_TCCR0A>,
+                    Reg8<_TCCR0B>,
+                    Reg8<_TCNT0>,
+                    Reg8<_OCR0A>,
+                    Reg8<_OCR0B>,
+                    Reg8<_TIMSK0>,
+                    Reg8<_TIFR0>,
+                    Reg8<_GTCCR> >
 {
-    Timer0::m_isrCallback(EV_TIMER0_OVF, Timer0::m_data);
-}
+public:
+    Timer0(ISRCallback isrCallback = 0, void* data = 0)
+    {
+        ASSERT(!m_isrCallback, AssertSingleTimer0);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
+    }
+    
+    static ISRCallback m_isrCallback;
+    static void* m_data;
+};
 
-ISR(TIMER0_COMPA_vect)
-{
-    Timer0::m_isrCallback(EV_TIMER0_COMPA, Timer0::m_data);
 }
-
-ISR(TIMER0_COMPB_vect)
-{
-    Timer0::m_isrCallback(EV_TIMER0_COMPB, Timer0::m_data);
-}
-
-ISR(TIMER1_OVF_vect)
-{
-    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer1::m_data);
-}
-
-ISR(TIMER1_COMPA_vect)
-{
-    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer1::m_data);
-}
-
-ISR(TIMER1_COMPB_vect)
-{
-    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer1::m_data);
-}
-
-ISR(TIMER1_CAPT_vect)
-{
-    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer1::m_data);
-}
-
-ISR(TIMER2_OVF_vect)
-{
-    Timer2::m_isrCallback(EV_TIMER2_OVF, Timer2::m_data);
-}
-
-ISR(TIMER2_COMPA_vect)
-{
-    Timer2::m_isrCallback(EV_TIMER2_COMPA, Timer2::m_data);
-}
-
-ISR(TIMER2_COMPB_vect)
-{
-    Timer2::m_isrCallback(EV_TIMER2_COMPB, Timer2::m_data);
-}
-

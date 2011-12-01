@@ -1,5 +1,5 @@
 //
-//  Animator.cpp
+//  Timer1.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -33,64 +33,33 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Animator.h"
+#include "Timer1.h"
+
+#include "Application.h"
+#include <avr/interrupt.h>
 
 using namespace m8r;
 
-static uint8_t g_sineTable[ ] = { 0, 49, 90, 117, 127 };
+ISRCallback Timer1::m_isrCallback = 0;
+void* Timer1::m_data = 0;
 
-static uint8_t interpSine(uint8_t t)
+// Interrupt handlers
+ISR(TIMER1_OVF_vect)
 {
-    uint8_t i = t >> 4;
-    return (((uint16_t) (g_sineTable[i + 1] - g_sineTable[i]) * (uint16_t) (t & 0x0F)) >> 4) + g_sineTable[i];
+    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer1::m_data);
 }
 
-AnimatorBase::AnimatorBase(uint8_t startValue, uint8_t endValue)
-    : m_paused(true)
-    , m_startValue(startValue)
-    , m_endValue(endValue)
-    , m_currentValue(startValue)
+ISR(TIMER1_COMPA_vect)
 {
+    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer1::m_data);
 }
 
-void
-AnimatorBase::start(uint16_t rate)
+ISR(TIMER1_COMPB_vect)
 {
-    m_rate = rate;
-    m_count = 0;
-    m_currentValue = m_startValue;
-    resume();
-} 
-
-void
-AnimatorBase::handleISR(EventType, void* data)
-{
-    AnimatorBase* animator = (AnimatorBase*) data;
-    
-    if (animator->m_paused)
-        return;
-    
-    Application::handleISR(EV_ANIMATOR_TICK_EVENT);    
-
-    if (++animator->m_count < animator->m_rate)
-        return;
-    
-    animator->m_count = 0;
-    
-    if (animator->m_currentValue++ >= animator->m_endValue)
-        animator->m_currentValue = animator->m_startValue;
-        
-    Application::handleISR(EV_ANIMATOR_VALUE_CHANGED_EVENT);    
+    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer1::m_data);
 }
 
-uint8_t
-AnimatorBase::sineValue(uint8_t t)
+ISR(TIMER1_CAPT_vect)
 {
-    if (t < 64)
-        return interpSine(t) + 128;
-    if (t < 128)
-        return interpSine(127 - t) + 128;
-    if (t < 192)
-        return 127 - interpSine(t - 128);
-    return 127 - interpSine(255 - t);
+    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer1::m_data);
 }

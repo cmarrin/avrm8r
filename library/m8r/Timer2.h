@@ -1,5 +1,5 @@
 //
-//  Timer1RTC.h
+//  Timer2.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -43,64 +43,45 @@ namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: RTC
+//  Class: Timer2
 //
-//  Real time clock
-//
-//  Sets up a 1 second timer and updates time and date on each event firing
+//  8 Bit timer with async mode
 //
 //////////////////////////////////////////////////////////////////////////////
 
-struct RTCTime {
-    uint8_t seconds, minutes, hours;
-    uint8_t day, date, month;
-    uint16_t year;    
-};
-
-class RTCBase
+class Timer2 : public TimerBase<uint8_t,
+                    Reg8<_TCCR0A>,
+                    Reg8<_TCCR0B>,
+                    Reg8<_TCNT0>,
+                    Reg8<_OCR0A>,
+                    Reg8<_OCR0B>,
+                    Reg8<_TIMSK0>,
+                    Reg8<_TIFR0>,
+                    Reg8<_GTCCR> >
 {
 public:
-    RTCBase(uint16_t intervalsPerSecond) 
-        : m_intervalsPerSecond(intervalsPerSecond)
-        , m_minutes(0)
-        , m_seconds(0)
-        , m_intervalCount(0)
+    Timer2(ISRCallback isrCallback = 0, void* data = 0)
     {
+        ASSERT(!m_isrCallback, AssertSingleTimer2);
+        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_data = data;
     }
+        
+    void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
+    void setExtClk(bool e) { m_asyncStatusPort.setMaskedBits(Timer2ExtClk, e); }
+    void setAsync(bool e) { m_asyncStatusPort.setMaskedBits(Timer2Async, e); }
     
-    void setTicks(uint32_t t)
-    {
-        m_minutes = t / 60;
-        m_seconds = t % 60;
-    }
+    bool isTCCRABusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCCRA2Busy); }
+    bool isTCCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCCRB2Busy); }
+    bool isOCRABusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRA2Busy); }
+    bool isOCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRB2Busy); }
+    bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
 
-    void currentTime(RTCTime& rtc);
+    static ISRCallback m_isrCallback;
+    static void* m_data;
 
-protected:
-    static void handleISR(EventType, void*);
-    
 private:
-    uint16_t m_intervalsPerSecond;
-    uint32_t m_minutes;
-    uint8_t m_seconds;
-    uint16_t m_intervalCount;
-};
-
-template <class Timer>
-class RTC : public RTCBase {
-public:
-	RTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
-        : RTCBase(intervalsPerSecond)
-        , m_timer(&handleISR, this)
-    {
-        m_timer.setTimerClockMode(prescaler);
-        m_timer.setOutputCompareA(count);
-        m_timer.setWaveGenMode(TimerWaveGenCTC);
-        m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
-    }
-    
-private:
-    Timer m_timer;
+    Reg8<_ASSR> m_asyncStatusPort;
 };
 
 }
