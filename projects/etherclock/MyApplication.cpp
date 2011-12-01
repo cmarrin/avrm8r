@@ -39,7 +39,9 @@ DAMAGE.
 #include "Animator.h"
 #include "Application.h"
 #include "ADC.h"
+#ifdef DEBUG
 #include "BlinkErrorReporter.h"
+#endif
 #include "ENC28J60.h"
 #include "MAX6969.h"
 #include "Network.h"
@@ -95,7 +97,9 @@ public:
         }
     }
     
+#ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
+#endif
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     Animator<Timer0> m_animator;
@@ -255,7 +259,9 @@ Application::handleIdle()
 void
 Application::handleErrorCondition(ErrorType type, ErrorConditionType condition)
 {
+#ifdef DEBUG
     g_app.m_errorReporter.reportError(type, condition);
+#endif
 }
 
 
