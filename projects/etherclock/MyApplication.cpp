@@ -129,7 +129,7 @@ MyApp::MyApp()
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
-    , m_network(&m_ethernet)
+    , m_network(&m_ethernet, IPAddr)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)

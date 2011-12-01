@@ -41,6 +41,10 @@ DAMAGE.
 
 namespace m8r {
 
+const uint16_t PacketBufferSize = 250;
+
+enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Network
@@ -51,18 +55,43 @@ namespace m8r {
 
 class NetworkBase {
 public:
+    NetworkBase(const uint8_t ipaddr[4]);
+    
+    virtual const uint8_t* macaddr() const = 0;
+    
+    void sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port);
+    
+protected:
+    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;    
 
 private:
+    void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
+    
+    bool isMyArpPacket() const;
+    bool isMyIpPacket() const;
+    
+    void setEthernetResponseHeader();
+    void setIPResponseHeader();
+    
+    void respondToArp();
+    void respondToEcho();
+    
+    uint8_t m_ipaddr[4];
+    uint8_t m_packetBuffer[PacketBufferSize + 1];
+    uint16_t m_packetLength;
 };
 
 template <class NetworkInterface>
 class Network : public NetworkBase {
 public:
-    Network(NetworkInterface* interface)
-        : m_interface(interface)
-    {
-    }
-    
+    Network(NetworkInterface* interface, const uint8_t ipaddr[4])
+        : NetworkBase(ipaddr)
+        , m_interface(interface)
+    { }
+        
+protected:
+    virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface->sendPacket(len, packet); }
+    virtual const uint8_t* macaddr() const { return m_interface->macaddr(); }
 private:
     NetworkInterface* m_interface;
 };
