@@ -203,7 +203,7 @@ NetworkBase::respondToArp()
 }
 
 void
-NetworkBase::respondToEcho()
+NetworkBase::respondToPing()
 {
     // Assume incoming packet is an echo we are responding to, so we just have to fix it up
     setEthernetResponseHeader();
@@ -249,6 +249,24 @@ NetworkBase::sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port)
     setChecksum(&m_packetBuffer[IP_SRC_P], CHECKSUM_UDP, length);
     
     sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
+}
+
+void
+NetworkBase::handlePackets()
+{
+    uint16_t length = receivePacket(PacketBufferSize, m_packetBuffer);
+    if (!length)
+        return;
+        
+    if (isMyArpPacket())
+        respondToArp();
+    else if (isMyIpPacket()) {
+        if(m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
+            respondToPing();
+        else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V) {
+            // FIXME: Need to send this as an event
+        }
+    }
 }
 
 

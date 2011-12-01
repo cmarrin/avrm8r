@@ -62,7 +62,10 @@ public:
     void sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port);
     
 protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;    
+    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
+    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
+    
+    void handlePackets();
 
 private:
     void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
@@ -74,7 +77,7 @@ private:
     void setIPResponseHeader();
     
     void respondToArp();
-    void respondToEcho();
+    void respondToPing();
     
     uint8_t m_ipaddr[4];
     uint8_t m_packetBuffer[PacketBufferSize + 1];
@@ -91,6 +94,7 @@ public:
         
 protected:
     virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface->sendPacket(len, packet); }
+    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface->receivePacket(maxlen, packet); }
     virtual const uint8_t* macaddr() const { return m_interface->macaddr(); }
 private:
     NetworkInterface* m_interface;
