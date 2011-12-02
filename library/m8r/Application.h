@@ -63,12 +63,17 @@ static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDel
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class NetworkBase;
+
 class Application {
 public:
     static void handleErrorCondition(ErrorType, ErrorConditionType);
     static void handleISR(EventType, void* = 0);
     static void handleIdle();
     
+    static void addNetwork(NetworkBase* network);
+    static void removeNetwork(NetworkBase* network);
+        
     static void run() __attribute__((noreturn));
     
     template <uint16_t ms> static void _INLINE_ msDelay() { longDelay(longCountFromMS(ms)); }
@@ -96,6 +101,8 @@ private:
     static void wait()
     {
     }
+    
+    static NetworkBase* m_networkHead;
 };
 
 }

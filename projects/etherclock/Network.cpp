@@ -37,6 +37,7 @@ DAMAGE.
 
 #include "Network.h"
 
+#include "Application.h"
 #include "net.h"
 #include <string.h>
 
@@ -61,9 +62,12 @@ using namespace m8r;
 // http://www.netfor2.com/checksum.html
 // http://www.msc.uky.edu/ken/cs471/notes/chap3.htm
 // The RFC has also a C code example: http://www.faqs.org/rfcs/rfc1071.html
-NetworkBase::NetworkBase(const uint8_t ipaddr[4])
+NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
 {
+    memcpy(m_macaddr, macaddr, 6);
     memcpy(m_ipaddr, ipaddr, 4);
+    
+    Application::addNetwork(this);
 }
 
 const uint16_t extraChecksumLength = (ETH_HEADER_LEN + IP_HEADER_LEN) - IP_SRC_P;
@@ -127,7 +131,7 @@ NetworkBase::isMyArpPacket() const
     if (m_packetLength < ETH_HEADER_LEN + ETH_ARP_HEADER_LEN)
         return false;
 
-    if (m_packetBuffer[ETH_TYPE_H_P] != ETHTYPE_ARP_H_V || m_packetBuffer[ETH_TYPE_L_P] != ETHTYPE_ARP_L_V)
+    if (m_packetBuffer[ETH_TYPE_P] != (ETHTYPE_ARP_V >> 8) || m_packetBuffer[ETH_TYPE_P + 1] != (ETHTYPE_ARP_V & 0xff))
         return false;
     
     return memcmp(&m_packetBuffer[ETH_ARP_DST_IP_P], m_ipaddr, 4) == 0;
@@ -139,7 +143,7 @@ NetworkBase::isMyIpPacket() const
     if (m_packetLength < ETH_HEADER_LEN + IP_HEADER_LEN + UDP_HEADER_LEN)
         return false;
 
-    if (m_packetBuffer[ETH_TYPE_H_P] != ETHTYPE_IP_H_V || m_packetBuffer[ETH_TYPE_L_P] != ETHTYPE_IP_L_V)
+    if (m_packetBuffer[ETH_TYPE_P] != (ETHTYPE_IP_V >> 8) || m_packetBuffer[ETH_TYPE_P + 1] != (ETHTYPE_IP_V & 0xff))
         return false;
     
     for (uint8_t i = 0; i < 4; ++i) {
@@ -153,12 +157,10 @@ NetworkBase::isMyIpPacket() const
 void
 NetworkBase::setEthernetResponseHeader()
 {
-    // Assume packet buffer contains a packet we want to reply to
-    const uint8_t* mac = macaddr();
-    
+    // Assume packet buffer contains a packet we want to reply to    
     for (uint8_t i = 0; i < 6; ++i) {
         m_packetBuffer[ETH_DST_MAC + i] = m_packetBuffer[ETH_SRC_MAC + i];
-        m_packetBuffer[ETH_SRC_MAC + i] = mac[i];
+        m_packetBuffer[ETH_SRC_MAC + i] = m_macaddr[i];
     }
 }
 
@@ -187,11 +189,9 @@ NetworkBase::respondToArp()
     m_packetBuffer[ETH_ARP_OPCODE_H_P] = ETH_ARP_OPCODE_REPLY_H_V;
     m_packetBuffer[ETH_ARP_OPCODE_L_P] = ETH_ARP_OPCODE_REPLY_L_V;
     
-    const uint8_t* mac = macaddr();
-
     for (uint8_t i = 0; i < 6; ++i) {
         m_packetBuffer[ETH_ARP_DST_MAC_P + i] = m_packetBuffer[ETH_ARP_SRC_MAC_P + i];
-        m_packetBuffer[ETH_ARP_SRC_MAC_P + i] = mac[i];
+        m_packetBuffer[ETH_ARP_SRC_MAC_P + i] = m_macaddr[i];
     }
     i=0;
     for (uint8_t i = 0; i < 4; ++i) {

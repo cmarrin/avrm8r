@@ -23,16 +23,11 @@
 #define ETH_HEADER_LEN	14
 // values of certain bytes:
 #define ETHTYPE_ARP_V 0x0806
-#define ETHTYPE_ARP_H_V 0x08
-#define ETHTYPE_ARP_L_V 0x06
 #define ETHTYPE_IP_V  0x0800
-#define ETHTYPE_IP_H_V  0x08
-#define ETHTYPE_IP_L_V  0x00
 // byte positions in the ethernet frame:
 //
 // Ethernet type field (2bytes):
-#define ETH_TYPE_H_P 12
-#define ETH_TYPE_L_P 13
+#define ETH_TYPE_P 12
 //
 #define ETH_DST_MAC 0
 #define ETH_SRC_MAC 6
@@ -62,7 +57,6 @@
 
 // ******* IP *******
 #define IP_HEADER_LEN	20
-// ip.src
 #define IP_SRC_P 0x1a
 #define IP_DST_P 0x1e
 #define IP_HEADER_LEN_VER_P 0xe
@@ -79,8 +73,8 @@
 
 #define IP_PROTO_ICMP_V 1
 #define IP_PROTO_TCP_V 6
-// 17=0x11
 #define IP_PROTO_UDP_V 17
+
 // ******* ICMP *******
 #define ICMP_TYPE_ECHOREPLY_V 0
 #define ICMP_TYPE_ECHOREQUEST_V 8

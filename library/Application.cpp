@@ -33,19 +33,44 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include <string.h>
-
 #include "Application.h"
 
+#include "Network.h"
+#include <string.h>
+
 using namespace m8r;
+
+NetworkBase* Application::m_networkHead = 0;
 
 void
 Application::run()
 {
     while (1) {
         handleIdle();
+        
+        for (NetworkBase* network = m_networkHead; network; network = network->next())
+            network->handlePackets();
         wait();
     }
+}
+
+void
+Application::addNetwork(NetworkBase* network)
+{
+    network->setNext(m_networkHead);
+    m_networkHead = network;
+}
+    
+void
+Application::removeNetwork(NetworkBase* network)
+{
+    for (NetworkBase *prev = 0, *current = m_networkHead; current; prev = current, current = current->next())
+        if (current == network) {
+            if (prev)
+                prev->setNext(current->next());
+            else
+                m_networkHead = current->next();
+        }
 }
 
 void operator delete(void * ptr) 

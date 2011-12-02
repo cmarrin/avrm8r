@@ -310,8 +310,6 @@ public:
     
     void phyWrite(uint8_t address, uint16_t data);
     
-    const uint8_t* macaddr() const { return m_macaddr; }
-
 protected:
     void write(uint8_t address, uint8_t data)
     {
@@ -336,13 +334,12 @@ private:
     SPI m_spi;
     uint8_t m_bank;
     int16_t m_nextPacketPtr;
-    uint8_t m_macaddr[6];
 };
 
 template<ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr>
 class ENC28J60 : public ENC28J60Base {
 public:
-    ENC28J60(const uint8_t macaddr[6])
+    ENC28J60(const uint8_t macaddr[6], const uint8_t ipaddr[4])
         : ENC28J60Base(macaddr, clockOut, spcr, spsr)
     { }
 };

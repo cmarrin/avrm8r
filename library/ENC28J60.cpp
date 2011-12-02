@@ -119,7 +119,6 @@ ENC28J60Base::ENC28J60Base(const uint8_t* macaddr, ENC28J60ClockOutType clockOut
 	// do bank 3 stuff
     // write MAC address
     // NOTE: MAC address in ENC28J60 is byte-backward
-    memcpy(m_macaddr, macaddr, 6);
     write(MAADR5, macaddr[0]);
     write(MAADR4, macaddr[1]);
     write(MAADR3, macaddr[2]);
