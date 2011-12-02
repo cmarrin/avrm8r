@@ -45,7 +45,7 @@ DAMAGE.
 
 using namespace m8r;
 
-ENC28J60::ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr)
+ENC28J60Base::ENC28J60Base(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr)
     : m_spi(spcr, spsr)
     , m_bank(0xff)
     , m_nextPacketPtr(RXSTART_INIT)
@@ -141,7 +141,7 @@ ENC28J60::ENC28J60(const uint8_t* macaddr, ENC28J60ClockOutType clockOut, uint8_
 }
 
 void
-ENC28J60::sendPacket(uint16_t len, uint8_t* packet)
+ENC28J60Base::sendPacket(uint16_t len, uint8_t* packet)
 {
     // Check no transmit in progress
     while (readOp(ENC28J60_READ_CTRL_REG, ECON1) & ECON1_TXRTS) {
@@ -167,7 +167,7 @@ ENC28J60::sendPacket(uint16_t len, uint8_t* packet)
 }
 
 uint16_t
-ENC28J60::receivePacket(uint16_t maxlen, uint8_t* packet)
+ENC28J60Base::receivePacket(uint16_t maxlen, uint8_t* packet)
 {
 	if(!hasRxPkt())
 		return 0;
@@ -222,13 +222,13 @@ ENC28J60::receivePacket(uint16_t maxlen, uint8_t* packet)
 }
 
 bool
-ENC28J60::hasRxPkt(void)
+ENC28J60Base::hasRxPkt(void)
 {
 	return read(EPKTCNT);
 }
 
 bool
-ENC28J60::linkup()
+ENC28J60Base::linkup()
 {
 	// Set the right address and start the register read operation
 	write(MIREGADR, PHSTAT2);
@@ -245,7 +245,7 @@ ENC28J60::linkup()
 }
 
 uint8_t
-ENC28J60::chipRev()
+ENC28J60Base::chipRev()
 {
     uint8_t rev = read(EREVID);
     
@@ -256,7 +256,7 @@ ENC28J60::chipRev()
 }
 
 uint8_t
-ENC28J60::readOp(uint8_t op, uint8_t address)
+ENC28J60Base::readOp(uint8_t op, uint8_t address)
 {
     CSACTIVE;
     m_spi.write(op | (address & ADDR_MASK));
@@ -276,7 +276,7 @@ ENC28J60::readOp(uint8_t op, uint8_t address)
 }
 
 void
-ENC28J60::writeOp(uint8_t op, uint8_t address, uint8_t data)
+ENC28J60Base::writeOp(uint8_t op, uint8_t address, uint8_t data)
 {
     CSACTIVE;
     m_spi.write(op | (address & ADDR_MASK));
@@ -288,7 +288,7 @@ ENC28J60::writeOp(uint8_t op, uint8_t address, uint8_t data)
 }
 
 void
-ENC28J60::readBuffer(uint16_t len, uint8_t* data)
+ENC28J60Base::readBuffer(uint16_t len, uint8_t* data)
 {
     CSACTIVE;
     m_spi.write(ENC28J60_READ_BUF_MEM);
@@ -307,7 +307,7 @@ ENC28J60::readBuffer(uint16_t len, uint8_t* data)
 }
 
 void
-ENC28J60::writeBuffer(uint16_t len, uint8_t* data)
+ENC28J60Base::writeBuffer(uint16_t len, uint8_t* data)
 {
     CSACTIVE;
     m_spi.write(ENC28J60_WRITE_BUF_MEM);
@@ -323,7 +323,7 @@ ENC28J60::writeBuffer(uint16_t len, uint8_t* data)
 }
 
 void
-ENC28J60::setBank(uint8_t address)
+ENC28J60Base::setBank(uint8_t address)
 {
     if ((address & BANK_MASK) != m_bank) {
         writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_BSEL1 | ECON1_BSEL0);
@@ -333,7 +333,7 @@ ENC28J60::setBank(uint8_t address)
 }
 
 void
-ENC28J60::phyWrite(uint8_t address, uint16_t data)
+ENC28J60Base::phyWrite(uint8_t address, uint16_t data)
 {
     write(MIREGADR, address);
     write(MIWRL, data);

@@ -106,8 +106,7 @@ public:
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     Animator<Timer0> m_animator;
     RTC<Timer1> m_clock;
-    ENC28J60 m_ethernet;
-    Network<ENC28J60> m_network;
+    Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
@@ -134,8 +133,7 @@ MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
-    , m_ethernet(MacAddr, ClockOutDiv2, _BV(MSTR), _BV(SPI2X))
-    , m_network(&m_ethernet, IPAddr)
+    , m_network(MacAddr, IPAddr)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)

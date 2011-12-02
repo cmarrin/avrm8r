@@ -297,9 +297,9 @@ enum ENC28J60ClockOutType {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class ENC28J60 {
+class ENC28J60Base {
 public:
-    ENC28J60(const uint8_t macaddr[6], ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr);
+    ENC28J60Base(const uint8_t macaddr[6], ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr);
     
     void sendPacket(uint16_t len, uint8_t* packet);
     uint16_t receivePacket(uint16_t maxlen, uint8_t* packet);
@@ -337,6 +337,14 @@ private:
     uint8_t m_bank;
     int16_t m_nextPacketPtr;
     uint8_t m_macaddr[6];
+};
+
+template<ENC28J60ClockOutType clockOut, uint8_t spcr, uint8_t spsr>
+class ENC28J60 : public ENC28J60Base {
+public:
+    ENC28J60(const uint8_t macaddr[6])
+        : ENC28J60Base(macaddr, clockOut, spcr, spsr)
+    { }
 };
 
 }

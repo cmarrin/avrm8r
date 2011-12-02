@@ -87,17 +87,17 @@ private:
 template <class NetworkInterface>
 class Network : public NetworkBase {
 public:
-    Network(NetworkInterface* interface, const uint8_t ipaddr[4])
+    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4])
         : NetworkBase(ipaddr)
-        , m_interface(interface)
+        , m_interface(macaddr)
     { }
         
 protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface->sendPacket(len, packet); }
-    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface->receivePacket(maxlen, packet); }
-    virtual const uint8_t* macaddr() const { return m_interface->macaddr(); }
+    virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface.sendPacket(len, packet); }
+    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface.receivePacket(maxlen, packet); }
+    virtual const uint8_t* macaddr() const { return m_interface.macaddr(); }
 private:
-    NetworkInterface* m_interface;
+    NetworkInterface m_interface;
 };
 
 }
