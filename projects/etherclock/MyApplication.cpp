@@ -152,7 +152,7 @@ static void
 telnetCallback(SocketCallbackType type, const uint8_t* data, uint16_t length)
 {
     if (data[0] == 'T')
-        g_app.m_clock.setTicks(parseNumber(&data[1]));
+        g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
 }
 
 MyApp::MyApp()
@@ -190,9 +190,6 @@ MyApp::MyApp()
     m_adc.startConversion();
     
     m_animator.start(150);
-    
-    // Testing: Set time
-    m_clock.setTicks(1322920853);
     
     // Test ethernet
     m_socket.listen(23);
