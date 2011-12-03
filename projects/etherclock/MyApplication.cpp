@@ -165,7 +165,7 @@ MyApp::MyApp()
     m_animator.start(150);
     
     // Testing: Set time
-    m_clock.setTicks(1322119620);
+    m_clock.setTicks(1322920853);
     
     // Test ethernet
 }

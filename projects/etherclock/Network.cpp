@@ -254,8 +254,8 @@ NetworkBase::sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port)
 void
 NetworkBase::handlePackets()
 {
-    uint16_t length = receivePacket(PacketBufferSize, m_packetBuffer);
-    if (!length)
+    m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
+    if (!m_packetLength)
         return;
         
     if (isMyArpPacket())
