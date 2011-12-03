@@ -82,9 +82,6 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
-		49BBE057147E8B4400DC43EC /* Network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Network.cpp; sourceTree = "<group>"; };
-		49BBE059147E8B5900DC43EC /* Network.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
-		49BBE05A147E8DDC00DC43EC /* NetworkInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkInterface.h; sourceTree = "<group>"; };
 		49BBE06F14873F6C00DC43EC /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = ../../library/m8r/net.h; sourceTree = "<group>"; };
 		49BBE0701487C72100DC43EC /* Timer0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = ../../library/m8r/Timer0.h; sourceTree = "<group>"; };
 		49BBE0711487C72100DC43EC /* Timer1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = ../../library/m8r/Timer1.h; sourceTree = "<group>"; };
@@ -92,6 +89,8 @@
 		49BBE0761487C74C00DC43EC /* Timer0.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer0.cpp; path = ../../library/Timer0.cpp; sourceTree = "<group>"; };
 		49BBE0771487C74C00DC43EC /* Timer1.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer1.cpp; path = ../../library/Timer1.cpp; sourceTree = "<group>"; };
 		49BBE0781487C74C00DC43EC /* Timer2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Timer2.cpp; path = ../../library/Timer2.cpp; sourceTree = "<group>"; };
+		49BBE088148A6D1600DC43EC /* Network.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Network.h; path = ../../library/m8r/Network.h; sourceTree = "<group>"; };
+		49BBE089148A6D1600DC43EC /* Network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Network.cpp; path = ../../library/Network.cpp; sourceTree = "<group>"; };
 		49EE68BD147B188700FA3113 /* print_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = print_event_enums.c; path = ../../library/print_event_enums.c; sourceTree = "<group>"; };
 		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
 		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
@@ -169,10 +168,9 @@
 				49EE68C3147B18C000FA3113 /* ENC28J60.cpp */,
 				49EE68D3147B18DF00FA3113 /* ENC28J60.h */,
 				49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */,
-				49BBE057147E8B4400DC43EC /* Network.cpp */,
-				49BBE059147E8B5900DC43EC /* Network.h */,
-				49BBE05A147E8DDC00DC43EC /* NetworkInterface.h */,
 				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
+				49BBE089148A6D1600DC43EC /* Network.cpp */,
+				49BBE088148A6D1600DC43EC /* Network.h */,
 				49EE68C9147B18C000FA3113 /* RTC.cpp */,
 				49EE68D8147B18DF00FA3113 /* RTC.h */,
 				49EE68CA147B18C000FA3113 /* ShiftReg.cpp */,
