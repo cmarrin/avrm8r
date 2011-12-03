@@ -1,5 +1,5 @@
 //
-//  Network.h
+//  Socket.h
 //  etherclock
 //
 //  Created by Chris Marrin on 11/24/11.
@@ -41,73 +41,48 @@ DAMAGE.
 
 namespace m8r {
 
-const uint16_t PacketBufferSize = 250;
-
-enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
-
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Network
+//  Class: Socket
 //
-//  Core networking. ARP, IP, TCP and UDP server
+//  Network socket for UDP or TCP comm.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class Socket;
+enum SocketType { SocketUDP, SocketTCP };
 
-class NetworkBase {
+class NetworkBase;
+
+class Socket {
 public:
-    NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4]);
+    Socket(NetworkBase*, SocketType);
 
-    void sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port);
+    void listen(uint16_t port)
+    {
+        m_port = port;
+        m_listening = true;
+    }
     
-    void handlePackets();
+    void send(uint8_t ipaddr[4], uint16_t port, uint8_t* data, uint16_t length);
+    void respond(uint8_t* data, uint16_t length);
+    
+    void handlePacket();
 
-    void setNext(NetworkBase* next) { m_next = next; }
-    NetworkBase* next() const { return m_next; }
+    void setNext(Socket* next) { m_next = next; }
+    Socket* next() const { return m_next; }
+    
+    SocketType type() const { return m_type; }
+    
+    bool matches(SocketType, uint16_t port) const;
         
-    void addSocket(Socket*);
-    void removeSocket(Socket*);
-
 protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
-    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
     
 private:
-    void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
-    
-    bool isMyArpPacket() const;
-    bool isMyIpPacket() const;
-    
-    void setEthernetResponseHeader();
-    void setIPResponseHeader();
-    
-    void respondToArp();
-    void respondToPing();
-    
-    uint8_t m_ipaddr[4];
-    uint8_t m_macaddr[6];
-    uint8_t m_packetBuffer[PacketBufferSize + 1];
-    uint16_t m_packetLength;
-
-    NetworkBase* m_next;
-    Socket* m_socketHead;
-};
-
-template <class NetworkInterface>
-class Network : public NetworkBase {
-public:
-    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4])
-        : NetworkBase(macaddr, ipaddr)
-        , m_interface(macaddr, ipaddr)
-    { }
-    
-protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface.sendPacket(len, packet); }
-    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface.receivePacket(maxlen, packet); }
-    
-private:
-    NetworkInterface m_interface;
+    NetworkBase* m_network;
+    Socket* m_next;
+    SocketType m_type;
+    bool m_listening;
+    uint16_t m_port;
 };
 
 }

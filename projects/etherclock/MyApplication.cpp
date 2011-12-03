@@ -46,6 +46,7 @@ DAMAGE.
 #include "MAX6969.h"
 #include "Network.h"
 #include "RTC.h"
+#include "Socket.h"
 #include "Timer0.h"
 #include "Timer1.h"
 
@@ -107,6 +108,7 @@ public:
     Animator<Timer0> m_animator;
     RTC<Timer1> m_clock;
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
+    Socket m_socket;
     Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
@@ -134,6 +136,7 @@ MyApp::MyApp()
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr)
+    , m_socket(&m_network, SocketUDP)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)
@@ -168,6 +171,7 @@ MyApp::MyApp()
     m_clock.setTicks(1322920853);
     
     // Test ethernet
+    m_socket.listen(23);
 }
 
 void

@@ -85,26 +85,19 @@
 #define ICMP_IDENT_L_P 0x27
 #define ICMP_DATA_P 0x2a
 
+// ******* UDP and TCP *******
+#define UDP_TCP_SRC_PORT_P 0x22
+#define UDP_TCP_DST_PORT_P 0x24
+
 // ******* UDP *******
 #define UDP_HEADER_LEN	8
-//
-#define UDP_SRC_PORT_H_P 0x22
-#define UDP_SRC_PORT_L_P 0x23
-#define UDP_DST_PORT_H_P 0x24
-#define UDP_DST_PORT_L_P 0x25
-//
-#define UDP_LEN_H_P 0x26
-#define UDP_LEN_L_P 0x27
+#define UDP_LEN_P 0x26
 #define UDP_CHECKSUM_P 0x28
 #define UDP_DATA_P 0x2a
 
 // ******* TCP *******
-#define TCP_SRC_PORT_H_P 0x22
-#define TCP_SRC_PORT_L_P 0x23
-#define TCP_DST_PORT_H_P 0x24
-#define TCP_DST_PORT_L_P 0x25
 // the tcp seq number is 4 bytes 0x26-0x29
-#define TCP_SEQ_H_P 0x26
+#define TCP_SEQ_P 0x26
 #define TCP_SEQACK_H_P 0x2a
 // flags: SYN=2
 #define TCP_FLAGS_P 0x2f

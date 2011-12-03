@@ -71,8 +71,8 @@ public:
     static void handleISR(EventType, void* = 0);
     static void handleIdle();
     
-    static void addNetwork(NetworkBase* network);
-    static void removeNetwork(NetworkBase* network);
+    static void addNetwork(NetworkBase*);
+    static void removeNetwork(NetworkBase*);
         
     static void run() __attribute__((noreturn));
     

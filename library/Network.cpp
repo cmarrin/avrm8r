@@ -38,10 +38,40 @@ DAMAGE.
 #include "Network.h"
 
 #include "Application.h"
+#include "Socket.h"
 #include "net.h"
 #include <string.h>
 
 using namespace m8r;
+
+NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
+    : m_next(0)
+    , m_socketHead(0)
+{
+    memcpy(m_macaddr, macaddr, 6);
+    memcpy(m_ipaddr, ipaddr, 4);
+    
+    Application::addNetwork(this);
+}
+
+void
+NetworkBase::addSocket(Socket* socket)
+{
+    socket->setNext(m_socketHead);
+    m_socketHead = socket;
+}
+    
+void
+NetworkBase::removeSocket(Socket* socket)
+{
+    for (Socket *prev = 0, *current = m_socketHead; current; prev = current, current = current->next())
+        if (current == socket) {
+            if (prev)
+                prev->setNext(current->next());
+            else
+                m_socketHead = current->next();
+        }
+}
 
 // The Ip checksum is calculated over the ip header only starting
 // with the header length field and a total length of 20 bytes
@@ -62,19 +92,11 @@ using namespace m8r;
 // http://www.netfor2.com/checksum.html
 // http://www.msc.uky.edu/ken/cs471/notes/chap3.htm
 // The RFC has also a C code example: http://www.faqs.org/rfcs/rfc1071.html
-NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
-{
-    memcpy(m_macaddr, macaddr, 6);
-    memcpy(m_ipaddr, ipaddr, 4);
-    
-    Application::addNetwork(this);
-}
-
-const uint16_t extraChecksumLength = (ETH_HEADER_LEN + IP_HEADER_LEN) - IP_SRC_P;
-
 void
 NetworkBase::setChecksum(uint8_t *buf, ChecksumType type, uint16_t len)
 {
+    const uint16_t extraChecksumLength = (ETH_HEADER_LEN + IP_HEADER_LEN) - IP_SRC_P;
+
     uint32_t sum = 0;
     uint16_t checksumLocation;
     
@@ -234,15 +256,15 @@ NetworkBase::sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port)
     setIPResponseHeader();
     
     // Send to port of sender and use "port" as own source:
-    m_packetBuffer[UDP_DST_PORT_H_P] = m_packetBuffer[UDP_SRC_PORT_H_P];
-    m_packetBuffer[UDP_DST_PORT_L_P] = m_packetBuffer[UDP_SRC_PORT_L_P];
-    m_packetBuffer[UDP_SRC_PORT_H_P] = port >> 8;
-    m_packetBuffer[UDP_SRC_PORT_L_P] = port & 0xff;
+    m_packetBuffer[UDP_TCP_DST_PORT_P] = m_packetBuffer[UDP_TCP_SRC_PORT_P];
+    m_packetBuffer[UDP_TCP_DST_PORT_P + 1] = m_packetBuffer[UDP_TCP_SRC_PORT_P + 1];
+    m_packetBuffer[UDP_TCP_SRC_PORT_P] = port >> 8;
+    m_packetBuffer[UDP_TCP_SRC_PORT_P + 1] = port & 0xff;
     
     // Source port does not matter and is what the sender used.
     
-    m_packetBuffer[UDP_LEN_H_P] = 0;
-    m_packetBuffer[UDP_LEN_L_P] = UDP_HEADER_LEN + length;
+    m_packetBuffer[UDP_LEN_P] = 0;
+    m_packetBuffer[UDP_LEN_P + 1] = UDP_HEADER_LEN + length;
     
     memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
 
@@ -261,10 +283,26 @@ NetworkBase::handlePackets()
     if (isMyArpPacket())
         respondToArp();
     else if (isMyIpPacket()) {
-        if(m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
+        if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
             respondToPing();
-        else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V) {
-            // FIXME: Need to send this as an event
+        else {
+            SocketType socketType;
+            
+            if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V)
+                socketType = SocketUDP;
+            else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_TCP_V)
+                socketType = SocketTCP;
+            else
+                return;
+            
+            uint16_t port;
+            port = ((uint16_t) m_packetBuffer[UDP_TCP_DST_PORT_P]) << 8;
+            port |= m_packetBuffer[UDP_TCP_DST_PORT_P + 1];
+            
+            for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
+                if (socket->matches(socketType, port))
+                    socket->handlePacket();
+            }
         }
     }
 }

@@ -49,6 +49,7 @@ LIB_HEADERS = \
     NetworkInterface.h \
     RTC.h \
     ShiftReg.h \
+    Socket.h \
     SPI.h \
     STP08CDC596.h \
     TimerBase.h \
@@ -65,6 +66,7 @@ LIB_SRC = \
     Network.cpp \
     RTC.cpp \
     ShiftReg.cpp \
+    Socket.cpp \
     Timer0.cpp \
     Timer1.cpp \
     Timer2.cpp \
