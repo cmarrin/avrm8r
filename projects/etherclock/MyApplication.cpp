@@ -131,12 +131,36 @@ const int8_t Hysteresis = 2;
 
 MyApp g_app;
 
+static uint32_t parseNumber(const uint8_t* string)
+{
+    uint8_t c;
+    uint32_t n;
+    while ((c = *string++)) {
+        if (c == ' ')
+            continue;
+        if (c < '0' || c > '9')
+            break;
+            
+        n *= 10;
+        n += c - '0';
+    }
+    
+    return n;
+}
+
+static void
+telnetCallback(SocketCallbackType type, const uint8_t* data, uint16_t length)
+{
+    if (data[0] == 'T')
+        g_app.m_clock.setTicks(parseNumber(&data[1]));
+}
+
 MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr)
-    , m_socket(&m_network, SocketUDP)
+    , m_socket(&m_network, SocketUDP, telnetCallback)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)

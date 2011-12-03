@@ -53,23 +53,15 @@ namespace m8r {
 enum ErrorConditionType { ErrorConditionNote, ErrorConditionWarning, ErrorConditionFatal };
 
 enum ErrorType {
-    ErrorUser = 0x10,
-    AssertTimerEventAlloc = 0x32,
-    AssertEventAlloc = 0x33,
-    AssertNoTimerEventMgr = 0x34,
-    AssertSglTimerEventMgr = 0x35,
-    AssertNoADCEvent = 0x36,
-    AssertSingleADC = 0x37,
-    AssertNoTimer0Event = 0x38,
-    AssertSingleTimer0 = 0x39,
-    AssertNoTimer1Event = 0x3a,
-    AssertSingleTimer1 = 0x3b,
-    AssertNoTimer2Event = 0x3c,
-    AssertSingleTimer2 = 0x3d,
-    AssertTooManyEventAllocs = 0x3e,
-    AssertOutOfMem = 0x3f,
-    AssertPureVirtual = 0x40,
-    AssertDeleteNotSupported = 0x41,
+    AssertOutOfMem = 0x01,
+    AssertPureVirtual = 0x02,
+    AssertDeleteNotSupported = 0x03,
+    AssertSingleADC = 0x10,
+    AssertSingleTimer0 = 0x20,
+    AssertSingleTimer1 = 0x21,
+    AssertSingleTimer2 = 0x22,
+    AssertEthernetBadLength = 0x30,
+    ErrorUser = 0x80,
 };
 
 enum Ports {

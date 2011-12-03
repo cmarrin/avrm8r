@@ -41,12 +41,13 @@ DAMAGE.
 
 using namespace m8r;
 
-Socket::Socket(NetworkBase* network, SocketType type)
+Socket::Socket(NetworkBase* network, SocketType type, SocketPacketCallback callback)
     : m_network(network)
     , m_next(0)
     , m_type(type)
     , m_listening(false)
     , m_port(0)
+    , m_callback(callback)
 {
     m_network->addSocket(this);
 }
@@ -67,7 +68,8 @@ Socket::matches(SocketType type, uint16_t port) const
 }
 
 void
-Socket::handlePacket()
+Socket::handlePacket(SocketCallbackType type, const uint8_t* data, uint16_t length)
 {
-    NOTE(2);
+    if (m_callback)
+        m_callback(type, data, length);
 }

@@ -287,11 +287,24 @@ NetworkBase::handlePackets()
             respondToPing();
         else {
             SocketType socketType;
+            uint16_t length;
+            const uint8_t* payload;
             
-            if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V)
+            if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V) {
                 socketType = SocketUDP;
-            else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_TCP_V)
+                length = ((uint16_t) m_packetBuffer[UDP_LEN_P]) << 8;
+                length |= m_packetBuffer[UDP_LEN_P + 1];
+                ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);
+                length -= UDP_HEADER_LEN;
+                payload = &m_packetBuffer[UDP_DATA_P];
+            }
+            else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_TCP_V) {
                 socketType = SocketTCP;
+                // FIXME: Need to set the length. Do we handle split packets?
+                length = 0;
+                length |= 0;
+                payload = &m_packetBuffer[TCP_OPTIONS_P];
+            }
             else
                 return;
             
@@ -301,7 +314,7 @@ NetworkBase::handlePackets()
             
             for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
                 if (socket->matches(socketType, port))
-                    socket->handlePacket();
+                    socket->handlePacket(SocketCallbackData, payload, length);
             }
         }
     }
