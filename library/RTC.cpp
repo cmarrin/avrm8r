@@ -97,7 +97,7 @@ RTCBase::currentTime(RTCTime& rtc)
 }
 
 void
-RTCBase::handleISR(EventType, void* data)
+RTCBase::fireISR(EventType, void* data)
 {
     RTCBase* rtc = (RTCBase*) data;
     
@@ -109,9 +109,9 @@ RTCBase::handleISR(EventType, void* data)
     if (++rtc->m_seconds >= 60) {
         rtc->m_seconds = 0;
         rtc->m_minutes++;
-        Application::handleISR(EV_RTC_MINUTES_EVENT);
+        Application::fireISR(EV_RTC_MINUTES_EVENT);
     }
     
-    Application::handleISR(EV_RTC_SECONDS_EVENT);
+    Application::fireISR(EV_RTC_SECONDS_EVENT);
 }
 

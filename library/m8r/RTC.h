@@ -77,7 +77,7 @@ public:
     void currentTime(RTCTime& rtc);
 
 protected:
-    static void handleISR(EventType, void*);
+    static void fireISR(EventType, void*);
     
 private:
     uint16_t m_intervalsPerSecond;
@@ -91,7 +91,7 @@ class RTC : public RTCBase {
 public:
 	RTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
         : RTCBase(intervalsPerSecond)
-        , m_timer(&handleISR, this)
+        , m_timer(&fireISR, this)
     {
         m_timer.setTimerClockMode(prescaler);
         m_timer.setOutputCompareA(count);

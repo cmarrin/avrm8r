@@ -86,7 +86,7 @@ using namespace m8r;
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 
-class MyApp {    
+class MyApp : public Application {    
 public:
     MyApp();
     
@@ -100,6 +100,10 @@ public:
         }
     }
     
+    virtual void handleErrorCondition(ErrorType, ErrorConditionType);
+    virtual void handleISR(EventType, void* = 0);
+    virtual void handleIdle();
+
 #ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
 #endif
@@ -149,7 +153,7 @@ static uint32_t parseNumber(const uint8_t* string)
 }
 
 static void
-telnetCallback(SocketCallbackType type, const uint8_t* data, uint16_t length)
+telnetCallback(SocketEventType type, const uint8_t* data, uint16_t length)
 {
     if (data[0] == 'T')
         g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
@@ -196,7 +200,7 @@ MyApp::MyApp()
 }
 
 void
-Application::handleISR(EventType type, void*)
+MyApp::handleISR(EventType type, void*)
 {
     switch(type)
     {
@@ -230,7 +234,7 @@ Application::handleISR(EventType type, void*)
 }
 
 void
-Application::handleIdle()
+MyApp::handleIdle()
 {
     if (g_app.m_needDisplayUpdate) {
         g_app.m_needDisplayUpdate = false;
@@ -238,9 +242,18 @@ Application::handleIdle()
         RTCTime t;
         g_app.m_clock.currentTime(t);
         
-        // FIXME: This is bogus, just for testing
-        g_app.m_shiftReg.setChar((t.hours / 10) + '0', false);
-        g_app.m_shiftReg.setChar((t.hours % 10) + '0', false);
+        uint8_t hours = t.hours;
+        bool pm = false;
+        if (hours > 12) {
+            hours -= 12;
+            pm = true;
+        }
+        
+        if (hours < 10)
+            g_app.m_shiftReg.setChar(0x20, pm);
+        else
+            g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
+        g_app.m_shiftReg.setChar((hours % 10) + '0', false);
         g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
         g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
         g_app.m_shiftReg.latch();
@@ -282,7 +295,7 @@ Application::handleIdle()
 }
 
 void
-Application::handleErrorCondition(ErrorType type, ErrorConditionType condition)
+MyApp::handleErrorCondition(ErrorType type, ErrorConditionType condition)
 {
 #ifdef DEBUG
     g_app.m_errorReporter.reportError(type, condition);

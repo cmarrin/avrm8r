@@ -63,7 +63,7 @@ public:
     static uint8_t sineValue(uint8_t);
 
 protected:
-    static void handleISR(EventType, void*);
+    static void fireISR(EventType, void*);
     
 private:
     bool m_paused;
@@ -76,7 +76,7 @@ class Animator : public AnimatorBase {
 public:
 	Animator(TimerClockMode prescaler, uint16_t count, uint8_t startValue = 0, uint8_t endValue = 255)
         : AnimatorBase(startValue, endValue)
-        , m_timer(&handleISR, this)
+        , m_timer(&fireISR, this)
     {
         m_timer.setTimerClockMode(prescaler);
         m_timer.setOutputCompareA(count);

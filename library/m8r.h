@@ -56,6 +56,8 @@ enum ErrorType {
     AssertOutOfMem = 0x01,
     AssertPureVirtual = 0x02,
     AssertDeleteNotSupported = 0x03,
+    AssertSingleApp = 0x04,
+    AssertNoApp = 0x05,
     AssertSingleADC = 0x10,
     AssertSingleTimer0 = 0x20,
     AssertSingleTimer1 = 0x21,

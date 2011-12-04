@@ -115,7 +115,7 @@ ADC::convert10Bit()
 ISR(ADC_vect)
 {
     ADC::setLastConversion(ADCW);
-    Application::handleISR(EV_ADC);
+    Application::fireISR(EV_ADC);
 }
 
 

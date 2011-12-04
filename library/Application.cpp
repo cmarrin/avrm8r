@@ -40,7 +40,14 @@ DAMAGE.
 
 using namespace m8r;
 
-NetworkBase* Application::m_networkHead = 0;
+Application* Application::g_shared = 0;
+
+Application::Application()
+    : m_networkHead()
+{
+    ASSERT(!g_shared, AssertSingleApp);
+    g_shared = this;
+}
 
 void
 Application::run()
@@ -87,14 +94,14 @@ void __cxa_pure_virtual()
 #ifdef DEBUG
 void _showErrorCondition(uint8_t code, ErrorConditionType condition)
 {
-    Application::handleErrorCondition((ErrorType) code, condition);
+    Application::shared()->handleErrorCondition((ErrorType) code, condition);
 }
 #endif
 
 void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::run();
+    Application::shared()->run();
 }
 }
 

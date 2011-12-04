@@ -63,7 +63,7 @@ public:
     Timer2(ISRCallback isrCallback = 0, void* data = 0)
     {
         ASSERT(!m_isrCallback, AssertSingleTimer2);
-        m_isrCallback = isrCallback ? isrCallback : &Application::handleISR;
+        m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
         m_data = data;
     }
         

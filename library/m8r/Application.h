@@ -67,14 +67,20 @@ class NetworkBase;
 
 class Application {
 public:
-    static void handleErrorCondition(ErrorType, ErrorConditionType);
-    static void handleISR(EventType, void* = 0);
-    static void handleIdle();
+    Application();
     
-    static void addNetwork(NetworkBase*);
-    static void removeNetwork(NetworkBase*);
+    static Application* shared() { ASSERT(g_shared, AssertNoApp); return g_shared; }
+    
+    static void fireISR(EventType type, void* data = 0) { shared()->handleISR(type, data); }
+    
+    virtual void handleErrorCondition(ErrorType, ErrorConditionType) = 0;
+    virtual void handleISR(EventType, void* = 0) = 0;
+    virtual void handleIdle() = 0;
+    
+    void addNetwork(NetworkBase*);
+    void removeNetwork(NetworkBase*);
         
-    static void run() __attribute__((noreturn));
+    void run() __attribute__((noreturn));
     
     template <uint16_t ms> static void _INLINE_ msDelay() { longDelay(longCountFromMS(ms)); }
     template <uint16_t us> static void _INLINE_ usDelay() { _delay_loop_2(shortCountFromUS(us)); }
@@ -96,13 +102,16 @@ public:
             : "0" (count)
         );
     }
-    
+
+protected:
+
 private:
     static void wait()
     {
     }
     
-    static NetworkBase* m_networkHead;
+    NetworkBase* m_networkHead;
+    static Application* g_shared;
 };
 
 }

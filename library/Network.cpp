@@ -51,7 +51,7 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
     memcpy(m_macaddr, macaddr, 6);
     memcpy(m_ipaddr, ipaddr, 4);
     
-    Application::addNetwork(this);
+    Application::shared()->addNetwork(this);
 }
 
 void
@@ -314,7 +314,7 @@ NetworkBase::handlePackets()
             
             for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
                 if (socket->matches(socketType, port))
-                    socket->handlePacket(SocketCallbackData, payload, length);
+                    socket->handlePacket(SocketEventDataReceived, payload, length);
             }
         }
     }
