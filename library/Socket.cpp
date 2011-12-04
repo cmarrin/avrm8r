@@ -68,7 +68,7 @@ Socket::matches(SocketType type, uint16_t port) const
 }
 
 void
-Socket::handlePacket(SocketCallbackType type, const uint8_t* data, uint16_t length)
+Socket::handlePacket(SocketEventType type, const uint8_t* data, uint16_t length)
 {
     if (m_callback)
         m_callback(type, data, length);

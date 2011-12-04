@@ -50,9 +50,15 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 enum SocketType { SocketUDP, SocketTCP };
-enum SocketCallbackType { SocketCallbackData };
 
-typedef void (*SocketPacketCallback)(SocketCallbackType, const uint8_t* data, uint16_t length);
+enum SocketEventType {
+    SocketEventDataReceived,
+    SocketEventDataDelivered,
+    SocketEventNewConnection,
+    SocketEventRetransmit
+};
+
+typedef void (*SocketPacketCallback)(SocketEventType, const uint8_t* data, uint16_t length);
 
 class NetworkBase;
 
@@ -69,7 +75,7 @@ public:
     void send(uint8_t ipaddr[4], uint16_t port, uint8_t* data, uint16_t length);
     void respond(uint8_t* data, uint16_t length);
     
-    void handlePacket(SocketCallbackType, const uint8_t* data, uint16_t length);
+    void handlePacket(SocketEventType, const uint8_t* data, uint16_t length);
 
     void setNext(Socket* next) { m_next = next; }
     Socket* next() const { return m_next; }
