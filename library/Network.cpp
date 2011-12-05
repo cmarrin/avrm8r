@@ -51,7 +51,7 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
     memcpy(m_macaddr, macaddr, 6);
     memcpy(m_ipaddr, ipaddr, 4);
     
-    Application::shared()->addNetwork(this);
+    Application::addNetwork(this);
 }
 
 void

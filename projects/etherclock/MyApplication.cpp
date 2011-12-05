@@ -86,7 +86,7 @@ using namespace m8r;
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 
-class MyApp : public Application {    
+class MyApp {    
 public:
     MyApp();
     
@@ -100,10 +100,6 @@ public:
         }
     }
     
-    virtual void handleErrorCondition(ErrorType, ErrorConditionType);
-    virtual void handleISR(EventType, void* = 0);
-    virtual void handleIdle();
-
 #ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
 #endif
@@ -200,7 +196,7 @@ MyApp::MyApp()
 }
 
 void
-MyApp::handleISR(EventType type, void*)
+Application::handleISR(EventType type, void*)
 {
     switch(type)
     {
@@ -234,7 +230,7 @@ MyApp::handleISR(EventType type, void*)
 }
 
 void
-MyApp::handleIdle()
+Application::handleIdle()
 {
     if (g_app.m_needDisplayUpdate) {
         g_app.m_needDisplayUpdate = false;
@@ -295,7 +291,7 @@ MyApp::handleIdle()
 }
 
 void
-MyApp::handleErrorCondition(ErrorType type, ErrorConditionType condition)
+Application::handleErrorCondition(ErrorType type, ErrorConditionType condition)
 {
 #ifdef DEBUG
     g_app.m_errorReporter.reportError(type, condition);
