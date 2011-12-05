@@ -93,6 +93,10 @@
 		49BBE089148A6D1600DC43EC /* Network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Network.cpp; path = ../../library/Network.cpp; sourceTree = "<group>"; };
 		49BBE08A148A6D7F00DC43EC /* Socket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Socket.h; path = ../../library/m8r/Socket.h; sourceTree = "<group>"; };
 		49BBE08B148A6D7F00DC43EC /* Socket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = ../../library/Socket.cpp; sourceTree = "<group>"; };
+		49BBE08C148D04F200DC43EC /* TCPSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TCPSocket.h; path = ../../library/m8r/TCPSocket.h; sourceTree = "<group>"; };
+		49BBE08D148D04F300DC43EC /* UDPSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UDPSocket.h; path = ../../library/m8r/UDPSocket.h; sourceTree = "<group>"; };
+		49BBE08E148D04F400DC43EC /* TCPSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TCPSocket.cpp; path = ../../library/TCPSocket.cpp; sourceTree = "<group>"; };
+		49BBE08F148D04F500DC43EC /* UDPSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UDPSocket.cpp; path = ../../library/UDPSocket.cpp; sourceTree = "<group>"; };
 		49EE68BD147B188700FA3113 /* print_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = print_event_enums.c; path = ../../library/print_event_enums.c; sourceTree = "<group>"; };
 		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
 		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
@@ -182,6 +186,8 @@
 				49EE68DA147B18DF00FA3113 /* SPI.h */,
 				49EE68CB147B18C000FA3113 /* STP08CDC596.cpp */,
 				49EE68DB147B18DF00FA3113 /* STP08CDC596.h */,
+				49BBE08E148D04F400DC43EC /* TCPSocket.cpp */,
+				49BBE08C148D04F200DC43EC /* TCPSocket.h */,
 				49EE68DC147B18DF00FA3113 /* TimerBase.h */,
 				49BBE0761487C74C00DC43EC /* Timer0.cpp */,
 				49BBE0701487C72100DC43EC /* Timer0.h */,
@@ -189,6 +195,8 @@
 				49BBE0711487C72100DC43EC /* Timer1.h */,
 				49BBE0781487C74C00DC43EC /* Timer2.cpp */,
 				49BBE0721487C72200DC43EC /* Timer2.h */,
+				49BBE08F148D04F500DC43EC /* UDPSocket.cpp */,
+				49BBE08D148D04F300DC43EC /* UDPSocket.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";

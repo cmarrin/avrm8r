@@ -52,10 +52,12 @@ LIB_HEADERS = \
     Socket.h \
     SPI.h \
     STP08CDC596.h \
+    TCPSocket.h \
     TimerBase.h \
     Timer0.h \
     Timer1.h \
     Timer2.h \
+    UDPSocket.h \
 
 LIB_SRC = \
     main.c \
@@ -67,9 +69,11 @@ LIB_SRC = \
     RTC.cpp \
     ShiftReg.cpp \
     Socket.cpp \
+    TCPSocket.cpp \
     Timer0.cpp \
     Timer1.cpp \
     Timer2.cpp \
+    UDPSocket.cpp \
 
 LIB_OBJ := $(LIB_SRC)
 LIB_OBJ := $(LIB_OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)

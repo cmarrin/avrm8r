@@ -47,6 +47,7 @@ using namespace m8r;
 NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
     : m_next(0)
     , m_socketHead(0)
+    , m_inHandler(false)
 {
     memcpy(m_macaddr, macaddr, 6);
     memcpy(m_ipaddr, ipaddr, 4);
@@ -242,13 +243,16 @@ NetworkBase::respondToPing()
 }
 
 void
-NetworkBase::sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port)
-{    
+NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port)
+{
+    ASSERT(m_inHandler, AssertEthernetNotInHandler);
+    if (!m_inHandler)
+        return;
+        
     setEthernetResponseHeader();
     
-    // FIXME: Is this limit just so we can fit the length in a byte? What is the real limit?
-    if (length > 220)
-            length = 220;
+    if (length > PacketBufferSize - UDP_DATA_P)
+        length = PacketBufferSize - UDP_DATA_P;
 
     // Total length field in the IP header must be set:
     m_packetBuffer[IP_TOTLEN_H_P] = 0;
@@ -286,36 +290,13 @@ NetworkBase::handlePackets()
         if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
             respondToPing();
         else {
-            SocketType socketType;
-            uint16_t length;
-            const uint8_t* payload;
-            
-            if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_UDP_V) {
-                socketType = SocketUDP;
-                length = ((uint16_t) m_packetBuffer[UDP_LEN_P]) << 8;
-                length |= m_packetBuffer[UDP_LEN_P + 1];
-                ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);
-                length -= UDP_HEADER_LEN;
-                payload = &m_packetBuffer[UDP_DATA_P];
-            }
-            else if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_TCP_V) {
-                socketType = SocketTCP;
-                // FIXME: Need to set the length. Do we handle split packets?
-                length = 0;
-                length |= 0;
-                payload = &m_packetBuffer[TCP_OPTIONS_P];
-            }
-            else
-                return;
-            
-            uint16_t port;
-            port = ((uint16_t) m_packetBuffer[UDP_TCP_DST_PORT_P]) << 8;
-            port |= m_packetBuffer[UDP_TCP_DST_PORT_P + 1];
+            m_inHandler = true;
             
             for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
-                if (socket->matches(socketType, port))
-                    socket->handlePacket(SocketEventDataReceived, payload, length);
+                if (socket->handlePacket(SocketEventDataReceived, m_packetBuffer))
+                    break;
             }
+            m_inHandler = false;
         }
     }
 }

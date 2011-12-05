@@ -63,6 +63,7 @@ enum ErrorType {
     AssertSingleTimer1 = 0x21,
     AssertSingleTimer2 = 0x22,
     AssertEthernetBadLength = 0x30,
+    AssertEthernetNotInHandler = 0x31,
     ErrorUser = 0x80,
 };
 

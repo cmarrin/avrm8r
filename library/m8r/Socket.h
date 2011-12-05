@@ -45,11 +45,9 @@ namespace m8r {
 //
 //  Class: Socket
 //
-//  Network socket for UDP or TCP comm.
+//  Network socket for IP based comm.
 //
 //////////////////////////////////////////////////////////////////////////////
-
-enum SocketType { SocketUDP, SocketTCP };
 
 enum SocketEventType {
     SocketEventDataReceived,
@@ -58,41 +56,34 @@ enum SocketEventType {
     SocketEventRetransmit
 };
 
-typedef void (*SocketPacketCallback)(SocketEventType, const uint8_t* data, uint16_t length);
+class Socket;
+
+typedef void (*SocketPacketCallback)(Socket*, SocketEventType, const uint8_t* data, uint16_t length);
 
 class NetworkBase;
 
 class Socket {
 public:
-    Socket(NetworkBase*, SocketType, SocketPacketCallback);
+    Socket(NetworkBase*, SocketPacketCallback);
 
-    void listen(uint16_t port)
-    {
-        m_port = port;
-        m_listening = true;
-    }
+    void listen(uint16_t port) { m_port = port; }
     
-    void send(uint8_t ipaddr[4], uint16_t port, uint8_t* data, uint16_t length);
-    void respond(uint8_t* data, uint16_t length);
+    // Send can only be called from a handlePacket function and uses the current source address and port
+    virtual void send(const uint8_t* data, uint16_t length) = 0;
+    virtual void sendto(const uint8_t ipaddr[4], uint16_t port, const uint8_t* data, uint16_t length) = 0;
     
-    void handlePacket(SocketEventType, const uint8_t* data, uint16_t length);
+    virtual bool handlePacket(SocketEventType, const uint8_t* data) = 0;
 
     void setNext(Socket* next) { m_next = next; }
     Socket* next() const { return m_next; }
     
-    SocketType type() const { return m_type; }
-    
-    bool matches(SocketType, uint16_t port) const;
-        
 protected:
-    
-private:
-    NetworkBase* m_network;
-    Socket* m_next;
-    SocketType m_type;
-    bool m_listening;
     uint16_t m_port;
     SocketPacketCallback m_callback;
+    NetworkBase* m_network;
+    
+private:
+    Socket* m_next;
 };
 
 }

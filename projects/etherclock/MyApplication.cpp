@@ -46,9 +46,9 @@ DAMAGE.
 #include "MAX6969.h"
 #include "Network.h"
 #include "RTC.h"
-#include "Socket.h"
 #include "Timer0.h"
 #include "Timer1.h"
+#include "UDPSocket.h"
 
 //
 // Etherclock
@@ -108,7 +108,7 @@ public:
     Animator<Timer0> m_animator;
     RTC<Timer1> m_clock;
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
-    Socket m_socket;
+    UDPSocket m_socket;
     Port<D> m_colonPort;
     
     uint16_t m_accumulatedLightSensorValues;
@@ -148,11 +148,22 @@ static uint32_t parseNumber(const uint8_t* string)
     return n;
 }
 
+const char welcomeMessage[] = "Welcome to Etherclock\n> ";
+
 static void
-telnetCallback(SocketEventType type, const uint8_t* data, uint16_t length)
+telnetCallback(Socket* socket, SocketEventType type, const uint8_t* data, uint16_t length)
 {
+    static bool sentWelcome = false;
+    
     if (data[0] == 'T')
         g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
+    
+    if (!sentWelcome) {
+        socket->send((const uint8_t*) welcomeMessage, sizeof(welcomeMessage));
+        sentWelcome = true;
+    } else
+        socket->send((const uint8_t*) "> ", 2);
+
 }
 
 MyApp::MyApp()
@@ -160,7 +171,7 @@ MyApp::MyApp()
     , m_animator(TimerClockDIV64, 10) // ~50us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr)
-    , m_socket(&m_network, SocketUDP, telnetCallback)
+    , m_socket(&m_network, telnetCallback)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)

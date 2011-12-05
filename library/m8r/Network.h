@@ -59,7 +59,7 @@ class NetworkBase {
 public:
     NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4]);
 
-    void sendUdpResponse(uint8_t* data, uint16_t length, uint16_t port);
+    void sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port);
     
     void handlePackets();
 
@@ -92,6 +92,8 @@ private:
 
     NetworkBase* m_next;
     Socket* m_socketHead;
+    
+    bool m_inHandler;
 };
 
 template <class NetworkInterface>
