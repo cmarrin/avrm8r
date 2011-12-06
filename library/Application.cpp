@@ -40,13 +40,15 @@ DAMAGE.
 
 using namespace m8r;
 
-NetworkBase* Application::m_networkHead;
+NetworkBase* Application::m_networkHead = 0;
+EventCallback Application::m_eventCallback = 0;
+ErrorReporter* Application::m_errorReporter = 0;
 
 void
 Application::run()
 {
     while (1) {
-        handleIdle();
+        handleEvent(EV_IDLE);
         
         for (NetworkBase* network = m_networkHead; network; network = network->next())
             network->handlePackets();

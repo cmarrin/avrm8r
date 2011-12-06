@@ -39,6 +39,8 @@ DAMAGE.
 
 #include "m8r.h"
 
+#include "Application.h"
+
 namespace m8r {
 
 
@@ -63,13 +65,14 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 template <class ErrorPort, uint8_t ErrorBit>
-class BlinkErrorReporter {
+class BlinkErrorReporter : public ErrorReporter {
 public:
 	_NO_INLINE_ BlinkErrorReporter()
     {
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
+        Application::setErrorReporter(this);
     }
         
     void _NO_INLINE_ setError(bool error)
@@ -83,7 +86,7 @@ public:
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
     // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
-    void _NO_INLINE_ reportError(uint8_t code, ErrorConditionType condition)
+    virtual void reportError(ErrorType code, ErrorConditionType condition)
     {
         setError(false);
         Application::msDelay<500>();
@@ -96,13 +99,6 @@ public:
             Application::msDelay<1000>();
         }
     }
-    
-    // ErrorConditionHandler override
-    virtual void handleErrorCondition(ErrorType type, ErrorConditionType condition)
-    {
-        reportError(type, condition);
-    }    
-    
 private:
     void _NO_INLINE_ flicker(uint8_t num)
     {

@@ -60,7 +60,7 @@ class Timer2 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer2(ISRCallback isrCallback = 0, EventParam param = EventParam())
+    Timer2(EventCallback isrCallback = 0, EventParam param = EventParam())
     {
         ASSERT(!m_isrCallback, AssertSingleTimer2);
         m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
@@ -77,7 +77,7 @@ public:
     bool isOCRBBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2OCRB2Busy); }
     bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
 
-    static ISRCallback m_isrCallback;
+    static EventCallback m_isrCallback;
     static EventParam m_param;
 
 private:

@@ -100,6 +100,9 @@ public:
         }
     }
     
+    static void handleEvent(EventType type, EventParam);
+    static void handleIdle();
+
 #ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
 #endif
@@ -182,6 +185,8 @@ MyApp::MyApp()
     , m_colonBrightnessCount(0)
     , m_needBrightnessUpdate(false)
 {
+    Application::setEventHandler(handleEvent);
+    
     // Testing
     m_shiftReg.setChar('1', true);
     m_shiftReg.setChar('2', true);
@@ -207,10 +212,13 @@ MyApp::MyApp()
 }
 
 void
-Application::handleISR(EventType type, EventParam)
+MyApp::handleEvent(EventType type, EventParam)
 {
     switch(type)
     {
+        case EV_IDLE:
+            handleIdle();
+            break;
         case EV_ADC:
             g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
             break;
@@ -241,7 +249,7 @@ Application::handleISR(EventType type, EventParam)
 }
 
 void
-Application::handleIdle()
+MyApp::handleIdle()
 {
     if (g_app.m_needDisplayUpdate) {
         g_app.m_needDisplayUpdate = false;
@@ -300,13 +308,4 @@ Application::handleIdle()
         sei();
     }
 }
-
-void
-Application::handleErrorCondition(ErrorType type, ErrorConditionType condition)
-{
-#ifdef DEBUG
-    g_app.m_errorReporter.reportError(type, condition);
-#endif
-}
-
 

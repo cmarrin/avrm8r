@@ -58,7 +58,13 @@ static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDel
 // Event management
 typedef void* EventParam;
         
-typedef void (*ISRCallback)(EventType, EventParam);
+typedef void (*EventCallback)(EventType, EventParam);
+
+// Error handling
+class ErrorReporter {
+public:
+    virtual void reportError(ErrorType, ErrorConditionType) = 0;
+};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -74,11 +80,23 @@ class Application {
 public:
     Application();
     
-    static void fireISR(EventType type, EventParam param = EventParam()) { handleISR(type, param); }
+    static void fireISR(EventType type, EventParam param = EventParam()) { handleEvent(type, param); }
     
-    static void handleErrorCondition(ErrorType, ErrorConditionType);
-    static void handleISR(EventType, EventParam);
-    static void handleIdle();
+#ifdef DEBUG
+    static void setErrorReporter(ErrorReporter* reporter) { m_errorReporter = reporter; }
+    static void handleErrorCondition(ErrorType errorType, ErrorConditionType conditionType)
+    {
+        if (m_errorReporter)
+            m_errorReporter->reportError(errorType, conditionType);
+    }
+#endif
+    
+    static void setEventHandler(EventCallback callback) { m_eventCallback = callback; }
+    static void handleEvent(EventType type, EventParam param = 0)
+    {
+        if (m_eventCallback)
+            m_eventCallback(type, param);
+    }
     
     static void addNetwork(NetworkBase*);
     static void removeNetwork(NetworkBase*);
@@ -114,6 +132,8 @@ private:
     }
     
     static NetworkBase* m_networkHead;
+    static EventCallback m_eventCallback;
+    static ErrorReporter* m_errorReporter;
 };
 
 }

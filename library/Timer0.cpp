@@ -40,7 +40,7 @@ DAMAGE.
 
 using namespace m8r;
 
-ISRCallback Timer0::m_isrCallback = 0;
+EventCallback Timer0::m_isrCallback = 0;
 EventParam Timer0::m_param;
 
 // Interrupt handlers

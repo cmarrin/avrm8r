@@ -466,6 +466,8 @@ enum EventType {
     EV_USERE,
     EV_USERF,
     
+    EV_IDLE,
+    
     EV_LAST,
 };
 
@@ -865,6 +867,7 @@ const char* g_eventNames[] = {
     "EV_USERD",
     "EV_USERE",
     "EV_USERF",
+    "EV_IDLE_EVENT",
 };
 
 #endif
