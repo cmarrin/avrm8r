@@ -36,7 +36,6 @@ DAMAGE.
 */
 
 #include "m8r.h"
-#include "Animator.h"
 #include "Application.h"
 #include "ADC.h"
 #ifdef DEBUG
@@ -49,6 +48,7 @@ DAMAGE.
 #include "RTC.h"
 #include "Timer0.h"
 #include "Timer1.h"
+#include "TimerEventMgr.h"
 #include "UDPSocket.h"
 
 //
@@ -101,8 +101,6 @@ public:
         }
     }
     
-    void handleIdle();
-    
     // EventListener override
     virtual void handleEvent(EventType type, EventParam);
 
@@ -111,7 +109,7 @@ public:
 #endif
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
-    Animator<Timer0> m_animator;
+    TimerEventMgr<Timer0> m_timerEventMgr;
     RTC<Timer1> m_clock;
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     UDPSocket m_socket;
@@ -125,9 +123,6 @@ public:
     
     uint8_t m_currentColonBrightness;
     uint8_t m_colonBrightnessCount;
-    
-    bool m_needBrightnessUpdate;
-    bool m_needDisplayUpdate;
     
     static uint8_t m_brightnessTable[8];
 };
@@ -174,7 +169,7 @@ telnetCallback(Socket* socket, SocketEventType type, const uint8_t* data, uint16
 
 MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
-    , m_animator(TimerClockDIV64, 10) // ~50us timer
+    , m_timerEventMgr(TimerClockDIV64, 195) // ~100us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr)
     , m_socket(&m_network, telnetCallback)
@@ -186,7 +181,6 @@ MyApp::MyApp()
     , m_brightnessCount(0)
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
-    , m_needBrightnessUpdate(false)
 {
     // Testing
     m_shiftReg.setChar('1', true);
@@ -206,8 +200,6 @@ MyApp::MyApp()
     sei();
     m_adc.startConversion();
     
-    m_animator.start(150);
-    
     // Test ethernet
     m_socket.listen(23);
 }
@@ -217,96 +209,63 @@ MyApp::handleEvent(EventType type, EventParam)
 {
     switch(type)
     {
-        case EV_IDLE:
-            handleIdle();
-            break;
         case EV_ADC:
             g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
             break;
-        case EV_ANIMATOR_TICK_EVENT:
-            g_app.m_needBrightnessUpdate = true;
-            break;
-        case EV_ANIMATOR_VALUE_CHANGED_EVENT: {
-            uint8_t value = g_app.m_animator.currentValue();
-            if (value > 127)
-                value = 255 - value;
-            value <<=+ 1;
-            //uint16_t b = AnimatorBase::sineValue(value);
-            //b = b * 4 / 5 + 50;
-            //b = (b * g_app.m_currentBrightness) >> 8;
-            //g_app.m_currentColonBrightness = value;
-            break;
-        }
-        case EV_TIMER_EVENT:
+        case EV_IDLE:
+            if (g_app.m_brightnessCount++ == g_app.m_currentBrightness)
+                g_app.m_shiftReg.setOutputEnable(false);
+
+            if (g_app.m_brightnessCount == 0) {
+                g_app.m_shiftReg.setOutputEnable(true);
+                
+                // Add some hysteresis to the brightness value
+                int8_t diff = (int16_t) g_app.m_lastAverageLightSensorValue - (int16_t) g_app.m_averageLightSensorValue;
+                if (diff < 0)
+                    diff = -diff;
+                if (diff < Hysteresis)
+                    return;
+                    
+                g_app.m_lastAverageLightSensorValue = g_app.m_averageLightSensorValue;
+                g_app.m_currentBrightness = MyApp::m_brightnessTable[g_app.m_averageLightSensorValue >> 5];
+                g_app.m_currentColonBrightness = g_app.m_currentBrightness;
+            }
+            
+            if (g_app.m_colonBrightnessCount++ == g_app.m_currentColonBrightness) {
+                g_app.m_colonPort.setPortBit(0);
+                g_app.m_colonPort.setPortBit(1);
+            }
+            
+            if (g_app.m_colonBrightnessCount == 0) {
+                g_app.m_colonPort.clearPortBit(0);
+                g_app.m_colonPort.clearPortBit(1);
+            }
             break;
         case EV_RTC_SECONDS_EVENT: {
             g_app.m_adc.startConversion();
-            g_app.m_needDisplayUpdate = true;
+
+            RTCTime t;
+            g_app.m_clock.currentTime(t);
+            
+            uint8_t hours = t.hours;
+            bool pm = false;
+            if (hours > 12) {
+                hours -= 12;
+                pm = true;
+            }
+            
+            if (hours < 10)
+                g_app.m_shiftReg.setChar(0x20, pm);
+            else
+                g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
+            g_app.m_shiftReg.setChar((hours % 10) + '0', false);
+            g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
+            g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
+            g_app.m_shiftReg.latch();
+
             break;
         }
         default:
             break;
     }
 }
-
-void
-MyApp::handleIdle()
-{
-    if (g_app.m_needDisplayUpdate) {
-        g_app.m_needDisplayUpdate = false;
-
-        RTCTime t;
-        g_app.m_clock.currentTime(t);
-        
-        uint8_t hours = t.hours;
-        bool pm = false;
-        if (hours > 12) {
-            hours -= 12;
-            pm = true;
-        }
-        
-        if (hours < 10)
-            g_app.m_shiftReg.setChar(0x20, pm);
-        else
-            g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
-        g_app.m_shiftReg.setChar((hours % 10) + '0', false);
-        g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
-        g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
-        g_app.m_shiftReg.latch();
-    }
-    
-    if (g_app.m_needBrightnessUpdate) {    
-        g_app.m_needBrightnessUpdate = false;
-        
-        if (g_app.m_brightnessCount++ == g_app.m_currentBrightness)
-            g_app.m_shiftReg.setOutputEnable(false);
-            
-        if (g_app.m_brightnessCount == 0) {
-            g_app.m_shiftReg.setOutputEnable(true);
-            
-            // Add some hysteresis to the brightness value
-            int8_t diff = (int16_t) g_app.m_lastAverageLightSensorValue - (int16_t) g_app.m_averageLightSensorValue;
-            if (diff < 0)
-                diff = -diff;
-            if (diff < Hysteresis)
-                return;
-                
-            g_app.m_lastAverageLightSensorValue = g_app.m_averageLightSensorValue;
-            g_app.m_currentBrightness = MyApp::m_brightnessTable[g_app.m_averageLightSensorValue >> 5];
-            g_app.m_currentColonBrightness = g_app.m_currentBrightness;
-        }
-        
-        cli();
-        if (g_app.m_colonBrightnessCount++ == g_app.m_currentColonBrightness) {
-            g_app.m_colonPort.setPortBit(0);
-            g_app.m_colonPort.setPortBit(1);
-        }
-        
-        if (g_app.m_colonBrightnessCount == 0) {
-            g_app.m_colonPort.clearPortBit(0);
-            g_app.m_colonPort.clearPortBit(1);
-        }
-        sei();
-    }
-}
-

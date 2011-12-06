@@ -33,105 +33,48 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "m8r/TimerEventMgr.h"
+#include "TimerEventMgr.h"
 
-#include "m8r/Event.h"
-#include "m8r/TimerEvent.h"
-#include <avr/interrupt.h>
+#include <string.h>
 
 using namespace m8r;
 
-TimerEventMgrBase* TimerEventMgrBase::m_shared = 0;
-
-TimerEventMgrBase::TimerEventMgrBase(uint16_t usPerInterval)
-    : m_head(0)
-    , m_free(0)
-    , m_usPerInterval(usPerInterval)
-    , m_currentInterval(0)
+TimerEventMgrBase::TimerEventMgrBase()
 {
-    ASSERT(!m_shared, AssertSglTimerEventMgr);
-    m_shared = this;
+    memset(m_timerCount, 0, 8 * sizeof(uint16_t));
 }
 
-uint16_t
-TimerEventMgrBase::intervalsFromMilliseconds(uint16_t ms) const
+TimerID
+TimerEventMgrBase::start(uint16_t intervals)
 {
-    uint32_t us = ((uint32_t) ms) * 1000;
-    return (us + (m_usPerInterval >> 1)) / (uint32_t) m_usPerInterval;
-}
-
-void
-TimerEventMgrBase::add(TimerEvent* event)
-{
-    uint32_t endInterval = (int32_t) event->m_intervals + m_currentInterval;
-    event->m_endInterval = endInterval;
-    
-    if (!m_head || m_head->m_endInterval >= endInterval) {
-        event->m_next = m_head;
-        m_head = event;
-        return;
-    }
-    
-    for (TimerEvent* currentEvent = m_head; ; currentEvent = currentEvent->m_next) {
-        if (currentEvent->m_next->m_endInterval >= endInterval) {
-            event->m_next = currentEvent;
-            currentEvent->m_next = event;
-            return;
-        }
-        
-        if (!currentEvent->m_next) {
-            event->m_next = 0;
-            currentEvent->m_next = event;
-            return;
+    if (!intervals)
+        intervals = 1;
+    for (uint8_t i = 0; i < 8; ++i) {
+        if (m_timerCount[i] == 0) {
+            m_timerCount[i] = intervals;
+            return i;
         }
     }
+    
+    FATAL(AssertNoEventTimers);
+    return 0;
 }
 
 void
-TimerEventMgrBase::remove(TimerEvent* event)
+TimerEventMgrBase::stop(TimerID id)
 {
-    if (event == m_head) {
-        m_head = event->m_next;
-        return;
-    }
-    
-    for (TimerEvent* currentEvent = m_head; currentEvent; currentEvent = currentEvent->m_next) {
-        if (currentEvent->m_next == event) {
-            currentEvent->m_next = event->m_next;
-            return;
-        }
-    }
+    m_timerCount[id] = 0;
 }
 
-// FIXME: There will be a lot of churn for events with an interval count of 1.
-// It will fire every time, get removed from the front of the list and then
-// readded to the front of the list. This can be optimized.
 void
-TimerEventMgrBase::handleEvent(EventType, uint8_t identifier)
+TimerEventMgrBase::fireISR(EventType type, EventParam param)
 {
-    ++m_currentInterval;
+    TimerEventMgrBase* mgr = (TimerEventMgrBase*) param;
     
-    TimerEvent* newEvents = 0;
-    
-    while (m_head) {
-        if (m_head->m_endInterval <= m_currentInterval) {
-            m_head->m_eventListener->handleEvent(m_head->m_type, m_head->m_identifier);
-            TimerEvent* nextEvent = m_head->m_next;
-            
-            if (m_head->m_mode == TimerEventRepeating) {
-                m_head->m_next = newEvents;
-                newEvents = m_head;
-            }
-            
-            m_head = nextEvent;
+    for (uint8_t i = 0; i < 8; ++i) {
+        if (mgr->m_timerCount[i]) {
+            if (--(mgr->m_timerCount[i]) == 0)
+                Application::fireISR(EV_EVENT_TIMER, (EventParam) i);
         }
-        else
-            break;
-    }
-    
-    while (newEvents) {
-        TimerEvent* event = newEvents;
-        newEvents = newEvents->m_next;
-        add(event);
     }
 }

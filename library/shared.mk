@@ -43,6 +43,7 @@ LIB_HEADERS = \
     Application.h \
     BlinkErrorReporter.h \
     ENC28J60.h \
+    EventListener.h \
     EventSourceEnums.h \
     MAX6969.h \
     Network.h \
@@ -57,6 +58,7 @@ LIB_HEADERS = \
     Timer0.h \
     Timer1.h \
     Timer2.h \
+    TimerEventMgr.h \
     UDPSocket.h \
 
 LIB_SRC = \
@@ -73,6 +75,7 @@ LIB_SRC = \
     Timer0.cpp \
     Timer1.cpp \
     Timer2.cpp \
+    TimerEventMgr.cpp \
     UDPSocket.cpp \
 
 LIB_OBJ := $(LIB_SRC)

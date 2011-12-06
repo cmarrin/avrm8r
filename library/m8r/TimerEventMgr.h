@@ -37,8 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r/EventListener.h"
-#include "m8r/Timer.h"
+#include "TimerBase.h"
 
 namespace m8r {
 
@@ -46,48 +45,30 @@ namespace m8r {
 //
 //  Class: TimerEventMgr
 //
-//  Manage list of events which fire at given intervals
+//  Manage events which fire at given intervals
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TimerEvent;
-
-class TimerEventMgrBase : public EventListener {
+class TimerEventMgrBase {
 public:
-    static TimerEventMgrBase* shared()
-    {
-        ASSERT(m_shared, AssertNoTimerEventMgr);
-        return m_shared;
-    }
-
-    void add(TimerEvent*);
-    void remove(TimerEvent*);
-
-    uint16_t intervalsFromMilliseconds(uint16_t) const;
+	TimerEventMgrBase();
     
-    uint32_t currentInterval() const { return m_currentInterval; }
-    
+    TimerID start(uint16_t intervals);
+    void stop(TimerID);
+
 protected:
-	TimerEventMgrBase(uint16_t usPerInterval);
+    static void fireISR(EventType, EventParam);
     
-    // EventListener override
-    virtual void handleEvent(EventType, uint8_t identifier);
-
 private:
-    TimerEvent* m_head;
-    TimerEvent* m_free;
-    uint16_t m_usPerInterval;
-    uint32_t m_currentInterval;
-    
-    static TimerEventMgrBase* m_shared;
+    uint16_t m_timerCount[8];
 };
 
 template <class Timer>
 class TimerEventMgr : public TimerEventMgrBase {
 public:
-	TimerEventMgr(TimerClockMode prescaler, uint16_t count, uint16_t usPerInterval)
-        : TimerEventMgrBase(usPerInterval)
-        , m_timer(this)
+	TimerEventMgr(TimerClockMode prescaler, uint16_t count)
+        : TimerEventMgrBase()
+        , m_timer(&fireISR, this)
     {
         m_timer.setTimerClockMode(prescaler);
         m_timer.setOutputCompareA(count);
