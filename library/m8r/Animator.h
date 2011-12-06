@@ -63,7 +63,7 @@ public:
     static uint8_t sineValue(uint8_t);
 
 protected:
-    static void fireISR(EventType, void*);
+    static void fireISR(EventType, EventParam);
     
 private:
     bool m_paused;

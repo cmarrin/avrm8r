@@ -55,6 +55,11 @@ const uint32_t longDelayCountMultiplier = (uint32_t) F_CPU / longInnerDelayCount
 static inline uint16_t shortCountFromUS(uint16_t us) { return (uint16_t)((shortDelayCountMultiplier * (uint32_t) us) / (uint32_t) 1000000); }
 static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDelayCountMultiplier * (uint32_t) ms) / (uint32_t) 1000); }
 
+// Event management
+typedef void* EventParam;
+        
+typedef void (*ISRCallback)(EventType, EventParam);
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application
@@ -69,10 +74,10 @@ class Application {
 public:
     Application();
     
-    static void fireISR(EventType type, void* data = 0) { handleISR(type, data); }
+    static void fireISR(EventType type, EventParam param = EventParam()) { handleISR(type, param); }
     
     static void handleErrorCondition(ErrorType, ErrorConditionType);
-    static void handleISR(EventType, void* = 0);
+    static void handleISR(EventType, EventParam);
     static void handleIdle();
     
     static void addNetwork(NetworkBase*);

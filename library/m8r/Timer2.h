@@ -60,11 +60,11 @@ class Timer2 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer2(ISRCallback isrCallback = 0, void* data = 0)
+    Timer2(ISRCallback isrCallback = 0, EventParam param = EventParam())
     {
         ASSERT(!m_isrCallback, AssertSingleTimer2);
         m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
-        m_data = data;
+        m_param = param;
     }
         
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
@@ -78,7 +78,7 @@ public:
     bool isTCNTBusy() const { return m_asyncStatusPort.isBitMaskSet(Timer2TCNT2Busy); }
 
     static ISRCallback m_isrCallback;
-    static void* m_data;
+    static EventParam m_param;
 
 private:
     Reg8<_ASSR> m_asyncStatusPort;

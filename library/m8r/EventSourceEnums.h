@@ -868,7 +868,3 @@ const char* g_eventNames[] = {
 };
 
 #endif
-
-#ifndef PRINT_ENUMS
-typedef void (*ISRCallback)(EventType, void*);
-#endif

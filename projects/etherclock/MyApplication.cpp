@@ -207,7 +207,7 @@ MyApp::MyApp()
 }
 
 void
-Application::handleISR(EventType type, void*)
+Application::handleISR(EventType type, EventParam)
 {
     switch(type)
     {

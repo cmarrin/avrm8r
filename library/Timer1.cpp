@@ -41,25 +41,25 @@ DAMAGE.
 using namespace m8r;
 
 ISRCallback Timer1::m_isrCallback = 0;
-void* Timer1::m_data = 0;
+EventParam Timer1::m_param;
 
 // Interrupt handlers
 ISR(TIMER1_OVF_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer1::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_OVF, Timer1::m_param);
 }
 
 ISR(TIMER1_COMPA_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer1::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_COMPA, Timer1::m_param);
 }
 
 ISR(TIMER1_COMPB_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer1::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_COMPB, Timer1::m_param);
 }
 
 ISR(TIMER1_CAPT_vect)
 {
-    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer1::m_data);
+    Timer1::m_isrCallback(EV_TIMER1_CAPT, Timer1::m_param);
 }

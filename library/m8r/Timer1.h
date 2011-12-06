@@ -60,11 +60,11 @@ class Timer1 : public TimerBase<uint16_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer1(ISRCallback isrCallback = 0, void* data = 0)
+    Timer1(ISRCallback isrCallback = 0, EventParam param = EventParam())
     {
         ASSERT(!m_isrCallback, AssertSingleTimer1);
         m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
-        m_data = data;
+        m_param = param;
     }
     
     void setWaveGenMode(TimerWaveGenMode mode)
@@ -85,7 +85,7 @@ public:
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
 
     static ISRCallback m_isrCallback;
-    static void* m_data;
+    static EventParam m_param;
 
 private:
     Reg8<_TCCR1C> m_controlPortC;

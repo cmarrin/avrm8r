@@ -60,15 +60,15 @@ class Timer0 : public TimerBase<uint8_t,
                     Reg8<_GTCCR> >
 {
 public:
-    Timer0(ISRCallback isrCallback = 0, void* data = 0)
+    Timer0(ISRCallback isrCallback = 0, EventParam param = EventParam())
     {
         ASSERT(!m_isrCallback, AssertSingleTimer0);
         m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
-        m_data = data;
+        m_param = param;
     }
     
     static ISRCallback m_isrCallback;
-    static void* m_data;
+    static EventParam m_param;
 };
 
 }

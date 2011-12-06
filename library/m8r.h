@@ -67,6 +67,8 @@ enum ErrorType {
     ErrorUser = 0x80,
 };
 
+typedef uint8_t TimerID;
+
 enum Ports {
 #ifdef PORTA
         A = 0x00,

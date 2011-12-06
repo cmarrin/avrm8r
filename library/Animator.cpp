@@ -63,9 +63,9 @@ AnimatorBase::start(uint16_t rate)
 } 
 
 void
-AnimatorBase::fireISR(EventType, void* data)
+AnimatorBase::fireISR(EventType, EventParam param)
 {
-    AnimatorBase* animator = (AnimatorBase*) data;
+    AnimatorBase* animator = (AnimatorBase*) param;
     
     if (animator->m_paused)
         return;

@@ -77,7 +77,7 @@ public:
     void currentTime(RTCTime& rtc);
 
 protected:
-    static void fireISR(EventType, void*);
+    static void fireISR(EventType, EventParam);
     
 private:
     uint16_t m_intervalsPerSecond;

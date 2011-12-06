@@ -97,9 +97,9 @@ RTCBase::currentTime(RTCTime& rtc)
 }
 
 void
-RTCBase::fireISR(EventType, void* data)
+RTCBase::fireISR(EventType, EventParam param)
 {
-    RTCBase* rtc = (RTCBase*) data;
+    RTCBase* rtc = (RTCBase*) param;
     
     if (++rtc->m_intervalCount < rtc->m_intervalsPerSecond)
         return;
