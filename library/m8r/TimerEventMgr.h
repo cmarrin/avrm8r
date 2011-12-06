@@ -50,13 +50,15 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class TimerEventMgrBase {
-public:
-	TimerEventMgrBase();
+    friend class Application;
     
+public:
+protected:
+	TimerEventMgrBase();
+
     TimerID start(uint16_t intervals);
     void stop(TimerID);
 
-protected:
     static void fireISR(EventType, EventParam);
     
 private:

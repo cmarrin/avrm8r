@@ -76,6 +76,7 @@ public:
 
 class EventListener;
 class NetworkBase;
+class TimerEventMgrBase;
 
 class Application {
 public:
@@ -98,6 +99,15 @@ public:
     
     static void addNetwork(NetworkBase*);
     static void removeNetwork(NetworkBase*);
+    
+    static void setTimerEventMgr(TimerEventMgrBase* mgr)
+    {
+        ASSERT(!m_timerEventMgr, AssertSingleTimerEventMgr);
+        m_timerEventMgr = mgr;
+    }
+    
+    static void startEventTimer(uint16_t count);
+    static void stopEventTimer(TimerID);
         
     static void run() __attribute__((noreturn));
     
@@ -132,6 +142,7 @@ private:
     static NetworkBase* m_networkHead;
     static EventListener* m_eventListenerHead;
     static ErrorReporter* m_errorReporter;
+    static TimerEventMgrBase* m_timerEventMgr;
 };
 
 }

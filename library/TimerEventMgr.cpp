@@ -42,6 +42,7 @@ using namespace m8r;
 TimerEventMgrBase::TimerEventMgrBase()
 {
     memset(m_timerCount, 0, 8 * sizeof(uint16_t));
+    Application::setTimerEventMgr(this);
 }
 
 TimerID

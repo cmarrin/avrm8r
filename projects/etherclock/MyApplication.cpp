@@ -68,12 +68,20 @@ DAMAGE.
 //  10 - 3.3v
 //
 // AVR Ports
+//  Port B
+//      1 - On board LED
+//      2 - ENC28J60 /CS 
+//      3 - ENC28J60 SI
+//      4 - ENC28J60 SO
+//      5 - ENC28J60 SCK
+//
 //  Port C
 //      0 - Light sensor
 //      1 - Clk
 //      2 - Data
 //      3 - Latch
 //      4 - Enable
+//      5 - Button
 //
 //  Port D
 //      0 - Colon 0

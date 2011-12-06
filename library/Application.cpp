@@ -37,6 +37,7 @@ DAMAGE.
 
 #include "EventListener.h"
 #include "Network.h"
+#include "TimerEventMgr.h"
 #include <string.h>
 
 using namespace m8r;
@@ -44,6 +45,7 @@ using namespace m8r;
 NetworkBase* Application::m_networkHead = 0;
 EventListener* Application::m_eventListenerHead = 0;
 ErrorReporter* Application::m_errorReporter = 0;
+TimerEventMgrBase* Application::m_timerEventMgr = 0;
 
 void
 Application::run()
@@ -100,6 +102,20 @@ Application::removeNetwork(NetworkBase* network)
             else
                 m_networkHead = current->next();
         }
+}
+
+void
+Application::startEventTimer(uint16_t count)
+{
+    ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
+    m_timerEventMgr->start(count);
+}
+
+void
+Application::stopEventTimer(TimerID id)
+{
+    ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
+    m_timerEventMgr->stop(id);
 }
 
 void operator delete(void * ptr) 
