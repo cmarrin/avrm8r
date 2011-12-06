@@ -43,6 +43,7 @@ DAMAGE.
 #include "BlinkErrorReporter.h"
 #endif
 #include "ENC28J60.h"
+#include "EventListener.h"
 #include "MAX6969.h"
 #include "Network.h"
 #include "RTC.h"
@@ -86,7 +87,7 @@ using namespace m8r;
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 
-class MyApp {    
+class MyApp : public EventListener {    
 public:
     MyApp();
     
@@ -100,8 +101,10 @@ public:
         }
     }
     
-    static void handleEvent(EventType type, EventParam);
-    static void handleIdle();
+    void handleIdle();
+    
+    // EventListener override
+    virtual void handleEvent(EventType type, EventParam);
 
 #ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
@@ -185,8 +188,6 @@ MyApp::MyApp()
     , m_colonBrightnessCount(0)
     , m_needBrightnessUpdate(false)
 {
-    Application::setEventHandler(handleEvent);
-    
     // Testing
     m_shiftReg.setChar('1', true);
     m_shiftReg.setChar('2', true);

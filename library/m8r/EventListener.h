@@ -37,8 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r.h"
-#include "EventSourceEnums.h"
+#include "Application.h"
 
 namespace m8r {
 
@@ -46,35 +45,24 @@ namespace m8r {
 //
 //  Class: EventListener
 //
-//  Abstract base class for event callbacks
+//  Abstract base class for event handlers
 //
 //////////////////////////////////////////////////////////////////////////////
 
 class EventListener {
 public:
-    virtual void handleEvent(EventType type, uint8_t identifier) = 0;
+    EventListener()
+    {
+        Application::addEventListener(this);
+    }
     
-private:
-};
+    virtual void handleEvent(EventType type, EventParam) = 0;
+    
+    void setNext(EventListener* next) { m_next = next; }
+    EventListener* next() const { return m_next; }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: IdleEventListener
-//
-//  Abstract base class for idle event callbacks
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class IdleEventListener {
-    friend class Application;
-    
-public:
-    IdleEventListener();
-    virtual ~IdleEventListener();
-    virtual void handleIdleEvent() = 0;
-    
 private:
-    IdleEventListener* m_next;
+    EventListener* m_next;
 };
 
 }

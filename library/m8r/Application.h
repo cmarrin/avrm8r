@@ -74,6 +74,7 @@ public:
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class EventListener;
 class NetworkBase;
 
 class Application {
@@ -91,12 +92,9 @@ public:
     }
 #endif
     
-    static void setEventHandler(EventCallback callback) { m_eventCallback = callback; }
-    static void handleEvent(EventType type, EventParam param = 0)
-    {
-        if (m_eventCallback)
-            m_eventCallback(type, param);
-    }
+    static void addEventListener(EventListener*);
+    static void removeEventListener(EventListener*);
+    static void handleEvent(EventType, EventParam = 0);
     
     static void addNetwork(NetworkBase*);
     static void removeNetwork(NetworkBase*);
@@ -132,7 +130,7 @@ private:
     }
     
     static NetworkBase* m_networkHead;
-    static EventCallback m_eventCallback;
+    static EventListener* m_eventListenerHead;
     static ErrorReporter* m_errorReporter;
 };
 

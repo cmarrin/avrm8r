@@ -35,13 +35,14 @@ DAMAGE.
 
 #include "Application.h"
 
+#include "EventListener.h"
 #include "Network.h"
 #include <string.h>
 
 using namespace m8r;
 
 NetworkBase* Application::m_networkHead = 0;
-EventCallback Application::m_eventCallback = 0;
+EventListener* Application::m_eventListenerHead = 0;
 ErrorReporter* Application::m_errorReporter = 0;
 
 void
@@ -54,6 +55,32 @@ Application::run()
             network->handlePackets();
         wait();
     }
+}
+
+void
+Application::addEventListener(EventListener* listener)
+{
+    listener->setNext(m_eventListenerHead);
+    m_eventListenerHead = listener;
+}
+
+void
+Application::removeEventListener(EventListener* listener)
+{
+    for (EventListener *prev = 0, *current = m_eventListenerHead; current; prev = current, current = current->next())
+        if (current == listener) {
+            if (prev)
+                prev->setNext(current->next());
+            else
+                m_eventListenerHead = current->next();
+        }
+}
+
+void
+Application::handleEvent(EventType type, EventParam param)
+{
+    for (EventListener* listener = m_eventListenerHead; listener; listener = listener->next())
+        listener->handleEvent(type, param);
 }
 
 void

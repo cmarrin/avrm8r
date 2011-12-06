@@ -97,6 +97,7 @@
 		49BBE08D148D04F300DC43EC /* UDPSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UDPSocket.h; path = ../../library/m8r/UDPSocket.h; sourceTree = "<group>"; };
 		49BBE08E148D04F400DC43EC /* TCPSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TCPSocket.cpp; path = ../../library/TCPSocket.cpp; sourceTree = "<group>"; };
 		49BBE08F148D04F500DC43EC /* UDPSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UDPSocket.cpp; path = ../../library/UDPSocket.cpp; sourceTree = "<group>"; };
+		49BBE090148E552C00DC43EC /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = ../../library/m8r/EventListener.h; sourceTree = "<group>"; };
 		49EE68BD147B188700FA3113 /* print_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = print_event_enums.c; path = ../../library/print_event_enums.c; sourceTree = "<group>"; };
 		49EE68BE147B188700FA3113 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../library/Makefile; sourceTree = "<group>"; };
 		49EE68BF147B188700FA3113 /* shared.mk */ = {isa = PBXFileReference; lastKnownFileType = text; name = shared.mk; path = ../../library/shared.mk; sourceTree = "<group>"; };
@@ -173,6 +174,7 @@
 				49EE68D2147B18DF00FA3113 /* BlinkErrorReporter.h */,
 				49EE68C3147B18C000FA3113 /* ENC28J60.cpp */,
 				49EE68D3147B18DF00FA3113 /* ENC28J60.h */,
+				49BBE090148E552C00DC43EC /* EventListener.h */,
 				49EE68D6147B18DF00FA3113 /* EventSourceEnums.h */,
 				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
 				49BBE089148A6D1600DC43EC /* Network.cpp */,
