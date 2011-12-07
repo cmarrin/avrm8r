@@ -104,11 +104,11 @@ Application::removeNetwork(NetworkBase* network)
         }
 }
 
-void
+TimerID
 Application::startEventTimer(uint16_t count)
 {
     ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
-    m_timerEventMgr->start(count);
+    return m_timerEventMgr->start(count);
 }
 
 void

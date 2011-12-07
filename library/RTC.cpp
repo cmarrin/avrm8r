@@ -1,5 +1,5 @@
 //
-//  Timer1RTC.cpp
+//  RTC.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -109,9 +109,9 @@ RTCBase::fireISR(EventType, EventParam param)
     if (++rtc->m_seconds >= 60) {
         rtc->m_seconds = 0;
         rtc->m_minutes++;
-        Application::fireISR(EV_RTC_MINUTES_EVENT);
+        Application::fireISR(EV_RTC_MINUTES);
     }
     
-    Application::fireISR(EV_RTC_SECONDS_EVENT);
+    Application::fireISR(EV_RTC_SECONDS);
 }
 

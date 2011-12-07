@@ -42,6 +42,7 @@ LIB_HEADERS = \
     Animator.h \
     Application.h \
     BlinkErrorReporter.h \
+    Button.h \
     ENC28J60.h \
     EventListener.h \
     EventSourceEnums.h \
@@ -66,6 +67,7 @@ LIB_SRC = \
     ADC.cpp \
     Animator.cpp \
     Application.cpp \
+    Button.cpp \
     ENC28J60.cpp \
     Network.cpp \
     RTC.cpp \

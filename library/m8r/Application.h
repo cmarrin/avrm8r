@@ -57,6 +57,8 @@ static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDel
 
 // Event management
 typedef void* EventParam;
+inline TimerID MakeTimerID(EventParam param) { return (TimerID) (uint32_t) param; }
+inline uint16_t MakeUint16(EventParam param) { return (uint16_t) (uint32_t) param; }
         
 typedef void (*EventCallback)(EventType, EventParam);
 
@@ -106,7 +108,7 @@ public:
         m_timerEventMgr = mgr;
     }
     
-    static void startEventTimer(uint16_t count);
+    static TimerID startEventTimer(uint16_t count);
     static void stopEventTimer(TimerID);
         
     static void run() __attribute__((noreturn));

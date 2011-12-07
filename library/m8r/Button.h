@@ -1,7 +1,9 @@
 //
-//  Animator.cpp
+//  Button.h
 //
 //  Created by Chris Marrin on 3/19/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,64 +35,60 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Animator.h"
+#pragma once
 
-using namespace m8r;
+#include "EventListener.h"
 
-static uint8_t g_sineTable[ ] = { 0, 49, 90, 117, 127 };
+namespace m8r {
 
-static uint8_t interpSine(uint8_t t)
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: Button
+//
+//  Debounced button on a port pin
+//
+//////////////////////////////////////////////////////////////////////////////
+
+class ButtonBase
 {
-    uint8_t i = t >> 4;
-    return (((uint16_t) (g_sineTable[i + 1] - g_sineTable[i]) * (uint16_t) (t & 0x0F)) >> 4) + g_sineTable[i];
-}
-
-AnimatorBase::AnimatorBase(uint8_t startValue, uint8_t endValue)
-    : m_paused(true)
-    , m_startValue(startValue)
-    , m_endValue(endValue)
-    , m_currentValue(startValue)
-{
-}
-
-void
-AnimatorBase::start(uint16_t rate)
-{
-    m_rate = rate;
-    m_count = 0;
-    m_currentValue = m_startValue;
-    resume();
-} 
-
-void
-AnimatorBase::fireISR(EventType, EventParam param)
-{
-    AnimatorBase* animator = (AnimatorBase*) param;
+public:
+    ButtonBase() 
+        : m_debounceTestsRemaining(0)
+        , m_debounceValue(false)
+        , m_value(false)
+    {
+    }
     
-    if (animator->m_paused)
-        return;
-    
-    Application::fireISR(EV_ANIMATOR_TICK);    
+    void _handleEvent(EventType, EventParam, bool value, uint8_t numDebounceTests);
+private:
+    uint8_t m_debounceTestsRemaining;
+    bool m_debounceValue;
+    bool m_value;
+};
 
-    if (++animator->m_count < animator->m_rate)
-        return;
+template <class Port, uint8_t Bit, uint8_t debounceTimerCount = 10, uint8_t numDebounceTests = 5>
+class Button : public ButtonBase {
+public:
+	Button()
+        : ButtonBase()
+    {
+        m_port.setBitInput(Bit);
+        m_timerID = Application::startEventTimer(debounceTimerCount);
+    }
     
-    animator->m_count = 0;
+    // EventListener override
+    virtual void handleEvent(EventType type, EventParam param)
+    {
+        if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
+            return;
+            
+        _handleEvent(type, param, m_port.isPortBit(Bit), numDebounceTests);
+        m_timerID = Application::startEventTimer(debounceTimerCount);
+    }
     
-    if (animator->m_currentValue++ >= animator->m_endValue)
-        animator->m_currentValue = animator->m_startValue;
-        
-    Application::fireISR(EV_ANIMATOR_VALUE_CHANGED);    
-}
+private:
+    Port m_port;
+    TimerID m_timerID;
+};
 
-uint8_t
-AnimatorBase::sineValue(uint8_t t)
-{
-    if (t < 64)
-        return interpSine(t) + 128;
-    if (t < 128)
-        return interpSine(127 - t) + 128;
-    if (t < 192)
-        return 127 - interpSine(t - 128);
-    return 127 - interpSine(255 - t);
 }

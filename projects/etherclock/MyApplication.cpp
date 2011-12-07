@@ -41,6 +41,7 @@ DAMAGE.
 #ifdef DEBUG
 #include "BlinkErrorReporter.h"
 #endif
+#include "Button.h"
 #include "ENC28J60.h"
 #include "EventListener.h"
 #include "MAX6969.h"
@@ -111,6 +112,8 @@ public:
     
     // EventListener override
     virtual void handleEvent(EventType type, EventParam);
+    
+    void updateDisplay();
 
 #ifdef DEBUG
     BlinkErrorReporter<Port<B>, 1> m_errorReporter;
@@ -122,6 +125,11 @@ public:
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     UDPSocket m_socket;
     Port<D> m_colonPort;
+    Button<Port<C>, 5, 10, 5> m_button;
+    
+    enum DisplayState { DisplayTime, DisplayDay, DisplayDate, DisplayCurrentTemp, DisplayHighTemp, DisplayLowTemp };
+    DisplayState m_displayState;
+    TimerID m_displaySequenceTimer;
     
     uint16_t m_accumulatedLightSensorValues;
     uint8_t m_numAccumulatedLightSensorValues;
@@ -190,13 +198,22 @@ MyApp::MyApp()
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
 {
-    // Testing
-    m_shiftReg.setChar('1', true);
-    m_shiftReg.setChar('2', true);
-    m_shiftReg.setChar('3', true);
-    m_shiftReg.setChar('4', false);
+    m_shiftReg.setChar(' ', true);
+    m_shiftReg.setChar(' ', false);
+    m_shiftReg.setChar(' ', false);
+    m_shiftReg.setChar(' ', false);
     m_shiftReg.latch();
     m_shiftReg.setOutputEnable(true);
+    Application::msDelay<500>();
+    m_shiftReg.setChar(' ', false);
+    m_shiftReg.latch();
+    Application::msDelay<500>();
+    m_shiftReg.setChar(' ', false);
+    m_shiftReg.latch();
+    Application::msDelay<500>();
+    m_shiftReg.setChar(' ', false);
+    m_shiftReg.latch();
+    Application::msDelay<500>();
     
     m_colonPort.setBitOutput(0);
     m_colonPort.setBitOutput(1);
@@ -213,7 +230,38 @@ MyApp::MyApp()
 }
 
 void
-MyApp::handleEvent(EventType type, EventParam)
+MyApp::updateDisplay()
+{
+    // FIXME: Add the other display states
+    switch (m_displayState) {
+        case DisplayTime: {
+            RTCTime t;
+            g_app.m_clock.currentTime(t);
+            
+            uint8_t hours = t.hours;
+            bool pm = false;
+            if (hours > 12) {
+                hours -= 12;
+                pm = true;
+            }
+            
+            if (hours < 10)
+                g_app.m_shiftReg.setChar(0x20, pm);
+            else
+                g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
+            g_app.m_shiftReg.setChar((hours % 10) + '0', false);
+            g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
+            g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
+            g_app.m_shiftReg.latch();
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void
+MyApp::handleEvent(EventType type, EventParam param)
 {
     switch(type)
     {
@@ -249,30 +297,32 @@ MyApp::handleEvent(EventType type, EventParam)
                 g_app.m_colonPort.clearPortBit(1);
             }
             break;
-        case EV_RTC_SECONDS_EVENT: {
+        case EV_RTC_SECONDS: {
             g_app.m_adc.startConversion();
-
-            RTCTime t;
-            g_app.m_clock.currentTime(t);
-            
-            uint8_t hours = t.hours;
-            bool pm = false;
-            if (hours > 12) {
-                hours -= 12;
-                pm = true;
-            }
-            
-            if (hours < 10)
-                g_app.m_shiftReg.setChar(0x20, pm);
-            else
-                g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
-            g_app.m_shiftReg.setChar((hours % 10) + '0', false);
-            g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
-            g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
-            g_app.m_shiftReg.latch();
-
+            updateDisplay();
             break;
         }
+        case EV_BUTTON_DOWN:
+            m_displaySequenceTimer = Application::startEventTimer(2000);
+            m_displayState = DisplayDay;
+            break;
+        case EV_EVENT_TIMER:
+            if (m_displaySequenceTimer != MakeTimerID(param))
+                break;
+                
+            if (m_displayState == DisplayDay)
+                m_displayState = DisplayDate;
+            else if (m_displayState == DisplayDate)
+                m_displayState = DisplayCurrentTemp;
+            else if (m_displayState == DisplayCurrentTemp)
+                m_displayState = DisplayHighTemp;
+            else if (m_displayState == DisplayHighTemp)
+                m_displayState = DisplayLowTemp;
+            else if (m_displayState == DisplayLowTemp)
+                m_displayState = DisplayTime;
+                
+            if (m_displayState != DisplayTime)
+                m_displaySequenceTimer = Application::startEventTimer(2000);
         default:
             break;
     }
