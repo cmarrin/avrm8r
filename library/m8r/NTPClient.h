@@ -1,5 +1,5 @@
 //
-//  Socket.h
+//  NTPClient.h
 //  etherclock
 //
 //  Created by Chris Marrin on 11/24/11.
@@ -37,57 +37,33 @@ DAMAGE.
 
 #pragma once
 
-#include "m8r.h"
+#include "UDPSocket.h"
 
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Socket
+//  Class: NTPClient
 //
-//  Network socket for IP based comm.
+//  Simple NTP client
 //
 //////////////////////////////////////////////////////////////////////////////
 
-enum SocketEventType {
-    SocketEventDataReceived,
-    SocketEventDataDelivered,
-    SocketEventConnectionReady,
-    SocketEventSendDataReady,
-    SocketEventRetransmit
-};
-
-class Socket;
-
-typedef void (*SocketPacketCallback)(Socket*, SocketEventType, const uint8_t* data, uint16_t length, void*);
-
+class UDPSocket;
 class NetworkBase;
 
-class Socket {
+class NTPClient {
 public:
-    Socket(NetworkBase*, SocketPacketCallback, void*);
+    NTPClient(NetworkBase*);
 
-    void listen(uint16_t port) { m_port = port; }
+    void request();
     
-    // Send can only be called from a handlePacket function and uses the current source address and port
-    virtual void send(const uint8_t* data, uint16_t length) = 0;
-    
-    uint8_t requestSend(const uint8_t ipaddr[4], uint16_t port);
-    uint8_t requestSend(const char* hostname, uint16_t port);
-    
-    virtual bool handlePacket(SocketEventType, const uint8_t* data) = 0;
-
-    void setNext(Socket* next) { m_next = next; }
-    Socket* next() const { return m_next; }
-    
-protected:
-    uint16_t m_port;
-    SocketPacketCallback m_callback;
-    void* m_data;
-    NetworkBase* m_network;
+    static void setTime(uint32_t t) { m_unixTime = t; }
+    static uint32_t time() { return m_unixTime; }
     
 private:
-    Socket* m_next;
+    UDPSocket m_socket;
+    static uint32_t m_unixTime;
 };
 
 }

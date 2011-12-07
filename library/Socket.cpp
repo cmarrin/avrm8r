@@ -41,11 +41,34 @@ DAMAGE.
 
 using namespace m8r;
 
-Socket::Socket(NetworkBase* network, SocketPacketCallback callback)
+Socket::Socket(NetworkBase* network, SocketPacketCallback callback, void* data)
     : m_port(0)
     , m_callback(callback)
+    , m_data(data)
     , m_network(network)
     , m_next(0)
 {
     m_network->addSocket(this);
 }
+
+uint8_t
+Socket::requestSend(const uint8_t ipaddr[4], uint16_t port)
+{
+    // FIXME: Implement. Need Network to send a callback when request can be satisfied. This means:
+    //
+    //  1) src ip, gw, mask and dns are all set (doing dhcp as needed)
+    //  2) gwmacaddr is set (using arp)
+    //  3) hostname has been translated in dst ip as needed (using dns, hostname version only)
+    //  4) any tcp negotiation has completed (tcp only)
+    //
+    // Once callback is made, send() is used to send actual packet
+    return 0;
+}
+
+uint8_t
+Socket::requestSend(const char* hostname, uint16_t port)
+{
+    // FIXME: Implement. See above
+    return 0;
+}
+

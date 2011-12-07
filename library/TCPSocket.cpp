@@ -41,19 +41,13 @@ DAMAGE.
 
 using namespace m8r;
 
-TCPSocket::TCPSocket(NetworkBase* network, SocketPacketCallback callback)
-    : Socket(network, callback)
+TCPSocket::TCPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+    : Socket(network, callback, data)
 {
 }
 
 void
 TCPSocket::send(const uint8_t* data, uint16_t length)
-{
-    // FIXME: Implement
-}
-
-void
-TCPSocket::sendto(const uint8_t ipaddr[4], uint16_t port, const uint8_t* data, uint16_t length)
 {
     // FIXME: Implement
 }
@@ -76,7 +70,7 @@ TCPSocket::handlePacket(SocketEventType type, const uint8_t* data)
     
     // FIXME: Where is the real payload?
     if (m_callback)
-        m_callback(this, type, &data[TCP_OPTIONS_P], length);
+        m_callback(this, type, &data[TCP_OPTIONS_P], length, m_data);
         
     return true;
 }

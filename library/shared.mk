@@ -49,6 +49,7 @@ LIB_HEADERS = \
     MAX6969.h \
     Network.h \
     NetworkInterface.h \
+    NTPClient.h \
     RTC.h \
     ShiftReg.h \
     Socket.h \
@@ -70,6 +71,7 @@ LIB_SRC = \
     Button.cpp \
     ENC28J60.cpp \
     Network.cpp \
+    NTPClient.cpp \
     RTC.cpp \
     ShiftReg.cpp \
     Socket.cpp \

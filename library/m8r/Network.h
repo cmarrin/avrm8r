@@ -57,7 +57,7 @@ class Socket;
 
 class NetworkBase {
 public:
-    NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4]);
+    NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
 
     void sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port);
     
@@ -86,6 +86,7 @@ private:
     void respondToPing();
     
     uint8_t m_ipaddr[4];
+    uint8_t m_gwaddr[4];
     uint8_t m_macaddr[6];
     uint8_t m_packetBuffer[PacketBufferSize + 1];
     uint16_t m_packetLength;
@@ -99,8 +100,8 @@ private:
 template <class NetworkInterface>
 class Network : public NetworkBase {
 public:
-    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4])
-        : NetworkBase(macaddr, ipaddr)
+    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
+        : NetworkBase(macaddr, ipaddr, gwaddr)
         , m_interface(macaddr, ipaddr)
     { }
     

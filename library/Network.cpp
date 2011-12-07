@@ -44,13 +44,14 @@ DAMAGE.
 
 using namespace m8r;
 
-NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4])
+NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
     : m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
 {
     memcpy(m_macaddr, macaddr, 6);
     memcpy(m_ipaddr, ipaddr, 4);
+    memcpy(m_gwaddr, gwaddr, 4);
     
     Application::addNetwork(this);
 }
@@ -169,12 +170,7 @@ NetworkBase::isMyIpPacket() const
     if (m_packetBuffer[ETH_TYPE_P] != (ETHTYPE_IP_V >> 8) || m_packetBuffer[ETH_TYPE_P + 1] != (ETHTYPE_IP_V & 0xff))
         return false;
     
-    for (uint8_t i = 0; i < 4; ++i) {
-        if (m_packetBuffer[IP_DST_P + i] != m_ipaddr[i])
-            return false;
-    }
-    
-    return true;
+    return memcmp(&m_packetBuffer[IP_DST_P], m_ipaddr, 4) == 0;
 }
 
 void

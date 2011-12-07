@@ -51,10 +51,9 @@ namespace m8r {
 
 class TCPSocket: public Socket {
 public:
-    TCPSocket(NetworkBase*, SocketPacketCallback);
+    TCPSocket(NetworkBase*, SocketPacketCallback, void*);
 
     virtual void send(const uint8_t* data, uint16_t length);
-    virtual void sendto(const uint8_t ipaddr[4], uint16_t port, const uint8_t* data, uint16_t length);
     virtual bool handlePacket(SocketEventType, const uint8_t* data);
 
 protected:

@@ -53,10 +53,9 @@ class NetworkBase;
 
 class UDPSocket : public Socket {
 public:
-    UDPSocket(NetworkBase*, SocketPacketCallback);
+    UDPSocket(NetworkBase*, SocketPacketCallback, void*);
 
     virtual void send(const uint8_t* data, uint16_t length);
-    virtual void sendto(const uint8_t ipaddr[4], uint16_t port, const uint8_t* data, uint16_t length);
     virtual bool handlePacket(SocketEventType, const uint8_t* data);
 
 protected:

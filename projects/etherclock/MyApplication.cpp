@@ -95,6 +95,7 @@ using namespace m8r;
 
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
+const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
 
 class MyApp : public EventListener {    
 public:
@@ -168,7 +169,7 @@ static uint32_t parseNumber(const uint8_t* string)
 const char welcomeMessage[] = "Welcome to Etherclock\n> ";
 
 static void
-telnetCallback(Socket* socket, SocketEventType type, const uint8_t* data, uint16_t length)
+telnetCallback(Socket* socket, SocketEventType type, const uint8_t* data, uint16_t length, void*)
 {
     static bool sentWelcome = false;
     
@@ -187,8 +188,8 @@ MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
     , m_timerEventMgr(TimerClockDIV64, 195) // ~100us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
-    , m_network(MacAddr, IPAddr)
-    , m_socket(&m_network, telnetCallback)
+    , m_network(MacAddr, IPAddr, GWAddr)
+    , m_socket(&m_network, telnetCallback, this)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)

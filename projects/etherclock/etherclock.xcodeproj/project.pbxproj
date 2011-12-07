@@ -100,6 +100,8 @@
 		49BBE090148E552C00DC43EC /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = ../../library/m8r/EventListener.h; sourceTree = "<group>"; };
 		49BBE091148E5CF000DC43EC /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = ../../library/m8r/TimerEventMgr.h; sourceTree = "<group>"; };
 		49BBE092148E5E4900DC43EC /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TimerEventMgr.cpp; path = ../../library/TimerEventMgr.cpp; sourceTree = "<group>"; };
+		49BBE097148F1A8E00DC43EC /* NTPClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NTPClient.h; path = ../../library/m8r/NTPClient.h; sourceTree = "<group>"; };
+		49BBE098148F1A8E00DC43EC /* NTPClient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NTPClient.cpp; path = ../../library/NTPClient.cpp; sourceTree = "<group>"; };
 		49EC8109148EE1A000BDA5AF /* Button.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Button.cpp; path = ../../library/Button.cpp; sourceTree = "<group>"; };
 		49EC810A148EE1A000BDA5AF /* Button.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Button.h; path = ../../library/m8r/Button.h; sourceTree = "<group>"; };
 		49EE68BD147B188700FA3113 /* print_event_enums.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = print_event_enums.c; path = ../../library/print_event_enums.c; sourceTree = "<group>"; };
@@ -126,7 +128,7 @@
 		49EE68DA147B18DF00FA3113 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = ../../library/m8r/SPI.h; sourceTree = "<group>"; };
 		49EE68DB147B18DF00FA3113 /* STP08CDC596.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = STP08CDC596.h; path = ../../library/m8r/STP08CDC596.h; sourceTree = "<group>"; };
 		49EE68DC147B18DF00FA3113 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerBase.h; path = ../../library/m8r/TimerBase.h; sourceTree = "<group>"; };
-		49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = liblibm8r.a.a; path = /Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Release/liblibm8r.a.a; sourceTree = "<absolute>"; };
 		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
 		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -137,7 +139,6 @@
 			children = (
 				49EE68BA147B184100FA3113 /* libm8r */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				49EE68E9147B19BB00FA3113 /* Products */,
 			);
 			name = etherclock;
 			sourceTree = "<group>";
@@ -185,6 +186,8 @@
 				49EE68D7147B18DF00FA3113 /* MAX6969.h */,
 				49BBE089148A6D1600DC43EC /* Network.cpp */,
 				49BBE088148A6D1600DC43EC /* Network.h */,
+				49BBE097148F1A8E00DC43EC /* NTPClient.h */,
+				49BBE098148F1A8E00DC43EC /* NTPClient.cpp */,
 				49EE68C9147B18C000FA3113 /* RTC.cpp */,
 				49EE68D8147B18DF00FA3113 /* RTC.h */,
 				49EE68CA147B18C000FA3113 /* ShiftReg.cpp */,
@@ -209,14 +212,6 @@
 				49BBE08D148D04F300DC43EC /* UDPSocket.h */,
 			);
 			name = Source;
-			sourceTree = "<group>";
-		};
-		49EE68E9147B19BB00FA3113 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				49EE68E8147B19BB00FA3113 /* liblibm8r.a.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,7 +266,7 @@
 				German,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* etherclock */;
-			productRefGroup = 49EE68E9147B19BB00FA3113 /* Products */;
+			productRefGroup = 08FB7794FE84155DC02AAC07 /* etherclock */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

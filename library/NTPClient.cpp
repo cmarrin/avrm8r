@@ -1,5 +1,5 @@
 //
-//  Socket.h
+//  Socket.cpp
 //  etherclock
 //
 //  Created by Chris Marrin on 11/24/11.
@@ -35,59 +35,43 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#pragma once
+#include "NTPClient.h"
 
-#include "m8r.h"
+#include <string.h>
 
-namespace m8r {
+using namespace m8r;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: Socket
-//
-//  Network socket for IP based comm.
-//
-//////////////////////////////////////////////////////////////////////////////
+uint32_t NTPClient::m_unixTime = 0;
 
-enum SocketEventType {
-    SocketEventDataReceived,
-    SocketEventDataDelivered,
-    SocketEventConnectionReady,
-    SocketEventSendDataReady,
-    SocketEventRetransmit
-};
+const uint8_t ntpipaddr[4] = { 96, 44, 157, 90 };
+const char ntpreqhdr[] = { 0xe3, 0, 4, 0xfa, 0, 1, 0, 0, 0, 1};
 
-class Socket;
-
-typedef void (*SocketPacketCallback)(Socket*, SocketEventType, const uint8_t* data, uint16_t length, void*);
-
-class NetworkBase;
-
-class Socket {
-public:
-    Socket(NetworkBase*, SocketPacketCallback, void*);
-
-    void listen(uint16_t port) { m_port = port; }
+static void
+ntpCallback(Socket* socket, SocketEventType type, const uint8_t* buffer, uint16_t length, void* data)
+{
+    if (type == SocketEventSendDataReady) {
+        uint8_t buf[48];
+        memset(buf, 0, 48);
+        buf[0] = 0xe3;
+        buf[2] = 4;
+        buf[3] = 0xfa;
+        buf[5] = 1;
+        socket->send(buf, 48);
+        return;
+    }
     
-    // Send can only be called from a handlePacket function and uses the current source address and port
-    virtual void send(const uint8_t* data, uint16_t length) = 0;
-    
-    uint8_t requestSend(const uint8_t ipaddr[4], uint16_t port);
-    uint8_t requestSend(const char* hostname, uint16_t port);
-    
-    virtual bool handlePacket(SocketEventType, const uint8_t* data) = 0;
+    // Assume this is the returned NTP data
+    // FIXME: Implement
+    NOTE(length);
+}
 
-    void setNext(Socket* next) { m_next = next; }
-    Socket* next() const { return m_next; }
-    
-protected:
-    uint16_t m_port;
-    SocketPacketCallback m_callback;
-    void* m_data;
-    NetworkBase* m_network;
-    
-private:
-    Socket* m_next;
-};
+NTPClient::NTPClient(NetworkBase* network)
+    : m_socket(network, ntpCallback, this)
+{
+}
 
+void
+NTPClient::request()
+{
+    m_socket.requestSend(ntpipaddr, 123);
 }

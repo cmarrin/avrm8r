@@ -42,8 +42,8 @@ DAMAGE.
 
 using namespace m8r;
 
-UDPSocket::UDPSocket(NetworkBase* network, SocketPacketCallback callback)
-    : Socket(network, callback)
+UDPSocket::UDPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+    : Socket(network, callback, data)
 {
 }
 
@@ -51,12 +51,6 @@ void
 UDPSocket::send(const uint8_t* data, uint16_t length)
 {
     m_network->sendUdpResponse(data, length, m_port);
-}
-
-void
-UDPSocket::sendto(const uint8_t ipaddr[4], uint16_t port, const uint8_t* data, uint16_t length)
-{
-    // FIXME: Implement
 }
 
 bool
@@ -74,7 +68,7 @@ UDPSocket::handlePacket(SocketEventType type, const uint8_t* data)
         return false;
         
     if (m_callback)
-        m_callback(this, type, &data[UDP_DATA_P], length);
+        m_callback(this, type, &data[UDP_DATA_P], length, m_data);
         
     return true;
 }
