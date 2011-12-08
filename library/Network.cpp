@@ -50,6 +50,7 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], cons
     : m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
+    , m_state(StateNone)
 {
     memcpy(m_macAddress, macaddr, 6);
     memcpy(m_ipAddress, ipaddr, 4);
@@ -66,6 +67,7 @@ NetworkBase::setGatewayIPAddress(const uint8_t* gwaddr)
 {
     memcpy(m_gatewayIPAddress, gwaddr, 4);
     sendArp(m_gatewayIPAddress);
+    m_state = StateWaitForGW;
 }
 
 void
@@ -228,7 +230,6 @@ NetworkBase::sendArp(const uint8_t destIPAddr[4])
     memcpy(&m_packetBuffer[ETH_ARP_DST_IP_P], destIPAddr, 4);
     memcpy(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_ipAddress, 4);
     
-    // FIXME: Need to set state for waiting for GW
     sendPacket(ETH_HEADER_LEN + ETH_ARP_HEADER_LEN, m_packetBuffer);
 }
 
@@ -238,8 +239,8 @@ NetworkBase::respondToArp()
     uint8_t i=0;
     //
     setEthernetResponseHeader();
-    m_packetBuffer[ETH_ARP_OPCODE_H_P] = ETH_ARP_OPCODE_REPLY_H_V;
-    m_packetBuffer[ETH_ARP_OPCODE_L_P] = ETH_ARP_OPCODE_REPLY_L_V;
+    m_packetBuffer[ETH_ARP_OPCODE_P] = ETH_ARP_OPCODE_REPLY_V >> 8;
+    m_packetBuffer[ETH_ARP_OPCODE_P + 1] = ETH_ARP_OPCODE_REPLY_V & 0xff;
     
     for (uint8_t i = 0; i < 6; ++i) {
         m_packetBuffer[ETH_ARP_DST_MAC_P + i] = m_packetBuffer[ETH_ARP_SRC_MAC_P + i];
@@ -307,15 +308,32 @@ NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port
 }
 
 void
+NetworkBase::notifyReady()
+{
+    m_state = StateReady;
+    for (Socket* socket = m_socketHead; socket; socket = socket->next())
+        socket->handlePacket(SocketEventConnectionReady, 0);
+}
+
+void
 NetworkBase::handlePackets()
 {
     m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
     if (!m_packetLength)
         return;
         
-    if (isMyArpPacket())
-        respondToArp();
-    else if (isMyIpPacket()) {
+    if (isMyArpPacket()) {
+        if (m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REQ_V >> 8) && 
+                m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REQ_V & 0xff))
+            respondToArp();
+        else if (m_state == StateWaitForGW && memcmp(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_gatewayIPAddress, 4) == 0 && 
+                m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REPLY_V >> 8) && 
+                m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REPLY_V & 0xff)) {
+            // We have our gw mac addr
+            memcpy(m_gatewayMACAddress, &m_packetBuffer[ETH_ARP_SRC_MAC_P], 6);
+            notifyReady();
+        }
+    } else if (isMyIpPacket()) {
         if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
             respondToPing();
         else {

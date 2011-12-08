@@ -36,10 +36,8 @@
 // ******* ARP *******
 #define ETH_ARP_HEADER_LEN	28
 
-#define ETH_ARP_OPCODE_REPLY_H_V 0x0
-#define ETH_ARP_OPCODE_REPLY_L_V 0x02
-#define ETH_ARP_OPCODE_REQ_H_V 0x0
-#define ETH_ARP_OPCODE_REQ_L_V 0x01
+#define ETH_ARP_OPCODE_REPLY_V 0x0002
+#define ETH_ARP_OPCODE_REQ_V 0x0001
 // start of arp header:
 #define ETH_ARP_P 0xe
 //
@@ -47,8 +45,7 @@
 // arp.dst.ip
 #define ETH_ARP_DST_IP_P 0x26
 // arp.opcode
-#define ETH_ARP_OPCODE_H_P 0x14
-#define ETH_ARP_OPCODE_L_P 0x15
+#define ETH_ARP_OPCODE_P 0x14
 // arp.src.mac
 #define ETH_ARP_SRC_MAC_P 0x16
 #define ETH_ARP_SRC_IP_P 0x1c

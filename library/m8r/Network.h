@@ -45,6 +45,12 @@ const uint16_t PacketBufferSize = 250;
 
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
 
+enum NetworkState {
+    NetworkStateNone,
+    NetworkStateWaitForGW,
+    NetworkStateReady
+};
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Network
@@ -78,6 +84,8 @@ private:
     
     void setGatewayIPAddress(const uint8_t* gwaddr);
     
+    void notifyReady();
+    
     bool isMyArpPacket() const;
     bool isMyIpPacket() const;
     
@@ -99,6 +107,14 @@ private:
     Socket* m_socketHead;
     
     bool m_inHandler;
+
+    enum State {
+        StateNone,
+        StateWaitForGW,
+        StateReady
+    };
+
+    State m_state;
 };
 
 template <class NetworkInterface>
