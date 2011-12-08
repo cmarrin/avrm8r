@@ -76,18 +76,22 @@ protected:
 private:
     void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
     
+    void setGatewayIPAddress(const uint8_t* gwaddr);
+    
     bool isMyArpPacket() const;
     bool isMyIpPacket() const;
     
     void setEthernetResponseHeader();
     void setIPResponseHeader();
     
+    void sendArp(const uint8_t destIPAddr[4]);
     void respondToArp();
     void respondToPing();
     
-    uint8_t m_ipaddr[4];
-    uint8_t m_gwaddr[4];
-    uint8_t m_macaddr[6];
+    uint8_t m_ipAddress[4];
+    uint8_t m_gatewayIPAddress[4];
+    uint8_t m_macAddress[6];
+    uint8_t m_gatewayMACAddress[6];
     uint8_t m_packetBuffer[PacketBufferSize + 1];
     uint16_t m_packetLength;
 

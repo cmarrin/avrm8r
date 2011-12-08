@@ -44,16 +44,28 @@ DAMAGE.
 
 using namespace m8r;
 
+const char arpreqhdr[] = { 0, 1, 8, 0, 6, 4, 0, 1 };
+
 NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
     : m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
 {
-    memcpy(m_macaddr, macaddr, 6);
-    memcpy(m_ipaddr, ipaddr, 4);
-    memcpy(m_gwaddr, gwaddr, 4);
+    memcpy(m_macAddress, macaddr, 6);
+    memcpy(m_ipAddress, ipaddr, 4);
+    memset(m_gatewayMACAddress, 0, 6);
+    memset(m_gatewayIPAddress, 0, 4);
+    
+    setGatewayIPAddress(gwaddr);
     
     Application::addNetwork(this);
+}
+
+void
+NetworkBase::setGatewayIPAddress(const uint8_t* gwaddr)
+{
+    memcpy(m_gatewayIPAddress, gwaddr, 4);
+    sendArp(m_gatewayIPAddress);
 }
 
 void
@@ -158,7 +170,7 @@ NetworkBase::isMyArpPacket() const
     if (m_packetBuffer[ETH_TYPE_P] != (ETHTYPE_ARP_V >> 8) || m_packetBuffer[ETH_TYPE_P + 1] != (ETHTYPE_ARP_V & 0xff))
         return false;
     
-    return memcmp(&m_packetBuffer[ETH_ARP_DST_IP_P], m_ipaddr, 4) == 0;
+    return memcmp(&m_packetBuffer[ETH_ARP_DST_IP_P], m_ipAddress, 4) == 0;
 }
 
 bool
@@ -170,7 +182,7 @@ NetworkBase::isMyIpPacket() const
     if (m_packetBuffer[ETH_TYPE_P] != (ETHTYPE_IP_V >> 8) || m_packetBuffer[ETH_TYPE_P + 1] != (ETHTYPE_IP_V & 0xff))
         return false;
     
-    return memcmp(&m_packetBuffer[IP_DST_P], m_ipaddr, 4) == 0;
+    return memcmp(&m_packetBuffer[IP_DST_P], m_ipAddress, 4) == 0;
 }
 
 void
@@ -179,7 +191,7 @@ NetworkBase::setEthernetResponseHeader()
     // Assume packet buffer contains a packet we want to reply to    
     for (uint8_t i = 0; i < 6; ++i) {
         m_packetBuffer[ETH_DST_MAC + i] = m_packetBuffer[ETH_SRC_MAC + i];
-        m_packetBuffer[ETH_SRC_MAC + i] = m_macaddr[i];
+        m_packetBuffer[ETH_SRC_MAC + i] = m_macAddress[i];
     }
 }
 
@@ -189,7 +201,7 @@ NetworkBase::setIPResponseHeader()
     // Assume packet buffer contains a packet we want to reply to
     for (uint8_t i = 0; i < 4; ++i) {
         m_packetBuffer[IP_DST_P + i] = m_packetBuffer[IP_SRC_P + i];
-        m_packetBuffer[IP_SRC_P + i] = m_ipaddr[i];
+        m_packetBuffer[IP_SRC_P + i] = m_ipAddress[i];
     }
     
     m_packetBuffer[IP_FLAGS_P] = 0x40; // don't fragment
@@ -197,6 +209,27 @@ NetworkBase::setIPResponseHeader()
     m_packetBuffer[IP_TTL_P] = 64;
     
     setChecksum(&m_packetBuffer[IP_P], CHECKSUM_IP);
+}
+
+void
+NetworkBase::sendArp(const uint8_t destIPAddr[4])
+{
+    memset(&m_packetBuffer[ETH_DST_MAC], 0xff, 6);
+    memcpy(&m_packetBuffer[ETH_SRC_MAC], m_macAddress, 6);
+
+    m_packetBuffer[ETH_TYPE_P] = ETHTYPE_ARP_V >> 8;
+    m_packetBuffer[ETH_TYPE_P + 1] = ETHTYPE_ARP_V & 0xff;
+    
+    memcpy(&m_packetBuffer[ETH_ARP_P], arpreqhdr, sizeof(arpreqhdr));
+    
+    memcpy(&m_packetBuffer[ETH_ARP_SRC_MAC_P], m_macAddress, 6);
+    memset(&m_packetBuffer[ETH_ARP_DST_MAC_P], 0, 6);
+    
+    memcpy(&m_packetBuffer[ETH_ARP_DST_IP_P], destIPAddr, 4);
+    memcpy(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_ipAddress, 4);
+    
+    // FIXME: Need to set state for waiting for GW
+    sendPacket(ETH_HEADER_LEN + ETH_ARP_HEADER_LEN, m_packetBuffer);
 }
 
 void
@@ -210,12 +243,12 @@ NetworkBase::respondToArp()
     
     for (uint8_t i = 0; i < 6; ++i) {
         m_packetBuffer[ETH_ARP_DST_MAC_P + i] = m_packetBuffer[ETH_ARP_SRC_MAC_P + i];
-        m_packetBuffer[ETH_ARP_SRC_MAC_P + i] = m_macaddr[i];
+        m_packetBuffer[ETH_ARP_SRC_MAC_P + i] = m_macAddress[i];
     }
     i=0;
     for (uint8_t i = 0; i < 4; ++i) {
         m_packetBuffer[ETH_ARP_DST_IP_P+i] = m_packetBuffer[ETH_ARP_SRC_IP_P+i];
-        m_packetBuffer[ETH_ARP_SRC_IP_P+i] = m_ipaddr[i];
+        m_packetBuffer[ETH_ARP_SRC_IP_P+i] = m_ipAddress[i];
     }
     
     sendPacket(ETH_HEADER_LEN + ETH_ARP_HEADER_LEN, m_packetBuffer); 
