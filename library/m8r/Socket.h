@@ -49,42 +49,57 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-enum SocketEventType {
-    SocketEventDataReceived,
-    SocketEventDataDelivered,
-    SocketEventConnectionReady,
-    SocketEventSendDataReady,
-    SocketEventRetransmit
-};
-
 class Socket;
-
-typedef void (*SocketPacketCallback)(Socket*, SocketEventType, const uint8_t* data, uint16_t length, void*);
 
 class NetworkBase;
 
 class Socket {
 public:
-    Socket(NetworkBase*, SocketPacketCallback, void*);
+    enum EventType {
+        EventDataReceived,
+        EventDataDelivered,
+        EventConnectionReady,
+        EventSendDataReady,
+        EventRetransmit
+    };
+
+    typedef void (*PacketCallback)(Socket*, Socket::EventType, const uint8_t* data, uint16_t length, void*);
+    
+    Socket(NetworkBase*, PacketCallback, void*);
 
     void listen(uint16_t port) { m_port = port; }
     
     // Send can only be called from a handlePacket function and uses the current source address and port
     virtual void send(const uint8_t* data, uint16_t length) = 0;
     
-    uint8_t requestSend(const uint8_t ipaddr[4], uint16_t port);
-    uint8_t requestSend(const char* hostname, uint16_t port);
+    void requestSend(const uint8_t ipaddr[4], uint16_t port);
+    void requestSend(const char* hostname, uint16_t port);
     
-    virtual bool handlePacket(SocketEventType, const uint8_t* data) = 0;
+    bool handlePacket(EventType, const uint8_t* data);
+    
+    bool waitingForSendData() const { return m_state == StateWaitSendData || m_state == StateWaitSendDNSRequest; }
 
     void setNext(Socket* next) { m_next = next; }
     Socket* next() const { return m_next; }
     
 protected:
+    virtual bool _handlePacket(EventType, const uint8_t* data) = 0;
+
     uint16_t m_port;
-    SocketPacketCallback m_callback;
+    PacketCallback m_callback;
     void* m_data;
     NetworkBase* m_network;
+    
+    enum State {
+        StateIdle,
+        StateWaitSendData,
+        StateWaitSendDNSRequest,
+        StateWaitDNSResponse
+    };
+    
+    const uint8_t* m_destinationAddress;
+    uint16_t m_destinationPort;
+    bool m_state;
     
 private:
     Socket* m_next;

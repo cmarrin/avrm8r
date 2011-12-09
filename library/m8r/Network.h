@@ -45,12 +45,6 @@ const uint16_t PacketBufferSize = 250;
 
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
 
-enum NetworkState {
-    NetworkStateNone,
-    NetworkStateWaitForGW,
-    NetworkStateReady
-};
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Network
@@ -68,6 +62,8 @@ public:
     void sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port);
     
     void handlePackets();
+    
+    bool ready() const { return m_state == StateReady; }
 
     void setNext(NetworkBase* next) { m_next = next; }
     NetworkBase* next() const { return m_next; }
@@ -76,7 +72,7 @@ public:
     void removeSocket(Socket*);
 
 protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
+    virtual void sendPacket(uint16_t len, uint8_t* packet) { NOTE(0x10); }
     virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
     
 private:
@@ -109,7 +105,7 @@ private:
     bool m_inHandler;
 
     enum State {
-        StateNone,
+        StateNeedGW,
         StateWaitForGW,
         StateReady
     };

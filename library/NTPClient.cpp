@@ -47,9 +47,9 @@ const uint8_t ntpipaddr[4] = { 96, 44, 157, 90 };
 const char ntpreqhdr[] = { 0xe3, 0, 4, 0xfa, 0, 1, 0, 0, 0, 1};
 
 static void
-ntpCallback(Socket* socket, SocketEventType type, const uint8_t* buffer, uint16_t length, void* data)
+ntpCallback(Socket* socket, Socket::EventType type, const uint8_t* buffer, uint16_t length, void* data)
 {
-    if (type == SocketEventSendDataReady) {
+    if (type == Socket::EventSendDataReady) {
         uint8_t buf[48];
         memset(buf, 0, 48);
         buf[0] = 0xe3;

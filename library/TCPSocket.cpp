@@ -41,7 +41,7 @@ DAMAGE.
 
 using namespace m8r;
 
-TCPSocket::TCPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+TCPSocket::TCPSocket(NetworkBase* network, PacketCallback callback, void* data)
     : Socket(network, callback, data)
 {
 }
@@ -53,7 +53,7 @@ TCPSocket::send(const uint8_t* data, uint16_t length)
 }
 
 bool
-TCPSocket::handlePacket(SocketEventType type, const uint8_t* data)
+TCPSocket::_handlePacket(EventType type, const uint8_t* data)
 {
     // FIXME: This needs to be completely implemented
     

@@ -50,15 +50,13 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], cons
     : m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
-    , m_state(StateNone)
+    , m_state(StateNeedGW)
 {
     memcpy(m_macAddress, macaddr, 6);
     memcpy(m_ipAddress, ipaddr, 4);
     memset(m_gatewayMACAddress, 0, 6);
     memset(m_gatewayIPAddress, 0, 4);
-    
-    setGatewayIPAddress(gwaddr);
-    
+
     Application::addNetwork(this);
 }
 
@@ -312,16 +310,28 @@ NetworkBase::notifyReady()
 {
     m_state = StateReady;
     for (Socket* socket = m_socketHead; socket; socket = socket->next())
-        socket->handlePacket(SocketEventConnectionReady, 0);
+        socket->handlePacket(Socket::EventConnectionReady, 0);
 }
 
 void
 NetworkBase::handlePackets()
 {
-    m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
-    if (!m_packetLength)
+    if (m_state == StateNeedGW) {
+        setGatewayIPAddress(m_gatewayIPAddress);
         return;
-        
+    }
+    
+    m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
+    if (!m_packetLength) {
+        m_inHandler = true;
+        for (Socket* socket = m_socketHead; socket; socket = socket->next())
+            if (socket->waitingForSendData())
+                socket->handlePacket(Socket::EventSendDataReady, 0);
+        m_inHandler = false;
+    
+        return;
+    }
+    
     if (isMyArpPacket()) {
         if (m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REQ_V >> 8) && 
                 m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REQ_V & 0xff))
@@ -338,9 +348,8 @@ NetworkBase::handlePackets()
             respondToPing();
         else {
             m_inHandler = true;
-            
             for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
-                if (socket->handlePacket(SocketEventDataReceived, m_packetBuffer))
+                if (socket->handlePacket(Socket::EventDataReceived, m_packetBuffer))
                     break;
             }
             m_inHandler = false;

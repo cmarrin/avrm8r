@@ -42,7 +42,7 @@ DAMAGE.
 
 using namespace m8r;
 
-UDPSocket::UDPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+UDPSocket::UDPSocket(NetworkBase* network, PacketCallback callback, void* data)
     : Socket(network, callback, data)
 {
 }
@@ -54,8 +54,10 @@ UDPSocket::send(const uint8_t* data, uint16_t length)
 }
 
 bool
-UDPSocket::handlePacket(SocketEventType type, const uint8_t* data)
+UDPSocket::_handlePacket(EventType type, const uint8_t* data)
 {
+    Socket::handlePacket(type, data);
+        
     uint16_t length = ((uint16_t) data[UDP_LEN_P]) << 8;
     length |= data[UDP_LEN_P + 1];
     ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);

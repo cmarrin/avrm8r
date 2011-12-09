@@ -53,12 +53,12 @@ class NetworkBase;
 
 class UDPSocket : public Socket {
 public:
-    UDPSocket(NetworkBase*, SocketPacketCallback, void*);
+    UDPSocket(NetworkBase*, PacketCallback, void*);
 
     virtual void send(const uint8_t* data, uint16_t length);
-    virtual bool handlePacket(SocketEventType, const uint8_t* data);
 
 protected:
+    virtual bool _handlePacket(EventType, const uint8_t* data);
     
 private:
 };

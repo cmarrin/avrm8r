@@ -169,7 +169,7 @@ static uint32_t parseNumber(const uint8_t* string)
 const char welcomeMessage[] = "Welcome to Etherclock\n> ";
 
 static void
-telnetCallback(Socket* socket, SocketEventType type, const uint8_t* data, uint16_t length, void*)
+telnetCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
 {
     static bool sentWelcome = false;
     
@@ -199,6 +199,7 @@ MyApp::MyApp()
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
 {
+            NOTE(0x23);
     m_shiftReg.setChar(' ', true);
     m_shiftReg.setChar(' ', false);
     m_shiftReg.setChar(' ', false);
