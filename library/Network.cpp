@@ -45,9 +45,11 @@ DAMAGE.
 using namespace m8r;
 
 const char arpreqhdr[] = { 0, 1, 8, 0, 6, 4, 0, 1 };
+const char iphdr[] = { 0x45, 0, 0, 0x82, 0, 0, 0x40, 0, 0x20 };
 
 NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
-    : m_next(0)
+    : m_ipID(2)
+    , m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
     , m_state(StateNeedGW)
@@ -186,23 +188,36 @@ NetworkBase::isMyIpPacket() const
 }
 
 void
-NetworkBase::setEthernetResponseHeader()
+NetworkBase::setEthernetMacAddresses(const uint8_t* destMacAddr)
 {
-    // Assume packet buffer contains a packet we want to reply to    
-    for (uint8_t i = 0; i < 6; ++i) {
-        m_packetBuffer[ETH_DST_MAC + i] = m_packetBuffer[ETH_SRC_MAC + i];
-        m_packetBuffer[ETH_SRC_MAC + i] = m_macAddress[i];
-    }
+    memcpy(&m_packetBuffer[ETH_DST_MAC], destMacAddr, 6);
+    memcpy(&m_packetBuffer[ETH_SRC_MAC], m_macAddress, 6);
+}
+
+void 
+NetworkBase::setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length)
+{
+    memcpy(&m_packetBuffer[IP_DST_P], destIPAddr, 4);
+    memcpy(&m_packetBuffer[IP_SRC_P], m_ipAddress, 4);
+    memcpy(&m_packetBuffer[IP_P], iphdr, sizeof(iphdr));
+    
+    m_packetBuffer[IP_ID_P + 1] = m_ipID++;
+    
+    uint16_t headerLength = length + IP_HEADER_LEN + UDP_HEADER_LEN;
+    m_packetBuffer[IP_TOTLEN_P] = headerLength >> 8;
+    m_packetBuffer[IP_TOTLEN_P + 1] = headerLength & 0xff;
+    
+    m_packetBuffer[IP_PROTO_P] = ipType;
+
+    setChecksum(&m_packetBuffer[IP_P], CHECKSUM_IP, length);
 }
 
 void 
 NetworkBase::setIPResponseHeader()
 {
     // Assume packet buffer contains a packet we want to reply to
-    for (uint8_t i = 0; i < 4; ++i) {
-        m_packetBuffer[IP_DST_P + i] = m_packetBuffer[IP_SRC_P + i];
-        m_packetBuffer[IP_SRC_P + i] = m_ipAddress[i];
-    }
+    memcpy(&m_packetBuffer[IP_DST_P], &m_packetBuffer[IP_SRC_P], 4);
+    memcpy(&m_packetBuffer[IP_SRC_P], m_ipAddress, 4);
     
     m_packetBuffer[IP_FLAGS_P] = 0x40; // don't fragment
     m_packetBuffer[IP_FLAGS_P+1] = 0;  // fragement offset
@@ -236,7 +251,7 @@ NetworkBase::respondToArp()
 {
     uint8_t i=0;
     //
-    setEthernetResponseHeader();
+    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
     m_packetBuffer[ETH_ARP_OPCODE_P] = ETH_ARP_OPCODE_REPLY_V >> 8;
     m_packetBuffer[ETH_ARP_OPCODE_P + 1] = ETH_ARP_OPCODE_REPLY_V & 0xff;
     
@@ -257,7 +272,7 @@ void
 NetworkBase::respondToPing()
 {
     // Assume incoming packet is an echo we are responding to, so we just have to fix it up
-    setEthernetResponseHeader();
+    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
     setIPResponseHeader();
     m_packetBuffer[ICMP_TYPE_P] = ICMP_TYPE_ECHOREPLY_V;
     
@@ -271,20 +286,49 @@ NetworkBase::respondToPing()
 }
 
 void
+NetworkBase::sendUdp(const uint8_t destIPAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port)
+{
+    setEthernetMacAddresses(m_gatewayMACAddress);
+    
+    m_packetBuffer[ETH_TYPE_P] = ETHTYPE_IP_V >> 8;
+    m_packetBuffer[ETH_TYPE_P + 1] = ETHTYPE_IP_V & 0xff;
+    
+    if (length > PacketBufferSize - UDP_DATA_P)
+        length = PacketBufferSize - UDP_DATA_P;
+        
+    setIPHeader(IP_PROTO_UDP_V, destIPAddr, length);
+
+    m_packetBuffer[UDP_TCP_DST_PORT_P] = destPort >> 8;
+    m_packetBuffer[UDP_TCP_DST_PORT_P + 1] = destPort & 0xff; 
+    m_packetBuffer[UDP_TCP_SRC_PORT_P] = port >> 8;
+    m_packetBuffer[UDP_TCP_SRC_PORT_P + 1] = port & 0xff; 
+
+    uint16_t headerLength = UDP_HEADER_LEN + length;
+    m_packetBuffer[UDP_LEN_P] = headerLength >> 8;
+    m_packetBuffer[UDP_LEN_P + 1] = headerLength & 0xff;
+    
+    memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
+
+    setChecksum(&m_packetBuffer[IP_SRC_P], CHECKSUM_UDP, length);
+    
+    sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
+}
+
+void
 NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port)
 {
     ASSERT(m_inHandler, AssertEthernetNotInHandler);
     if (!m_inHandler)
         return;
         
-    setEthernetResponseHeader();
+    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
     
     if (length > PacketBufferSize - UDP_DATA_P)
         length = PacketBufferSize - UDP_DATA_P;
 
     // Total length field in the IP header must be set:
-    m_packetBuffer[IP_TOTLEN_H_P] = 0;
-    m_packetBuffer[IP_TOTLEN_L_P] = IP_HEADER_LEN + UDP_HEADER_LEN + length;
+    m_packetBuffer[IP_TOTLEN_P] = 0;
+    m_packetBuffer[IP_TOTLEN_P + 1] = IP_HEADER_LEN + UDP_HEADER_LEN + length;
     setIPResponseHeader();
     
     // Send to port of sender and use "port" as own source:
@@ -308,7 +352,7 @@ NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port
 void
 NetworkBase::notifyReady()
 {
-    m_state = StateReady;
+    m_inHandler = true;
     for (Socket* socket = m_socketHead; socket; socket = socket->next())
         socket->handlePacket(Socket::EventConnectionReady, 0);
 }
@@ -323,11 +367,9 @@ NetworkBase::handlePackets()
     
     m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
     if (!m_packetLength) {
-        m_inHandler = true;
         for (Socket* socket = m_socketHead; socket; socket = socket->next())
             if (socket->waitingForSendData())
                 socket->handlePacket(Socket::EventSendDataReady, 0);
-        m_inHandler = false;
     
         return;
     }

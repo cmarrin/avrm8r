@@ -58,7 +58,6 @@ Socket::requestSend(const uint8_t ipaddr[4], uint16_t port)
     m_destinationAddress = ipaddr;
     m_destinationPort = port;
     m_state = StateWaitSendData;
-        
 }
 
 void
@@ -71,7 +70,13 @@ bool
 Socket::handlePacket(EventType type, const uint8_t* data)
 {
     if (type == EventSendDataReady && m_state == StateWaitSendData)
+        m_state = StateCanSendData;
+        
+    bool result = _handlePacket(type, data);
+    
+    if (type == EventSendDataReady && m_state == StateCanSendData)
         m_state = StateIdle;
-    return _handlePacket(type, data);
+        
+    return result;
 }
 

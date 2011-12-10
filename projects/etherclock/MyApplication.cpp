@@ -46,6 +46,7 @@ DAMAGE.
 #include "EventListener.h"
 #include "MAX6969.h"
 #include "Network.h"
+#include "NTPClient.h"
 #include "RTC.h"
 #include "Timer0.h"
 #include "Timer1.h"
@@ -125,6 +126,7 @@ public:
     RTC<Timer1> m_clock;
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     UDPSocket m_socket;
+    NTPClient m_ntp;
     Port<D> m_colonPort;
     Button<Port<C>, 5, 10, 5> m_button;
     
@@ -190,6 +192,7 @@ MyApp::MyApp()
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr, GWAddr)
     , m_socket(&m_network, telnetCallback, this)
+    , m_ntp(&m_network)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)
@@ -199,7 +202,6 @@ MyApp::MyApp()
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
 {
-            NOTE(0x23);
     m_shiftReg.setChar(' ', true);
     m_shiftReg.setChar(' ', false);
     m_shiftReg.setChar(' ', false);
@@ -227,8 +229,9 @@ MyApp::MyApp()
     sei();
     m_adc.startConversion();
     
-    // Test ethernet
     m_socket.listen(23);
+    
+    m_ntp.request();
 }
 
 void

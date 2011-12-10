@@ -70,6 +70,8 @@ public:
     void listen(uint16_t port) { m_port = port; }
     
     // Send can only be called from a handlePacket function and uses the current source address and port
+    virtual void respond(const uint8_t* data, uint16_t length) = 0;
+    
     virtual void send(const uint8_t* data, uint16_t length) = 0;
     
     void requestSend(const uint8_t ipaddr[4], uint16_t port);
@@ -93,6 +95,7 @@ protected:
     enum State {
         StateIdle,
         StateWaitSendData,
+        StateCanSendData,
         StateWaitSendDNSRequest,
         StateWaitDNSResponse
     };
