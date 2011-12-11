@@ -48,6 +48,13 @@ ErrorReporter* Application::m_errorReporter = 0;
 TimerEventMgrBase* Application::m_timerEventMgr = 0;
 
 void
+Application::handleErrorCondition(uint16_t errorType, ErrorConditionType conditionType)
+{
+    if (m_errorReporter)
+        m_errorReporter->reportError(errorType, conditionType);
+}
+
+void
 Application::run()
 {
     while (1) {
@@ -130,9 +137,9 @@ void __cxa_pure_virtual()
 }
 
 #ifdef DEBUG
-void _showErrorCondition(uint8_t code, ErrorConditionType condition)
+void _showErrorCondition(uint16_t code, ErrorConditionType condition)
 {
-    Application::handleErrorCondition((ErrorType) code, condition);
+    Application::handleErrorCondition(code, condition);
 }
 #endif
 

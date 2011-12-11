@@ -45,19 +45,19 @@ DAMAGE.
 using namespace m8r;
 
 const char arpreqhdr[] = { 0, 1, 8, 0, 6, 4, 0, 1 };
-const char iphdr[] = { 0x45, 0, 0, 0x82, 0, 0, 0x40, 0, 0x20 };
+const char iphdr[] = { 0x45, 0, 0, 0x82, 0, 0, 0x40, 0, 0x40 };
 
 NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
     : m_ipID(2)
     , m_next(0)
     , m_socketHead(0)
     , m_inHandler(false)
-    , m_state(StateNeedGW)
+    , m_state(StateNeedToRequestGWMacAddr)
 {
     memcpy(m_macAddress, macaddr, 6);
     memcpy(m_ipAddress, ipaddr, 4);
+    memcpy(m_gatewayIPAddress, gwaddr, 4);
     memset(m_gatewayMACAddress, 0, 6);
-    memset(m_gatewayIPAddress, 0, 4);
 
     Application::addNetwork(this);
 }
@@ -67,7 +67,7 @@ NetworkBase::setGatewayIPAddress(const uint8_t* gwaddr)
 {
     memcpy(m_gatewayIPAddress, gwaddr, 4);
     sendArp(m_gatewayIPAddress);
-    m_state = StateWaitForGW;
+    m_state = StateWaitForGWMacAddr;
 }
 
 void
@@ -109,33 +109,43 @@ NetworkBase::removeSocket(Socket* socket)
 // http://www.msc.uky.edu/ken/cs471/notes/chap3.htm
 // The RFC has also a C code example: http://www.faqs.org/rfcs/rfc1071.html
 void
-NetworkBase::setChecksum(uint8_t *buf, ChecksumType type, uint16_t len)
+NetworkBase::setChecksum(ChecksumType type, uint16_t len)
 {
     const uint16_t extraChecksumLength = (ETH_HEADER_LEN + IP_HEADER_LEN) - IP_SRC_P;
 
     uint32_t sum = 0;
     uint16_t checksumLocation;
+    uint8_t* buf;
     
     switch(type) {
         case CHECKSUM_IP:
             len += IP_HEADER_LEN;
+            buf = &m_packetBuffer[IP_P];
             checksumLocation = IP_CHECKSUM_P;
             break;
         case CHECKSUM_UDP:
             // For UDP checksum is from IP_SRC_P
-            len += extraChecksumLength + UDP_HEADER_LEN;
-            sum += IP_PROTO_UDP_V + len - extraChecksumLength;
+            len += UDP_HEADER_LEN;
+            sum += IP_PROTO_UDP_V + len;
+            len += extraChecksumLength;
+            buf = &m_packetBuffer[IP_SRC_P];
             checksumLocation = UDP_CHECKSUM_P;
             break;
         case CHECKSUM_TCP:
             len += extraChecksumLength + TCP_HEADER_LEN_PLAIN;
             sum += IP_PROTO_TCP_V + len - extraChecksumLength;
+            buf = &m_packetBuffer[IP_SRC_P];
             checksumLocation = TCP_CHECKSUM_P;
             break;
         case CHECKSUM_ICMP:
             len += ICMP_DATA_P - ICMP_TYPE_P;
+            
+            // FIXME: This is probably wrong
+            buf = &m_packetBuffer[ICMP_DATA_P];
             checksumLocation = ICMP_CHECKSUM_P;
             break;
+        default:
+            return;
     }
 
     // Clear the checksum before computing a new one
@@ -209,7 +219,7 @@ NetworkBase::setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t len
     
     m_packetBuffer[IP_PROTO_P] = ipType;
 
-    setChecksum(&m_packetBuffer[IP_P], CHECKSUM_IP, length);
+    setChecksum(CHECKSUM_IP, length);
 }
 
 void 
@@ -223,7 +233,7 @@ NetworkBase::setIPResponseHeader()
     m_packetBuffer[IP_FLAGS_P+1] = 0;  // fragement offset
     m_packetBuffer[IP_TTL_P] = 64;
     
-    setChecksum(&m_packetBuffer[IP_P], CHECKSUM_IP);
+    setChecksum(CHECKSUM_IP);
 }
 
 void
@@ -309,7 +319,7 @@ NetworkBase::sendUdp(const uint8_t destIPAddr[4], uint16_t destPort, const uint8
     
     memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
 
-    setChecksum(&m_packetBuffer[IP_SRC_P], CHECKSUM_UDP, length);
+    setChecksum(CHECKSUM_UDP, length);
     
     sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
 }
@@ -344,7 +354,7 @@ NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port
     
     memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
 
-    setChecksum(&m_packetBuffer[IP_SRC_P], CHECKSUM_UDP, length);
+    setChecksum(CHECKSUM_UDP, length);
     
     sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
 }
@@ -360,7 +370,7 @@ NetworkBase::notifyReady()
 void
 NetworkBase::handlePackets()
 {
-    if (m_state == StateNeedGW) {
+    if (m_state == StateNeedToRequestGWMacAddr) {
         setGatewayIPAddress(m_gatewayIPAddress);
         return;
     }
@@ -378,7 +388,7 @@ NetworkBase::handlePackets()
         if (m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REQ_V >> 8) && 
                 m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REQ_V & 0xff))
             respondToArp();
-        else if (m_state == StateWaitForGW && memcmp(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_gatewayIPAddress, 4) == 0 && 
+        else if (m_state == StateWaitForGWMacAddr && memcmp(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_gatewayIPAddress, 4) == 0 && 
                 m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REPLY_V >> 8) && 
                 m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REPLY_V & 0xff)) {
             // We have our gw mac addr

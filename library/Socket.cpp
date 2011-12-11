@@ -69,9 +69,11 @@ Socket::requestSend(const char* hostname, uint16_t port)
 bool
 Socket::handlePacket(EventType type, const uint8_t* data)
 {
-    if (type == EventSendDataReady && m_state == StateWaitSendData)
+    if (type == EventSendDataReady) {
+        ASSERT(m_state == StateWaitSendData, AssertEthernetNotWaitingToSendData);
         m_state = StateCanSendData;
-        
+    }
+    
     bool result = _handlePacket(type, data);
     
     if (type == EventSendDataReady && m_state == StateCanSendData)

@@ -57,7 +57,7 @@ void
 UDPSocket::send(const uint8_t* data, uint16_t length)
 {
     ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
-    m_network->sendUdp(m_destinationAddress, m_destinationPort, data, length, m_port);
+    m_network->sendUdp(m_destinationAddress, m_destinationPort, data, length, m_port ? m_port : 0x1012);
 }
 
 bool

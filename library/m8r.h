@@ -68,6 +68,7 @@ enum ErrorType {
     AssertEthernetBadLength = 0x30,
     AssertEthernetNotInHandler = 0x31,
     AssertEthernetCannotSendData = 0x32,
+    AssertEthernetNotWaitingToSendData = 0x33,
     ErrorUser = 0x80,
 };
 
@@ -247,7 +248,7 @@ public:
 
 #ifdef DEBUG
 extern "C" {
-    void _showErrorCondition(uint8_t code, m8r::ErrorConditionType);
+    void _showErrorCondition(uint16_t code, m8r::ErrorConditionType);
 }
 
 #define ASSERT(expr, code) if (!(expr)) FATAL(code)

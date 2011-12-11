@@ -102,7 +102,7 @@ protected:
     
     const uint8_t* m_destinationAddress;
     uint16_t m_destinationPort;
-    bool m_state;
+    State m_state;
     
 private:
     Socket* m_next;

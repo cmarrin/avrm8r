@@ -41,7 +41,7 @@ DAMAGE.
 
 namespace m8r {
 
-const uint16_t PacketBufferSize = 250;
+const uint16_t PacketBufferSize = 220;
 
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
 
@@ -77,7 +77,7 @@ protected:
     virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
     
 private:
-    void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
+    void setChecksum(ChecksumType type, uint16_t len = 0);
     
     void setGatewayIPAddress(const uint8_t* gwaddr);
     
@@ -108,8 +108,8 @@ private:
     bool m_inHandler;
 
     enum State {
-        StateNeedGW,
-        StateWaitForGW,
+        StateNeedToRequestGWMacAddr,
+        StateWaitForGWMacAddr,
         StateReady
     };
 

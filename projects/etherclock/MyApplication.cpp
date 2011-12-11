@@ -98,6 +98,15 @@ const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
 
+class MyApp;
+
+#ifdef DEBUG
+class MyErrorReporter : public ErrorReporter {
+public:
+    virtual void reportError(uint16_t, ErrorConditionType);
+};
+#endif
+
 class MyApp : public EventListener {    
 public:
     MyApp();
@@ -117,8 +126,12 @@ public:
     
     void updateDisplay();
 
+    void showChars(const char chars[4], uint8_t dps);
+    void scrollChars(const char* string);
+
 #ifdef DEBUG
-    BlinkErrorReporter<Port<B>, 1> m_errorReporter;
+    //BlinkErrorReporter<Port<B>, 1> m_errorReporter;
+    MyErrorReporter m_errorReporter;
 #endif
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
@@ -151,6 +164,36 @@ const int8_t Hysteresis = 2;
 
 MyApp g_app;
 
+void
+MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
+{
+    cli();
+    char string[4];
+    for (uint8_t i = 4; i > 0; --i) {
+        char c = code & 0xf;
+        c += ((c > 9) ? ('A' - 10) : '0');
+        if ((i == 1 || i == 2) && c == '0')
+            c = ' ';
+        string[i - 1] = c;
+        code >>= 4;
+    }
+    
+    uint8_t dps = (type == ErrorConditionNote) ? 1 : ((type == ErrorConditionWarning) ? 3 : 7);
+    g_app.showChars(string, dps);
+
+    for (uint8_t i = 0; i < 5; ++i) {
+        g_app.m_shiftReg.setOutputEnable(true);
+        Application::msDelay<900>();
+        g_app.m_shiftReg.setOutputEnable(false);
+        Application::msDelay<100>();
+    }
+    
+    g_app.m_shiftReg.setOutputEnable(true);
+    if (type == ErrorConditionFatal)
+        while (1) ;
+    sei();
+}
+
 static uint32_t parseNumber(const uint8_t* string)
 {
     uint8_t c;
@@ -169,6 +212,7 @@ static uint32_t parseNumber(const uint8_t* string)
 }
 
 const char welcomeMessage[] = "Welcome to Etherclock\n> ";
+const char startupMessage[] = "EtherClock  v1-0";
 
 static void
 telnetCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
@@ -179,11 +223,10 @@ telnetCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint
         g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
     
     if (!sentWelcome) {
-        socket->send((const uint8_t*) welcomeMessage, sizeof(welcomeMessage));
+        socket->respond((const uint8_t*) welcomeMessage, sizeof(welcomeMessage));
         sentWelcome = true;
     } else
-        socket->send((const uint8_t*) "> ", 2);
-
+        socket->respond((const uint8_t*) "> ", 2);
 }
 
 MyApp::MyApp()
@@ -202,22 +245,22 @@ MyApp::MyApp()
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
 {
-    m_shiftReg.setChar(' ', true);
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.latch();
     m_shiftReg.setOutputEnable(true);
-    Application::msDelay<500>();
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.latch();
-    Application::msDelay<500>();
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.latch();
-    Application::msDelay<500>();
-    m_shiftReg.setChar(' ', false);
-    m_shiftReg.latch();
-    Application::msDelay<500>();
+    
+#ifdef TEST_ALL_CHARS
+    // Test all chars
+    for (char c = 0x20; c < 0x5f; ) {
+        char string[4];
+        for (uint8_t i = 0; i < 4; ++i, c++)
+            string[i] = c;
+        showChars(string, 0x08);
+        Application::msDelay<2000>();
+    }
+#endif
+
+    // Show startup
+    scrollChars(startupMessage);
+    Application::msDelay<1000>();
     
     m_colonPort.setBitOutput(0);
     m_colonPort.setBitOutput(1);
@@ -234,6 +277,7 @@ MyApp::MyApp()
     m_ntp.request();
 }
 
+
 void
 MyApp::updateDisplay()
 {
@@ -244,24 +288,49 @@ MyApp::updateDisplay()
             g_app.m_clock.currentTime(t);
             
             uint8_t hours = t.hours;
-            bool pm = false;
+            uint8_t dps = 0;
             if (hours > 12) {
                 hours -= 12;
-                pm = true;
+                dps = 0x08;
             }
             
+            char string[4];
             if (hours < 10)
-                g_app.m_shiftReg.setChar(0x20, pm);
+                string[0] = 0x20;
             else
-                g_app.m_shiftReg.setChar((hours / 10) + '0', pm);
-            g_app.m_shiftReg.setChar((hours % 10) + '0', false);
-            g_app.m_shiftReg.setChar((t.minutes / 10) + '0', false);
-            g_app.m_shiftReg.setChar((t.minutes % 10) + '0', false);
-            g_app.m_shiftReg.latch();
+                string[0] = (hours / 10) + '0';
+            string[1] = (hours % 10) + '0';
+            string[2] = (t.minutes / 10) + '0';
+            string[3] = (t.minutes % 10) + '0';
+            showChars(string, dps);
             break;
         }
         default:
             break;
+    }
+}
+
+void
+MyApp::showChars(const char* string, uint8_t dps)
+{
+    bool blank = false;
+    for (uint8_t i = 0; i < 4; ++i, dps <<= 1) {
+        if (!blank && string[i] == '\0')
+            blank = true;
+        m_shiftReg.setChar(blank ? ' ' : string[i], dps & 0x08);
+    }
+    m_shiftReg.latch();
+}
+
+void
+MyApp::scrollChars(const char* string)
+{
+    showChars("    ", 0);
+    
+    for (const char* s = string; *s; s++) { 
+        m_shiftReg.setChar(*s);
+        m_shiftReg.latch();
+        Application::msDelay<200>();
     }
 }
 
