@@ -321,6 +321,7 @@ NetworkBase::sendUdp(const uint8_t destIPAddr[4], uint16_t destPort, const uint8
 
     setChecksum(CHECKSUM_UDP, length);
     
+    NOTE(0x1234);
     sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
 }
 

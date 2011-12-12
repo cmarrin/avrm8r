@@ -85,7 +85,7 @@ public:
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
     // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
-    virtual void reportError(uint16_t code, ErrorConditionType condition)
+    virtual void reportError(char, uint16_t code, ErrorConditionType condition)
     {
         setError(false);
         Application::msDelay<500>();

@@ -103,7 +103,7 @@ class MyApp;
 #ifdef DEBUG
 class MyErrorReporter : public ErrorReporter {
 public:
-    virtual void reportError(uint16_t, ErrorConditionType);
+    virtual void reportError(char c, uint16_t, ErrorConditionType);
 };
 #endif
 
@@ -166,9 +166,10 @@ MyApp g_app;
 
 #ifdef DEBUG
 void
-MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
+MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
 {
     cli();
+    
     char string[4];
     for (uint8_t i = 4; i > 0; --i) {
         char c = code & 0xf;
@@ -179,10 +180,13 @@ MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
         code >>= 4;
     }
     
+    if (c)
+        string[0] = c;
+    
     uint8_t dps = (type == ErrorConditionNote) ? 1 : ((type == ErrorConditionWarning) ? 3 : 7);
     g_app.showChars(string, dps);
 
-    for (uint8_t i = 0; i < 5; ++i) {
+    for (uint8_t i = 0; i < 3; ++i) {
         g_app.m_shiftReg.setOutputEnable(true);
         Application::msDelay<900>();
         g_app.m_shiftReg.setOutputEnable(false);
@@ -192,6 +196,8 @@ MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
     g_app.m_shiftReg.setOutputEnable(true);
     if (type == ErrorConditionFatal)
         while (1) ;
+    
+    Application::msDelay<1000>();
     sei();
 }
 #endif

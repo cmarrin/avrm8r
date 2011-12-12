@@ -244,20 +244,37 @@ public:
     void set(uint16_t v) _INLINE_ { REG16(reg) = v; }
     volatile uint8_t& getAddress() _INLINE_ { return REG16(reg); }
 };
+
+inline uint16_t makeUInt(uint8_t c1, uint8_t c2)
+{
+    union {
+        uint8_t a[2];
+        uint16_t uint;
+    } u;
+    
+    u.a[0] = c2;
+    u.a[1] = c1;
+    return u.uint;
 }
 
 #ifdef DEBUG
 extern "C" {
-    void _showErrorCondition(uint16_t code, m8r::ErrorConditionType);
+    void _showErrorCondition(char c, uint16_t code, m8r::ErrorConditionType);
 }
 
 #define ASSERT(expr, code) if (!(expr)) FATAL(code)
-#define FATAL(code) _showErrorCondition(code, ErrorConditionFatal)
-#define WARNING(code) _showErrorCondition(code, ErrorConditionWarning)
-#define NOTE(code) _showErrorCondition(code, ErrorConditionNote)
+#define FATAL(code) _showErrorCondition(0, code, ErrorConditionFatal)
+#define WARNING(code) _showErrorCondition(0, code, ErrorConditionWarning)
+inline void NOTE(uint16_t code) { _showErrorCondition(0, code, ErrorConditionNote); }
+inline void NOTE(uint8_t code1, uint8_t code2) { _showErrorCondition(0, makeUInt(code1, code2), ErrorConditionNote); }
+inline void CNOTE(char c, uint8_t code) { _showErrorCondition(c, code, ErrorConditionNote); }
 #else
 #define ASSERT(expr, code)
 #define FATAL(code) while(1)
 #define WARNING(code)
-#define NOTE(code)
+inline void NOTE(uint16_t code) { }
+inline void NOTE(uint8_t code1, uint8_t code2) { }
+inline void CNOTE(char c, uint8_t code) { }
 #endif
+
+}

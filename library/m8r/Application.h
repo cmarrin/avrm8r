@@ -83,7 +83,7 @@ public:
     
 #ifdef DEBUG
     static void setErrorReporter(ErrorReporter* reporter) { m_errorReporter = reporter; }
-    static void handleErrorCondition(uint16_t errorType, ErrorConditionType conditionType);
+    static void handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType);
 #endif
     
     static void addEventListener(EventListener*);
@@ -143,7 +143,7 @@ private:
 class ErrorReporter {
 public:
     ErrorReporter() { Application::setErrorReporter(this); }
-    virtual void reportError(uint16_t, ErrorConditionType) = 0;
+    virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
 };
 #endif
 
