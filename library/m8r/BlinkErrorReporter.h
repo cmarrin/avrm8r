@@ -72,7 +72,6 @@ public:
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
-        Application::setErrorReporter(this);
     }
         
     void _NO_INLINE_ setError(bool error)
@@ -86,15 +85,26 @@ public:
     bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
 
     // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
-    virtual void reportError(ErrorType code, ErrorConditionType condition)
+    virtual void reportError(char, uint16_t code, ErrorConditionType condition)
     {
         setError(false);
         Application::msDelay<500>();
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
-                flicker(10);
+                if (code > 0xff) {
+                    flicker(3);
+                    Application::msDelay<25>();
+                    flicker(3);
+                    Application::msDelay<25>();
+                    flicker(3);
+                }
+                else
+                    flicker(10);
+                    
                 Application::msDelay<1000>();
             }
+            if (code > 0xff)
+                blinkCode(code >> 8);
             blinkCode(code);
             Application::msDelay<1000>();
         }

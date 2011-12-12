@@ -82,7 +82,7 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
-		497CD342149048BD0026DE00 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		497CD342149048BD0026DE00 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = liblibm8r.a.a; path = /Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Release/liblibm8r.a.a; sourceTree = "<absolute>"; };
 		49BBE06F14873F6C00DC43EC /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = ../../library/m8r/net.h; sourceTree = "<group>"; };
 		49BBE0701487C72100DC43EC /* Timer0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = ../../library/m8r/Timer0.h; sourceTree = "<group>"; };
 		49BBE0711487C72100DC43EC /* Timer1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = ../../library/m8r/Timer1.h; sourceTree = "<group>"; };
@@ -139,7 +139,6 @@
 			children = (
 				49EE68BA147B184100FA3113 /* libm8r */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				497CD342149048BD0026DE00 /* liblibm8r.a.a */,
 			);
 			name = etherclock;
 			sourceTree = "<group>";

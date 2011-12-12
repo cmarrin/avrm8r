@@ -61,10 +61,8 @@
 #define IP_TTL_P 0x16
 #define IP_FLAGS_P 0x14
 #define IP_P 0xe
-#define IP_TOTLEN_H_P 0x10
-#define IP_TOTLEN_L_P 0x11
-#define IP_ID_H_P 0x12
-#define IP_ID_L_P 0x13
+#define IP_TOTLEN_P 0x10
+#define IP_ID_P 0x12
 
 #define IP_PROTO_P 0x17  
 

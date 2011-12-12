@@ -41,15 +41,9 @@ DAMAGE.
 
 namespace m8r {
 
-const uint16_t PacketBufferSize = 250;
+const uint16_t PacketBufferSize = 220;
 
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
-
-enum NetworkState {
-    NetworkStateNone,
-    NetworkStateWaitForGW,
-    NetworkStateReady
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -65,9 +59,12 @@ class NetworkBase {
 public:
     NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
 
+    void sendUdp(const uint8_t destAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port);
     void sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port);
     
     void handlePackets();
+    
+    bool ready() const { return m_state == StateReady; }
 
     void setNext(NetworkBase* next) { m_next = next; }
     NetworkBase* next() const { return m_next; }
@@ -80,7 +77,7 @@ protected:
     virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
     
 private:
-    void setChecksum(uint8_t *buf, ChecksumType type, uint16_t len = 0);
+    void setChecksum(ChecksumType type, uint16_t len = 0);
     
     void setGatewayIPAddress(const uint8_t* gwaddr);
     
@@ -89,7 +86,8 @@ private:
     bool isMyArpPacket() const;
     bool isMyIpPacket() const;
     
-    void setEthernetResponseHeader();
+    void setEthernetMacAddresses(const uint8_t* destMacAddr);
+    void setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length);
     void setIPResponseHeader();
     
     void sendArp(const uint8_t destIPAddr[4]);
@@ -102,6 +100,7 @@ private:
     uint8_t m_gatewayMACAddress[6];
     uint8_t m_packetBuffer[PacketBufferSize + 1];
     uint16_t m_packetLength;
+    uint8_t m_ipID;
 
     NetworkBase* m_next;
     Socket* m_socketHead;
@@ -109,8 +108,8 @@ private:
     bool m_inHandler;
 
     enum State {
-        StateNone,
-        StateWaitForGW,
+        StateNeedToRequestGWMacAddr,
+        StateWaitForGWMacAddr,
         StateReady
     };
 

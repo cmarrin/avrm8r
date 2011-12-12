@@ -42,33 +42,44 @@ DAMAGE.
 
 using namespace m8r;
 
-UDPSocket::UDPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+UDPSocket::UDPSocket(NetworkBase* network, PacketCallback callback, void* data)
     : Socket(network, callback, data)
 {
 }
 
 void
-UDPSocket::send(const uint8_t* data, uint16_t length)
+UDPSocket::respond(const uint8_t* data, uint16_t length)
 {
     m_network->sendUdpResponse(data, length, m_port);
 }
 
-bool
-UDPSocket::handlePacket(SocketEventType type, const uint8_t* data)
+void
+UDPSocket::send(const uint8_t* data, uint16_t length)
 {
-    uint16_t length = ((uint16_t) data[UDP_LEN_P]) << 8;
-    length |= data[UDP_LEN_P + 1];
-    ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);
-    length -= UDP_HEADER_LEN;
+    ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
+    m_network->sendUdp(m_destinationAddress, m_destinationPort, data, length, m_port);
+}
 
-    uint16_t port = ((uint16_t) data[UDP_TCP_DST_PORT_P]) << 8;
-    port |= data[UDP_TCP_DST_PORT_P + 1];
+bool
+UDPSocket::_handlePacket(EventType type, const uint8_t* data)
+{
+    uint16_t length = 0;
+    
+    if (type == EventDataReceived) {
+        length = ((uint16_t) data[UDP_LEN_P]) << 8;
+        length |= data[UDP_LEN_P + 1];
+        ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);
+        length -= UDP_HEADER_LEN;
 
-    if (data[IP_PROTO_P] != IP_PROTO_UDP_V || !m_port || port != m_port)
-        return false;
-        
+        uint16_t port = ((uint16_t) data[UDP_TCP_DST_PORT_P]) << 8;
+        port |= data[UDP_TCP_DST_PORT_P + 1];
+
+        if (data[IP_PROTO_P] != IP_PROTO_UDP_V || !m_port || port != m_port)
+            return false;
+    }
+    
     if (m_callback)
-        m_callback(this, type, &data[UDP_DATA_P], length, m_data);
+        m_callback(this, type, data ? &data[UDP_DATA_P] : 0, length, m_data);
         
     return true;
 }

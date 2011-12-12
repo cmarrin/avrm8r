@@ -41,34 +41,44 @@ DAMAGE.
 
 using namespace m8r;
 
-Socket::Socket(NetworkBase* network, SocketPacketCallback callback, void* data)
+Socket::Socket(NetworkBase* network, PacketCallback callback, void* data)
     : m_port(0)
     , m_callback(callback)
     , m_data(data)
     , m_network(network)
+    , m_state(StateIdle)
     , m_next(0)
 {
     m_network->addSocket(this);
 }
 
-uint8_t
+void
 Socket::requestSend(const uint8_t ipaddr[4], uint16_t port)
 {
-    // FIXME: Implement. Need Network to send a callback when request can be satisfied. This means:
-    //
-    //  1) src ip, gw, mask and dns are all set (doing dhcp as needed)
-    //  2) gwmacaddr is set (using arp)
-    //  3) hostname has been translated in dst ip as needed (using dns, hostname version only)
-    //  4) any tcp negotiation has completed (tcp only)
-    //
-    // Once callback is made, send() is used to send actual packet
-    return 0;
+    m_destinationAddress = ipaddr;
+    m_destinationPort = port;
+    m_state = StateWaitSendData;
 }
 
-uint8_t
+void
 Socket::requestSend(const char* hostname, uint16_t port)
 {
     // FIXME: Implement. See above
-    return 0;
+}
+
+bool
+Socket::handlePacket(EventType type, const uint8_t* data)
+{
+    if (type == EventSendDataReady) {
+        ASSERT(m_state == StateWaitSendData, AssertEthernetNotWaitingToSendData);
+        m_state = StateCanSendData;
+    }
+    
+    bool result = _handlePacket(type, data);
+    
+    if (type == EventSendDataReady && m_state == StateCanSendData)
+        m_state = StateIdle;
+        
+    return result;
 }
 

@@ -41,9 +41,15 @@ DAMAGE.
 
 using namespace m8r;
 
-TCPSocket::TCPSocket(NetworkBase* network, SocketPacketCallback callback, void* data)
+TCPSocket::TCPSocket(NetworkBase* network, PacketCallback callback, void* data)
     : Socket(network, callback, data)
 {
+}
+
+void
+TCPSocket::respond(const uint8_t* data, uint16_t length)
+{
+    // FIXME: Implement
 }
 
 void
@@ -53,24 +59,26 @@ TCPSocket::send(const uint8_t* data, uint16_t length)
 }
 
 bool
-TCPSocket::handlePacket(SocketEventType type, const uint8_t* data)
+TCPSocket::_handlePacket(EventType type, const uint8_t* data)
 {
     // FIXME: This needs to be completely implemented
-    
-    // FIXME: Need to set the length. Do we handle split packets?
     uint16_t length = 0;
-    length |= 0;
+    
+    if (type == EventDataReceived) {
+        // FIXME: Need to set the length. Do we handle split packets?
+        length |= 0;
 
-    uint16_t port = ((uint16_t) data[UDP_TCP_DST_PORT_P]) << 8;
-    port |= data[UDP_TCP_DST_PORT_P + 1];
-            
+        uint16_t port = ((uint16_t) data[UDP_TCP_DST_PORT_P]) << 8;
+        port |= data[UDP_TCP_DST_PORT_P + 1];
+                
 
-    if (data[IP_PROTO_P] != IP_PROTO_TCP_V || !m_port || port != m_port)
-        return false;
+        if (data[IP_PROTO_P] != IP_PROTO_TCP_V || !m_port || port != m_port)
+            return false;
+    }
     
     // FIXME: Where is the real payload?
     if (m_callback)
-        m_callback(this, type, &data[TCP_OPTIONS_P], length, m_data);
+        m_callback(this, type, data ? &data[TCP_OPTIONS_P] : 0, length, m_data);
         
     return true;
 }

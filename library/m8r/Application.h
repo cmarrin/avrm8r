@@ -62,12 +62,6 @@ inline uint16_t MakeUint16(EventParam param) { return (uint16_t) (uint32_t) para
         
 typedef void (*EventCallback)(EventType, EventParam);
 
-// Error handling
-class ErrorReporter {
-public:
-    virtual void reportError(ErrorType, ErrorConditionType) = 0;
-};
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: Application
@@ -76,6 +70,7 @@ public:
 //
 //////////////////////////////////////////////////////////////////////////////
 
+class ErrorReporter;
 class EventListener;
 class NetworkBase;
 class TimerEventMgrBase;
@@ -88,11 +83,7 @@ public:
     
 #ifdef DEBUG
     static void setErrorReporter(ErrorReporter* reporter) { m_errorReporter = reporter; }
-    static void handleErrorCondition(ErrorType errorType, ErrorConditionType conditionType)
-    {
-        if (m_errorReporter)
-            m_errorReporter->reportError(errorType, conditionType);
-    }
+    static void handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType);
 #endif
     
     static void addEventListener(EventListener*);
@@ -146,5 +137,14 @@ private:
     static ErrorReporter* m_errorReporter;
     static TimerEventMgrBase* m_timerEventMgr;
 };
+
+#ifdef DEBUG
+// Error handling
+class ErrorReporter {
+public:
+    ErrorReporter() { Application::setErrorReporter(this); }
+    virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
+};
+#endif
 
 }

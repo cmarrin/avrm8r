@@ -43,26 +43,27 @@ using namespace m8r;
 
 uint32_t NTPClient::m_unixTime = 0;
 
-const uint8_t ntpipaddr[4] = { 96, 44, 157, 90 };
-const char ntpreqhdr[] = { 0xe3, 0, 4, 0xfa, 0, 1, 0, 0, 0, 1};
+const uint8_t ntpipaddr[4] = { 67, 18, 187, 111 };
 
 static void
-ntpCallback(Socket* socket, SocketEventType type, const uint8_t* buffer, uint16_t length, void* data)
+ntpCallback(Socket* socket, Socket::EventType type, const uint8_t* buffer, uint16_t length, void* data)
 {
-    if (type == SocketEventSendDataReady) {
+    if (type == Socket::EventSendDataReady) {
         uint8_t buf[48];
         memset(buf, 0, 48);
         buf[0] = 0xe3;
         buf[2] = 4;
         buf[3] = 0xfa;
         buf[5] = 1;
+        buf[9] = 1;
         socket->send(buf, 48);
         return;
     }
     
-    // Assume this is the returned NTP data
-    // FIXME: Implement
-    NOTE(length);
+    if (type == Socket::EventDataReceived) {
+        // FIXME: Implement
+        NOTE(length);
+    }
 }
 
 NTPClient::NTPClient(NetworkBase* network)

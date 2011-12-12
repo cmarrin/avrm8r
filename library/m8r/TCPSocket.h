@@ -51,12 +51,13 @@ namespace m8r {
 
 class TCPSocket: public Socket {
 public:
-    TCPSocket(NetworkBase*, SocketPacketCallback, void*);
+    TCPSocket(NetworkBase*, PacketCallback, void*);
 
+    virtual void respond(const uint8_t* data, uint16_t length);
     virtual void send(const uint8_t* data, uint16_t length);
-    virtual bool handlePacket(SocketEventType, const uint8_t* data);
 
 protected:
+    virtual bool _handlePacket(EventType, const uint8_t* data);
     
 private:
 };
