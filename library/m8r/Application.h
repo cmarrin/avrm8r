@@ -138,11 +138,13 @@ private:
     static TimerEventMgrBase* m_timerEventMgr;
 };
 
+#ifdef DEBUG
 // Error handling
 class ErrorReporter {
 public:
     ErrorReporter() { Application::setErrorReporter(this); }
     virtual void reportError(uint16_t, ErrorConditionType) = 0;
 };
+#endif
 
 }

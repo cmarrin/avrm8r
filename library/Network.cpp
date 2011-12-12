@@ -362,7 +362,7 @@ NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port
 void
 NetworkBase::notifyReady()
 {
-    m_inHandler = true;
+    m_state = StateReady;
     for (Socket* socket = m_socketHead; socket; socket = socket->next())
         socket->handlePacket(Socket::EventConnectionReady, 0);
 }
@@ -377,6 +377,9 @@ NetworkBase::handlePackets()
     
     m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
     if (!m_packetLength) {
+        if (m_state != StateReady)
+            return;
+            
         for (Socket* socket = m_socketHead; socket; socket = socket->next())
             if (socket->waitingForSendData())
                 socket->handlePacket(Socket::EventSendDataReady, 0);

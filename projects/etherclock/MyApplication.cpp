@@ -164,6 +164,7 @@ const int8_t Hysteresis = 2;
 
 MyApp g_app;
 
+#ifdef DEBUG
 void
 MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
 {
@@ -193,6 +194,7 @@ MyErrorReporter::reportError(uint16_t code, ErrorConditionType type)
         while (1) ;
     sei();
 }
+#endif
 
 static uint32_t parseNumber(const uint8_t* string)
 {
@@ -217,6 +219,9 @@ const char startupMessage[] = "EtherClock  v1-0";
 static void
 telnetCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
 {
+    if (type != Socket::EventDataReceived)
+        return;
+        
     static bool sentWelcome = false;
     
     if (data[0] == 'T')

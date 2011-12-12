@@ -47,12 +47,14 @@ EventListener* Application::m_eventListenerHead = 0;
 ErrorReporter* Application::m_errorReporter = 0;
 TimerEventMgrBase* Application::m_timerEventMgr = 0;
 
+#ifdef DEBUG
 void
 Application::handleErrorCondition(uint16_t errorType, ErrorConditionType conditionType)
 {
     if (m_errorReporter)
         m_errorReporter->reportError(errorType, conditionType);
 }
+#endif
 
 void
 Application::run()
