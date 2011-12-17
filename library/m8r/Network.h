@@ -43,6 +43,7 @@ namespace m8r {
 
 const uint16_t PacketBufferSize = 220;
 
+enum NetworkInterfaceError { NetworkInterfaceNoError, NetworkInterfaceTransmitError, NetworkInterfaceReceiveError };
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -75,6 +76,7 @@ public:
 protected:
     virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
     virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
+    virtual NetworkInterfaceError checkError() = 0;
     
 private:
     void setChecksum(ChecksumType type, uint16_t len = 0);
@@ -127,6 +129,7 @@ public:
 protected:
     virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface.sendPacket(len, packet); }
     virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface.receivePacket(maxlen, packet); }
+    virtual NetworkInterfaceError checkError() { return m_interface.checkError(); }
     
 private:
     NetworkInterface m_interface;

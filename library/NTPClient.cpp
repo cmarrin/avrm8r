@@ -43,7 +43,7 @@ using namespace m8r;
 
 uint32_t NTPClient::m_unixTime = 0;
 
-const uint8_t ntpipaddr[4] = { 67, 18, 187, 111 };
+const uint8_t ntpipaddr[4] = { 209, 139, 209, 59 };
 
 static void
 ntpCallback(Socket* socket, Socket::EventType type, const uint8_t* buffer, uint16_t length, void* data)
@@ -62,7 +62,7 @@ ntpCallback(Socket* socket, Socket::EventType type, const uint8_t* buffer, uint1
     
     if (type == Socket::EventDataReceived) {
         // FIXME: Implement
-        NOTE(length);
+        CNOTE('n', length);
     }
 }
 
@@ -74,5 +74,5 @@ NTPClient::NTPClient(NetworkBase* network)
 void
 NTPClient::request()
 {
-    m_socket.requestSend(ntpipaddr, 123);
+    m_socket.requestSend(ntpipaddr, 37);
 }
