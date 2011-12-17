@@ -69,6 +69,8 @@ enum ErrorType {
     AssertEthernetNotInHandler = 0x31,
     AssertEthernetCannotSendData = 0x32,
     AssertEthernetNotWaitingToSendData = 0x33,
+    AssertEthernetTransmitError = 0x34,
+    AssertEthernetReceiveError = 0x35,
     ErrorUser = 0x80,
 };
 

@@ -91,6 +91,8 @@ DAMAGE.
 
 using namespace m8r;
 
+//#define TEST_LOOP_TIMING
+
 #define ErrorPort Port<B>
 #define ErrorBit 1
 
@@ -126,7 +128,7 @@ public:
     
     void updateDisplay();
 
-    void showChars(const char chars[4], uint8_t dps);
+    void showChars(const char chars[4], uint8_t dps, bool showLeadingZero);
     void scrollChars(const char* string);
 
 #ifdef DEBUG
@@ -170,11 +172,12 @@ MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
 {
     cli();
     
+    bool truncateLeadingZeros = code < 256;
     char string[4];
     for (uint8_t i = 4; i > 0; --i) {
         char c = code & 0xf;
         c += ((c > 9) ? ('A' - 10) : '0');
-        if ((i == 1 || i == 2) && c == '0')
+        if ((i == 1 || i == 2) && truncateLeadingZeros)
             c = ' ';
         string[i - 1] = c;
         code >>= 4;
@@ -184,7 +187,7 @@ MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
         string[0] = c;
     
     uint8_t dps = (type == ErrorConditionNote) ? 1 : ((type == ErrorConditionWarning) ? 3 : 7);
-    g_app.showChars(string, dps);
+    g_app.showChars(string, dps, true);
 
     for (uint8_t i = 0; i < 3; ++i) {
         g_app.m_shiftReg.setOutputEnable(true);
@@ -264,7 +267,7 @@ MyApp::MyApp()
         char string[4];
         for (uint8_t i = 0; i < 4; ++i, c++)
             string[i] = c;
-        showChars(string, 0x08);
+        showChars(string, 0x08, true);
         Application::msDelay<2000>();
     }
 #endif
@@ -313,7 +316,7 @@ MyApp::updateDisplay()
             string[1] = (hours % 10) + '0';
             string[2] = (t.minutes / 10) + '0';
             string[3] = (t.minutes % 10) + '0';
-            showChars(string, dps);
+            showChars(string, dps, false);
             break;
         }
         default:
@@ -322,11 +325,11 @@ MyApp::updateDisplay()
 }
 
 void
-MyApp::showChars(const char* string, uint8_t dps)
+MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
 {
     bool blank = false;
     for (uint8_t i = 0; i < 4; ++i, dps <<= 1) {
-        if (!blank && string[i] == '\0')
+        if (!blank && string[i] == '\0' && !showLeadingZero)
             blank = true;
         m_shiftReg.setChar(blank ? ' ' : string[i], dps & 0x08);
     }
@@ -336,7 +339,7 @@ MyApp::showChars(const char* string, uint8_t dps)
 void
 MyApp::scrollChars(const char* string)
 {
-    showChars("    ", 0);
+    showChars("    ", 0, true);
     
     for (const char* s = string; *s; s++) { 
         m_shiftReg.setChar(*s);
@@ -344,6 +347,13 @@ MyApp::scrollChars(const char* string)
         Application::msDelay<200>();
     }
 }
+
+#ifdef TEST_LOOP_TIMING
+const uint8_t TestLoopSecondsToDisplay = 10;
+
+static uint32_t g_testLoopIterationCount = 0;
+static uint8_t g_testLoopIterationSecondsLeft = TestLoopSecondsToDisplay;
+#endif
 
 void
 MyApp::handleEvent(EventType type, EventParam param)
@@ -354,6 +364,9 @@ MyApp::handleEvent(EventType type, EventParam param)
             g_app.accumulateBrightnessValue(g_app.m_adc.lastConversion8Bit());
             break;
         case EV_IDLE:
+#ifdef TEST_LOOP_TIMING
+            g_testLoopIterationCount++;
+#endif
             if (g_app.m_brightnessCount++ == g_app.m_currentBrightness)
                 g_app.m_shiftReg.setOutputEnable(false);
 
@@ -383,6 +396,17 @@ MyApp::handleEvent(EventType type, EventParam param)
             }
             break;
         case EV_RTC_SECONDS: {
+#ifdef TEST_LOOP_TIMING
+            if (--g_testLoopIterationSecondsLeft == 0) {
+                g_testLoopIterationCount /= TestLoopSecondsToDisplay;
+                if (g_testLoopIterationCount > 65536 * 256)
+                    CNOTE('D', g_testLoopIterationCount >> 24);
+                CNOTE('C', (g_testLoopIterationCount >> 16) & 0xff);
+                NOTE(g_testLoopIterationCount & 0xffff);
+                g_testLoopIterationCount = 0;
+                g_testLoopIterationSecondsLeft = TestLoopSecondsToDisplay;
+            }
+#endif
             g_app.m_adc.startConversion();
             updateDisplay();
             break;

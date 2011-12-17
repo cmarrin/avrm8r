@@ -75,6 +75,9 @@ class EventListener;
 class NetworkBase;
 class TimerEventMgrBase;
 
+// The networkHandlers are called after this many iterations of the run loop
+const uint8_t NetworkHandlerIterationCount = 100;
+
 class Application {
 public:
     Application();
@@ -136,6 +139,7 @@ private:
     static EventListener* m_eventListenerHead;
     static ErrorReporter* m_errorReporter;
     static TimerEventMgrBase* m_timerEventMgr;
+    static uint8_t m_networkHandlerCount;
 };
 
 #ifdef DEBUG

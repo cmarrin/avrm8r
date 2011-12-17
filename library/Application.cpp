@@ -46,6 +46,7 @@ NetworkBase* Application::m_networkHead = 0;
 EventListener* Application::m_eventListenerHead = 0;
 ErrorReporter* Application::m_errorReporter = 0;
 TimerEventMgrBase* Application::m_timerEventMgr = 0;
+uint8_t Application::m_networkHandlerCount = NetworkHandlerIterationCount;
 
 #ifdef DEBUG
 void
@@ -62,8 +63,11 @@ Application::run()
     while (1) {
         handleEvent(EV_IDLE);
         
-        for (NetworkBase* network = m_networkHead; network; network = network->next())
-            network->handlePackets();
+        if (--m_networkHandlerCount == 0) {
+            for (NetworkBase* network = m_networkHead; network; network = network->next())
+                network->handlePackets();
+            m_networkHandlerCount = NetworkHandlerIterationCount;
+        }
         wait();
     }
 }
