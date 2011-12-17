@@ -139,6 +139,25 @@ ENC28J60Base::ENC28J60Base(const uint8_t* macaddr, ENC28J60ClockOutType clockOut
 	writeOp(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_RXEN);
 }
 
+NetworkInterfaceError
+ENC28J60Base::checkError()
+{
+    uint8_t eir = read(EIR);
+    if (eir & EIR_TXERIF) {
+        writeOp(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_TXRST);
+        writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_TXRST);
+        return NetworkInterfaceTransmitError;
+    }
+    
+    if (eir & EIR_RXERIF) {
+        writeOp(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_RXRST);
+        writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_RXRST);
+        return NetworkInterfaceReceiveError;
+    }
+    
+    return NetworkInterfaceNoError;
+}
+
 void
 ENC28J60Base::sendPacket(uint16_t len, uint8_t* packet)
 {
@@ -150,7 +169,10 @@ ENC28J60Base::sendPacket(uint16_t len, uint8_t* packet)
             writeOp(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_TXRST);
         }
     }
-    
+        
+    // Wait until previous packet was sent
+    while(read(ECON1) & (1 << ECON1_TXRTS));
+
 	// Set the write pointer to start of transmit buffer area
 	write(EWRPTL, TXSTART_INIT&0xFF);
 	write(EWRPTH, TXSTART_INIT>>8);

@@ -37,6 +37,7 @@ DAMAGE.
 
 #pragma once
 
+#include "Network.h"
 #include "SPI.h"
 
 // Variable definitions from:
@@ -305,6 +306,8 @@ public:
     uint16_t receivePacket(uint16_t maxlen, uint8_t* packet);
     bool hasRxPkt(void);
     bool linkup();
+
+    NetworkInterfaceError checkError();
     
     uint8_t chipRev();
     
