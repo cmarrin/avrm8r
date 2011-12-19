@@ -37,6 +37,7 @@ DAMAGE.
 
 #include "TCPSocket.h"
 
+#include "Network.h"
 #include "net.h"
 
 using namespace m8r;
@@ -49,13 +50,14 @@ TCPSocket::TCPSocket(NetworkBase* network, PacketCallback callback, void* data)
 void
 TCPSocket::respond(const uint8_t* data, uint16_t length)
 {
-    // FIXME: Implement
+    m_network->sendTcpResponse(data, length, m_port);
 }
 
 void
 TCPSocket::send(const uint8_t* data, uint16_t length)
 {
-    // FIXME: Implement
+    ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
+    m_network->sendTcp(m_destinationAddress, m_destinationPort, data, length, m_port);
 }
 
 bool

@@ -63,6 +63,9 @@ public:
     void sendUdp(const uint8_t destAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port);
     void sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port);
     
+    void sendTcp(const uint8_t destAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port);
+    void sendTcpResponse(const uint8_t* data, uint16_t length, uint16_t port);
+    
     void handlePackets();
     
     bool ready() const { return m_state == StateReady; }
