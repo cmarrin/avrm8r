@@ -38,6 +38,7 @@ DAMAGE.
 #include "Socket.h"
 
 #include "Network.h"
+#include "net.h"
 
 using namespace m8r;
 
@@ -47,6 +48,7 @@ Socket::Socket(NetworkBase* network, PacketCallback callback, void* data)
     , m_data(data)
     , m_network(network)
     , m_state(StateIdle)
+    , m_inHandler(false)
     , m_next(0)
 {
     m_network->addSocket(this);
@@ -66,6 +68,50 @@ Socket::requestSend(const char* hostname, uint16_t port)
     // FIXME: Implement. See above
 }
 
+void
+Socket::createSendPacket(uint16_t length)
+{
+    // FIXME: Consolidate this and createResponsePacket
+    m_network->setEthernetMacAddresses();
+    
+    // FIXME: This should not be UDP_HEADER_LEN here
+    length += IP_HEADER_LEN + UDP_HEADER_LEN;
+    
+    m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
+    m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
+    m_network->setIPResponseHeader();
+    
+    // Send to port of sender and use "port" as own source:
+    m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P];
+    m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1];
+    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P] = m_port >> 8;
+    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1] = m_port & 0xff;
+}
+
+void
+Socket::createResponsePacket(uint16_t length)
+{
+    ASSERT(m_inHandler, AssertEthernetNotInHandler);
+    if (!m_inHandler)
+        return;
+        
+    m_network->setEthernetMacAddresses(&m_network->packetBuffer()[ETH_SRC_MAC]);
+    
+    // FIXME: This should not be UDP_HEADER_LEN here
+    length += IP_HEADER_LEN + UDP_HEADER_LEN;
+    
+    m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
+    m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
+    m_network->setIPResponseHeader();
+    
+    // Send to port of sender and use "port" as own source:
+    m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P];
+    m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1];
+    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P] = m_port >> 8;
+    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1] = m_port & 0xff;
+    
+}
+
 bool
 Socket::handlePacket(EventType type, const uint8_t* data)
 {
@@ -74,7 +120,9 @@ Socket::handlePacket(EventType type, const uint8_t* data)
         m_state = StateCanSendData;
     }
     
+    m_inHandler = true;
     bool result = _handlePacket(type, data);
+    m_inHandler = false;
     
     if (type == EventSendDataReady && m_state == StateCanSendData)
         m_state = StateIdle;

@@ -201,7 +201,7 @@ AR = ${TOOLS_DIR}/bin/avr-ar
 OBJCOPY = ${TOOLS_DIR}/bin/avr-objcopy
 OBJDUMP = ${TOOLS_DIR}/bin/avr-objdump
 SIZE = ${TOOLS_DIR}/bin/avr-size
-AVRDUDE = ${TOOLS_DIR}/bin/avrdude
+AVRDUDE = /usr/local/bin/avrdude
 NM = ${TOOLS_DIR}/bin/avr-nm
 REMOVE = rm -f
 COPY = cp
@@ -234,7 +234,7 @@ program_app: build_app
 	@echo
 	@echo Programming:
 	@echo
-	$(AVRDUDE) -C $(TOOLS_DIR)/etc/avrdude.conf -c $(AVRDUDE_PROGRAMMER) -P $(AVRDUDE_PORT) -p $(MCU) -U flash:w:$(BUILT_PRODUCTS_DIR)/$(TARGET).hex:i
+	$(AVRDUDE) -C /usr/local/etc/avrdude.conf -c $(AVRDUDE_PROGRAMMER) -P $(AVRDUDE_PORT) -p $(MCU) -U flash:w:$(BUILT_PRODUCTS_DIR)/$(TARGET).hex:i
 begin:
 	@echo
 	@echo "-------- begin --------"

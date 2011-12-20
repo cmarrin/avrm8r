@@ -51,7 +51,6 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], cons
     : m_ipID(2)
     , m_next(0)
     , m_socketHead(0)
-    , m_inHandler(false)
     , m_state(StateNeedToRequestGWMacAddr)
 {
     memcpy(m_macAddress, macaddr, 6);
@@ -200,6 +199,9 @@ NetworkBase::isMyIpPacket() const
 void
 NetworkBase::setEthernetMacAddresses(const uint8_t* destMacAddr)
 {
+    if (!destMacAddr)
+        destMacAddr = m_gatewayMACAddress;
+        
     memcpy(&m_packetBuffer[ETH_DST_MAC], destMacAddr, 6);
     memcpy(&m_packetBuffer[ETH_SRC_MAC], m_macAddress, 6);
 }
@@ -296,82 +298,6 @@ NetworkBase::respondToPing()
 }
 
 void
-NetworkBase::sendUdp(const uint8_t destIPAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port)
-{
-    setEthernetMacAddresses(m_gatewayMACAddress);
-    
-    m_packetBuffer[ETH_TYPE_P] = ETHTYPE_IP_V >> 8;
-    m_packetBuffer[ETH_TYPE_P + 1] = ETHTYPE_IP_V & 0xff;
-    
-    if (length > PacketBufferSize - UDP_DATA_P)
-        length = PacketBufferSize - UDP_DATA_P;
-        
-    setIPHeader(IP_PROTO_UDP_V, destIPAddr, length);
-
-    m_packetBuffer[UDP_TCP_DST_PORT_P] = destPort >> 8;
-    m_packetBuffer[UDP_TCP_DST_PORT_P + 1] = destPort & 0xff; 
-    m_packetBuffer[UDP_TCP_SRC_PORT_P] = port >> 8;
-    m_packetBuffer[UDP_TCP_SRC_PORT_P + 1] = port & 0xff; 
-
-    uint16_t headerLength = UDP_HEADER_LEN + length;
-    m_packetBuffer[UDP_LEN_P] = headerLength >> 8;
-    m_packetBuffer[UDP_LEN_P + 1] = headerLength & 0xff;
-    
-    memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
-
-    setChecksum(CHECKSUM_UDP, length);
-    
-    sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
-}
-
-void
-NetworkBase::sendUdpResponse(const uint8_t* data, uint16_t length, uint16_t port)
-{
-    ASSERT(m_inHandler, AssertEthernetNotInHandler);
-    if (!m_inHandler)
-        return;
-        
-    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
-    
-    if (length > PacketBufferSize - UDP_DATA_P)
-        length = PacketBufferSize - UDP_DATA_P;
-
-    // Total length field in the IP header must be set:
-    m_packetBuffer[IP_TOTLEN_P] = 0;
-    m_packetBuffer[IP_TOTLEN_P + 1] = IP_HEADER_LEN + UDP_HEADER_LEN + length;
-    setIPResponseHeader();
-    
-    // Send to port of sender and use "port" as own source:
-    m_packetBuffer[UDP_TCP_DST_PORT_P] = m_packetBuffer[UDP_TCP_SRC_PORT_P];
-    m_packetBuffer[UDP_TCP_DST_PORT_P + 1] = m_packetBuffer[UDP_TCP_SRC_PORT_P + 1];
-    m_packetBuffer[UDP_TCP_SRC_PORT_P] = port >> 8;
-    m_packetBuffer[UDP_TCP_SRC_PORT_P + 1] = port & 0xff;
-    
-    // Source port does not matter and is what the sender used.
-    
-    m_packetBuffer[UDP_LEN_P] = 0;
-    m_packetBuffer[UDP_LEN_P + 1] = UDP_HEADER_LEN + length;
-    
-    memcpy(&m_packetBuffer[UDP_DATA_P], data, length);
-
-    setChecksum(CHECKSUM_UDP, length);
-    
-    sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_packetBuffer);
-}
-
-void
-NetworkBase::sendTcp(const uint8_t destIPAddr[4], uint16_t destPort, const uint8_t* data, uint16_t length, uint16_t port)
-{
-    // FIXME: implement
-}
-
-void
-NetworkBase::sendTcpResponse(const uint8_t* data, uint16_t length, uint16_t port)
-{
-    // FIXME: implement
-}
-
-void
 NetworkBase::notifyReady()
 {
     m_state = StateReady;
@@ -420,12 +346,10 @@ NetworkBase::handlePackets()
         if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
             respondToPing();
         else {
-            m_inHandler = true;
             for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
                 if (socket->handlePacket(Socket::EventDataReceived, m_packetBuffer))
                     break;
             }
-            m_inHandler = false;
         }
     }
 }

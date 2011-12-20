@@ -86,6 +86,9 @@ public:
     
 protected:
     virtual bool _handlePacket(EventType, const uint8_t* data) = 0;
+    
+    void createSendPacket(uint16_t length);
+    void createResponsePacket(uint16_t length);
 
     uint16_t m_port;
     PacketCallback m_callback;
@@ -104,6 +107,8 @@ protected:
     uint16_t m_destinationPort;
     State m_state;
     
+    bool m_inHandler;
+
 private:
     Socket* m_next;
 };
