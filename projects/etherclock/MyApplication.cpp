@@ -98,7 +98,7 @@ using namespace m8r;
 
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
-const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
+const uint8_t GWAddr[4] = { 10, 0, 1, 201 };
 
 class MyApp;
 

@@ -57,7 +57,7 @@ Socket::Socket(NetworkBase* network, PacketCallback callback, void* data)
 void
 Socket::requestSend(const uint8_t ipaddr[4], uint16_t port)
 {
-    m_destinationAddress = ipaddr;
+    m_destinationIPAddress = ipaddr;
     m_destinationPort = port;
     m_state = StateWaitSendData;
 }
@@ -69,17 +69,16 @@ Socket::requestSend(const char* hostname, uint16_t port)
 }
 
 void
-Socket::createSendPacket(uint16_t length)
+Socket::createSendPacket(uint8_t ipType, uint16_t length)
 {
     // FIXME: Consolidate this and createResponsePacket
-    m_network->setEthernetMacAddresses();
     
     // FIXME: This should not be UDP_HEADER_LEN here
-    length += IP_HEADER_LEN + UDP_HEADER_LEN;
+    length += IP_HEADER_LEN;
     
     m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
     m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
-    m_network->setIPResponseHeader();
+    m_network->setIPHeader(ipType, m_destinationIPAddress, length);
     
     // Send to port of sender and use "port" as own source:
     m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P];
@@ -94,11 +93,8 @@ Socket::createResponsePacket(uint16_t length)
     ASSERT(m_inHandler, AssertEthernetNotInHandler);
     if (!m_inHandler)
         return;
-        
-    m_network->setEthernetMacAddresses(&m_network->packetBuffer()[ETH_SRC_MAC]);
-    
-    // FIXME: This should not be UDP_HEADER_LEN here
-    length += IP_HEADER_LEN + UDP_HEADER_LEN;
+
+    length += IP_HEADER_LEN;
     
     m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
     m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
@@ -119,7 +115,7 @@ Socket::handlePacket(EventType type, const uint8_t* data)
         ASSERT(m_state == StateWaitSendData, AssertEthernetNotWaitingToSendData);
         m_state = StateCanSendData;
     }
-    
+
     m_inHandler = true;
     bool result = _handlePacket(type, data);
     m_inHandler = false;

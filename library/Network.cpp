@@ -209,6 +209,10 @@ NetworkBase::setEthernetMacAddresses(const uint8_t* destMacAddr)
 void 
 NetworkBase::setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length)
 {
+    uint16_t swappedLength = htons(length);
+    
+    setEthernetMacAddresses();
+    
     memcpy(&m_packetBuffer[IP_DST_P], destIPAddr, 4);
     memcpy(&m_packetBuffer[IP_SRC_P], m_ipAddress, 4);
     memcpy(&m_packetBuffer[IP_P], iphdr, sizeof(iphdr));
@@ -218,9 +222,9 @@ NetworkBase::setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t len
     uint16_t headerLength = length + IP_HEADER_LEN + UDP_HEADER_LEN;
     m_packetBuffer[IP_TOTLEN_P] = headerLength >> 8;
     m_packetBuffer[IP_TOTLEN_P + 1] = headerLength & 0xff;
-    
-    m_packetBuffer[IP_PROTO_P] = ipType;
 
+    m_packetBuffer[IP_PROTO_P] = ipType;
+    
     setChecksum(CHECKSUM_IP, length);
 }
 
@@ -228,6 +232,8 @@ void
 NetworkBase::setIPResponseHeader()
 {
     // Assume packet buffer contains a packet we want to reply to
+    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
+
     memcpy(&m_packetBuffer[IP_DST_P], &m_packetBuffer[IP_SRC_P], 4);
     memcpy(&m_packetBuffer[IP_SRC_P], m_ipAddress, 4);
     
@@ -284,7 +290,6 @@ void
 NetworkBase::respondToPing()
 {
     // Assume incoming packet is an echo we are responding to, so we just have to fix it up
-    setEthernetMacAddresses(&m_packetBuffer[ETH_SRC_MAC]);
     setIPResponseHeader();
     m_packetBuffer[ICMP_TYPE_P] = ICMP_TYPE_ECHOREPLY_V;
     

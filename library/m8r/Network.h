@@ -60,6 +60,22 @@ class NetworkBase {
 public:
     NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
 
+    static uint16_t _INLINE_ _swap(uint16_t value)
+    {
+        uint16_t result;
+        __asm__ volatile (
+            "mov __tmp_reg__, %A0"  "\n\t"
+             "mov %A0, %B0"         "\n\t"
+             "mov %B0, __tmp_reg__" "\n\t"
+             : "=r" (result)
+             : "0" (value)
+        );
+        return result;
+    }
+
+    static uint16_t _INLINE_ htons(uint16_t v) { return _swap(v); }
+    static uint16_t _INLINE_ ntohs(uint16_t v) { return _swap(v); }
+
     void handlePackets();
     
     bool ready() const { return m_state == StateReady; }
@@ -73,7 +89,6 @@ public:
     uint8_t* packetBuffer() { return m_packetBuffer; }
     uint16_t packetBufferSize() const { return PacketBufferSize; }
 
-    void setEthernetMacAddresses(const uint8_t* destMacAddr = 0);
     void setIPResponseHeader();
     void setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length);
     
@@ -84,6 +99,7 @@ public:
     virtual NetworkInterfaceError checkError() = 0;
     
 private:
+    void setEthernetMacAddresses(const uint8_t* destMacAddr = 0);
     
     void setGatewayIPAddress(const uint8_t* gwaddr);
     

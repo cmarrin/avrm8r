@@ -87,7 +87,7 @@ public:
 protected:
     virtual bool _handlePacket(EventType, const uint8_t* data) = 0;
     
-    void createSendPacket(uint16_t length);
+    void createSendPacket(uint8_t ipType, uint16_t length);
     void createResponsePacket(uint16_t length);
 
     uint16_t m_port;
@@ -103,7 +103,7 @@ protected:
         StateWaitDNSResponse
     };
     
-    const uint8_t* m_destinationAddress;
+    const uint8_t* m_destinationIPAddress;
     uint16_t m_destinationPort;
     State m_state;
     

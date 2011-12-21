@@ -50,14 +50,14 @@ TCPSocket::TCPSocket(NetworkBase* network, PacketCallback callback, void* data)
 void
 TCPSocket::respond(const uint8_t* data, uint16_t length)
 {
-    m_network->sendTcpResponse(data, length, m_port);
+    //m_network->sendTcpResponse(data, length, m_port);
 }
 
 void
 TCPSocket::send(const uint8_t* data, uint16_t length)
 {
     ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
-    m_network->sendTcp(m_destinationAddress, m_destinationPort, data, length, m_port);
+    //m_network->sendTcp(m_destinationIPAddress, m_destinationPort, data, length, m_port);
 }
 
 bool

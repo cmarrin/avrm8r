@@ -54,9 +54,9 @@ UDPSocket::respond(const uint8_t* data, uint16_t length)
     if (length > m_network->packetBufferSize() - UDP_DATA_P)
         length = m_network->packetBufferSize() - UDP_DATA_P;
 
-    createResponsePacket(length);
-        
     uint16_t headerLength = length + UDP_HEADER_LEN;
+    createResponsePacket(headerLength);
+        
     m_network->packetBuffer()[UDP_LEN_P] = headerLength >> 8;
     m_network->packetBuffer()[UDP_LEN_P + 1] = headerLength;
     
@@ -75,12 +75,12 @@ UDPSocket::send(const uint8_t* data, uint16_t length)
     if (length > m_network->packetBufferSize() - UDP_DATA_P)
         length = m_network->packetBufferSize() - UDP_DATA_P;
 
-    createResponsePacket(length);
+    createSendPacket(IP_PROTO_UDP_V, length);
     
     m_network->packetBuffer()[ETH_TYPE_P] = ETHTYPE_IP_V >> 8;
     m_network->packetBuffer()[ETH_TYPE_P + 1] = ETHTYPE_IP_V & 0xff;
     
-    m_network->setIPHeader(IP_PROTO_UDP_V, m_destinationAddress, length);
+    m_network->setIPHeader(IP_PROTO_UDP_V, m_destinationIPAddress, length);
 
     m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_destinationPort >> 8;
     m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_destinationPort & 0xff; 
