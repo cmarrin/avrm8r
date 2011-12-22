@@ -42,11 +42,9 @@ DAMAGE.
 
 using namespace m8r;
 
-NetworkBase* Application::m_networkHead = 0;
 EventListener* Application::m_eventListenerHead = 0;
 ErrorReporter* Application::m_errorReporter = 0;
 TimerEventMgrBase* Application::m_timerEventMgr = 0;
-uint8_t Application::m_networkHandlerCount = NetworkHandlerIterationCount;
 
 #ifdef DEBUG
 void
@@ -62,12 +60,6 @@ Application::run()
 {
     while (1) {
         handleEvent(EV_IDLE);
-        
-        if (--m_networkHandlerCount == 0) {
-            for (NetworkBase* network = m_networkHead; network; network = network->next())
-                network->handlePackets();
-            m_networkHandlerCount = NetworkHandlerIterationCount;
-        }
         wait();
     }
 }
@@ -96,25 +88,6 @@ Application::handleEvent(EventType type, EventParam param)
 {
     for (EventListener* listener = m_eventListenerHead; listener; listener = listener->next())
         listener->handleEvent(type, param);
-}
-
-void
-Application::addNetwork(NetworkBase* network)
-{
-    network->setNext(m_networkHead);
-    m_networkHead = network;
-}
-    
-void
-Application::removeNetwork(NetworkBase* network)
-{
-    for (NetworkBase *prev = 0, *current = m_networkHead; current; prev = current, current = current->next())
-        if (current == network) {
-            if (prev)
-                prev->setNext(current->next());
-            else
-                m_networkHead = current->next();
-        }
 }
 
 TimerID

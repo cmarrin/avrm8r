@@ -75,9 +75,6 @@ class EventListener;
 class NetworkBase;
 class TimerEventMgrBase;
 
-// The networkHandlers are called after this many iterations of the run loop
-const uint8_t NetworkHandlerIterationCount = 100;
-
 class Application {
 public:
     Application();
@@ -92,9 +89,6 @@ public:
     static void addEventListener(EventListener*);
     static void removeEventListener(EventListener*);
     static void handleEvent(EventType, EventParam = 0);
-    
-    static void addNetwork(NetworkBase*);
-    static void removeNetwork(NetworkBase*);
     
     static void setTimerEventMgr(TimerEventMgrBase* mgr)
     {
@@ -135,11 +129,9 @@ private:
     {
     }
     
-    static NetworkBase* m_networkHead;
     static EventListener* m_eventListenerHead;
     static ErrorReporter* m_errorReporter;
     static TimerEventMgrBase* m_timerEventMgr;
-    static uint8_t m_networkHandlerCount;
 };
 
 #ifdef DEBUG

@@ -60,6 +60,21 @@ protected:
     virtual bool _handlePacket(EventType, const uint8_t* data);
     
 private:
+    enum TCPState {
+        TCPStateClosed,
+        TCPStateListen,
+        TCPStateSYNSent,
+        TCPStateSYNReceived,
+        TCPStateEstablished,
+        TCPStateFINWait1,
+        TCPStateClosing,
+        TCPStateFINWait2,
+        TCPStateTimeWait,
+        TCPStateCloseWait,
+        TCPStateLastACK
+    };
+    
+    TCPState m_tcpState;
 };
 
 }

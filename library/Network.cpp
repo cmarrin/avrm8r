@@ -52,13 +52,14 @@ NetworkBase::NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], cons
     , m_next(0)
     , m_socketHead(0)
     , m_state(StateNeedToRequestGWMacAddr)
+    , m_timerID()
 {
     memcpy(m_macAddress, macaddr, 6);
     memcpy(m_ipAddress, ipaddr, 4);
     memcpy(m_gatewayIPAddress, gwaddr, 4);
     memset(m_gatewayMACAddress, 0, 6);
 
-    Application::addNetwork(this);
+    m_timerID = Application::startEventTimer(NetworkTimerInterval);
 }
 
 void
@@ -209,8 +210,6 @@ NetworkBase::setEthernetMacAddresses(const uint8_t* destMacAddr)
 void 
 NetworkBase::setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length)
 {
-    uint16_t swappedLength = htons(length);
-    
     setEthernetMacAddresses();
     
     memcpy(&m_packetBuffer[IP_DST_P], destIPAddr, 4);
@@ -311,8 +310,13 @@ NetworkBase::notifyReady()
 }
 
 void
-NetworkBase::handlePackets()
+NetworkBase::handleEvent(EventType type, EventParam param)
 {
+    if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
+        return;
+        
+    m_timerID = Application::startEventTimer(NetworkTimerInterval);    
+
 #ifdef DEBUG
     NetworkInterfaceError error = checkError();
     ASSERT(error != NetworkInterfaceTransmitError, AssertEthernetTransmitError);

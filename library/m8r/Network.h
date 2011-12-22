@@ -39,9 +39,12 @@ DAMAGE.
 
 #include "m8r.h"
 
+#include "EventListener.h"
+
 namespace m8r {
 
 const uint16_t PacketBufferSize = 220;
+const uint16_t NetworkTimerInterval = 1000;
 
 enum NetworkInterfaceError { NetworkInterfaceNoError, NetworkInterfaceTransmitError, NetworkInterfaceReceiveError };
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
@@ -56,7 +59,7 @@ enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP }
 
 class Socket;
 
-class NetworkBase {
+class NetworkBase : public EventListener {
 public:
     NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
 
@@ -76,7 +79,8 @@ public:
     static uint16_t _INLINE_ htons(uint16_t v) { return _swap(v); }
     static uint16_t _INLINE_ ntohs(uint16_t v) { return _swap(v); }
 
-    void handlePackets();
+    // EventListener override
+    virtual void handleEvent(EventType, EventParam);
     
     bool ready() const { return m_state == StateReady; }
 
@@ -130,6 +134,8 @@ private:
     };
 
     State m_state;
+    
+    TimerID m_timerID;    
 };
 
 template <class NetworkInterface>
