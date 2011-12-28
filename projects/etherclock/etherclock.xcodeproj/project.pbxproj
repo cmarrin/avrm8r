@@ -82,7 +82,6 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
-		497CD342149048BD0026DE00 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = liblibm8r.a.a; path = /Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Release/liblibm8r.a.a; sourceTree = "<absolute>"; };
 		49BBE06F14873F6C00DC43EC /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = ../../library/m8r/net.h; sourceTree = "<group>"; };
 		49BBE0701487C72100DC43EC /* Timer0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = ../../library/m8r/Timer0.h; sourceTree = "<group>"; };
 		49BBE0711487C72100DC43EC /* Timer1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = ../../library/m8r/Timer1.h; sourceTree = "<group>"; };
@@ -131,6 +130,7 @@
 		49EE68DC147B18DF00FA3113 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerBase.h; path = ../../library/m8r/TimerBase.h; sourceTree = "<group>"; };
 		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
 		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -139,6 +139,7 @@
 			children = (
 				49EE68BA147B184100FA3113 /* libm8r */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
+				49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */,
 			);
 			name = etherclock;
 			sourceTree = "<group>";
@@ -247,7 +248,7 @@
 			);
 			name = libm8r.a;
 			productName = libm8r.a;
-			productReference = 497CD342149048BD0026DE00 /* liblibm8r.a.a */;
+			productReference = 49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */

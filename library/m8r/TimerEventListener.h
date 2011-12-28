@@ -1,5 +1,5 @@
 //
-//  TimerEvent.h
+//  TimerEventListener.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -42,20 +42,16 @@ DAMAGE.
 
 namespace m8r {
 
-enum TimerEventMode { TimerEventRepeating, TimerEventOneShot };
-
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: TimerEvent
+//  Class: TimerEventListener
 //
 //  Timer events managed by TimerEventMgr
 //
 //////////////////////////////////////////////////////////////////////////////
     
 
-class TimerEvent {
-    friend class TimerEventMgrBase;
-    
+class TimerEventListener : public EventListener {
 public:
     TimerEvent(EventListener* listener, uint16_t ms, TimerEventMode mode, EventType type = EV_TIMER_EVENT);
     ~TimerEvent() { stop(); }
