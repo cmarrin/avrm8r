@@ -69,7 +69,6 @@ UDPSocket::respond(const uint8_t* data, uint16_t length)
 void
 UDPSocket::send(const uint8_t* data, uint16_t length)
 {
-    // FIXME: this is actually the respond logic
     ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
     
     if (length > m_network->packetBufferSize() - UDP_DATA_P)
@@ -91,7 +90,8 @@ UDPSocket::send(const uint8_t* data, uint16_t length)
     m_network->packetBuffer()[UDP_LEN_P] = headerLength >> 8;
     m_network->packetBuffer()[UDP_LEN_P + 1] = headerLength;
     
-    memcpy(&m_network->packetBuffer()[UDP_DATA_P], data, length);
+    if (length)
+        memcpy(&m_network->packetBuffer()[UDP_DATA_P], data, length);
 
     m_network->setChecksum(CHECKSUM_UDP, length);
     m_network->sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_network->packetBuffer());
@@ -105,7 +105,9 @@ UDPSocket::_handlePacket(EventType type, const uint8_t* data)
     if (type == EventDataReceived) {
         length = ((uint16_t) data[UDP_LEN_P]) << 8;
         length |= data[UDP_LEN_P + 1];
-        ASSERT(length >= UDP_HEADER_LEN, AssertEthernetBadLength);
+        if (length < UDP_HEADER_LEN)
+            return false;
+
         length -= UDP_HEADER_LEN;
 
         uint16_t port = ((uint16_t) data[UDP_TCP_DST_PORT_P]) << 8;

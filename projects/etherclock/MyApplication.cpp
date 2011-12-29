@@ -46,7 +46,6 @@ DAMAGE.
 #include "EventListener.h"
 #include "MAX6969.h"
 #include "Network.h"
-#include "NTPClient.h"
 #include "RTC.h"
 #include "Timer0.h"
 #include "Timer1.h"
@@ -98,7 +97,8 @@ using namespace m8r;
 
 const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
-const uint8_t GWAddr[4] = { 10, 0, 1, 201 };
+const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
+const uint8_t DestAddr[4] = { 10, 0, 1, 201 };
 
 class MyApp;
 
@@ -141,7 +141,6 @@ public:
     RTC<Timer1> m_clock;
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     UDPSocket m_socket;
-    NTPClient m_ntp;
     Port<D> m_colonPort;
     Button<Port<C>, 5, 10, 5> m_button;
     
@@ -159,6 +158,8 @@ public:
     uint8_t m_colonBrightnessCount;
     
     static uint8_t m_brightnessTable[8];
+    
+    int8_t m_curTemp, m_lowTemp, m_highTemp;
 };
 
 uint8_t MyApp::m_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
@@ -222,25 +223,21 @@ static uint32_t parseNumber(const uint8_t* string)
     return n;
 }
 
-const char welcomeMessage[] = "Welcome to Etherclock\n> ";
 const char startupMessage[] = "EtherClock  v1-0";
 
 static void
-telnetCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
+networkUpdateCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
 {
+    if (type == Socket::EventSendDataReady) {
+        g_app.m_socket.send(0, 0);
+        return;
+    }
+    
     if (type != Socket::EventDataReceived)
         return;
         
-    static bool sentWelcome = false;
-    
     if (data[0] == 'T')
         g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
-    
-    if (!sentWelcome) {
-        socket->respond((const uint8_t*) welcomeMessage, sizeof(welcomeMessage));
-        sentWelcome = true;
-    } else
-        socket->respond((const uint8_t*) "> ", 2);
 }
 
 MyApp::MyApp()
@@ -248,8 +245,7 @@ MyApp::MyApp()
     , m_timerEventMgr(TimerClockDIV64, 195) // ~100us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr, GWAddr)
-    , m_socket(&m_network, telnetCallback, this)
-    , m_ntp(&m_network)
+    , m_socket(&m_network, networkUpdateCallback, this)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)
@@ -258,6 +254,9 @@ MyApp::MyApp()
     , m_brightnessCount(0)
     , m_currentColonBrightness(0xff)
     , m_colonBrightnessCount(0)
+    , m_curTemp(-1)
+    , m_lowTemp(-1)
+    , m_highTemp(-1)
 {
     m_shiftReg.setOutputEnable(true);
     
@@ -286,21 +285,20 @@ MyApp::MyApp()
     sei();
     m_adc.startConversion();
     
-    m_socket.listen(23);
-    
-    m_ntp.request();
+    m_socket.listen(1956);
+    m_socket.requestSend(DestAddr, 1956);
 }
-
 
 void
 MyApp::updateDisplay()
 {
-    // FIXME: Add the other display states
     switch (m_displayState) {
+        case DisplayDate:
+        case DisplayDay:
         case DisplayTime: {
             RTCTime t;
             g_app.m_clock.currentTime(t);
-            
+
             uint8_t hours = t.hours;
             uint8_t dps = 0;
             if (hours > 12) {
@@ -319,6 +317,16 @@ MyApp::updateDisplay()
             showChars(string, dps, false);
             break;
         }
+        case DisplayDay:
+            break;
+        case DisplayDate:
+            break;
+        case DisplayCurrentTemp:
+            break;
+        case DisplayHighTemp:
+            break;
+        case DisplayLowTemp:       
+            break;
         default:
             break;
     }
