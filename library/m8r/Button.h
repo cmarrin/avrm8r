@@ -67,12 +67,13 @@ private:
 };
 
 template <class Port, uint8_t Bit, uint8_t debounceTimerCount = 10, uint8_t numDebounceTests = 5>
-class Button : public ButtonBase {
+class Button : public ButtonBase, public EventListener {
 public:
 	Button()
         : ButtonBase()
     {
         m_port.setBitInput(Bit);
+        m_port.setPortBit(Bit);
         m_timerID = Application::startEventTimer(debounceTimerCount);
     }
     
@@ -82,7 +83,7 @@ public:
         if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
             return;
             
-        _handleEvent(type, param, m_port.isPortBit(Bit), numDebounceTests);
+        _handleEvent(type, param, !m_port.isPinBit(Bit), numDebounceTests);
         m_timerID = Application::startEventTimer(debounceTimerCount);
     }
     
