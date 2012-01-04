@@ -35,10 +35,13 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
+//#define TEST_LOOP_TIMING
+//#define USE_BLINK_ERROR_REPORTER
+
 #include "m8r.h"
 #include "Application.h"
 #include "ADC.h"
-#ifdef DEBUG
+#if defined(DEBUG) && defined(USE_BLINK_ERROR_REPORTER)
 #include "BlinkErrorReporter.h"
 #endif
 #include "Button.h"
@@ -52,6 +55,8 @@ DAMAGE.
 #include "Timer1.h"
 #include "TimerEventMgr.h"
 #include "UDPSocket.h"
+
+#include <avr/pgmspace.h>
 
 //
 // Etherclock
@@ -92,16 +97,17 @@ DAMAGE.
 
 using namespace m8r;
 
-//#define TEST_LOOP_TIMING
-
 #define ErrorPort Port<B>
 #define ErrorBit 1
 
-const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
+const uint8_t MacAddr[6] = { 'm', 't', 'e', 't', 'h', 0x01 };
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
 const uint8_t DestAddr[4] = { 10, 0, 1, 201 };
 const uint16_t DestPort = 1956;
+
+extern const char startupMessage[] PROGMEM;
+const char startupMessage[] = "EtherClock  v1-0";
 
 class MyApp;
 
@@ -132,11 +138,14 @@ public:
     void updateDisplay();
 
     void showChars(const char chars[4], uint8_t dps, bool showLeadingZero);
-    void scrollChars(const char* string);
+    void scrollChars_P(const char* string);
 
 #ifdef DEBUG
-    //BlinkErrorReporter<Port<B>, 1> m_errorReporter;
+#ifdef USE_BLINK_ERROR_REPORTER
+    BlinkErrorReporter<Port<B>, 1> m_errorReporter;
+#else
     MyErrorReporter m_errorReporter;
+#endif
 #endif
     ADC m_adc;
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
@@ -173,7 +182,7 @@ const int8_t Hysteresis = 2;
 
 MyApp g_app;
 
-#ifdef DEBUG
+#if defined(DEBUG) && !defined(USE_BLINK_ERROR_REPORTER)
 void
 MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
 {
@@ -236,8 +245,6 @@ parseNumber(const uint8_t* string, int32_t& result)
     result = n * sign;
     return string;
 }
-
-const char startupMessage[] = "EtherClock  v1-0";
 
 static void
 networkUpdateCallback(Socket* socket, Socket::EventType type, const uint8_t* data, uint16_t length, void*)
@@ -321,7 +328,7 @@ MyApp::MyApp()
 #endif
 
     // Show startup
-    scrollChars(startupMessage);
+    scrollChars_P(startupMessage);
     Application::msDelay<1000>();
     
     m_colonPort.setBitOutput(0);
@@ -408,26 +415,49 @@ void
 MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
 {
     bool blank = false;
+    bool endOfString = false;
+    
     for (uint8_t i = 0; i < 4; ++i, dps <<= 1) {
-        if (!blank && string[i] == '\0' && !showLeadingZero)
-            blank = true;
+        if (string[i] == '\0')
+            endOfString = true;
             
-        uint8_t glyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[i]);
-        m_shiftReg.send(glyph | (dps & 0x08) ? 0x80 : 0, 8);
+        if (endOfString || (!blank && string[i] == '0' && !showLeadingZero))
+            blank = true;
+        
+        uint8_t glyph1, glyph2 = 0;
+        bool hasSecondGlyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[i], glyph1, glyph2);
+        
+        m_shiftReg.send(glyph1 | (dps & 0x08) ? 0x80 : 0, 8);
+        
+        if (hasSecondGlyph && i != 3) {
+            ++i;
+            dps <<= 1;
+            m_shiftReg.send(glyph2 | (dps & 0x08) ? 0x80 : 0, 8);
+        }
     }
     m_shiftReg.latch();
 }
 
 void
-MyApp::scrollChars(const char* string)
+MyApp::scrollChars_P(const char* string)
 {
     showChars("    ", 0, true);
     
-    for (const char* s = string; *s; s++) { 
-        uint8_t glyph = SevenSegmentDisplay::glyphForChar(*s);
-        m_shiftReg.send(glyph, 8);
+    char c;
+    
+    while ((c = pgm_read_byte(string++))) { 
+        uint8_t glyph1, glyph2 = 0;
+        bool hasSecondGlyph = SevenSegmentDisplay::glyphForChar(c, glyph1, glyph2);
+
+        m_shiftReg.send(glyph1, 8);
         m_shiftReg.latch();
         Application::msDelay<200>();
+        
+        if (hasSecondGlyph) {
+            m_shiftReg.send(glyph2, 8);
+            m_shiftReg.latch();
+            Application::msDelay<200>();
+        }
     }
 }
 

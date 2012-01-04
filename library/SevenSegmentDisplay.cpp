@@ -107,8 +107,8 @@ const uint8_t g_charTable[] = {
 };
 using namespace m8r;
 
-uint8_t
-SevenSegmentDisplay::glyphForChar(uint8_t c)
+bool
+SevenSegmentDisplay::glyphForChar(uint8_t c, uint8_t& glyph1, uint8_t glyph2)
 {
     if (c < 0x20 || c > 0x7f)
         return 0;
@@ -116,5 +116,14 @@ SevenSegmentDisplay::glyphForChar(uint8_t c)
     if (c > 0x5f)
         c -= 0x20;
         
-    return pgm_read_byte_near(&(g_charTable[c-0x20]));
+    glyph1 = pgm_read_byte_near(&(g_charTable[c - 0x20]));
+    
+    if (c == 'M')
+        glyph2 = pgm_read_byte_near(&(g_charTable['<' - 0x20]));
+    else if (c == 'W')
+        glyph2 = pgm_read_byte_near(&(g_charTable['>' - 0x20]));
+    else
+        return false;
+        
+    return true;
 }

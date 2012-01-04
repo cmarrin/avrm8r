@@ -46,19 +46,19 @@ extern const uint8_t g_monthDayTable[] PROGMEM;
 const uint8_t g_monthDayTable[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 extern const char g_sun[] PROGMEM;
-const char g_sun[] = "SUN ";
+const char g_sun[] = "SUN";
 extern const char g_mon[] PROGMEM;
-const char g_mon[] = "M<ON";
+const char g_mon[] = "MON";
 extern const char g_tue[] PROGMEM;
-const char g_tue[] = "TUE ";
+const char g_tue[] = "TUE";
 extern const char g_wed[] PROGMEM;
-const char g_wed[] = "W>ED";
+const char g_wed[] = "WED";
 extern const char g_thu[] PROGMEM;
-const char g_thu[] = "THU ";
+const char g_thu[] = "THU";
 extern const char g_fri[] PROGMEM;
-const char g_fri[] = "FRI ";
+const char g_fri[] = "FRI";
 extern const char g_sat[] PROGMEM;
-const char g_sat[] = "SAT ";
+const char g_sat[] = "SAT";
 
 extern const char* g_dayStringTable[] PROGMEM;
 const char* g_dayStringTable[] = { g_sun, g_mon, g_tue, g_wed, g_thu, g_fri, g_sat };

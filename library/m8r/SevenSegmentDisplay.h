@@ -51,7 +51,7 @@ namespace m8r {
 
 class SevenSegmentDisplay {
 public:
-    static uint8_t glyphForChar(uint8_t c);
+    static bool glyphForChar(uint8_t c, uint8_t& glyph1, uint8_t glyph2);
 };
 
 }
