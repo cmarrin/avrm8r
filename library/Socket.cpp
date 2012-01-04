@@ -42,7 +42,7 @@ DAMAGE.
 
 using namespace m8r;
 
-Socket::Socket(NetworkBase* network, PacketCallback callback, void* data)
+Socket::Socket(Network* network, NetworkCallback callback, void* data)
     : m_port(0)
     , m_callback(callback)
     , m_data(data)
@@ -65,47 +65,19 @@ Socket::requestSend(const uint8_t ipaddr[4], uint16_t port)
 void
 Socket::requestSend(const char* hostname, uint16_t port)
 {
-    // FIXME: Implement. See above
+    // FIXME: Implement
 }
 
 void
 Socket::createSendPacket(uint8_t ipType, uint16_t length)
 {
-    // FIXME: Consolidate this and createResponsePacket
-    
-    // FIXME: This should not be UDP_HEADER_LEN here
-    length += IP_HEADER_LEN;
-    
-    m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
-    m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
-    m_network->setIPHeader(ipType, m_destinationIPAddress, length);
-    
-    // Send to port of sender and use "port" as own source:
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P];
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1];
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P] = m_port >> 8;
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1] = m_port & 0xff;
+    // FIXME: Implement
 }
 
 void
 Socket::createResponsePacket(uint16_t length)
 {
-    ASSERT(m_inHandler, AssertEthernetNotInHandler);
-    if (!m_inHandler)
-        return;
-
-    length += IP_HEADER_LEN;
-    
-    m_network->packetBuffer()[IP_TOTLEN_P] = length >> 8;
-    m_network->packetBuffer()[IP_TOTLEN_P + 1] = length;
-    m_network->setIPResponseHeader();
-    
-    // Send to port of sender and use "port" as own source:
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P];
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1];
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P] = m_port >> 8;
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1] = m_port & 0xff;
-    
+    // FIXME: Implement
 }
 
 bool

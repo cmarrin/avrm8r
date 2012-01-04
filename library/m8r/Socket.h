@@ -51,7 +51,7 @@ namespace m8r {
 
 class Socket;
 
-class NetworkBase;
+class Network;
 
 class Socket {
 public:
@@ -63,9 +63,9 @@ public:
         EventRetransmit
     };
 
-    typedef void (*PacketCallback)(Socket*, Socket::EventType, const uint8_t* data, uint16_t length, void*);
+    typedef void (*NetworkCallback)(Socket*, Socket::EventType, const uint8_t* data, uint16_t length, void*);
     
-    Socket(NetworkBase*, PacketCallback, void*);
+    Socket(Network*, NetworkCallback, void*);
 
     void listen(uint16_t port) { m_port = port; }
     
@@ -91,9 +91,9 @@ protected:
     void createResponsePacket(uint16_t length);
 
     uint16_t m_port;
-    PacketCallback m_callback;
+    NetworkCallback m_callback;
     void* m_data;
-    NetworkBase* m_network;
+    Network* m_network;
     
     enum State {
         StateIdle,

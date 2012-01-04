@@ -51,7 +51,7 @@ namespace m8r {
 
 class TCPSocket: public Socket {
 public:
-    TCPSocket(NetworkBase*, PacketCallback, void*);
+    TCPSocket(Network*, NetworkCallback, void*);
 
     virtual void respond(const uint8_t* data, uint16_t length);
     virtual void send(const uint8_t* data, uint16_t length);

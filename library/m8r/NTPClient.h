@@ -50,11 +50,11 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class UDPSocket;
-class NetworkBase;
+class Network;
 
 class NTPClient {
 public:
-    NTPClient(NetworkBase*);
+    NTPClient(Network*);
 
     void request();
     

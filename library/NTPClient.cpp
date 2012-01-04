@@ -66,7 +66,7 @@ ntpCallback(Socket* socket, Socket::EventType type, const uint8_t* buffer, uint1
     }
 }
 
-NTPClient::NTPClient(NetworkBase* network)
+NTPClient::NTPClient(Network* network)
     : m_socket(network, ntpCallback, this)
 {
 }

@@ -49,11 +49,11 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class NetworkBase;
+class Network;
 
 class UDPSocket : public Socket {
 public:
-    UDPSocket(NetworkBase*, PacketCallback, void*);
+    UDPSocket(Network*, NetworkCallback, void*);
 
     virtual void respond(const uint8_t* data, uint16_t length);
     virtual void send(const uint8_t* data, uint16_t length);

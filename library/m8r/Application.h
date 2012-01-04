@@ -72,7 +72,6 @@ typedef void (*EventCallback)(EventType, EventParam);
 
 class ErrorReporter;
 class EventListener;
-class NetworkBase;
 class TimerEventMgrBase;
 
 class Application {

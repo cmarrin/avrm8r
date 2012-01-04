@@ -19,6 +19,8 @@ ifndef M8R_SRC_DIR
 M8R_SRC_DIR = .
 endif
 
+TUXGRAPHICS_SRC_DIR = eth_tcp_client_server-4.5
+
 INSTALL_DIR = ~/Library/m8r
 
 ifndef BUILT_PRODUCTS_DIR
@@ -70,7 +72,6 @@ LIB_SRC = \
     Animator.cpp \
     Application.cpp \
     Button.cpp \
-    ENC28J60.cpp \
     Network.cpp \
     NTPClient.cpp \
     RTC.cpp \
@@ -83,12 +84,27 @@ LIB_SRC = \
     Timer2.cpp \
     TimerEventMgr.cpp \
     UDPSocket.cpp \
+    
+LIB_TUXGRAPHICS_HEADERS = \
+    dnslkup.h \
+    enc28j60.h \
+    ip_arp_udp_tcp.h \
+    ip_config.h \
+    net.h \
+    timeout.h \
+    websrv_help_functions.h \
+    
+LIB_TUXGRAPHICS_SRC = \
+    dnslkup.c \
+    enc28j60.c \
+    ip_arp_udp_tcp.c \
+    websrv_help_functions.c \
 
-LIB_OBJ := $(LIB_SRC)
+LIB_OBJ := $(LIB_SRC) $(LIB_TUXGRAPHICS_SRC)
 LIB_OBJ := $(LIB_OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)
 LIB_OBJ := $(LIB_OBJ:%.cpp=$(BUILT_PRODUCTS_DIR)/%.o)
 LIB_OBJ := $(LIB_OBJ:%.S=$(BUILT_PRODUCTS_DIR)/%.o)
-LIB_SRC := ${LIB_SRC:%=$(M8R_SRC_DIR)/%}
+LIB_SRC := ${LIB_SRC:%=$(M8R_SRC_DIR)/%} ${LIB_TUXGRAPHICS_SRC:%=$(M8R_SRC_DIR)/$(TUXGRAPHICS_SRC_DIR)/%} 
 
 OBJ := $(SRC)
 OBJ := $(OBJ:%.c=$(BUILT_PRODUCTS_DIR)/%.o)
@@ -127,6 +143,7 @@ CFLAGS += -mcall-prologues
 CFLAGS += -Wall
 CFLAGS += $(patsubst %,-I%,$(M8R_SRC_DIR))
 CFLAGS += $(patsubst %,-I%,$(LIB_HEADER_DIR))
+CFLAGS += $(patsubst %,-I%,$(M8R_SRC_DIR)/$(TUXGRAPHICS_SRC_DIR))
 
 #---------------- Compiler Options ----------------
 #  -g*:          generate debugging information
@@ -277,6 +294,9 @@ FORCE:
 # object from C
 #.c.o: 
 $(BUILT_PRODUCTS_DIR)/%.o: $(M8R_SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILT_PRODUCTS_DIR)/%.o: $(M8R_SRC_DIR)/$(TUXGRAPHICS_SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # object from C++ (.cc, .cpp, .C files)

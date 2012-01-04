@@ -42,7 +42,7 @@ DAMAGE.
 
 using namespace m8r;
 
-TCPSocket::TCPSocket(NetworkBase* network, PacketCallback callback, void* data)
+TCPSocket::TCPSocket(Network* network, NetworkCallback callback, void* data)
     : Socket(network, callback, data)
 {
 }

@@ -45,7 +45,6 @@ DAMAGE.
 #include "BlinkErrorReporter.h"
 #endif
 #include "Button.h"
-#include "ENC28J60.h"
 #include "EventListener.h"
 #include "MAX6969.h"
 #include "Network.h"
@@ -151,7 +150,7 @@ public:
     MAX6969<Port<C>, 1, Port<C>, 2, Port<C>, 3, Port<C>, 4> m_shiftReg;
     TimerEventMgr<Timer0> m_timerEventMgr;
     RTC<Timer1> m_clock;
-    Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
+    Network m_network;
     UDPSocket m_socket;
     Port<D> m_colonPort;
     Button<Port<B>, 0, 10, 5> m_button;

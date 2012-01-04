@@ -16,7 +16,7 @@
 
 //------------- functions in ip_arp_udp_tcp.c --------------
 // an NTP client (ntp clock):
-#undef NTP_client
+#define NTP_client
 // a spontanious sending UDP client
 #define UDP_client
 // a server answering to UDP messages

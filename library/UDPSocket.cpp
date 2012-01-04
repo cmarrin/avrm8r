@@ -43,7 +43,7 @@ DAMAGE.
 
 using namespace m8r;
 
-UDPSocket::UDPSocket(NetworkBase* network, PacketCallback callback, void* data)
+UDPSocket::UDPSocket(Network* network, NetworkCallback callback, void* data)
     : Socket(network, callback, data)
 {
 }
@@ -51,50 +51,13 @@ UDPSocket::UDPSocket(NetworkBase* network, PacketCallback callback, void* data)
 void
 UDPSocket::respond(const uint8_t* data, uint16_t length)
 {
-    if (length > m_network->packetBufferSize() - UDP_DATA_P)
-        length = m_network->packetBufferSize() - UDP_DATA_P;
-
-    uint16_t headerLength = length + UDP_HEADER_LEN;
-    createResponsePacket(headerLength);
-        
-    m_network->packetBuffer()[UDP_LEN_P] = headerLength >> 8;
-    m_network->packetBuffer()[UDP_LEN_P + 1] = headerLength;
-    
-    memcpy(&m_network->packetBuffer()[UDP_DATA_P], data, length);
-
-    m_network->setChecksum(CHECKSUM_UDP, length);
-    m_network->sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_network->packetBuffer());
+    m_network->respondUDP(data, length, m_port);
 }
 
 void
 UDPSocket::send(const uint8_t* data, uint16_t length)
 {
-    ASSERT(m_state == StateCanSendData, AssertEthernetCannotSendData);
-    
-    if (length > m_network->packetBufferSize() - UDP_DATA_P)
-        length = m_network->packetBufferSize() - UDP_DATA_P;
-
-    createSendPacket(IP_PROTO_UDP_V, length);
-    
-    m_network->packetBuffer()[ETH_TYPE_P] = ETHTYPE_IP_V >> 8;
-    m_network->packetBuffer()[ETH_TYPE_P + 1] = ETHTYPE_IP_V & 0xff;
-    
-    m_network->setIPHeader(IP_PROTO_UDP_V, m_destinationIPAddress, length);
-
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P] = m_destinationPort >> 8;
-    m_network->packetBuffer()[UDP_TCP_DST_PORT_P + 1] = m_destinationPort & 0xff; 
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P] = m_port >> 8;
-    m_network->packetBuffer()[UDP_TCP_SRC_PORT_P + 1] = m_port & 0xff; 
-
-    uint16_t headerLength = length + UDP_HEADER_LEN;
-    m_network->packetBuffer()[UDP_LEN_P] = headerLength >> 8;
-    m_network->packetBuffer()[UDP_LEN_P + 1] = headerLength;
-    
-    if (length)
-        memcpy(&m_network->packetBuffer()[UDP_DATA_P], data, length);
-
-    m_network->setChecksum(CHECKSUM_UDP, length);
-    m_network->sendPacket(UDP_HEADER_LEN + IP_HEADER_LEN + ETH_HEADER_LEN + length, m_network->packetBuffer());
+    m_network->sendUDP(data, length, m_port, m_destinationIPAddress, m_port);
 }
 
 bool

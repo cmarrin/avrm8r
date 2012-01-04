@@ -59,9 +59,9 @@ enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP }
 
 class Socket;
 
-class NetworkBase : public EventListener {
+class Network : public EventListener {
 public:
-    NetworkBase(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
+    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
 
     static uint16_t _INLINE_ _swap(uint16_t value)
     {
@@ -80,79 +80,30 @@ public:
     static uint16_t _INLINE_ ntohs(uint16_t v) { return _swap(v); }
 
     // EventListener override
-    virtual void handleEvent(EventType, EventParam);
+    virtual void handleEvent(::EventType, EventParam);
     
-    bool ready() const { return m_state == StateReady; }
-
-    void setNext(NetworkBase* next) { m_next = next; }
-    NetworkBase* next() const { return m_next; }
+    void setNext(Network* next) { m_next = next; }
+    Network* next() const { return m_next; }
         
     void addSocket(Socket*);
     void removeSocket(Socket*);
     
     uint8_t* packetBuffer() { return m_packetBuffer; }
     uint16_t packetBufferSize() const { return PacketBufferSize; }
+    
+    void respondUDP(const uint8_t* data, uint8_t length, uint16_t port);
+    void sendUDP(const uint8_t* data, uint8_t length, uint16_t srcPort, const uint8_t* dstIP, uint16_t dstPort);
 
-    void setIPResponseHeader();
-    void setIPHeader(uint8_t ipType, const uint8_t* destIPAddr, uint16_t length);
-    
-    void setChecksum(ChecksumType type, uint16_t len = 0);
-    
-    virtual void sendPacket(uint16_t len, uint8_t* packet) = 0;
-    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) = 0;
-    virtual NetworkInterfaceError checkError() = 0;
-    
 private:
-    void setEthernetMacAddresses(const uint8_t* destMacAddr = 0);
-    
-    void setGatewayIPAddress(const uint8_t* gwaddr);
-    
     void notifyReady();
     
-    bool isMyArpPacket() const;
-    bool isMyIpPacket() const;
-    
-    void sendArp(const uint8_t destIPAddr[4]);
-    void respondToArp();
-    void respondToPing();
-    
-    uint8_t m_ipAddress[4];
-    uint8_t m_gatewayIPAddress[4];
-    uint8_t m_macAddress[6];
-    uint8_t m_gatewayMACAddress[6];
     uint8_t m_packetBuffer[PacketBufferSize + 1];
     uint16_t m_packetLength;
-    uint8_t m_ipID;
 
-    NetworkBase* m_next;
+    Network* m_next;
     Socket* m_socketHead;
     
-    enum State {
-        StateNeedToRequestGWMacAddr,
-        StateWaitForGWMacAddr,
-        StateReady
-    };
-
-    State m_state;
-    
     TimerID m_timerID;    
-};
-
-template <class NetworkInterface>
-class Network : public NetworkBase {
-public:
-    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
-        : NetworkBase(macaddr, ipaddr, gwaddr)
-        , m_interface(macaddr, ipaddr)
-    { }
-    
-protected:
-    virtual void sendPacket(uint16_t len, uint8_t* packet) { m_interface.sendPacket(len, packet); }
-    virtual uint16_t receivePacket(uint16_t maxlen, uint8_t* packet) { return m_interface.receivePacket(maxlen, packet); }
-    virtual NetworkInterfaceError checkError() { return m_interface.checkError(); }
-    
-private:
-    NetworkInterface m_interface;
 };
 
 }
