@@ -70,6 +70,7 @@ DAMAGE.
 //
 // AVR Ports
 //  Port B
+//      0 - Button
 //      1 - On board LED
 //      2 - ENC28J60 /CS 
 //      3 - ENC28J60 SI
@@ -82,11 +83,11 @@ DAMAGE.
 //      2 - Data
 //      3 - Latch
 //      4 - Enable
-//      5 - Button
 //
 //  Port D
 //      0 - Colon 0
 //      1 - Colon 1
+// 
 
 using namespace m8r;
 
@@ -99,6 +100,7 @@ const uint8_t MacAddr[6] = {'m', 't', 'e', 't', 'h', 0x01};
 const uint8_t IPAddr[4] = { 10, 0, 1, 210 };
 const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
 const uint8_t DestAddr[4] = { 10, 0, 1, 201 };
+const uint16_t DestPort = 1956;
 
 class MyApp;
 
@@ -142,7 +144,7 @@ public:
     Network<ENC28J60<ClockOutDiv2, _BV(MSTR), _BV(SPI2X)> > m_network;
     UDPSocket m_socket;
     Port<D> m_colonPort;
-    Button<Port<C>, 5, 10, 5> m_button;
+    Button<Port<B>, 0, 10, 5> m_button;
     
     enum DisplayState { DisplayTime, DisplayDay, DisplayDate, DisplayCurrentTemp, DisplayHighTemp, DisplayLowTemp };
     DisplayState m_displayState;
@@ -160,6 +162,9 @@ public:
     static uint8_t m_brightnessTable[8];
     
     int8_t m_curTemp, m_lowTemp, m_highTemp;
+    bool m_startDisplaySequence;
+    uint16_t m_secondsToNextNetworkUpdate;
+    uint8_t m_currentMinutes;
 };
 
 uint8_t MyApp::m_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
@@ -206,13 +211,20 @@ MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
 }
 #endif
 
-static uint32_t parseNumber(const uint8_t* string)
+static const uint8_t*
+parseNumber(const uint8_t* string, int32_t& result)
 {
     uint8_t c;
-    uint32_t n;
+    int32_t n = 0;
+    int8_t sign = 1;
+    
     while ((c = *string++)) {
         if (c == ' ')
+            break;
+        if (c == '-') {
+            sign = -sign;
             continue;
+        }
         if (c < '0' || c > '9')
             break;
             
@@ -220,7 +232,8 @@ static uint32_t parseNumber(const uint8_t* string)
         n += c - '0';
     }
     
-    return n;
+    result = n * sign;
+    return string;
 }
 
 const char startupMessage[] = "EtherClock  v1-0";
@@ -235,9 +248,39 @@ networkUpdateCallback(Socket* socket, Socket::EventType type, const uint8_t* dat
     
     if (type != Socket::EventDataReceived)
         return;
-        
-    if (data[0] == 'T')
-        g_app.m_clock.setTicks(parseNumber(&data[1]) - 8 * 60 * 60);
+    
+    int32_t ticks;
+    int32_t zone;
+    int32_t temp;
+    const uint8_t* end = data + length;
+    
+    while (data < end) {
+        switch(data[0]) {
+            case 'T':
+                data = parseNumber(&data[1], ticks);
+                break;
+            case 'Z':
+                data = parseNumber(&data[1], zone);
+                break;
+            case 'C':
+                data = parseNumber(&data[1], temp);
+                g_app.m_curTemp = temp;
+                break;
+            case 'L':
+                data = parseNumber(&data[1], temp);
+                g_app.m_lowTemp = temp;
+                break;
+            case 'H':
+                data = parseNumber(&data[1], temp);
+                g_app.m_highTemp = temp;
+                break;
+            default:
+                data++;
+                break;
+        }
+    }
+            
+    g_app.m_clock.setTicks(ticks + ((zone / 100) * 60 * 60));
 }
 
 MyApp::MyApp()
@@ -246,6 +289,8 @@ MyApp::MyApp()
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr, GWAddr)
     , m_socket(&m_network, networkUpdateCallback, this)
+    , m_displayState(DisplayTime)
+    , m_displaySequenceTimer(NoTimer)
     , m_accumulatedLightSensorValues(0)
     , m_numAccumulatedLightSensorValues(0)
     , m_averageLightSensorValue(0xff)
@@ -257,6 +302,9 @@ MyApp::MyApp()
     , m_curTemp(-1)
     , m_lowTemp(-1)
     , m_highTemp(-1)
+    , m_startDisplaySequence(false)
+    , m_secondsToNextNetworkUpdate(1)
+    , m_currentMinutes(0)
 {
     m_shiftReg.setOutputEnable(true);
     
@@ -285,51 +333,74 @@ MyApp::MyApp()
     sei();
     m_adc.startConversion();
     
-    m_socket.listen(1956);
-    m_socket.requestSend(DestAddr, 1956);
+    m_socket.listen(DestPort);
+}
+
+static void
+decimalByteToString(uint8_t v, char string[2], bool showLeadingZero)
+{
+    string[0] = (v < 10 && !showLeadingZero) ? ' ' : (v / 10 + '0');
+    string[1] = (v % 10) + '0';
+}
+
+static void
+tempToString(char c, int8_t t, char string[4])
+{
+    string[0] = c;
+    if (t < 0) {
+        t = -t;
+        string[1] = '-';
+    } else
+        string[1] = ' ';
+    
+    decimalByteToString(t, &string[2], false);
 }
 
 void
 MyApp::updateDisplay()
 {
+    char string[4];
+    uint8_t dps = 0;
+    
     switch (m_displayState) {
         case DisplayDate:
         case DisplayDay:
         case DisplayTime: {
             RTCTime t;
             g_app.m_clock.currentTime(t);
-
-            uint8_t hours = t.hours;
-            uint8_t dps = 0;
-            if (hours > 12) {
-                hours -= 12;
-                dps = 0x08;
-            }
+            g_app.m_currentMinutes = t.minutes;
             
-            char string[4];
-            if (hours < 10)
-                string[0] = 0x20;
-            else
-                string[0] = (hours / 10) + '0';
-            string[1] = (hours % 10) + '0';
-            string[2] = (t.minutes / 10) + '0';
-            string[3] = (t.minutes % 10) + '0';
-            showChars(string, dps, false);
+            if (m_displayState == DisplayDay)
+                RTCBase::dayString(t.day, string);
+            else if (m_displayState == DisplayDate) {
+                decimalByteToString(t.month, string, false);
+                decimalByteToString(t.date, &string[2], false);
+            } else {
+                uint8_t hours = t.hours;
+                if (hours > 12) {
+                    hours -= 12;
+                    dps = 0x08;
+                }
+
+                decimalByteToString(hours, string, false);
+                decimalByteToString(t.minutes, &string[2], true);
+            }
             break;
         }
-        case DisplayDay:
-            break;
-        case DisplayDate:
-            break;
         case DisplayCurrentTemp:
+            tempToString('C', m_curTemp, string);
             break;
         case DisplayHighTemp:
+            tempToString('H', m_highTemp, string);
             break;
         case DisplayLowTemp:       
+            tempToString('L', m_lowTemp, string);
             break;
         default:
             break;
     }
+    
+    showChars(string, dps, false);
 }
 
 void
@@ -375,6 +446,14 @@ MyApp::handleEvent(EventType type, EventParam param)
 #ifdef TEST_LOOP_TIMING
             g_testLoopIterationCount++;
 #endif
+
+            if (m_startDisplaySequence) {
+                m_startDisplaySequence = false;
+                m_displayState = DisplayDay;
+                updateDisplay();
+                m_displaySequenceTimer = Application::startEventTimer(2000);
+            }
+            
             if (g_app.m_brightnessCount++ == g_app.m_currentBrightness)
                 g_app.m_shiftReg.setOutputEnable(false);
 
@@ -398,7 +477,7 @@ MyApp::handleEvent(EventType type, EventParam param)
                 g_app.m_colonPort.setPortBit(1);
             }
             
-            if (g_app.m_colonBrightnessCount == 0) {
+            if (g_app.m_colonBrightnessCount == 0 && m_displayState == DisplayTime) {
                 g_app.m_colonPort.clearPortBit(0);
                 g_app.m_colonPort.clearPortBit(1);
             }
@@ -417,11 +496,21 @@ MyApp::handleEvent(EventType type, EventParam param)
 #endif
             g_app.m_adc.startConversion();
             updateDisplay();
+
+            if (--m_secondsToNextNetworkUpdate == 0) {
+                // Update network at 1, 16, 31 and 46 minutes past the hour
+                m_secondsToNextNetworkUpdate = 61 - m_currentMinutes;
+                while (m_secondsToNextNetworkUpdate > 15)
+                    m_secondsToNextNetworkUpdate -= 15;
+                m_secondsToNextNetworkUpdate *= 60;
+                
+                m_socket.requestSend(DestAddr, DestPort);
+            }
+            
             break;
         }
         case EV_BUTTON_DOWN:
-            m_displaySequenceTimer = Application::startEventTimer(2000);
-            m_displayState = DisplayDay;
+            m_startDisplaySequence = true;
             break;
         case EV_EVENT_TIMER:
             if (m_displaySequenceTimer != MakeTimerID(param))
@@ -437,9 +526,10 @@ MyApp::handleEvent(EventType type, EventParam param)
                 m_displayState = DisplayLowTemp;
             else if (m_displayState == DisplayLowTemp)
                 m_displayState = DisplayTime;
+            updateDisplay();
                 
             if (m_displayState != DisplayTime)
-                m_displaySequenceTimer = Application::startEventTimer(2000);
+                m_displaySequenceTimer = (m_displayState != DisplayTime) ? Application::startEventTimer(2000) : NoTimer;
         default:
             break;
     }
