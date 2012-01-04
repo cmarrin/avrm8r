@@ -40,15 +40,33 @@ DAMAGE.
 
 const uint32_t minutesPerDay = 24UL * 60UL;
 const uint16_t epochYear = 1970;
-const uint8_t epochDayOfWeek = 6; // Saturday
+const uint8_t epochDayOfWeek = 4; // Saturday
 
-extern const uint8_t mygMonthDayTable[] PROGMEM;
-const uint8_t mygMonthDayTable[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+extern const uint8_t g_monthDayTable[] PROGMEM;
+const uint8_t g_monthDayTable[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+extern const char g_sun[] PROGMEM;
+const char g_sun[] = "SUN ";
+extern const char g_mon[] PROGMEM;
+const char g_mon[] = "M<ON";
+extern const char g_tue[] PROGMEM;
+const char g_tue[] = "TUE ";
+extern const char g_wed[] PROGMEM;
+const char g_wed[] = "W>ED";
+extern const char g_thu[] PROGMEM;
+const char g_thu[] = "THU ";
+extern const char g_fri[] PROGMEM;
+const char g_fri[] = "FRI ";
+extern const char g_sat[] PROGMEM;
+const char g_sat[] = "SAT ";
+
+extern const char* g_dayStringTable[] PROGMEM;
+const char* g_dayStringTable[] = { g_sun, g_mon, g_tue, g_wed, g_thu, g_fri, g_sat };
 
 static inline uint8_t 
 daysInMonth(uint8_t month)
 {
-    return pgm_read_byte(&mygMonthDayTable[month]);
+    return pgm_read_byte(&g_monthDayTable[month]);
 }
 
 using namespace m8r;
@@ -57,6 +75,12 @@ static inline bool
 isLeapYear(uint16_t year)
 {
     return (((year % 4) == 0 && (year % 100) != 0) || (year % 400) == 0);
+}
+
+void
+RTCBase::dayString(uint8_t day, char string[4])
+{
+    memcpy_P(string, (char*) pgm_read_word(&(g_dayStringTable[day])), 4);
 }
 
 void
@@ -70,30 +94,16 @@ RTCBase::currentTime(RTCTime& rtc)
 	rtc.hours = minutesInDay / 60UL;
 	rtc.day = (days + epochDayOfWeek) % 7;
     
-    bool leap;
-    uint16_t year;
+    uint16_t year = ((days * 4) + 2) / 1461;
+    rtc.year = year + 70;
+    bool leap = isLeapYear(rtc.year);
     
-    for (year = epochYear; ; ++year) {
-        leap = isLeapYear(year);
-        uint16_t yearLength = leap ? 366 : 365;
-        if (days > yearLength)
-            break;
-        days -= yearLength;
-    }
-
-    rtc.year = year;
+    days -= ((year * 1461) + 1) / 4;
+    days += (days > (58 + (leap ? 1 : 0))) ? (leap ? 1 : 2) : 0;
     
-    uint8_t month;
-    
-    for (month = 0; ; ++month) {
-        uint8_t monthLength = daysInMonth(month);
-        if (days > monthLength)
-            break;
-        days -= monthLength;
-    }
-
-    rtc.month = month;
-    rtc.date = days;
+    rtc.month = ((days * 12) + 6) / 367;
+    rtc.date = days + 1 - ((rtc.month * 367) + 5) / 12;
+    rtc.month++;
 }
 
 void

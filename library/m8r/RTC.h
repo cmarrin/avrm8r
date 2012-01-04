@@ -75,6 +75,8 @@ public:
     }
 
     void currentTime(RTCTime& rtc);
+    
+    static void dayString(uint8_t day, char string[4]);
 
 protected:
     static void fireISR(EventType, EventParam);
