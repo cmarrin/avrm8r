@@ -1,12 +1,12 @@
 //
-//  ShiftReg.h
+//  SevenSegmentDisplay.h
 //
-//  Created by Chris Marrin on 3/19/2011.
+//  Created by Chris Marrin on 1/4/2012.
 //
 //
 
 /*
-Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
+Copyright (c) 2009-2012 Chris Marrin (chris@marrin.com)
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, 
@@ -38,73 +38,20 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
-#include <util/delay_basic.h>
 
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: ShiftReg
+//  Class: SevenSegmentDisplay
 //
-//  Generic shift register interface. Has variable bit length, and is 
-//  controlled by a clock and data-in bit. Clock can use leading or
-//  trailing edge.
+//  Generates glyphs for seven segment display
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class ShiftRegBase {
+class SevenSegmentDisplay {
 public:
-    ShiftRegBase(bool rising, bool msbFirst)
-        : m_rising(rising)
-        , m_msbFirst(msbFirst)
-    { }
-    
-    void send(uint8_t value, uint8_t bits);
-    
-protected:
-    virtual void toggleClockBit(bool positive) = 0;
-    virtual void setDataBit(bool value) = 0;
-    
-	bool m_rising, m_msbFirst;
-};
-
-template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit>
-class ShiftReg : public ShiftRegBase {
-public:
-	ShiftReg(bool rising, bool msbFirst)
-        : ShiftRegBase(rising, msbFirst)
-    {
-        m_clockPort.setBitOutput(ClockBit);
-        m_dataPort.setBitOutput(DataBit);
-        if (m_rising)
-            m_clockPort.clearPortBit(ClockBit);
-        else
-            m_clockPort.setPortBit(ClockBit);
-    }
-    
-    virtual void toggleClockBit(bool positive)
-    {
-        if (positive) {
-            m_clockPort.setPortBit(ClockBit);
-            m_clockPort.clearPortBit(ClockBit);
-        } else {
-            m_clockPort.clearPortBit(ClockBit);
-            m_clockPort.setPortBit(ClockBit);
-        }
-            
-    }
-    
-    virtual void setDataBit(bool value)
-    {
-        if (value)
-            m_dataPort.setPortBit(DataBit);
-        else
-            m_dataPort.clearPortBit(DataBit);
-    }
-
-private:    
-    ClockPort m_clockPort;
-    DataPort m_dataPort;
+    static uint8_t glyphForChar(uint8_t c);
 };
 
 }

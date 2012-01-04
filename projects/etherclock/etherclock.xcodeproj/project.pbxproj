@@ -131,6 +131,8 @@
 		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
 		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49F35DDA14B4BDB300C7F7E4 /* SevenSegmentDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SevenSegmentDisplay.h; path = ../../library/m8r/SevenSegmentDisplay.h; sourceTree = "<group>"; };
+		49F35DDC14B4BDCE00C7F7E4 /* SevenSegmentDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SevenSegmentDisplay.cpp; path = ../../library/SevenSegmentDisplay.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -191,6 +193,8 @@
 				49BBE097148F1A8E00DC43EC /* NTPClient.h */,
 				49EE68C9147B18C000FA3113 /* RTC.cpp */,
 				49EE68D8147B18DF00FA3113 /* RTC.h */,
+				49F35DDC14B4BDCE00C7F7E4 /* SevenSegmentDisplay.cpp */,
+				49F35DDA14B4BDB300C7F7E4 /* SevenSegmentDisplay.h */,
 				49EE68CA147B18C000FA3113 /* ShiftReg.cpp */,
 				49EE68D9147B18DF00FA3113 /* ShiftReg.h */,
 				49BBE08B148A6D7F00DC43EC /* Socket.cpp */,

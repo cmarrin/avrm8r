@@ -47,6 +47,7 @@ DAMAGE.
 #include "MAX6969.h"
 #include "Network.h"
 #include "RTC.h"
+#include "SevenSegmentDisplay.h"
 #include "Timer0.h"
 #include "Timer1.h"
 #include "TimerEventMgr.h"
@@ -410,7 +411,9 @@ MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
     for (uint8_t i = 0; i < 4; ++i, dps <<= 1) {
         if (!blank && string[i] == '\0' && !showLeadingZero)
             blank = true;
-        m_shiftReg.setChar(blank ? ' ' : string[i], dps & 0x08);
+            
+        uint8_t glyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[i]);
+        m_shiftReg.send(glyph | (dps & 0x08) ? 0x80 : 0, 8);
     }
     m_shiftReg.latch();
 }
@@ -421,7 +424,8 @@ MyApp::scrollChars(const char* string)
     showChars("    ", 0, true);
     
     for (const char* s = string; *s; s++) { 
-        m_shiftReg.setChar(*s);
+        uint8_t glyph = SevenSegmentDisplay::glyphForChar(*s);
+        m_shiftReg.send(glyph, 8);
         m_shiftReg.latch();
         Application::msDelay<200>();
     }

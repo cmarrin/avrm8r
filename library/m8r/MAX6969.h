@@ -83,11 +83,6 @@ public:
         m_latchPort.clearPortBit(LatchBit);
     }
     
-    void setChar(uint8_t c, bool dp = false) _INLINE_
-    {
-        ShiftReg<ClockPort, ClockBit, DataPort, DataBit>::sendChar(c, dp);
-    }
-    
 private:
     LatchPort m_latchPort;
     EnablePort m_enablePort;

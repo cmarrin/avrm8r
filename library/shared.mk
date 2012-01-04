@@ -51,6 +51,7 @@ LIB_HEADERS = \
     NetworkInterface.h \
     NTPClient.h \
     RTC.h \
+    SevenSegmentDisplay.h \
     ShiftReg.h \
     Socket.h \
     SPI.h \
@@ -73,6 +74,7 @@ LIB_SRC = \
     Network.cpp \
     NTPClient.cpp \
     RTC.cpp \
+    SevenSegmentDisplay.cpp \
     ShiftReg.cpp \
     Socket.cpp \
     TCPSocket.cpp \
