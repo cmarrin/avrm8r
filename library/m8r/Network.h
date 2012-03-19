@@ -61,7 +61,7 @@ class Socket;
 
 class Network : public EventListener {
 public:
-    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4]);
+    Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4], bool doubleClockRate);
 
     static uint16_t _INLINE_ _swap(uint16_t value)
     {

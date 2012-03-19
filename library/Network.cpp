@@ -39,6 +39,7 @@ DAMAGE.
 
 #include "Application.h"
 extern "C" {
+#include "enc28j60.h"
 #include "ip_arp_udp_tcp.h"
 }
 #include "Socket.h"
@@ -46,10 +47,24 @@ extern "C" {
 
 using namespace m8r;
 
-Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4])
+Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4], bool doubleClockRate)
     : m_next(0)
     , m_timerID()
 {
+    enc28j60Init(const_cast<uint8_t*>(macaddr));
+    
+    if (doubleClockRate)
+        enc28j60clkout(2); // change clkout from 6.25MHz to 12.5MHz
+    
+    Application::usDelay<60>();
+
+    // Magjack leds configuration, see enc28j60 datasheet, page 11
+    // LEDB=yellow LEDA=green
+    //
+    // 0x476 is PHLCON LEDA=links status, LEDB=receive/transmit
+    // enc28j60PhyWrite(PHLCON,0b0000 0100 0111 01 10);
+    enc28j60PhyWrite(PHLCON,0x476);
+
     init_ip_arp_udp_tcp(const_cast<uint8_t*>(macaddr), const_cast<uint8_t*>(ipaddr), 0);
     client_set_gwip(const_cast<uint8_t*>(gwaddr));
     
@@ -95,12 +110,6 @@ Network::handleEvent(::EventType type, EventParam param)
         return;
         
     m_timerID = Application::startEventTimer(NetworkTimerInterval);    
-
-#ifdef DEBUG
-    NetworkInterfaceError error = checkError();
-    ASSERT(error != NetworkInterfaceTransmitError, AssertEthernetTransmitError);
-    ASSERT(error != NetworkInterfaceReceiveError, AssertEthernetReceiveError);
-#endif
 
     if (m_state == StateNeedToRequestGWMacAddr) {
         setGatewayIPAddress(m_gatewayIPAddress);

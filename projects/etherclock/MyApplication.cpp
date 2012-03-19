@@ -37,6 +37,7 @@ DAMAGE.
 
 //#define TEST_LOOP_TIMING
 //#define USE_BLINK_ERROR_REPORTER
+//#define TEST_ALL_CHARS
 
 #include "m8r.h"
 #include "Application.h"
@@ -105,8 +106,10 @@ const uint8_t GWAddr[4] = { 10, 0, 1, 1 };
 const uint8_t DestAddr[4] = { 10, 0, 1, 201 };
 const uint16_t DestPort = 1956;
 
+const uint16_t CountTimeTimerStartMinutes = 20;
+
 extern const char startupMessage[] PROGMEM;
-const char startupMessage[] = "EtherClock  v1-0";
+const char startupMessage[] = "EtherClock  v2-0";
 
 class MyApp;
 
@@ -136,7 +139,7 @@ public:
     
     void updateDisplay();
 
-    void showChars(const char chars[4], uint8_t dps, bool showLeadingZero);
+    void showChars(const char chars[4], uint8_t dps);
     void scrollChars_P(const char* string);
 
 #ifdef DEBUG
@@ -155,7 +158,7 @@ public:
     Port<D> m_colonPort;
     Button<Port<B>, 0, 10, 5> m_button;
     
-    enum DisplayState { DisplayTime, DisplayDay, DisplayDate, DisplayCurrentTemp, DisplayHighTemp, DisplayLowTemp };
+    enum DisplayState { DisplayTime, DisplayDay, DisplayDate, DisplayCurrentTemp, DisplayHighTemp, DisplayLowTemp, DisplayCountdownTimerAsk, DisplayCountdownTimerCount, DisplayCountdownTimerDone };
     DisplayState m_displayState;
     TimerID m_displaySequenceTimer;
     
@@ -174,6 +177,8 @@ public:
     bool m_startDisplaySequence;
     uint16_t m_secondsToNextNetworkUpdate;
     uint8_t m_currentMinutes;
+    
+    uint16_t m_timeCounterSecondsRemaining;
 };
 
 uint8_t MyApp::m_brightnessTable[] = { 30, 60, 90, 120, 150, 180, 210, 255 };
@@ -202,7 +207,7 @@ MyErrorReporter::reportError(char c, uint16_t code, ErrorConditionType type)
         string[0] = c;
     
     uint8_t dps = (type == ErrorConditionNote) ? 1 : ((type == ErrorConditionWarning) ? 3 : 7);
-    g_app.showChars(string, dps, true);
+    g_app.showChars(string, dps);
 
     for (uint8_t i = 0; i < 3; ++i) {
         g_app.m_shiftReg.setOutputEnable(true);
@@ -294,7 +299,7 @@ MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
     , m_timerEventMgr(TimerClockDIV64, 195) // ~100us timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
-    , m_network(MacAddr, IPAddr, GWAddr)
+    , m_network(MacAddr, IPAddr, GWAddr, true)
     , m_socket(&m_network, networkUpdateCallback, this)
     , m_displayState(DisplayTime)
     , m_displaySequenceTimer(NoTimer)
@@ -312,20 +317,21 @@ MyApp::MyApp()
     , m_startDisplaySequence(false)
     , m_secondsToNextNetworkUpdate(1)
     , m_currentMinutes(0)
+    , m_timeCounterSecondsRemaining(0)
 {
     m_shiftReg.setOutputEnable(true);
-    
+
 #ifdef TEST_ALL_CHARS
     // Test all chars
     for (char c = 0x20; c < 0x5f; ) {
         char string[4];
         for (uint8_t i = 0; i < 4; ++i, c++)
             string[i] = c;
-        showChars(string, 0x08, true);
+        showChars(string, 0x08);
         Application::msDelay<2000>();
     }
 #endif
-
+    
     // Show startup
     scrollChars_P(startupMessage);
     Application::msDelay<1000>();
@@ -367,6 +373,7 @@ void
 MyApp::updateDisplay()
 {
     char string[4];
+    const char* pstring = string;
     uint8_t dps = 0;
     
     switch (m_displayState) {
@@ -377,20 +384,28 @@ MyApp::updateDisplay()
             g_app.m_clock.currentTime(t);
             g_app.m_currentMinutes = t.minutes;
             
-            if (m_displayState == DisplayDay)
-                RTCBase::dayString(t.day, string);
-            else if (m_displayState == DisplayDate) {
-                decimalByteToString(t.month, string, false);
-                decimalByteToString(t.date, &string[2], false);
-            } else {
-                uint8_t hours = t.hours;
-                if (hours > 12) {
-                    hours -= 12;
-                    dps = 0x08;
+            switch (m_displayState) {
+                case DisplayDay:
+                    RTCBase::dayString(t.day, string);
+                    break;
+                case DisplayDate:
+                    decimalByteToString(t.month, string, false);
+                    decimalByteToString(t.date, &string[2], false);
+                    break;
+                case DisplayTime: {
+                    uint8_t hours = t.hours;
+                    if (hours == 0)
+                        hours = 12;
+                    else if (hours > 12) {
+                        hours -= 12;
+                        dps = 0x08;
+                    }
+                    decimalByteToString(hours, string, false);
+                    decimalByteToString(t.minutes, &string[2], true);
+                    break;
                 }
-
-                decimalByteToString(hours, string, false);
-                decimalByteToString(t.minutes, &string[2], true);
+                default:
+                    break;
             }
             break;
         }
@@ -403,15 +418,25 @@ MyApp::updateDisplay()
         case DisplayLowTemp:       
             tempToString('L', m_lowTemp, string);
             break;
+        case DisplayCountdownTimerAsk:       
+            pstring = "cnt?";
+            break;
+        case DisplayCountdownTimerCount:
+            decimalByteToString(m_timeCounterSecondsRemaining / 60, string, false);
+            decimalByteToString(m_timeCounterSecondsRemaining % 60, &string[2], true);
+            break;
+        case DisplayCountdownTimerDone:
+            pstring = "done";
+            break;
         default:
             break;
     }
     
-    showChars(string, dps, false);
+    showChars(pstring, dps);
 }
 
 void
-MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
+MyApp::showChars(const char* string, uint8_t dps)
 {
     bool blank = false;
     bool endOfString = false;
@@ -420,13 +445,13 @@ MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
         if (string[i] == '\0')
             endOfString = true;
             
-        if (endOfString || (!blank && string[i] == '0' && !showLeadingZero))
+        if (endOfString)
             blank = true;
         
         uint8_t glyph1, glyph2 = 0;
         bool hasSecondGlyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[i], glyph1, glyph2);
-        
-        m_shiftReg.send(glyph1 | (dps & 0x08) ? 0x80 : 0, 8);
+
+        m_shiftReg.send(glyph1 | ((dps & 0x08) ? 0x80 : 0), 8);
         
         if (hasSecondGlyph && i != 3) {
             ++i;
@@ -440,7 +465,7 @@ MyApp::showChars(const char* string, uint8_t dps, bool showLeadingZero)
 void
 MyApp::scrollChars_P(const char* string)
 {
-    showChars("    ", 0, true);
+    showChars("    ", 0);
     
     char c;
     
@@ -482,7 +507,7 @@ MyApp::handleEvent(EventType type, EventParam param)
 
             if (m_startDisplaySequence) {
                 m_startDisplaySequence = false;
-                m_displayState = DisplayDay;
+                m_displayState = DisplayCountdownTimerAsk;
                 updateDisplay();
                 m_displaySequenceTimer = Application::startEventTimer(2000);
             }
@@ -528,6 +553,13 @@ MyApp::handleEvent(EventType type, EventParam param)
             }
 #endif
             g_app.m_adc.startConversion();
+            
+            if (m_displayState == DisplayCountdownTimerCount) {
+                if (m_timeCounterSecondsRemaining > 0)
+                    m_timeCounterSecondsRemaining--;
+                else
+                    m_displayState = DisplayCountdownTimerDone;
+            }
             updateDisplay();
 
             if (--m_secondsToNextNetworkUpdate == 0) {
@@ -543,13 +575,29 @@ MyApp::handleEvent(EventType type, EventParam param)
             break;
         }
         case EV_BUTTON_DOWN:
-            m_startDisplaySequence = true;
+            if (m_displayState == DisplayTime) {
+                m_startDisplaySequence = true;
+                break;
+            }
+            
+            if (m_timeCounterSecondsRemaining != NoTimer)
+                Application::stopEventTimer(m_displaySequenceTimer);
+                
+            if (m_displayState == DisplayCountdownTimerAsk) {
+                m_displayState = DisplayCountdownTimerCount;
+                m_timeCounterSecondsRemaining = 10; //CountTimeTimerStartMinutes * 60;
+            } else
+                m_displayState = DisplayTime;
+                
+            updateDisplay();
             break;
         case EV_EVENT_TIMER:
             if (m_displaySequenceTimer != MakeTimerID(param))
                 break;
                 
-            if (m_displayState == DisplayDay)
+            if (m_displayState == DisplayCountdownTimerAsk)
+                m_displayState = DisplayDay;
+            else if (m_displayState == DisplayDay)
                 m_displayState = DisplayDate;
             else if (m_displayState == DisplayDate)
                 m_displayState = DisplayCurrentTemp;
@@ -561,8 +609,8 @@ MyApp::handleEvent(EventType type, EventParam param)
                 m_displayState = DisplayTime;
             updateDisplay();
                 
-            if (m_displayState != DisplayTime)
-                m_displaySequenceTimer = (m_displayState != DisplayTime) ? Application::startEventTimer(2000) : NoTimer;
+            m_displaySequenceTimer = (m_displayState != DisplayTime) ? Application::startEventTimer(2000) : NoTimer;
+            break;
         default:
             break;
     }
