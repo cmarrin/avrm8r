@@ -1,0 +1,1 @@
+echo T`date +%s` Z`date +%z` C`cat curtemp` H`cat hightemp` L`cat lowtemp` | nc -w 1 -uv 10.0.1.210 1956

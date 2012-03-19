@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Updates current, high and low temps, putting values in curtemp, hightemp, and lowtemp. Values
+# are numeric strings without spaces or newlines
+
+curtemp=`curl http://api.wunderground.com/api/5bc1eac6864b7e57/conditions/q/94022.json 2>/dev/null | grep temp_f`
+curtemp=(${curtemp//:/ })
+curtemp=${curtemp[1]}
+curtemp=`echo $curtemp | sed 's/,//'`
+echo $(printf %0.f $curtemp) > curtemp
+
+temp=`curl http://api.wunderground.com/api/5bc1eac6864b7e57/forecast/q/94022.json 2>/dev/null | grep '"fahrenheit":'`
+temp=(${temp//, / })
+hightemp=${temp[0]}
+hightemp=(${hightemp//:/ })
+hightemp=${hightemp[1]}
+echo $hightemp | sed 's/,//' | tr -d '"' > hightemp
+
+lowtemp=${temp[1]}
+lowtemp=(${lowtemp//:/ })
+lowtemp=${lowtemp[1]}
+echo $lowtemp | sed 's/,//' | tr -d '"' > lowtemp

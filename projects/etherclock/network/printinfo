@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "T`date +%s` Z`date +%z` C`cat curtemp` H`cat hightemp` L`cat lowtemp`"
+

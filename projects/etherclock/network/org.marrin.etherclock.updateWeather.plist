@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.marrin.etherclock.updateWeather</string>
+	<key>Program</key>
+	<string>/Users/cmarrin/Library/Application Support/etherclock/updateWeather</string>
+	<key>StartInterval</key>
+	<integer>900</integer>
+	<key>WorkingDirectory</key>
+	<string>/Users/cmarrin/Library/Application Support/etherclock/</string>
+</dict>
+</plist>
