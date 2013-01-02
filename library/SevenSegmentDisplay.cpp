@@ -108,7 +108,7 @@ const uint8_t g_charTable[] = {
 using namespace m8r;
 
 bool
-SevenSegmentDisplay::glyphForChar(uint8_t c, uint8_t& glyph1, uint8_t glyph2)
+SevenSegmentDisplay::glyphForChar(uint8_t c, uint8_t& glyph1, uint8_t& glyph2)
 {
     if (c < 0x20 || c > 0x7f)
         return 0;

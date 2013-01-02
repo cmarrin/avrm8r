@@ -297,7 +297,7 @@ networkUpdateCallback(Socket* socket, Socket::EventType type, const uint8_t* dat
 
 MyApp::MyApp()
     : m_adc(0, ADC_PS_DIV128, ADC_REF_AVCC)
-    , m_timerEventMgr(TimerClockDIV64, 195) // ~100us timer
+    , m_timerEventMgr(TimerClockDIV64, 195) // ~1ms timer
     , m_clock(TimerClockDIV1, 12499, 1000) // 1ms timer
     , m_network(MacAddr, IPAddr, GWAddr, true)
     , m_socket(&m_network, networkUpdateCallback, this)
@@ -331,7 +331,7 @@ MyApp::MyApp()
         Application::msDelay<2000>();
     }
 #endif
-    
+
     // Show startup
     scrollChars_P(startupMessage);
     Application::msDelay<1000>();
@@ -441,22 +441,22 @@ MyApp::showChars(const char* string, uint8_t dps)
     bool blank = false;
     bool endOfString = false;
     
-    for (uint8_t i = 0; i < 4; ++i, dps <<= 1) {
-        if (string[i] == '\0')
+    for (uint8_t stringIndex = 0, outputIndex = 0; outputIndex < 4; ++stringIndex, ++outputIndex, dps <<= 1) {
+        if (string[stringIndex] == '\0')
             endOfString = true;
             
         if (endOfString)
             blank = true;
         
         uint8_t glyph1, glyph2 = 0;
-        bool hasSecondGlyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[i], glyph1, glyph2);
+        bool hasSecondGlyph = SevenSegmentDisplay::glyphForChar(blank ? ' ' : string[stringIndex], glyph1, glyph2);
 
         m_shiftReg.send(glyph1 | ((dps & 0x08) ? 0x80 : 0), 8);
         
-        if (hasSecondGlyph && i != 3) {
-            ++i;
+        if (hasSecondGlyph && outputIndex != 3) {
+            ++outputIndex;
             dps <<= 1;
-            m_shiftReg.send(glyph2 | (dps & 0x08) ? 0x80 : 0, 8);
+            m_shiftReg.send(glyph2 | ((dps & 0x08) ? 0x80 : 0), 8);
         }
     }
     m_shiftReg.latch();
@@ -585,7 +585,7 @@ MyApp::handleEvent(EventType type, EventParam param)
                 
             if (m_displayState == DisplayCountdownTimerAsk) {
                 m_displayState = DisplayCountdownTimerCount;
-                m_timeCounterSecondsRemaining = 10; //CountTimeTimerStartMinutes * 60;
+                m_timeCounterSecondsRemaining = CountTimeTimerStartMinutes * 60;
             } else
                 m_displayState = DisplayTime;
                 
