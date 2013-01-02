@@ -1,0 +1,71 @@
+<h1>Ethernet remote switch (aka web switch)</h1>
+This is an example for a web server that can control a relay connected via pin PD7. The web server
+provides a web page from where you can switch the relay on or off.
+There is as well the possibility to control the relay via UDP messages.
+<br>
+<br>
+Between pin PD6 and GND you can optionally attach a push button to manually switch the relay on/off.
+<h2>Configuration of the IP address and password</h2>
+You will have to change the IP address that the web server gets before you
+compile this code. 
+Change the following line in file main.c and assign an IP address that is compatible
+with the address range in your local network (e.g if your PC has the address 192.168.0.8
+then try to give this board the address 192.168.0.9).
+<br>
+<pre>
+static uint8_t myip[4] = {10,0,0,29}; // this would be http://10.0.0.29 in your web browser
+</pre>
+The password is defined by the following line
+<pre>
+// the password string (only a-z,0-9,_ characters):
+static char password[]="secret"; 
+</pre>
+The software is written such that the
+password becomes part of the URL which makes it
+easy to bookmark a URL e.g on your phone. Like this: http://10.0.0.29/secret/
+
+
+<h2>Compiling and loading the code into the tuxgraphics ethernet board</h2>
+Please see the <a href="../README.htm">top level README.htm file</a> for
+details.
+<h2>Using the UDP interface</h2>
+To use the udp interface you can use a tool called <a href="../udpcom/">udpcom</a> which comes with this package.
+Versions are available for Linux, windows, and Mac.
+
+<br>
+<br>
+The udpcom utility sends text based commands in form of short UDP messages
+to the UDP server running on the ethernet board.
+<br>
+The only supported useful function  is to switch on or
+of the transistor connected to PD7.
+<pre>
+The command to switch on is: t=1
+The command to switch off is: t=0
+Query the status: t=?
+
+The udpcom syntax is: udpcom password,X=Y IP-addr
+
+Here is an example:
+./udpcom/unix/udpcom secret,t=0 10.0.0.29
+II: data: secret,t=0, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: t=0
+
+./udpcom/unix/udpcom secret,t=1 10.0.0.29
+II: data: secret,t=1, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: t=1
+
+./udpcom/unix/udpcom secret,t=? 10.0.0.29
+II: data: secret,t=?, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: t=1
+
+./udpcom/unix/udpcom secret,t=0 10.0.0.29
+II: data: secret,t=0, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: t=0
+
+./udpcom/unix/udpcom secret,t=? 10.0.0.29
+II: data: secret,t=?, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: t=0
+</pre>
+<hr>
+&copy; Guido Socher, tuxgraphics

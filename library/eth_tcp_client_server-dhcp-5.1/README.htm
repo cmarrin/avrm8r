@@ -1,0 +1,351 @@
+<h1>AVR web server and web client, stack version 5.X</h1>
+
+The main new feature in stack version 5.X is the addition of a DHCP client
+and a general overhaul of all client related interfaces.
+Most client functions what now a IP address and a MAC address as arguments.
+<br>
+<br>
+This change opens the possibility to do proper routing for client applications.
+That is: if the server you want to reach is on your local LAN the you use the IP
+address of the server and the MAC address of the servers interface.
+If it is a server somewhere on the internet then you would use
+the IP address of the server and the MAC address of the internal interface of your gateway (e.g 
+DSL router).
+<br>
+<br>
+A new interface is provided to lookup MAC addresses. 
+<br>
+<br>
+The web server code is mostly unaffected by the changes although some functions have
+been renamed.
+<br>
+<br>
+
+<h2>cgi-script to receive data and store on your web-server</h2>
+In the <a href="cgi-bin">cgi-bin directory</a> a perl cgi-script is provided
+to store data received from the web client on the avr-ethernet board.
+The idea is that the avr-ethernet board is used to take measurements (e.g of
+temperature or records events) and this data is then up-loaded by the board
+to a central server on the internet for storage and further processing.
+The sdat cgi-script receives and stores the data. It can as well be used
+to view data that was received.
+
+<h2>What is where?</h2>
+See file 
+<a href=WhatIsWhat.htm>WhatIsWhat.htm</a>
+
+<br>
+<br>
+There is as well detailed documentation and other applications of this TCP/IP stack at <a href="http://tuxgraphics.org/electronics/">http://tuxgraphics.org/electronics/</a>
+<br>
+<br>
+All parts needed to build this AVR ethernet solution can be ordered from 
+<a href="http://shop.tuxgraphics.org/">http://shop.tuxgraphics.org/</a>.
+You can also order the email account which you need for the test_emailnotify
+application from the tuxgraphics online shop.
+<h2>The characteristics of this TCP/IP stack</h2>
+The tuxgraphics TCP/IP stack was written with a web server in mind and is optimized
+for size. It is the smallest stack and the fastest web server at the same time. It does
+not have any hard-coded limit on the amount of parallel web connections/transactions.
+Most TCP/IP stacks for embedded systems are limited very much in the number of connections
+and can thus easily be taken down by a SYN-attack (even hardware implementations have
+that limitation). This stack does not have this problem.
+<br>
+<br>
+The trade off is however that you can not send large files or show big web pages.
+Everything must fit into one IP packet. You can produce bigger web pages by splitting
+up the page or using the &lt;iframe src="url"&gt;
+
+
+<h2>License</h2>
+Copyright of the software and all diagrams: Guido Socher, tuxgraphics
+
+<br>
+<br>
+The libraries<br>
+dhcp_client, dnslkup, ip_arp_udp_tcp, enc28j60 and websrv_help_functions<br>
+are licensed under LGPL V2<br>
+See http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html<br>
+All other parts are GPL V2<br>
+See http://www.gnu.org/licenses/old-licenses/gpl-2.0.html<br>
+
+Other licenses are available on request.
+<hr>
+<h2>Configuration (!! READ THIS BEFORE YOU COMPILE THE CODE !!)</h2>
+<pre>
+ Edit the  C-file of the application which you plan to compile from
+the appropriate sub-directory and change the lines:
+
+static uint8_t mymac[6] = {0x54,0x55,0x58,0x10,0x00,0x29};
+
+static uint8_t myip[4] = {10,0,0,29};
+</pre>
+Which IP address should I use for myip? You need an IP address that
+is in the same range as your LAN.
+Example: your wlan router might have 192.168.1.1, your PC might have
+192.168.1.2. This means you could e.g use 192.168.1.10 and leave some
+room for more PCs. 
+<br>
+<br>
+Only in the case of the example in client-www-dhcp you will not need to change
+the myip[] variable as DHCP will be used to obtain the IP address.
+You must however still assign a MAC address to each board such that there are
+no two boards in your local network with the same MAC address.
+
+<br>
+<br>
+In case of the web client applications  (test_web_client.c, test_identi_ca.c and test_emailnotify.c)
+you will in addition need to edit the following line:
+
+<pre>
+// Default gateway. The internal IP address of your DSL router. 
+static uint8_t gwip[4] = {10,0,0,2};
+</pre>
+
+Check the file "Makevars.mk" on the top level. This file contains common settings
+included in all the Makefiles used here.
+Make sure the MCU is set correctly:
+
+<pre>
+  MCU=atmega168
+  DUDECPUTYPE=m168
+  or
+  MCU=atmega88
+  DUDECPUTYPE=m88
+  or
+  MCU=atmega328p
+  DUDECPUTYPE=m328p
+  or
+  MCU=atmega644
+  DUDECPUTYPE=m644
+</pre>
+The code for only the web server fits into an atmega88 chip but
+a combined web client and web server needs a atmega168/atmega328p or atmega644.
+<br>
+<br>
+The each directory contains a file called ip_config.h. This file is used
+to configure the features that the stack provides. This file is tailored
+to the specific use to keep the IP stack as small as possible.
+That way you can have really efficient and small code.
+
+<h2>Compiling the code</h2>
+You need an avr-gcc development environment in order to compile this.
+See http://tuxgraphics.org/electronics/200901/avr-gcc-linux.shtml
+<br>
+<br>
+Each of the examples can be compiled from the corresponding sub-directory
+<pre>
+Just use the command:
+make
+
+Note: windows users may use and modify the supplied winmake.bat to setup the
+environment correctly. See details below on how to compile this under windows.
+</pre>
+
+More information about Makefiles can be found at:
+http://tuxgraphics.org/electronics/200912/makefiles.shtml
+
+
+<pre>
+In the variouse sub-directories you can use a command like: 
+make load_TheNameOfTheApplication
+E.g in server-www-simple to compile and load test_OKworks.c you run
+make load_test_OKworks
+</pre>
+This will execute the avrdude command to load the  software 
+<pre>
+E.g something like: 
+   avrdude -p m88 -c stk500v2 -e -U flash:w:test_OKworks.hex
+</pre>
+For the "make load" stuff to work you will have to set the LOADCMD variable
+in the Makevars.mk.
+It is as well possible to compile everything from the top level make file
+but loading is obviously not possible from there.
+<br><br>
+To see a list of all possible build targets run the command:
+<br>
+make help
+
+<h2>Selecting the right clock source (fuse settings) !you do this only once per board!</h2>
+Tuxgraphics hardware sold as of march 2007 is prepared to use the clock
+signal from the enc28j60. To use this you need to change the 
+low fuse byte once from 0x62 to 0x60:
+
+<pre>
+avrdude -p m88 -c stk500v2 -u -v -U lfuse:w:0x60:m
+or
+avrdude -p m168 -c stk500v2 -u -v -U lfuse:w:0x60:m
+or
+avrdude -p m328p -c stk500v2 -u -v -U lfuse:w:0x60:m
+or
+avrdude -p m644 -c stk500v2 -u -v -U lfuse:w:0x60:m
+</pre>
+
+The above command can as well be executed by using the make
+file. In a Linux shell you can just make sure the Makevars.mk is correct and
+then type:
+<br>
+make fuse
+<br>
+<br>
+Note: windows users may use and modify the supplied winsetfuse.bat script.
+
+<br>
+<pre>
+After programming the fuse settings of atmega168 and atmega88 should be:
+ low fuse:  0x60
+ high fuse: 0xdf
+ ext. fuse: 0x01
+
+For the atmega328p the hfuse and efuse bytes look slightly different.
+The idea is however the same. Just change the lfuse from factory default
+to 0x60. The fuse settings of the atmega328p are after programming
+should be as below (default factory settings for atmega328p, the
+efuse has some not used bits and is dependent on the chip revision):
+ lfuse reads as 0x60
+ hfuse reads as 0xD9
+ efuse reads as 0x07
+
+Fuses of the atmega644/atmega644a after programming:
+ Device signature = 0x1e9609
+ lfuse reads as 60
+ hfuse reads as 99
+ efuse reads as FF
+
+details of the lfuse bits:
+  CKDIV8 = 0
+  CKOUT  = 1
+  SUT1   = 1
+  SUT0   = 0
+  CKSEL3 = 0
+  CKSEL2 = 0
+  CKSEL1 = 0
+  CKSEL0 = 0
+
+
+If you are unsure what the current fuse setting are on the atmega
+then you can read the fuse settings with a command like:
+          avrdude -p m168 -c stk500v2 -v -q
+
+The below list of fuses shows for reference purpose the settings
+of a new and never programmed chip. 
+
+The result should be this (default factory settings for atmega168):
+          avrdude: safemode: lfuse reads as 62
+          avrdude: safemode: hfuse reads as DF
+          avrdude: safemode: efuse reads as 1
+
+The result should be this (default factory settings for atmega328p):
+          avrdude: safemode: lfuse reads as 62
+          avrdude: safemode: hfuse reads as D9
+          avrdude: safemode: efuse reads as 7
+
+The result should be this (default factory settings for atmega644/atmega644a):
+          avrdude: Device signature = 0x1e9609
+          avrdude: safemode: lfuse reads as 62
+          avrdude: safemode: hfuse reads as 99
+          avrdude: safemode: efuse reads as FF
+
+</pre>
+<h2>Compiling on non-Unix systems</h2>
+Please use the provided Makefiles !!!
+<br>
+Those Makefiles will  work under Windows.
+<br>
+<br>
+Take a look at the supplied winmake.bat, winclean.bat and winsetfuse.bat file. The bat script
+might need to be adapted  to set the environment correctly.
+Both script call then the Makefile to run the actual commands.
+<br>
+<br>
+Edit the Makevars.mk to make the needed adjustments.
+<br>
+<br>
+More information about Makefiles can be found at:
+http://tuxgraphics.org/electronics/200912/makefiles.shtml
+<br>
+<br>
+After adjusting both the batch script and the Makevars.mk you can
+use this system as follows:
+<br>
+<ol>
+<li>Compilation: just double click on the winmake.bat in the filemanager. This
+will compile the whole tree.
+<li>Loading of the resulting hex files into the board: I recommend to use the
+win-avrdude zip-package as described in:<br>
+http://tuxgraphics.org/electronics/201205/windows-avr-microcontroller-programming.shtml
+<li>Setting fuse bytes (needs to be done only once per board): double click in winsetfuse.bat
+<li>Clean-up of object files (needs to be run after changing any settings in Makefiles): double click on winclean.bat
+</ol>
+
+<h2>Adapting code from stack version 4.X to this version</h2>
+The the client interfaces have changed a lot and most function signatures
+have changed. I recommend you to look at the examples in the client-www directory
+and adapt your code line by line.
+<br>
+<br>
+For a web server the changes are much smaller. All you have to do is replace the function:
+<pre>
+init_ip_arp_udp_tcp(mymac,myip,mywwwport);
+
+with
+
+init_udp_or_www_server(mymac,myip);
+www_server_port(mywwwport); // only needed if mywwwport!=80
+</pre>
+
+
+<h2>Revision history </h2>
+<pre>
+2009-05-05: version 3.2 -- first version of the new stack. 
+2009-05-18: version 3.3 -- get rid of avr_compat.h, add twitter and identi.ca
+2009-06-02: version 3.4 -- added make target "main" to compile eth_rem_dev_tcp.hex
+                           updated delay functions.
+2009-06-21: version 3.5 -- added a smiley for the remote switch (main.c)
+2009-12-30: version 3.6 -- improvements to Makefile
+2010-02-26: version 4.0 -- added generic udp client code (from alarm system)
+                        -- added a generic TCP client interface
+                        -- add a length parameter to the browser callback
+                        -- added a dns resolver
+2010-03-13: version 4.1 -- clean-up code for enc28j60 B4 errata point 13
+2010-03-21: version 4.2 -- ping client code update
+                        -- arp refresh procedure uses now bit-mapped flags
+2010-06-27: version 4.3 -- added atmega644 support
+2011-10-18: version 4.4 -- various error fixes by: 
+                           - Marc Bouget - add missing check for IP protocol field, ip_arp_udp_tcp.c
+                           - Andras Tucsni - increase TCP_WIN_SIZE size, ip_arp_udp_tcp.c
+                           - Andras Tucsni - zero 12 bytes not 10, dnslkup.c
+                       -- changed license of the stack code to allow use of 
+                          those files as a library in combination with 
+                          proprietary code. Without a need to release that
+                          code to the receiver of the application or hardware
+                          running it:
+                          dnslkup.c: Copyright:LGPL V2
+                          dnslkup.h: Copyright:LGPL V2
+                          enc28j60.c: Copyright:LGPL V2
+                          enc28j60.h: Copyright:LGPL V2
+                          ip_arp_udp_tcp.c: Copyright:LGPL V2
+                          ip_arp_udp_tcp.h: Copyright:LGPL V2
+                          ip_config.h: Copyright:LGPL V2
+                          net.h: Copyright:LGPL V2
+                          websrv_help_functions.c: Copyright:LGPL V2
+2011-10-22: version 4.5 -- this is a bug fix only release. There was one
+                           correction forgotten in the 4.4 release. We release
+                           it now. It affects only the file dnslkup.c:
+                           - Andras Tucsni - dnslkup.c: search all answer sections until 
+                             we find an A record (important only for CNAME or sub domains)
+                           - Guido Socher - dnslkup.c: incorrect handling of
+                           lencnt. It must be 1 at start.
+2011-11-22: version 4.6 -- fix wol packet, WOL is UDP, there was a copy/paste
+                           error when code for ICMP was reused.
+2012-02-02: version 5.0 -- added a dhcp client. Major client code re-write.
+2012-04-12: version 5.1 -- added #define __PROG_TYPES_COMPAT__ before 
+                           avr/pgmspace.h as this is needed for the new avr-libc-1.8
+                           see http://www.nongnu.org/avr-libc/changes-1.8.html:
+                        -- changed in websrv_help_functions the return value 
+                           of find_key_val
+                        -- The client_browse_url function will retrun the full status code
+                           and not only the first digit.
+                           Note: this change is incompatible with the previous version!
+</pre>
+vim:sw=8:ts=8:si:et

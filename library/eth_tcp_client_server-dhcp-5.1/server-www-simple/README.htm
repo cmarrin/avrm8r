@@ -1,0 +1,55 @@
+<h1>Simple web servers and udp servers</h1>
+This directory contains 3 small web server examples.
+<pre>
+basic_web_server.c
+test_OKworks.c  
+test_readSiliconRev.c
+</pre>
+
+The test_readSiliconRev.c implemens a web server and a UDP sever.
+<br>
+<h2>Configuration of the IP address</h2>
+You will have to change the IP address that the web server gets before you
+compile this code. 
+Change the following line in file main.c and assign an IP address that is compatible
+with the address range in your local network (e.g if your PC has the address 192.168.0.8
+then try to give this board the address 192.168.0.9).
+<br>
+<pre>
+static uint8_t myip[4] = {10,0,0,29}; // this would be http://10.0.0.29 in your web browser
+</pre>
+
+<h2>Compiling and loading the code into the tuxgraphics ethernet board</h2>
+Please see the <a href="../README.htm">top level README.htm file</a> for
+details.
+<h2>Using the UDP interface</h2>
+To use the udp interface you can use a tool called udpcom which comes with this package.
+Versions are available for Linux, windows, and Mac.
+
+<br>
+<br>
+The udpcom utility sends text based commands in form of short UDP messages
+to the UDP server running on the ethernet board.
+<br>
+<pre>
+The test_readSiliconRev.c (compiles to load_readSiliconRev.hex) reads 
+the enc28j60 silicon revision and displays it. 
+You can use it as a base for a simple application
+where you want to just read data (e.g thermometer)
+
+The command that you can send via udpcom is called "ver"
+
+Example:
+
+udpcom ver 10.0.0.29
+
+will answer:
+II: data: ver, ip: 10.0.0.29 port: 1200
+OK: 10.0.0.29: ver=B4
+
+
+This means the ENC28J60 silicon rev is B4
+
+</pre>
+<hr>
+&copy; tuxgraphics

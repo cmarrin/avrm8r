@@ -1,0 +1,109 @@
+<h1>Simple web clients using DNS to find a server on the internet</h1>
+This directory contains 3 small web clients. Each of them
+upload data to a server on the internet and they use the dnslkup.c code
+to look up the IP address of the server that they contact.
+<br>
+<br>
+All of the examples implement as well a web server on the ethernet board such that you can point
+a web browser on your PC to those and on the web pages that they
+show you can see details about the status of the web client.
+<pre>
+test_web_client.c -- this is a web client that monitors ping requests
+that it gets and if it detected a ping then it will upload information
+as to where that ping came from to the web site 
+http://tuxgraphics.org/cgi-bin/upld
+
+To use this edit test_web_client.c and configure the IP addresses
+as described below then load the code with
+make load_test_web_client
+
+send a single ping to the board e.g:
+ping 10.0.0.29
+(stop ping with crtl-c)
+
+Point your web browser to <a href=http://tuxgraphics.org/cgi-bin/upld>http://tuxgraphics.org/cgi-bin/upld</a>. The site filters data by originating IP.
+The originating is the external address of the DSL router were the
+web client is connected. If you use the same router to get onto the internet
+the the IP address suggested is already the correct one. Just click "show".
+<br>
+<br>
+Instead of http://tuxgraphics.org/cgi-bin/upld 
+can use the sdat cgi-script provided in <a href="../cgi-bin">the ../cgi-script directory</a>,
+install it on your own web server and up-load data to your web server. Just replace in the C-code
+the WEBSERVER_VHOST with the name of your own server and search for upld and replace it by sdat.
+<br>
+<br>
+
+The board runs besides the web client as well a web server where you
+can see debug and status information. You can open it in web browser
+e.g http://10.0.0.29 (or whatever you configured as myip[4]).
+</pre>
+
+<pre>
+test_identi_ca.c  -- post a message on identi.ca. To trigger the sending 
+of the message connect PD6 to GND. You need a identi.ca account to use this. 
+There is a timeout of 3min to prevent too many posts.
+
+To use this edit test_web_client.c and configure the IP addresses
+as described below then encode your identi.ca account username and 
+password as described further down and load the code with
+
+make load_test_identi_ca
+</pre>
+
+We used to have as well a twitter.com example code but twitter changed
+their authentication method a while back such that the code would no longer
+work. Apparently there was nobody using twitter from the ethernet board
+and this code is now removed.
+
+<h2>Configuration of the IP address</h2>
+You will have to change the IP address that the client (server) gets before you
+compile this code. 
+Change the following line in file main.c and assign an IP address that is compatible
+with the address range in your local network.
+<br>
+<pre>
+static uint8_t myip[4] = {10,0,0,29}; 
+</pre>
+
+<br>
+In order to get out onto the internet the web client needs to know
+the IP address of the gateway behind which it can find the host
+that it wants to contact. This is normally the internal IP address
+of your DSL router.
+<br>
+<pre>
+static uint8_t gwip[4] = {10,0,0,2};
+</pre>
+There is a special case when the server were you would like to
+upload data to is on the same LAN as the web client. In that you
+don't really have a gateway and then you have to set the gwip to
+the IP address of the server that you want to upload to.
+
+<h2>Configuration identi.ca account</h2>
+The program test_identi_ca.c  uses a define
+statement called BLOGGACCOUNT. This needs to contain an
+base64 encoded string of your identi.ca account.
+The user name and password need to be separated by a single colon (user:passw).
+There is a web based tool to generate the BLOGGACCOUNT authorisation
+code at <a href=http://tuxgraphics.org/~guido/javascript/base64-javascript.html>http://tuxgraphics.org/~guido/javascript/base64-javascript.html</a>.
+<br>
+This base64-javascript encoder can also be found in the subdirectory <a href=../files/>&quot;files&quot;</a>.
+
+<br>
+<br>
+In this encoder enter username and password seperated by a single colon 
+(username:youpassword) use the generated value in the "#define BLOGGACCOUNT":
+<br>
+<br>
+#define BLOGGACCOUNT "Authorization: Basic ZABcdefghijklmnop12345=="
+<br>
+<br>
+The sending of messages to twitter/identi.ca is triggered by  connecting PD6 to GND.
+
+<h2>Compiling and loading the code into the tuxgraphics ethernet board</h2>
+Please see the <a href="../README.htm">top level README.htm file</a> for
+details.
+</pre>
+<hr>
+&copy; tuxgraphics

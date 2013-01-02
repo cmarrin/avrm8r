@@ -16,11 +16,13 @@
 
 //------------- functions in ip_arp_udp_tcp.c --------------
 // an NTP client (ntp clock):
-#define NTP_client
-// a spontanious sending UDP client
-#define UDP_client
+#undef NTP_client
+// a spontanious sending UDP client (needed as well for DNS and DHCP)
+#undef UDP_client
 // a server answering to UDP messages
 #define UDP_server
+// a web server 
+#define WWW_server
 
 // to send out a ping:
 #undef PING_client
@@ -30,22 +32,22 @@
 #undef WOL_client
 
 // function to send a gratuitous arp
-#define GRATARP
+#undef GRATARP
 
 // a "web browser". This can be use to upload data
 // to a web server on the internet by encoding the data 
 // into the url (like a Form action of type GET):
-#define WWW_client
+#undef WWW_client
 // if you do not need a browser and just a server:
 //#undef WWW_client
 //
 //------------- functions in websrv_help_functions.c --------------
 //
 // functions to decode cgi-form data:
-#define FROMDECODE_websrv_help
+#undef FROMDECODE_websrv_help
 
 // function to encode a URL (mostly needed for a web client)
-#define URLENCODE_websrv_help
+#undef URLENCODE_websrv_help
 
 #endif /* IP_CONFIG_H */
 //@}

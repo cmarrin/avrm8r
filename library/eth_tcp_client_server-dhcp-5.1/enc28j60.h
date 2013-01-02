@@ -275,6 +275,8 @@ extern void enc28j60PacketSend(uint16_t len, uint8_t* packet);
 extern uint8_t enc28j60hasRxPkt(void);
 extern uint16_t enc28j60PacketReceive(uint16_t maxlen, uint8_t* packet);
 extern uint8_t enc28j60getrev(void);
+extern void enc28j60EnableBroadcast(void);
+extern void enc28j60DisableBroadcast(void);
 extern uint8_t enc28j60linkup(void);
 
 #endif

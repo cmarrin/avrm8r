@@ -131,17 +131,6 @@
 		49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		49F35DDA14B4BDB300C7F7E4 /* SevenSegmentDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SevenSegmentDisplay.h; path = ../../library/m8r/SevenSegmentDisplay.h; sourceTree = "<group>"; };
 		49F35DDC14B4BDCE00C7F7E4 /* SevenSegmentDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SevenSegmentDisplay.cpp; path = ../../library/SevenSegmentDisplay.cpp; sourceTree = "<group>"; };
-		49F35DE214B4F3F000C7F7E4 /* dnslkup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dnslkup.c; path = "../../library/eth_tcp_client_server-4.5/dnslkup.c"; sourceTree = "<group>"; };
-		49F35DE314B4F3F000C7F7E4 /* dnslkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dnslkup.h; path = "../../library/eth_tcp_client_server-4.5/dnslkup.h"; sourceTree = "<group>"; };
-		49F35DE414B4F3F000C7F7E4 /* enc28j60.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enc28j60.c; path = "../../library/eth_tcp_client_server-4.5/enc28j60.c"; sourceTree = "<group>"; };
-		49F35DE514B4F3F000C7F7E4 /* enc28j60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enc28j60.h; path = "../../library/eth_tcp_client_server-4.5/enc28j60.h"; sourceTree = "<group>"; };
-		49F35DE614B4F3F000C7F7E4 /* ip_arp_udp_tcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ip_arp_udp_tcp.c; path = "../../library/eth_tcp_client_server-4.5/ip_arp_udp_tcp.c"; sourceTree = "<group>"; };
-		49F35DE714B4F3F000C7F7E4 /* ip_arp_udp_tcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_arp_udp_tcp.h; path = "../../library/eth_tcp_client_server-4.5/ip_arp_udp_tcp.h"; sourceTree = "<group>"; };
-		49F35DE814B4F3F000C7F7E4 /* ip_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_config.h; path = "../../library/eth_tcp_client_server-4.5/ip_config.h"; sourceTree = "<group>"; };
-		49F35DE914B4F3F000C7F7E4 /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = "../../library/eth_tcp_client_server-4.5/net.h"; sourceTree = "<group>"; };
-		49F35DEA14B4F3F000C7F7E4 /* timeout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timeout.h; path = "../../library/eth_tcp_client_server-4.5/timeout.h"; sourceTree = "<group>"; };
-		49F35DEB14B4F3F000C7F7E4 /* websrv_help_functions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = websrv_help_functions.c; path = "../../library/eth_tcp_client_server-4.5/websrv_help_functions.c"; sourceTree = "<group>"; };
-		49F35DEC14B4F3F000C7F7E4 /* websrv_help_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = websrv_help_functions.h; path = "../../library/eth_tcp_client_server-4.5/websrv_help_functions.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -165,13 +154,20 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
+		495740FC1693B1FF0068C223 /* eth_tcp_client_server_dhcp-5.1 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "eth_tcp_client_server_dhcp-5.1";
+			sourceTree = "<group>";
+		};
 		49EE68BA147B184100FA3113 /* libm8r */ = {
 			isa = PBXGroup;
 			children = (
+				495740FC1693B1FF0068C223 /* eth_tcp_client_server_dhcp-5.1 */,
 				49EE68BD147B188700FA3113 /* print_event_enums.c */,
 				49EE68BE147B188700FA3113 /* Makefile */,
 				49EE68BF147B188700FA3113 /* shared.mk */,
-				49F35DE014B4F3B800C7F7E4 /* eth_tcp_client_server */,
 				49EE68BB147B185900FA3113 /* Source */,
 			);
 			name = libm8r;
@@ -225,24 +221,6 @@
 				49BBE08D148D04F300DC43EC /* UDPSocket.h */,
 			);
 			name = Source;
-			sourceTree = "<group>";
-		};
-		49F35DE014B4F3B800C7F7E4 /* eth_tcp_client_server */ = {
-			isa = PBXGroup;
-			children = (
-				49F35DE214B4F3F000C7F7E4 /* dnslkup.c */,
-				49F35DE314B4F3F000C7F7E4 /* dnslkup.h */,
-				49F35DE414B4F3F000C7F7E4 /* enc28j60.c */,
-				49F35DE514B4F3F000C7F7E4 /* enc28j60.h */,
-				49F35DE614B4F3F000C7F7E4 /* ip_arp_udp_tcp.c */,
-				49F35DE714B4F3F000C7F7E4 /* ip_arp_udp_tcp.h */,
-				49F35DE814B4F3F000C7F7E4 /* ip_config.h */,
-				49F35DE914B4F3F000C7F7E4 /* net.h */,
-				49F35DEA14B4F3F000C7F7E4 /* timeout.h */,
-				49F35DEB14B4F3F000C7F7E4 /* websrv_help_functions.c */,
-				49F35DEC14B4F3F000C7F7E4 /* websrv_help_functions.h */,
-			);
-			name = eth_tcp_client_server;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -594,7 +572,7 @@
 				49A5D67F13A7F72B00E4C97D /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		01706F550A347F8800E43B08 /* Build configuration list for PBXNativeTarget "Build" */ = {
 			isa = XCConfigurationList;

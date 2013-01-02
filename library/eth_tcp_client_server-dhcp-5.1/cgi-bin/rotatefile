@@ -1,0 +1,54 @@
+#!/bin/sh
+# vim: set sw=4 ts=4 et: 
+# written by guido socher
+ver="0.1"
+help()
+{
+    cat <<HELP
+rotatefile -- rotate the file name 
+
+USAGE: rotatefile [-h]  filename
+
+OPTIONS: -h this help
+
+EXAMPLE: rotatefile sdat.txt
+This will e.g rename  ... sdat.txt.1 to sdat.txt.2, sdat.txt.0 to sdat.txt.1 and sdat.txt to sdat.txt.0
+and create an empty sdat.txt file
+
+The max number is 20
+
+version $ver
+HELP
+    exit 0
+}
+
+error()
+{
+    echo "$1"
+    exit "$2"
+}
+while [ -n "$1" ]; do
+case $1 in
+    -h) help;shift 1;;
+    --) break;;
+    -*) echo "error: no such option $1. -h for help";exit 1;;
+    *)  break;;
+esac
+done
+
+# input check:
+[ -z "$1" ] && error "ERROR: you must specify a file, use -h for help" 1
+filen="$1"
+for n in 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0; do
+    if [ -f "$filen.$n" ]; then
+        p=`expr $n + 1`
+	    echo "OK rotatefile: mv $filen.$n $filen.$p"
+	    mv $filen.$n $filen.$p
+    fi
+done
+if [ -f "$filen" ]; then
+    echo "OK rotatefile: cp $filen $filen.0"
+    cp -p $filen $filen.0
+fi
+echo "OK rotatefile: cp /dev/null $filen"
+cp /dev/null $filen

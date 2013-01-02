@@ -287,11 +287,29 @@ uint8_t enc28j60getrev(void)
 	return(rev);
 }
 
+// A number of utility functions to enable/disable broadcast 
+void enc28j60EnableBroadcast( void ) {
+        uint8_t erxfcon;
+        erxfcon=enc28j60Read(ERXFCON);
+        erxfcon |= ERXFCON_BCEN;
+        enc28j60Write(ERXFCON, erxfcon);
+}
+
+void enc28j60DisableBroadcast( void ) {
+        uint8_t erxfcon;
+        erxfcon=enc28j60Read(ERXFCON);
+        erxfcon &= (0xff ^ ERXFCON_BCEN);
+        enc28j60Write(ERXFCON, erxfcon);
+}
+
 // link status
 uint8_t enc28j60linkup(void)
 {
         // bit 10 (= bit 3 in upper reg)
-	return(enc28j60PhyReadH(PHSTAT2) && 4);
+        if (enc28j60PhyReadH(PHSTAT2) && 4){
+                return(1);
+        }
+        return(0);
 }
 
 void enc28j60PacketSend(uint16_t len, uint8_t* packet)
