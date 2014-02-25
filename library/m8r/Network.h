@@ -44,7 +44,8 @@ DAMAGE.
 namespace m8r {
 
 const uint16_t PacketBufferSize = 220;
-const uint16_t NetworkTimerInterval = 1000;
+const uint16_t NetworkTimerInterval = 10; // ms
+const uint16_t DNSLookupTimeout = 60U * 1000U / NetworkTimerInterval; // 60 seconds with a 10ms event rate
 
 enum NetworkInterfaceError { NetworkInterfaceNoError, NetworkInterfaceTransmitError, NetworkInterfaceReceiveError };
 enum ChecksumType { CHECKSUM_IP = 0, CHECKSUM_UDP, CHECKSUM_TCP, CHECKSUM_ICMP };
@@ -96,9 +97,16 @@ public:
 
 private:
     void notifyReady();
+    static void arpResolverResultCallback(uint8_t *ip, void* userdata, uint8_t* mac);
     
     uint8_t m_packetBuffer[PacketBufferSize + 1];
     uint16_t m_packetLength;
+    uint8_t m_gwArpState;
+    uint8_t m_dnsState;
+    uint8_t m_gwip[4];
+    uint8_t m_gwmac[6];
+    
+    uint16_t m_dnsLookupCounter;
 
     Network* m_next;
     Socket* m_socketHead;

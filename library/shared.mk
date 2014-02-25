@@ -12,14 +12,14 @@ MCU = atmega168
 endif
 
 ifndef TOOLS_DIR
-TOOLS_DIR = /sw
+TOOLS_DIR = /usr/local/CrossPack-AVR/
 endif
 
 ifndef M8R_SRC_DIR
 M8R_SRC_DIR = .
 endif
 
-TUXGRAPHICS_SRC_DIR = eth_tcp_client_server-4.5
+TUXGRAPHICS_SRC_DIR = eth_tcp_client_server-dhcp-5.1
 
 INSTALL_DIR = ~/Library/m8r
 

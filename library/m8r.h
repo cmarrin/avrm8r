@@ -48,9 +48,11 @@ DAMAGE.
 #define _INLINE_ __attribute__ ((always_inline)) 
 #define _NO_INLINE_ __attribute__ ((noinline))
 
-namespace m8r {
-
 enum ErrorConditionType { ErrorConditionNote, ErrorConditionWarning, ErrorConditionFatal };
+
+#ifdef __cplusplus
+namespace m8r {
+#endif
 
 enum ErrorType {
     AssertOutOfMem = 0x01,
@@ -180,7 +182,8 @@ enum Ports {
 #endif
         _NOREG
     };
-    
+
+#ifdef __cplusplus
 #define REG8(reg) _SFR_MEM8(reg)
 #define REG16(reg) _SFR_MEM16(reg)
 #define PIN(port) _SFR_IO8(port)
@@ -259,25 +262,43 @@ inline uint16_t makeUInt(uint8_t c1, uint8_t c2)
     u.a[1] = c1;
     return u.uint;
 }
+#endif
 
 #ifdef DEBUG
+#ifdef __cplusplus
 extern "C" {
-    void _showErrorCondition(char c, uint16_t code, m8r::ErrorConditionType);
+#endif
+    void _showErrorCondition(char c, uint16_t code, enum ErrorConditionType type);
+#ifdef __cplusplus
 }
+#endif
 
 #define ASSERT(expr, code) if (!(expr)) FATAL(code)
 #define FATAL(code) _showErrorCondition(0, code, ErrorConditionFatal)
 #define WARNING(code) _showErrorCondition(0, code, ErrorConditionWarning)
+#ifdef __cplusplus
 inline void NOTE(uint16_t code) { _showErrorCondition(0, code, ErrorConditionNote); }
 inline void NOTE(uint8_t code1, uint8_t code2) { _showErrorCondition(0, makeUInt(code1, code2), ErrorConditionNote); }
 inline void CNOTE(char c, uint8_t code) { _showErrorCondition(c, code, ErrorConditionNote); }
 #else
+#define NOTE(code) _showErrorCondition(0, code, ErrorConditionNote)
+#define CNOTE(c, code) _showErrorCondition(c, code, ErrorConditionNote)
+#endif
+#else
 #define ASSERT(expr, code)
 #define FATAL(code) while(1)
 #define WARNING(code)
+#ifdef __cplusplus
 inline void NOTE(uint16_t code) { }
 inline void NOTE(uint8_t code1, uint8_t code2) { }
 inline void CNOTE(char c, uint8_t code) { }
+#else
+#define NOTE(code)
+#define CNOTE(c, code)
+#endif
 #endif
 
+#ifdef __cplusplus
 }
+#endif
+

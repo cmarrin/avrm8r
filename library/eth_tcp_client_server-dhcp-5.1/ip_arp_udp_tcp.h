@@ -59,13 +59,12 @@ extern uint8_t route_via_gw(uint8_t *destip); // returns 1 if destip must be rou
 // a MAC address.
 // You need to provide a callback function. That function will be executed once the
 // MAC address is found. We do this to not block execution in the main loop.
-// NOTE: you can only do one MAC address resolution at a time. The reference_number is just
+// NOTE: you can only do one MAC address resolution at a time. The userdata is just
 // a number given back to you to make it easier to know what this relates to.
 //
 // You declare the callback function:
 //
-//#define TRANS_NUM_GWMAC 12
-//void arpresolver_result_callback(uint8_t *ip __attribute__((unused)),uint8_t reference_number,uint8_t *mac){ // the __attribute__((unused)) is a gcc compiler directive to avoid warnings about unsed variables.
+//void arpresolver_result_callback(uint8_t *ip __attribute__((unused)),void* userdata,uint8_t *mac){ // the __attribute__((unused)) is a gcc compiler directive to avoid warnings about unsed variables.
 //        uint8_t i=0;
 //        if (reference_number==TRANS_NUM_GWMAC){
 //                // copy mac address over:
@@ -78,7 +77,7 @@ extern uint8_t route_via_gw(uint8_t *destip); // returns 1 if destip must be rou
 // Note: you must have initialized the stack with init_udp_or_www_server or client_ifconfig
 // before you can use get_mac_with_arp(). The arp request will automatically be repeated if
 // there is no answer. 
-extern void get_mac_with_arp(uint8_t *ip, uint8_t reference_number,void (*arp_result_callback)(uint8_t *ip,uint8_t reference_number,uint8_t *mac));
+extern void get_mac_with_arp(uint8_t *ip, void* userdata,void (*arp_result_callback)(uint8_t *ip,void* userdata,uint8_t *mac));
 uint8_t get_mac_with_arp_wait(void); // checks current ongoing transaction, retuns 0 when the transaction is over
 #endif
 

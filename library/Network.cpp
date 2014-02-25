@@ -48,9 +48,13 @@ extern "C" {
 using namespace m8r;
 
 Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_t gwaddr[4], bool doubleClockRate)
-    : m_next(0)
+    : m_gwArpState(0)
+    , m_dnsState(0)
+    , m_dnsLookupCounter(0)
+    , m_next(0)
     , m_timerID()
 {
+    memcpy(m_gwip, gwaddr, 4);
     enc28j60Init(const_cast<uint8_t*>(macaddr));
     
     if (doubleClockRate)
@@ -65,8 +69,7 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
     // enc28j60PhyWrite(PHLCON,0b0000 0100 0111 01 10);
     enc28j60PhyWrite(PHLCON,0x476);
 
-    init_ip_arp_udp_tcp(const_cast<uint8_t*>(macaddr), const_cast<uint8_t*>(ipaddr), 0);
-    client_set_gwip(const_cast<uint8_t*>(gwaddr));
+    init_udp_or_www_server(const_cast<uint8_t*>(macaddr), const_cast<uint8_t*>(ipaddr));
     
     m_timerID = Application::startEventTimer(NetworkTimerInterval);
 }
@@ -99,57 +102,43 @@ Network::respondUDP(const uint8_t* data, uint8_t length, uint16_t port)
 void
 Network::sendUDP(const uint8_t* data, uint8_t length, uint16_t srcPort, const uint8_t* dstIP, uint16_t dstPort)
 {
-    send_udp(m_packetBuffer, (char*) const_cast<uint8_t*>(data), length, srcPort, const_cast<uint8_t*>(dstIP), dstPort);
+    uint8_t allxff[] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+    send_udp(m_packetBuffer, (char*) const_cast<uint8_t*>(data), length, srcPort, const_cast<uint8_t*>(dstIP), dstPort, allxff);
+}
+
+void Network::arpResolverResultCallback(uint8_t *ip, void* userdata, uint8_t* mac)
+{
+    memcpy(static_cast<Network*>(userdata)->m_gwmac, mac, 6);
 }
 
 void
-Network::handleEvent(::EventType type, EventParam param)
+Network::handleEvent(EventType type, EventParam param)
 {
-/*
     if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
         return;
         
-    m_timerID = Application::startEventTimer(NetworkTimerInterval);    
+    m_timerID = Application::startEventTimer(NetworkTimerInterval);
 
-    if (m_state == StateNeedToRequestGWMacAddr) {
-        setGatewayIPAddress(m_gatewayIPAddress);
-        return;
-    }
-    
-    m_packetLength = receivePacket(PacketBufferSize, m_packetBuffer);
+    m_packetLength = enc28j60PacketReceive(PacketBufferSize, m_packetBuffer);
+    uint16_t dataStartOffset = packetloop_arp_icmp_tcp(m_packetBuffer, m_packetLength);
+
     if (!m_packetLength) {
-        if (m_state != StateReady)
-            return;
-            
+        if (m_gwArpState == 0) {
+            get_mac_with_arp(m_gwip, this, &arpResolverResultCallback);
+            m_gwArpState = 1;
+        }
+        if (get_mac_with_arp_wait() == 0 && m_gwArpState == 1)
+            m_gwArpState = 2;
+
         for (Socket* socket = m_socketHead; socket; socket = socket->next())
             if (socket->waitingForSendData())
                 socket->handlePacket(Socket::EventSendDataReady, 0);
-    
         return;
     }
     
-    if (isMyArpPacket()) {
-        if (m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REQ_V >> 8) && 
-                m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REQ_V & 0xff))
-            respondToArp();
-        else if (m_state == StateWaitForGWMacAddr && memcmp(&m_packetBuffer[ETH_ARP_SRC_IP_P], m_gatewayIPAddress, 4) == 0 && 
-                m_packetBuffer[ETH_ARP_OPCODE_P] == (ETH_ARP_OPCODE_REPLY_V >> 8) && 
-                m_packetBuffer[ETH_ARP_OPCODE_P + 1] == (ETH_ARP_OPCODE_REPLY_V & 0xff)) {
-            // We have our gw mac addr
-            memcpy(m_gatewayMACAddress, &m_packetBuffer[ETH_ARP_SRC_MAC_P], 6);
-            notifyReady();
-        }
-    } else if (isMyIpPacket()) {
-        if (m_packetBuffer[IP_PROTO_P] == IP_PROTO_ICMP_V && m_packetBuffer[ICMP_TYPE_P] == ICMP_TYPE_ECHOREQUEST_V)
-            respondToPing();
-        else {
-            for (Socket* socket = m_socketHead; socket; socket = socket->next()) {
-                if (socket->handlePacket(Socket::EventDataReceived, m_packetBuffer))
-                    break;
-            }
-        }
-    }
-    */
+    for (Socket* socket = m_socketHead; socket; socket = socket->next())
+        if (socket->handlePacket(Socket::EventDataReceived, &m_packetBuffer[dataStartOffset]))
+            break;
 }
 
 

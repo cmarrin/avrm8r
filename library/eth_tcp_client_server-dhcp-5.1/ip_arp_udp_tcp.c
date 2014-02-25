@@ -82,7 +82,7 @@ void (*client_arp_result_callback)(uint8_t*,uint8_t,uint8_t*);
 static int16_t arp_delaycnt=1;
 static uint8_t arpip[4];  // IP to find via arp
 static uint8_t arpip_state=0; // 0 at poweron, 1=req sent no answer yet, 2=have mac, 8=ready to accept an arp reply
-static uint8_t arp_reference_number=0;
+static void* arp_userdata=0;
 #define WGW_INITIAL_ARP 1
 #define WGW_HAVE_MAC 2
 #define WGW_ACCEPT_ARP_REPLY 8
@@ -1015,17 +1015,17 @@ uint8_t get_mac_with_arp_wait(void)
         return(1);
 }
 
-// reference_number is something that is just returned in the callback
+// userdata is something that is just returned in the callback
 // to make matching and waiting for a given ip/mac address pair easier
 // Note: you must have initialized the stack with 
 // init_udp_or_www_server or client_ifconfig 
 // before you can use this function
-void get_mac_with_arp(uint8_t *ip, uint8_t reference_number,void (*arp_result_callback)(uint8_t *ip,uint8_t reference_number,uint8_t *mac))
+void get_mac_with_arp(uint8_t *ip, void* userdata,void (*arp_result_callback)(uint8_t *ip,void* userdata,uint8_t *mac))
 {
         uint8_t i=0;
         client_arp_result_callback=arp_result_callback;
         arpip_state=WGW_INITIAL_ARP; // causes an arp request in the packet loop
-        arp_reference_number=reference_number;
+        arp_userdata=userdata;
         while(i<4){
                 arpip[i]=ip[i];
                 i++;
@@ -1355,7 +1355,7 @@ uint16_t packetloop_arp_icmp_tcp(uint8_t *buf,uint16_t plen)
                 if ((arpip_state & WGW_ACCEPT_ARP_REPLY) && (buf[ETH_ARP_OPCODE_L_P]==ETH_ARP_OPCODE_REPLY_L_V)){
                         // is it an arp reply 
                         if (memcmp(&buf[ETH_ARP_SRC_IP_P],arpip,4)!=0) return(0); // not an arp reply for the IP we were searching           
-                        (*client_arp_result_callback)(arpip,arp_reference_number,buf+ETH_ARP_SRC_MAC_P);
+                        (*client_arp_result_callback)(arpip,arp_userdata,buf+ETH_ARP_SRC_MAC_P);
                         arpip_state=WGW_HAVE_MAC;
                 }
 #endif // ARP_MAC_resolver_client

@@ -82,6 +82,19 @@
 
 /* Begin PBXFileReference section */
 		490EBD241348B13700FAD91C /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
+		495740FD1693B4190068C223 /* dhcp_client.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dhcp_client.c; path = "../../library/eth_tcp_client_server-dhcp-5.1/dhcp_client.c"; sourceTree = "<group>"; };
+		495740FE1693B4190068C223 /* dhcp_client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dhcp_client.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/dhcp_client.h"; sourceTree = "<group>"; };
+		495740FF1693B4190068C223 /* dnslkup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dnslkup.c; path = "../../library/eth_tcp_client_server-dhcp-5.1/dnslkup.c"; sourceTree = "<group>"; };
+		495741001693B4190068C223 /* dnslkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dnslkup.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/dnslkup.h"; sourceTree = "<group>"; };
+		495741011693B4190068C223 /* enc28j60.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enc28j60.c; path = "../../library/eth_tcp_client_server-dhcp-5.1/enc28j60.c"; sourceTree = "<group>"; };
+		495741021693B4190068C223 /* enc28j60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enc28j60.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/enc28j60.h"; sourceTree = "<group>"; };
+		495741031693B4190068C223 /* ip_arp_udp_tcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ip_arp_udp_tcp.c; path = "../../library/eth_tcp_client_server-dhcp-5.1/ip_arp_udp_tcp.c"; sourceTree = "<group>"; };
+		495741041693B4190068C223 /* ip_arp_udp_tcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_arp_udp_tcp.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/ip_arp_udp_tcp.h"; sourceTree = "<group>"; };
+		495741051693B4190068C223 /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/net.h"; sourceTree = "<group>"; };
+		495741061693B4190068C223 /* timeout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timeout.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/timeout.h"; sourceTree = "<group>"; };
+		495741071693B4190068C223 /* websrv_help_functions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = websrv_help_functions.c; path = "../../library/eth_tcp_client_server-dhcp-5.1/websrv_help_functions.c"; sourceTree = "<group>"; };
+		495741081693B4190068C223 /* websrv_help_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = websrv_help_functions.h; path = "../../library/eth_tcp_client_server-dhcp-5.1/websrv_help_functions.h"; sourceTree = "<group>"; };
+		495741091693B67D0068C223 /* ip_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_config.h; path = ../../library/ip_config.h; sourceTree = "<group>"; };
 		49BBE06F14873F6C00DC43EC /* net.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = net.h; path = ../../library/m8r/net.h; sourceTree = "<group>"; };
 		49BBE0701487C72100DC43EC /* Timer0.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = ../../library/m8r/Timer0.h; sourceTree = "<group>"; };
 		49BBE0711487C72100DC43EC /* Timer1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = ../../library/m8r/Timer1.h; sourceTree = "<group>"; };
@@ -154,17 +167,29 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
-		495740FC1693B1FF0068C223 /* eth_tcp_client_server_dhcp-5.1 */ = {
+		495740FC1693B1FF0068C223 /* eth_tcp_client_server-dhcp-5.1 */ = {
 			isa = PBXGroup;
 			children = (
+				495740FD1693B4190068C223 /* dhcp_client.c */,
+				495740FE1693B4190068C223 /* dhcp_client.h */,
+				495740FF1693B4190068C223 /* dnslkup.c */,
+				495741001693B4190068C223 /* dnslkup.h */,
+				495741011693B4190068C223 /* enc28j60.c */,
+				495741021693B4190068C223 /* enc28j60.h */,
+				495741031693B4190068C223 /* ip_arp_udp_tcp.c */,
+				495741041693B4190068C223 /* ip_arp_udp_tcp.h */,
+				495741051693B4190068C223 /* net.h */,
+				495741061693B4190068C223 /* timeout.h */,
+				495741071693B4190068C223 /* websrv_help_functions.c */,
+				495741081693B4190068C223 /* websrv_help_functions.h */,
 			);
-			name = "eth_tcp_client_server_dhcp-5.1";
+			name = "eth_tcp_client_server-dhcp-5.1";
 			sourceTree = "<group>";
 		};
 		49EE68BA147B184100FA3113 /* libm8r */ = {
 			isa = PBXGroup;
 			children = (
-				495740FC1693B1FF0068C223 /* eth_tcp_client_server_dhcp-5.1 */,
+				495740FC1693B1FF0068C223 /* eth_tcp_client_server-dhcp-5.1 */,
 				49EE68BD147B188700FA3113 /* print_event_enums.c */,
 				49EE68BE147B188700FA3113 /* Makefile */,
 				49EE68BF147B188700FA3113 /* shared.mk */,
@@ -176,6 +201,7 @@
 		49EE68BB147B185900FA3113 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				495741091693B67D0068C223 /* ip_config.h */,
 				49EE68C6147B18C000FA3113 /* m8r.h */,
 				49EE68C7147B18C000FA3113 /* main.c */,
 				49BBE06F14873F6C00DC43EC /* net.h */,
@@ -264,6 +290,8 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 01706F350A34762900E43B08 /* Build configuration list for PBXProject "etherclock" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -377,7 +405,7 @@
 				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
-				TOOLS_DIR = /sw;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR/";
 			};
 			name = Release;
 		};
@@ -420,7 +448,7 @@
 				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
-				TOOLS_DIR = /sw;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR/";
 			};
 			name = Debug;
 		};
@@ -463,7 +491,7 @@
 				M8R_SRC_DIR = ../../library;
 				MCU = atmega168;
 				PRODUCT_NAME = etherclock;
-				TOOLS_DIR = /sw;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR/";
 			};
 			name = Report;
 		};
