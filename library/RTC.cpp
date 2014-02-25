@@ -60,8 +60,8 @@ const char g_fri[] = "FRI";
 extern const char g_sat[] PROGMEM;
 const char g_sat[] = "SAT";
 
-extern const char* g_dayStringTable[] PROGMEM;
-const char* g_dayStringTable[] = { g_sun, g_mon, g_tue, g_wed, g_thu, g_fri, g_sat };
+extern const char* const g_dayStringTable[] PROGMEM;
+const char* const g_dayStringTable[] = { g_sun, g_mon, g_tue, g_wed, g_thu, g_fri, g_sat };
 
 static inline uint8_t 
 daysInMonth(uint8_t month)

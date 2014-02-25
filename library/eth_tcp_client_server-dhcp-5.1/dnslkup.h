@@ -36,7 +36,6 @@ uint8_t udp_client_check_for_dns_answer(uint8_t *buf,uint16_t plen);
 extern void dnslkup_get_ip(uint8_t *ip);
 // Determine if the string is a hostname or an IP address
 // A valid IP is e.g. "10.10.11.22"
-// This function wants a prog_char (not a normal string)
 extern uint8_t string_is_ipv4(const char *str);
 
 #endif /* DNSLKUP_H */
