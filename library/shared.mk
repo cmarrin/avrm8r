@@ -12,7 +12,7 @@ MCU = atmega168
 endif
 
 ifndef TOOLS_DIR
-TOOLS_DIR = /usr/local/CrossPack-AVR/
+TOOLS_DIR =  /sw
 endif
 
 ifndef M8R_SRC_DIR

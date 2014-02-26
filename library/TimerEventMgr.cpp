@@ -75,7 +75,7 @@ TimerEventMgrBase::fireISR(EventType type, EventParam param)
     for (uint8_t i = 0; i < 8; ++i) {
         if (mgr->m_timerCount[i]) {
             if (--(mgr->m_timerCount[i]) == 0)
-                Application::fireISR(EV_EVENT_TIMER, (EventParam) i);
+                Application::fireISR(EV_EVENT_TIMER, reinterpret_cast<EventParam>(i));
         }
     }
 }

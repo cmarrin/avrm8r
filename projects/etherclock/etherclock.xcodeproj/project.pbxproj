@@ -141,7 +141,7 @@
 		49EE68DC147B18DF00FA3113 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerBase.h; path = ../../library/m8r/TimerBase.h; sourceTree = "<group>"; };
 		49EE68F1147B2DFD00FA3113 /* config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
 		49EE68F2147B2DFD00FA3113 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibm8r.a.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = liblibm8r.a.a; path = /Users/cmarrin/Personal/Projects/git/marrinator/projects/etherclock/build/Report/liblibm8r.a.a; sourceTree = "<absolute>"; };
 		49F35DDA14B4BDB300C7F7E4 /* SevenSegmentDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SevenSegmentDisplay.h; path = ../../library/m8r/SevenSegmentDisplay.h; sourceTree = "<group>"; };
 		49F35DDC14B4BDCE00C7F7E4 /* SevenSegmentDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SevenSegmentDisplay.cpp; path = ../../library/SevenSegmentDisplay.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,7 +152,6 @@
 			children = (
 				49EE68BA147B184100FA3113 /* libm8r */,
 				08FB77AFFE84173DC02AAC07 /* Source */,
-				49F35DD014A3E17B00C7F7E4 /* liblibm8r.a.a */,
 			);
 			name = etherclock;
 			sourceTree = "<group>";
@@ -398,7 +397,7 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = release;
-				CFLAGS = "-DNDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DNDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding --export-all-symbols";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
 				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
@@ -441,7 +440,7 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = debug;
-				CFLAGS = "-DDEBUG -g -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DDEBUG -g -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding --export-all-symbols";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
 				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
@@ -484,7 +483,7 @@
 				AVRDUDE_PROGRAMMER_DRAGON = dragon_isp;
 				AVRDUDE_PROGRAMMER_STK500 = stk500v1;
 				BUILD_TYPE = report;
-				CFLAGS = "-DDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding";
+				CFLAGS = "-DDEBUG -Wa,-adhlns=${BUILT_PRODUCTS_DIR}/${INPUT_FILE_BASE}.lst -I${C_INCLUDE_PATH} -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffunction-sections -fdata-sections -ffreestanding --export-all-symbols";
 				C_INCLUDE_PATH = "${USER_LIBRARY_DIR}/m8r/Headers";
 				FREQUENCY = 12500000;
 				LDFLAGS = "-L${BUILT_PRODUCTS_DIR} -lm8r -Wl,-gc-sections";
