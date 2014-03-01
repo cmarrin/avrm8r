@@ -1,0 +1,34 @@
+//
+//  Config.xcconfig
+//  libm8r
+//
+//  Created by Chris Marrin on 2/27/14.
+//
+//
+
+FREQUENCY = 16000000
+MCU = atmega328p
+AVRDUDE_DEVICE = DRAGON
+
+AVRDUDE_PORT_DRAGON = usb
+AVRDUDE_PORT_STK500 = /dev/cu.usbserial
+AVRDUDE_PROGRAMMER_DRAGON = dragon_isp
+AVRDUDE_PROGRAMMER_STK500 = stk500v1
+
+AVRDUDE_PORT = $(AVRDUDE_PORT_$AVRDUDE_DEVICE)
+AVRDUDE_PROGRAMMER = $(AVRDUDE_PROGRAMMER_$AVRDUDE_DEVICE)
+
+CFLAGS = -Wa,-alh -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffreestanding -mcall-prologues -Wall
+M8R_SRC_DIR = $(PROJECT_DIR)/library
+M8R_HDR_DIR = $(M8R_SRC_DIR)/m8r
+TOOLS_DIR = /usr/local/CrossPack-AVR
+TUXGRAPHICS_DIR = $(M8R_SRC_DIR)/eth_tcp_client_server-dhcp-5.1
+CINCLUDE = -I. -I$M8R_SRC_DIR -I$M8R_HDR_DIR -I$TUXGRAPHICS_DIR
+
+// Optimization level, can be [0, 1, 2, 3, s]. 
+//     0 = turn off optimization. s = optimize for size.
+//     (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
+OPT = s
+
+LDFLAGS = -L$(SHARED_DERIVED_FILE_DIR) -lm8r -Wl,-gc-sections -Wl,--relax -Wl,-Map=$(BUILT_PRODUCTS_DIR)/$(TARGET_NAME).map,--cref -mmcu=$(MCU)
+

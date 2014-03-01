@@ -1,0 +1,686 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49052A7118BEEEC1008B41D8 /* dnslkup.c in Sources */ = {isa = PBXBuildFile; fileRef = 49052A6F18BEEEAE008B41D8 /* dnslkup.c */; };
+		4983118318BEA7B900751432 /* enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117918BEA7B900751432 /* enc28j60.c */; };
+		4983118418BEA7B900751432 /* ip_arp_udp_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */; };
+		4983118518BEA7B900751432 /* websrv_help_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117F18BEA7B900751432 /* websrv_help_functions.c */; };
+		498311F618C2872600751432 /* MyApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498311F418C2866A00751432 /* MyApplication.cpp */; };
+		4994B76B18BDBBA40001437D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
+		4994B76C18BDBBA40001437D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
+		4994B76D18BDBBA40001437D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
+		4994B76E18BDBBA40001437D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		4994B76F18BDBBA40001437D /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B73E18BDB4FC0001437D /* Button.cpp */; };
+		4994B77018BDBBA40001437D /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74018BDB58C0001437D /* Network.cpp */; };
+		4994B77118BDBBA40001437D /* NTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74118BDB58C0001437D /* NTPClient.cpp */; };
+		4994B77218BDBBA40001437D /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* RTC.cpp */; };
+		4994B77318BDBBA40001437D /* SevenSegmentDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */; };
+		4994B77418BDBBA40001437D /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
+		4994B77518BDBBA40001437D /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74318BDB58C0001437D /* Socket.cpp */; };
+		4994B77718BDBBA40001437D /* TCPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74518BDB58C0001437D /* TCPSocket.cpp */; };
+		4994B77818BDBBA40001437D /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74618BDB58C0001437D /* Timer0.cpp */; };
+		4994B77918BDBBA40001437D /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74718BDB58C0001437D /* Timer1.cpp */; };
+		4994B77A18BDBBA40001437D /* Timer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74818BDB58C0001437D /* Timer2.cpp */; };
+		4994B77B18BDBBA40001437D /* TimerEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */; };
+		4994B77C18BDBBA40001437D /* UDPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74918BDB58C0001437D /* UDPSocket.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		4983116918BDC8E200751432 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			name = "Compile AVR Source File";
+			outputFiles = (
+				"$(SHARED_DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=$FREQUENCY -DMCU=$MCU -mmcu=$MCU -Wa,-adhlns=$SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.lst,-gstabs $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.o\necho $SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.o >> $SHARED_DERIVED_FILE_DIR/archiveFileList.txt";
+		};
+		498311BB18C05D3400751432 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+				"$(SHARED_DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=$FREQUENCY -DMCU=$MCU -mmcu=$MCU -Wa,-gstabs,-adhlns=$SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.lst $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.o\necho $SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.o >> $SHARED_DERIVED_FILE_DIR/applicationFileList.txt";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		498311B418C05C4A00751432 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4994B75C18BDBB6F0001437D;
+			remoteInfo = libm8r;
+		};
+		498311D418C267CC00751432 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 498311A918C05C3700751432;
+			remoteInfo = sample;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = library/Application.cpp; sourceTree = "<group>"; };
+		4900A1E4133F9C5B0036518B /* ADC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ADC.cpp; path = library/ADC.cpp; sourceTree = "<group>"; };
+		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShiftReg.cpp; path = library/ShiftReg.cpp; sourceTree = "<group>"; };
+		4900A1EE133F9C5B0036518B /* RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RTC.cpp; path = library/RTC.cpp; sourceTree = "<group>"; };
+		49052A6F18BEEEAE008B41D8 /* dnslkup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = dnslkup.c; path = "library/eth_tcp_client_server-dhcp-5.1/dnslkup.c"; sourceTree = "<group>"; };
+		49052A7018BEEEAE008B41D8 /* dnslkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = dnslkup.h; path = "library/eth_tcp_client_server-dhcp-5.1/dnslkup.h"; sourceTree = "<group>"; };
+		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = m8r.h; path = library/m8r.h; sourceTree = "<group>"; };
+		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = library/main.c; sourceTree = "<group>"; };
+		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TimerEventMgr.cpp; path = library/TimerEventMgr.cpp; sourceTree = "<group>"; };
+		4983117918BEA7B900751432 /* enc28j60.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = enc28j60.c; path = "library/eth_tcp_client_server-dhcp-5.1/enc28j60.c"; sourceTree = "<group>"; };
+		4983117A18BEA7B900751432 /* enc28j60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = enc28j60.h; path = "library/eth_tcp_client_server-dhcp-5.1/enc28j60.h"; sourceTree = "<group>"; };
+		4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ip_arp_udp_tcp.c; path = "library/eth_tcp_client_server-dhcp-5.1/ip_arp_udp_tcp.c"; sourceTree = "<group>"; };
+		4983117C18BEA7B900751432 /* ip_arp_udp_tcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_arp_udp_tcp.h; path = "library/eth_tcp_client_server-dhcp-5.1/ip_arp_udp_tcp.h"; sourceTree = "<group>"; };
+		4983117E18BEA7B900751432 /* timeout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = timeout.h; path = "library/eth_tcp_client_server-dhcp-5.1/timeout.h"; sourceTree = "<group>"; };
+		4983117F18BEA7B900751432 /* websrv_help_functions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = websrv_help_functions.c; path = "library/eth_tcp_client_server-dhcp-5.1/websrv_help_functions.c"; sourceTree = "<group>"; };
+		4983118018BEA7B900751432 /* websrv_help_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = websrv_help_functions.h; path = "library/eth_tcp_client_server-dhcp-5.1/websrv_help_functions.h"; sourceTree = "<group>"; };
+		498311D718C2839F00751432 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = library/m8r/ADC.h; sourceTree = "<group>"; };
+		498311D818C2839F00751432 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animator.h; path = library/m8r/Animator.h; sourceTree = "<group>"; };
+		498311D918C2839F00751432 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = library/m8r/Application.h; sourceTree = "<group>"; };
+		498311DA18C2839F00751432 /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = library/m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
+		498311DB18C2839F00751432 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = library/m8r/Button.h; sourceTree = "<group>"; };
+		498311DC18C2839F00751432 /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = library/m8r/EventListener.h; sourceTree = "<group>"; };
+		498311DD18C2839F00751432 /* EventSourceEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventSourceEnums.h; path = library/m8r/EventSourceEnums.h; sourceTree = "<group>"; };
+		498311DE18C2839F00751432 /* MAX6969.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MAX6969.h; path = library/m8r/MAX6969.h; sourceTree = "<group>"; };
+		498311DF18C2839F00751432 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Network.h; path = library/m8r/Network.h; sourceTree = "<group>"; };
+		498311E018C2839F00751432 /* NTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTPClient.h; path = library/m8r/NTPClient.h; sourceTree = "<group>"; };
+		498311E118C2839F00751432 /* RTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RTC.h; path = library/m8r/RTC.h; sourceTree = "<group>"; };
+		498311E218C2839F00751432 /* SevenSegmentDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SevenSegmentDisplay.h; path = library/m8r/SevenSegmentDisplay.h; sourceTree = "<group>"; };
+		498311E318C2839F00751432 /* ShiftReg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShiftReg.h; path = library/m8r/ShiftReg.h; sourceTree = "<group>"; };
+		498311E418C2839F00751432 /* Socket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Socket.h; path = library/m8r/Socket.h; sourceTree = "<group>"; };
+		498311E518C2839F00751432 /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SPI.h; path = library/m8r/SPI.h; sourceTree = "<group>"; };
+		498311E618C2839F00751432 /* TCPSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCPSocket.h; path = library/m8r/TCPSocket.h; sourceTree = "<group>"; };
+		498311E718C2839F00751432 /* Timer0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer0.h; path = library/m8r/Timer0.h; sourceTree = "<group>"; };
+		498311E818C2839F00751432 /* Timer1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer1.h; path = library/m8r/Timer1.h; sourceTree = "<group>"; };
+		498311E918C2839F00751432 /* Timer2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Timer2.h; path = library/m8r/Timer2.h; sourceTree = "<group>"; };
+		498311EA18C2839F00751432 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerBase.h; path = library/m8r/TimerBase.h; sourceTree = "<group>"; };
+		498311EB18C2839F00751432 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = library/m8r/TimerEventMgr.h; sourceTree = "<group>"; };
+		498311EC18C2839F00751432 /* UDPSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UDPSocket.h; path = library/m8r/UDPSocket.h; sourceTree = "<group>"; };
+		498311ED18C2854200751432 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libm8r; sourceTree = BUILT_PRODUCTS_DIR; };
+		498311EE18C2854200751432 /* sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sample; sourceTree = BUILT_PRODUCTS_DIR; };
+		498311EF18C2854200751432 /* program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = program; sourceTree = BUILT_PRODUCTS_DIR; };
+		498311F018C2855E00751432 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		498311F118C2855E00751432 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		498311F218C2855E00751432 /* Report.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Report.xcconfig; sourceTree = "<group>"; };
+		498311F318C2855E00751432 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		498311F418C2866A00751432 /* MyApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyApplication.cpp; sourceTree = "<group>"; };
+		4994B73D18BDB4D00001437D /* ip_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ip_config.h; path = library/ip_config.h; sourceTree = "<group>"; };
+		4994B73E18BDB4FC0001437D /* Button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Button.cpp; path = library/Button.cpp; sourceTree = "<group>"; };
+		4994B74018BDB58C0001437D /* Network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Network.cpp; path = library/Network.cpp; sourceTree = "<group>"; };
+		4994B74118BDB58C0001437D /* NTPClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NTPClient.cpp; path = library/NTPClient.cpp; sourceTree = "<group>"; };
+		4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SevenSegmentDisplay.cpp; path = library/SevenSegmentDisplay.cpp; sourceTree = "<group>"; };
+		4994B74318BDB58C0001437D /* Socket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Socket.cpp; path = library/Socket.cpp; sourceTree = "<group>"; };
+		4994B74518BDB58C0001437D /* TCPSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TCPSocket.cpp; path = library/TCPSocket.cpp; sourceTree = "<group>"; };
+		4994B74618BDB58C0001437D /* Timer0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer0.cpp; path = library/Timer0.cpp; sourceTree = "<group>"; };
+		4994B74718BDB58C0001437D /* Timer1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer1.cpp; path = library/Timer1.cpp; sourceTree = "<group>"; };
+		4994B74818BDB58C0001437D /* Timer2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer2.cpp; path = library/Timer2.cpp; sourceTree = "<group>"; };
+		4994B74918BDB58C0001437D /* UDPSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UDPSocket.cpp; path = library/UDPSocket.cpp; sourceTree = "<group>"; };
+		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Animator.cpp; path = library/Animator.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* marrinator */ = {
+			isa = PBXGroup;
+			children = (
+				498311F418C2866A00751432 /* MyApplication.cpp */,
+				498311B818C05CA100751432 /* Config */,
+				498311B918C05CD700751432 /* libm8r */,
+				498311ED18C2854200751432 /* libm8r */,
+				498311EE18C2854200751432 /* sample */,
+				498311EF18C2854200751432 /* program */,
+			);
+			name = marrinator;
+			sourceTree = "<group>";
+		};
+		08FB77AFFE84173DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				495F1CB3134A1F920059E738 /* main.c */,
+				4900A1E4133F9C5B0036518B /* ADC.cpp */,
+				49CF367513BDF945001EB1B8 /* Animator.cpp */,
+				4900A1A7133F92730036518B /* Application.cpp */,
+				4994B73E18BDB4FC0001437D /* Button.cpp */,
+				4994B74018BDB58C0001437D /* Network.cpp */,
+				4994B74118BDB58C0001437D /* NTPClient.cpp */,
+				4900A1EE133F9C5B0036518B /* RTC.cpp */,
+				4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */,
+				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
+				4994B74318BDB58C0001437D /* Socket.cpp */,
+				4994B74518BDB58C0001437D /* TCPSocket.cpp */,
+				4994B74618BDB58C0001437D /* Timer0.cpp */,
+				4994B74718BDB58C0001437D /* Timer1.cpp */,
+				4994B74818BDB58C0001437D /* Timer2.cpp */,
+				4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */,
+				4994B74918BDB58C0001437D /* UDPSocket.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		49052A6D18BEA5BF008B41D8 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				498311D718C2839F00751432 /* ADC.h */,
+				498311D818C2839F00751432 /* Animator.h */,
+				498311D918C2839F00751432 /* Application.h */,
+				498311DA18C2839F00751432 /* BlinkErrorReporter.h */,
+				498311DB18C2839F00751432 /* Button.h */,
+				498311DC18C2839F00751432 /* EventListener.h */,
+				498311DD18C2839F00751432 /* EventSourceEnums.h */,
+				498311DE18C2839F00751432 /* MAX6969.h */,
+				498311DF18C2839F00751432 /* Network.h */,
+				498311E018C2839F00751432 /* NTPClient.h */,
+				498311E118C2839F00751432 /* RTC.h */,
+				498311E218C2839F00751432 /* SevenSegmentDisplay.h */,
+				498311E318C2839F00751432 /* ShiftReg.h */,
+				498311E418C2839F00751432 /* Socket.h */,
+				498311E518C2839F00751432 /* SPI.h */,
+				498311E618C2839F00751432 /* TCPSocket.h */,
+				498311E718C2839F00751432 /* Timer0.h */,
+				498311E818C2839F00751432 /* Timer1.h */,
+				498311E918C2839F00751432 /* Timer2.h */,
+				498311EA18C2839F00751432 /* TimerBase.h */,
+				498311EB18C2839F00751432 /* TimerEventMgr.h */,
+				498311EC18C2839F00751432 /* UDPSocket.h */,
+				490EBD531348B4C800FAD91C /* m8r.h */,
+				4994B73D18BDB4D00001437D /* ip_config.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		49052A6E18BEA6EE008B41D8 /* eth_tcp_client_server-dhcp-5.1 */ = {
+			isa = PBXGroup;
+			children = (
+				49052A6F18BEEEAE008B41D8 /* dnslkup.c */,
+				49052A7018BEEEAE008B41D8 /* dnslkup.h */,
+				4983117918BEA7B900751432 /* enc28j60.c */,
+				4983117A18BEA7B900751432 /* enc28j60.h */,
+				4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */,
+				4983117C18BEA7B900751432 /* ip_arp_udp_tcp.h */,
+				4983117E18BEA7B900751432 /* timeout.h */,
+				4983117F18BEA7B900751432 /* websrv_help_functions.c */,
+				4983118018BEA7B900751432 /* websrv_help_functions.h */,
+			);
+			name = "eth_tcp_client_server-dhcp-5.1";
+			sourceTree = "<group>";
+		};
+		498311B818C05CA100751432 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				498311F018C2855E00751432 /* Debug.xcconfig */,
+				498311F118C2855E00751432 /* Release.xcconfig */,
+				498311F218C2855E00751432 /* Report.xcconfig */,
+				498311F318C2855E00751432 /* Shared.xcconfig */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+		498311B918C05CD700751432 /* libm8r */ = {
+			isa = PBXGroup;
+			children = (
+				49052A6D18BEA5BF008B41D8 /* Headers */,
+				08FB77AFFE84173DC02AAC07 /* Source */,
+				49052A6E18BEA6EE008B41D8 /* eth_tcp_client_server-dhcp-5.1 */,
+			);
+			name = libm8r;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		498311A918C05C3700751432 /* sample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498311B018C05C3700751432 /* Build configuration list for PBXNativeTarget "sample" */;
+			buildPhases = (
+				498311C418C1B82000751432 /* Prepare */,
+				498311A618C05C3700751432 /* Sources */,
+				498311C218C1B04F00751432 /* Link */,
+				498311C318C1B29900751432 /* .elf Size */,
+				498311C118C1AFA300751432 /* Generate .hex File */,
+				498311C518C23F6300751432 /* Generate .lss File */,
+			);
+			buildRules = (
+				498311BB18C05D3400751432 /* PBXBuildRule */,
+			);
+			dependencies = (
+				498311B518C05C4A00751432 /* PBXTargetDependency */,
+			);
+			name = sample;
+			productName = build;
+			productReference = 498311EE18C2854200751432 /* sample */;
+			productType = "com.apple.product-type.tool";
+		};
+		498311C918C267BC00751432 /* program */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 498311D018C267BC00751432 /* Build configuration list for PBXNativeTarget "program" */;
+			buildPhases = (
+				498311D618C267ED00751432 /* Program AVR */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				498311D518C267CC00751432 /* PBXTargetDependency */,
+			);
+			name = program;
+			productName = program;
+			productReference = 498311EF18C2854200751432 /* program */;
+			productType = "com.apple.product-type.tool";
+		};
+		4994B75C18BDBB6F0001437D /* libm8r */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4994B76418BDBB6F0001437D /* Build configuration list for PBXNativeTarget "libm8r" */;
+			buildPhases = (
+				4983116B18BE9C6500751432 /* Prepare */,
+				4994B75918BDBB6F0001437D /* Sources */,
+				4983116A18BE359000751432 /* Archive */,
+			);
+			buildRules = (
+				4983116918BDC8E200751432 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = libm8r;
+			productName = Tool;
+			productReference = 498311ED18C2854200751432 /* libm8r */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = 1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "marrinator" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* marrinator */;
+			productRefGroup = 089C166AFE841209C02AAC07 /* marrinator */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4994B75C18BDBB6F0001437D /* libm8r */,
+				498311A918C05C3700751432 /* sample */,
+				498311C918C267BC00751432 /* program */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4983116A18BE359000751432 /* Archive */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Archive;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-ar rcs $SHARED_DERIVED_FILE_DIR/$TARGET_NAME.a `cat $SHARED_DERIVED_FILE_DIR/archiveFileList.txt`\nrm -f `cat $SHARED_DERIVED_FILE_DIR/archiveFileList.txt`";
+			showEnvVarsInLog = 0;
+		};
+		4983116B18BE9C6500751432 /* Prepare */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Prepare;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -f $SHARED_DERIVED_FILE_DIR/archiveFileList.txt $SHARED_DERIVED_FILE_DIR/*.o ";
+		};
+		498311C118C1AFA300751432 /* Generate .hex File */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = "Generate .hex File";
+			outputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-objcopy -O ihex $SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf $BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex ";
+		};
+		498311C218C1B04F00751432 /* Link */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Link;
+			outputPaths = (
+				$SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-gcc `cat $SHARED_DERIVED_FILE_DIR/applicationFileList.txt` $LDFLAGS -o $SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf";
+		};
+		498311C318C1B29900751432 /* .elf Size */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = ".elf Size";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/bash $M8R_SRC_DIR/section_sizes ${TOOLS_DIR}/bin/avr-size $SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf";
+		};
+		498311C418C1B82000751432 /* Prepare */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Prepare;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -f $SHARED_DERIVED_FILE_DIR/applicationFileList.txt";
+		};
+		498311C518C23F6300751432 /* Generate .lss File */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = "Generate .lss File";
+			outputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.lss,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-objdump -lhS --demangle $SHARED_DERIVED_FILE_DIR/$PROJECT_NAME.elf > $BUILT_PRODUCTS_DIR/$PROJECT_NAME.lss";
+		};
+		498311D618C267ED00751432 /* Program AVR */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex,
+			);
+			name = "Program AVR";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avrdude -c $AVRDUDE_PROGRAMMER -P $AVRDUDE_PORT -p $MCU -U flash:w:$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex:i";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		498311A618C05C3700751432 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				498311F618C2872600751432 /* MyApplication.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4994B75918BDBB6F0001437D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4994B76D18BDBBA40001437D /* Animator.cpp in Sources */,
+				4994B76C18BDBBA40001437D /* ADC.cpp in Sources */,
+				4994B77418BDBBA40001437D /* ShiftReg.cpp in Sources */,
+				4994B76E18BDBBA40001437D /* Application.cpp in Sources */,
+				4983118518BEA7B900751432 /* websrv_help_functions.c in Sources */,
+				4994B77718BDBBA40001437D /* TCPSocket.cpp in Sources */,
+				4994B77A18BDBBA40001437D /* Timer2.cpp in Sources */,
+				4994B77518BDBBA40001437D /* Socket.cpp in Sources */,
+				4983118418BEA7B900751432 /* ip_arp_udp_tcp.c in Sources */,
+				4994B77C18BDBBA40001437D /* UDPSocket.cpp in Sources */,
+				4994B77818BDBBA40001437D /* Timer0.cpp in Sources */,
+				4983118318BEA7B900751432 /* enc28j60.c in Sources */,
+				4994B77218BDBBA40001437D /* RTC.cpp in Sources */,
+				4994B77318BDBBA40001437D /* SevenSegmentDisplay.cpp in Sources */,
+				4994B77B18BDBBA40001437D /* TimerEventMgr.cpp in Sources */,
+				4994B76B18BDBBA40001437D /* main.c in Sources */,
+				4994B77018BDBBA40001437D /* Network.cpp in Sources */,
+				4994B77918BDBBA40001437D /* Timer1.cpp in Sources */,
+				4994B76F18BDBBA40001437D /* Button.cpp in Sources */,
+				49052A7118BEEEC1008B41D8 /* dnslkup.c in Sources */,
+				4994B77118BDBBA40001437D /* NTPClient.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		498311B518C05C4A00751432 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4994B75C18BDBB6F0001437D /* libm8r */;
+			targetProxy = 498311B418C05C4A00751432 /* PBXContainerItemProxy */;
+		};
+		498311D518C267CC00751432 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 498311A918C05C3700751432 /* sample */;
+			targetProxy = 498311D418C267CC00751432 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB912008733D790010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 498311F118C2855E00751432 /* Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_TYPE = release;
+				COPY_PHASE_STRIP = NO;
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-E",
+					"-w",
+				);
+				PRODUCT_NAME = marrinator;
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR";
+			};
+			name = Release;
+		};
+		498311B118C05C3700751432 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		498311B218C05C3700751432 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Report;
+		};
+		498311B318C05C3700751432 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		498311D118C267BC00751432 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		498311D218C267BC00751432 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Report;
+		};
+		498311D318C267BC00751432 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_DYNAMIC_NO_PIC = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4994B76518BDBB6F0001437D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "";
+			};
+			name = Release;
+		};
+		4994B76618BDBB6F0001437D /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "";
+			};
+			name = Report;
+		};
+		4994B76718BDBB6F0001437D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "";
+			};
+			name = Debug;
+		};
+		49A5D67613A7F6D300E4C97D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 498311F018C2855E00751432 /* Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_TYPE = debug;
+				COPY_PHASE_STRIP = NO;
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-E",
+					"-w",
+				);
+				PRODUCT_NAME = marrinator;
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR";
+			};
+			name = Debug;
+		};
+		49EE68AE147AA80500FA3113 /* Report */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 498311F218C2855E00751432 /* Report.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_TYPE = report;
+				COPY_PHASE_STRIP = NO;
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-E",
+					"-w",
+				);
+				PRODUCT_NAME = marrinator;
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				TOOLS_DIR = "/usr/local/CrossPack-AVR";
+			};
+			name = Report;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB911E08733D790010E9CD /* Build configuration list for PBXProject "marrinator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB912008733D790010E9CD /* Release */,
+				49EE68AE147AA80500FA3113 /* Report */,
+				49A5D67613A7F6D300E4C97D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		498311B018C05C3700751432 /* Build configuration list for PBXNativeTarget "sample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498311B118C05C3700751432 /* Release */,
+				498311B218C05C3700751432 /* Report */,
+				498311B318C05C3700751432 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		498311D018C267BC00751432 /* Build configuration list for PBXNativeTarget "program" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				498311D118C267BC00751432 /* Release */,
+				498311D218C267BC00751432 /* Report */,
+				498311D318C267BC00751432 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4994B76418BDBB6F0001437D /* Build configuration list for PBXNativeTarget "libm8r" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4994B76518BDBB6F0001437D /* Release */,
+				4994B76618BDBB6F0001437D /* Report */,
+				4994B76718BDBB6F0001437D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}

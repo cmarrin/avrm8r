@@ -1,0 +1,11 @@
+//
+//  Release.xcconfig
+//  libm8r
+//
+//  Created by Chris Marrin on 2/27/14.
+//
+//
+
+#include "Shared.xcconfig"
+
+CDEFS = -DNDEBUG -O$(OPT)
