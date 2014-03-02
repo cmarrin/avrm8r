@@ -7,28 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		49052A7118BEEEC1008B41D8 /* dnslkup.c in Sources */ = {isa = PBXBuildFile; fileRef = 49052A6F18BEEEAE008B41D8 /* dnslkup.c */; };
-		4983118318BEA7B900751432 /* enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117918BEA7B900751432 /* enc28j60.c */; };
-		4983118418BEA7B900751432 /* ip_arp_udp_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */; };
-		4983118518BEA7B900751432 /* websrv_help_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117F18BEA7B900751432 /* websrv_help_functions.c */; };
-		498311F618C2872600751432 /* MyApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498311F418C2866A00751432 /* MyApplication.cpp */; };
-		4994B76B18BDBBA40001437D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
-		4994B76C18BDBBA40001437D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
-		4994B76D18BDBBA40001437D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
-		4994B76E18BDBBA40001437D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
-		4994B76F18BDBBA40001437D /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B73E18BDB4FC0001437D /* Button.cpp */; };
-		4994B77018BDBBA40001437D /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74018BDB58C0001437D /* Network.cpp */; };
-		4994B77118BDBBA40001437D /* NTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74118BDB58C0001437D /* NTPClient.cpp */; };
-		4994B77218BDBBA40001437D /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* RTC.cpp */; };
-		4994B77318BDBBA40001437D /* SevenSegmentDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */; };
-		4994B77418BDBBA40001437D /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
-		4994B77518BDBBA40001437D /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74318BDB58C0001437D /* Socket.cpp */; };
-		4994B77718BDBBA40001437D /* TCPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74518BDB58C0001437D /* TCPSocket.cpp */; };
-		4994B77818BDBBA40001437D /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74618BDB58C0001437D /* Timer0.cpp */; };
-		4994B77918BDBBA40001437D /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74718BDB58C0001437D /* Timer1.cpp */; };
-		4994B77A18BDBBA40001437D /* Timer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74818BDB58C0001437D /* Timer2.cpp */; };
-		4994B77B18BDBBA40001437D /* TimerEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */; };
-		4994B77C18BDBBA40001437D /* UDPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74918BDB58C0001437D /* UDPSocket.cpp */; };
+		49CDD3BF18C2EFFA0040EE8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
+		49CDD3C018C2EFFA0040EE8D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
+		49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
+		49CDD3C218C2EFFA0040EE8D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		49CDD3C318C2EFFA0040EE8D /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B73E18BDB4FC0001437D /* Button.cpp */; };
+		49CDD3C418C2EFFA0040EE8D /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74018BDB58C0001437D /* Network.cpp */; };
+		49CDD3C518C2EFFA0040EE8D /* NTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74118BDB58C0001437D /* NTPClient.cpp */; };
+		49CDD3C618C2EFFA0040EE8D /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1EE133F9C5B0036518B /* RTC.cpp */; };
+		49CDD3C718C2EFFA0040EE8D /* SevenSegmentDisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */; };
+		49CDD3C818C2EFFA0040EE8D /* ShiftReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E6133F9C5B0036518B /* ShiftReg.cpp */; };
+		49CDD3C918C2EFFA0040EE8D /* Socket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74318BDB58C0001437D /* Socket.cpp */; };
+		49CDD3CA18C2EFFA0040EE8D /* TCPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74518BDB58C0001437D /* TCPSocket.cpp */; };
+		49CDD3CB18C2EFFA0040EE8D /* Timer0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74618BDB58C0001437D /* Timer0.cpp */; };
+		49CDD3CC18C2EFFA0040EE8D /* Timer1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74718BDB58C0001437D /* Timer1.cpp */; };
+		49CDD3CD18C2EFFA0040EE8D /* Timer2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74818BDB58C0001437D /* Timer2.cpp */; };
+		49CDD3CE18C2EFFA0040EE8D /* TimerEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */; };
+		49CDD3CF18C2EFFA0040EE8D /* UDPSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74918BDB58C0001437D /* UDPSocket.cpp */; };
+		49CDD3D018C2F0040040EE8D /* dnslkup.c in Sources */ = {isa = PBXBuildFile; fileRef = 49052A6F18BEEEAE008B41D8 /* dnslkup.c */; };
+		49CDD3D118C2F0040040EE8D /* enc28j60.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117918BEA7B900751432 /* enc28j60.c */; };
+		49CDD3D218C2F0040040EE8D /* ip_arp_udp_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */; };
+		49CDD3D318C2F0040040EE8D /* websrv_help_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117F18BEA7B900751432 /* websrv_help_functions.c */; };
+		49CDD3D418C2F0090040EE8D /* MyApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 498311F418C2866A00751432 /* MyApplication.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -455,7 +455,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				498311F618C2872600751432 /* MyApplication.cpp in Sources */,
+				49CDD3D418C2F0090040EE8D /* MyApplication.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,27 +463,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4994B76D18BDBBA40001437D /* Animator.cpp in Sources */,
-				4994B76C18BDBBA40001437D /* ADC.cpp in Sources */,
-				4994B77418BDBBA40001437D /* ShiftReg.cpp in Sources */,
-				4994B76E18BDBBA40001437D /* Application.cpp in Sources */,
-				4983118518BEA7B900751432 /* websrv_help_functions.c in Sources */,
-				4994B77718BDBBA40001437D /* TCPSocket.cpp in Sources */,
-				4994B77A18BDBBA40001437D /* Timer2.cpp in Sources */,
-				4994B77518BDBBA40001437D /* Socket.cpp in Sources */,
-				4983118418BEA7B900751432 /* ip_arp_udp_tcp.c in Sources */,
-				4994B77C18BDBBA40001437D /* UDPSocket.cpp in Sources */,
-				4994B77818BDBBA40001437D /* Timer0.cpp in Sources */,
-				4983118318BEA7B900751432 /* enc28j60.c in Sources */,
-				4994B77218BDBBA40001437D /* RTC.cpp in Sources */,
-				4994B77318BDBBA40001437D /* SevenSegmentDisplay.cpp in Sources */,
-				4994B77B18BDBBA40001437D /* TimerEventMgr.cpp in Sources */,
-				4994B76B18BDBBA40001437D /* main.c in Sources */,
-				4994B77018BDBBA40001437D /* Network.cpp in Sources */,
-				4994B77918BDBBA40001437D /* Timer1.cpp in Sources */,
-				4994B76F18BDBBA40001437D /* Button.cpp in Sources */,
-				49052A7118BEEEC1008B41D8 /* dnslkup.c in Sources */,
-				4994B77118BDBBA40001437D /* NTPClient.cpp in Sources */,
+				49CDD3C018C2EFFA0040EE8D /* ADC.cpp in Sources */,
+				49CDD3C518C2EFFA0040EE8D /* NTPClient.cpp in Sources */,
+				49CDD3BF18C2EFFA0040EE8D /* main.c in Sources */,
+				49CDD3CC18C2EFFA0040EE8D /* Timer1.cpp in Sources */,
+				49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */,
+				49CDD3C918C2EFFA0040EE8D /* Socket.cpp in Sources */,
+				49CDD3C218C2EFFA0040EE8D /* Application.cpp in Sources */,
+				49CDD3D018C2F0040040EE8D /* dnslkup.c in Sources */,
+				49CDD3CF18C2EFFA0040EE8D /* UDPSocket.cpp in Sources */,
+				49CDD3D318C2F0040040EE8D /* websrv_help_functions.c in Sources */,
+				49CDD3C318C2EFFA0040EE8D /* Button.cpp in Sources */,
+				49CDD3D118C2F0040040EE8D /* enc28j60.c in Sources */,
+				49CDD3CD18C2EFFA0040EE8D /* Timer2.cpp in Sources */,
+				49CDD3C718C2EFFA0040EE8D /* SevenSegmentDisplay.cpp in Sources */,
+				49CDD3CE18C2EFFA0040EE8D /* TimerEventMgr.cpp in Sources */,
+				49CDD3C618C2EFFA0040EE8D /* RTC.cpp in Sources */,
+				49CDD3C818C2EFFA0040EE8D /* ShiftReg.cpp in Sources */,
+				49CDD3C418C2EFFA0040EE8D /* Network.cpp in Sources */,
+				49CDD3CA18C2EFFA0040EE8D /* TCPSocket.cpp in Sources */,
+				49CDD3D218C2F0040040EE8D /* ip_arp_udp_tcp.c in Sources */,
+				49CDD3CB18C2EFFA0040EE8D /* Timer0.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
