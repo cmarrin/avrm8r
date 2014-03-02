@@ -38,18 +38,3 @@ DAMAGE.
 #include <avr/pgmspace.h>
 
 using namespace m8r;
-
-void
-ShiftRegBase::send(uint8_t value, uint8_t bits)
-{        
-    for (uint8_t mask = m_msbFirst ? 0x80 : 1; bits > 0; --bits) {
-        // set data bit
-        setDataBit(((uint8_t) value) & ((uint8_t) mask));
-
-        // clock in data
-        toggleClockBit(m_rising);
-
-        mask = m_msbFirst ? (mask >> 1) : (mask << 1);
-    }
-}
-    	

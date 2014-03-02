@@ -67,6 +67,14 @@ public:
         m_param = param;
     }
     
+    void setWaveGenMode(TimerWaveGenMode mode)
+    {
+        m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
+        m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, TimerWaveGenMaskB);
+    }
+
+    void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
+
     static EventCallback m_isrCallback;
     static EventParam m_param;
 };

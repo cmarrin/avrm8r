@@ -81,6 +81,8 @@ public:
         m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
         m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, Timer1WaveGenMaskB);
     }
+
+    void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
     
     void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
 

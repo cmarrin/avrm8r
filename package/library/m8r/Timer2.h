@@ -67,6 +67,12 @@ public:
         m_param = param;
     }
         
+    void setWaveGenMode(TimerWaveGenMode mode)
+    {
+        m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
+        m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, TimerWaveGenMaskB);
+    }
+
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(Timer2PrescalerReset, e); }
     void setExtClk(bool e) { m_asyncStatusPort.setMaskedBits(Timer2ExtClk, e); }
     void setAsync(bool e) { m_asyncStatusPort.setMaskedBits(Timer2Async, e); }

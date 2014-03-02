@@ -52,27 +52,12 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class ShiftRegBase {
-public:
-    ShiftRegBase(bool rising, bool msbFirst)
-        : m_rising(rising)
-        , m_msbFirst(msbFirst)
-    { }
-    
-    void send(uint8_t value, uint8_t bits);
-    
-protected:
-    virtual void toggleClockBit(bool positive) = 0;
-    virtual void setDataBit(bool value) = 0;
-    
-	bool m_rising, m_msbFirst;
-};
-
 template <class ClockPort, uint8_t ClockBit, class DataPort, uint8_t DataBit>
-class ShiftReg : public ShiftRegBase {
+class ShiftReg {
 public:
 	ShiftReg(bool rising, bool msbFirst)
-        : ShiftRegBase(rising, msbFirst)
+        : m_rising(rising)
+        , m_msbFirst(msbFirst)
     {
         m_clockPort.setBitOutput(ClockBit);
         m_dataPort.setBitOutput(DataBit);
@@ -82,7 +67,21 @@ public:
             m_clockPort.setPortBit(ClockBit);
     }
     
-    virtual void toggleClockBit(bool positive)
+    void send(uint8_t value, uint8_t bits)
+    {        
+        for (uint8_t mask = m_msbFirst ? 0x80 : 1; bits > 0; --bits) {
+            // set data bit
+            setDataBit(((uint8_t) value) & ((uint8_t) mask));
+
+            // clock in data
+            toggleClockBit(m_rising);
+
+            mask = m_msbFirst ? (mask >> 1) : (mask << 1);
+        }
+    }
+
+private:
+    void toggleClockBit(bool positive)
     {
         if (positive) {
             m_clockPort.setPortBit(ClockBit);
@@ -94,7 +93,7 @@ public:
             
     }
     
-    virtual void setDataBit(bool value)
+    void setDataBit(bool value)
     {
         if (value)
             m_dataPort.setPortBit(DataBit);
@@ -102,9 +101,9 @@ public:
             m_dataPort.clearPortBit(DataBit);
     }
 
-private:    
     ClockPort m_clockPort;
     DataPort m_dataPort;
+	bool m_rising, m_msbFirst;
 };
 
 }

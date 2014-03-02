@@ -123,16 +123,18 @@ Functional Differences:
 Note that this timer functionality is common to most if not all megaAVR chips.
 */
 
-// Presccale values for all timers
+// Presccale values for all timers. Lower 3 bits are the same as the bits sent
+// to the TCCRnB register. The upper 4 bits are the exponent of the divider,
+// or 0xf if there is no divider.
 enum TimerClockMode {
-    TimerClockStop = 0x00,
+    TimerClockStop = 0xf0,
     TimerClockDIV1 = 0x01,
-    TimerClockDIV8 = 0x02,
-    TimerClockDIV64 = 0x03,
-    TimerClockDIV256 = 0x04,
-    TimerClockDIV1024 = 0x05,
-    TimerExtClockFall = 0x06,
-    TimerExtClockRise = 0x07
+    TimerClockDIV8 = 0x32,
+    TimerClockDIV64 = 0x63,
+    TimerClockDIV256 = 0x84,
+    TimerClockDIV1024 = 0xa5,
+    TimerExtClockFall = 0xf6,
+    TimerExtClockRise = 0xf7
 };
 
 const uint8_t TimerPrescaleMask = 0x07;
@@ -249,11 +251,6 @@ public:
     void setTimerClockMode(TimerClockMode v) { m_controlBPort.setMaskedBits(v, TimerPrescaleMask); }
     void setCompOutputAMode(TimerCompOutputMode mode) { m_controlAPort.setMaskedBits(mode << TimerCompOutputShiftA, TimerCompOutputMaskA); }
     void setCompOutputBMode(TimerCompOutputMode mode) { m_controlAPort.setMaskedBits(mode << TimerCompOutputShiftB, TimerCompOutputMaskB); }
-    virtual void setWaveGenMode(TimerWaveGenMode mode)
-    {
-        m_controlAPort.setMaskedBits(mode, TimerWaveGenMaskA);
-        m_controlBPort.setMaskedBits(mode << TimerWaveGenShiftB, TimerWaveGenMaskB);
-    }
 
     void setForceOutputCompareA(bool e) { m_controlBPort.setBitMask(TimerForceOutputCompareA, e); }
     void setForceOutputCompareB(bool e) { m_controlBPort.setBitMask(TimerForceOutputCompareB, e); }
@@ -262,7 +259,6 @@ public:
     bool isIrptTriggered(TimerIrptType type) const { return m_irptFlagPort.isBitMaskSet(type); }
     
     void setTimerTSM(bool e) { m_genTCCtrlPort.setBitMask(TimerTSM, e); }
-    virtual void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
     
 protected:
     ControlAPort m_controlAPort;
