@@ -42,7 +42,7 @@ using namespace m8r;
 TimerEventMgrBase::TimerEventMgrBase()
 {
     memset(m_timerCount, 0, 8 * sizeof(uint16_t));
-    Application::setTimerEventMgr(this);
+    System::setTimerEventMgr(this);
 }
 
 TimerID
@@ -75,7 +75,7 @@ TimerEventMgrBase::fireISR(EventType type, EventParam param)
     for (uint8_t i = 0; i < 8; ++i) {
         if (mgr->m_timerCount[i]) {
             if (--(mgr->m_timerCount[i]) == 0)
-                Application::fireISR(EV_EVENT_TIMER, reinterpret_cast<EventParam>(i));
+                System::fireISR(EV_EVENT_TIMER, reinterpret_cast<EventParam>(i));
         }
     }
 }

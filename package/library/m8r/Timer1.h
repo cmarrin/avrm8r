@@ -39,6 +39,8 @@ DAMAGE.
 
 #include "TimerBase.h"
 
+#include "System.h"
+
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
@@ -63,7 +65,7 @@ public:
     Timer1(EventCallback isrCallback = 0, EventParam param = EventParam())
     {
         ASSERT(!m_isrCallback, AssertSingleTimer1);
-        m_isrCallback = isrCallback ? isrCallback : &Application::fireISR;
+        m_isrCallback = isrCallback ? isrCallback : &System::fireISR;
         m_param = param;
     }
     

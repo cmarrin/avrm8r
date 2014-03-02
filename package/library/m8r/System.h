@@ -1,5 +1,5 @@
 //
-//  Application.h
+//  System.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -64,9 +64,9 @@ typedef void (*EventCallback)(EventType, EventParam);
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//  Class: Application
+//  Class: System
 //
-//  Main application for AVR apps. Static class
+//  Operating systme for AVR apps. Static class
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -74,9 +74,9 @@ class ErrorReporter;
 class EventListener;
 class TimerEventMgrBase;
 
-class Application {
+class System {
 public:
-    Application();
+    System();
     
     static void fireISR(EventType type, EventParam param = EventParam()) { handleEvent(type, param); }
     
@@ -137,7 +137,7 @@ private:
 // Error handling
 class ErrorReporter {
 public:
-    ErrorReporter() { Application::setErrorReporter(this); }
+    ErrorReporter() { System::setErrorReporter(this); }
     virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
 };
 #endif

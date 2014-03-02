@@ -37,7 +37,7 @@ DAMAGE.
 
 #pragma once
 
-#include "Application.h"
+#include "System.h"
 
 namespace m8r {
 
@@ -53,7 +53,7 @@ class EventListener {
 public:
     EventListener()
     {
-        Application::addEventListener(this);
+        System::addEventListener(this);
     }
     
     virtual void handleEvent(EventType type, EventParam) = 0;

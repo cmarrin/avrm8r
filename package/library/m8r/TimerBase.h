@@ -38,7 +38,6 @@ DAMAGE.
 #pragma once
 
 #include "m8r.h"
-#include "Application.h"
 #include "EventSourceEnums.h"
 
 /*

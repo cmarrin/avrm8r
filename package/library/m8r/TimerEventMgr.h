@@ -39,6 +39,8 @@ DAMAGE.
 
 #include "TimerBase.h"
 
+#include "System.h"
+
 namespace m8r {
 
 //////////////////////////////////////////////////////////////////////////////
@@ -50,7 +52,7 @@ namespace m8r {
 //////////////////////////////////////////////////////////////////////////////
 
 class TimerEventMgrBase {
-    friend class Application;
+    friend class System;
     
 public:
 protected:

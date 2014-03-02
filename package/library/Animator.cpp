@@ -70,7 +70,7 @@ AnimatorBase::fireISR(EventType, EventParam param)
     if (animator->m_paused)
         return;
     
-    Application::fireISR(EV_ANIMATOR_TICK);    
+    System::fireISR(EV_ANIMATOR_TICK);    
 
     if (++animator->m_count < animator->m_rate)
         return;
@@ -80,7 +80,7 @@ AnimatorBase::fireISR(EventType, EventParam param)
     if (animator->m_currentValue++ >= animator->m_endValue)
         animator->m_currentValue = animator->m_startValue;
         
-    Application::fireISR(EV_ANIMATOR_VALUE_CHANGED);    
+    System::fireISR(EV_ANIMATOR_VALUE_CHANGED);    
 }
 
 uint8_t

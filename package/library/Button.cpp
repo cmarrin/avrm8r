@@ -35,7 +35,7 @@ DAMAGE.
 
 #include "Button.h"
 
-#include "Application.h"
+#include "System.h"
 
 using namespace m8r;
 
@@ -50,7 +50,7 @@ ButtonBase::_handleEvent(EventType type, EventParam param, bool value, uint8_t n
     if (m_debounceValue == value) {
         if (--m_debounceTestsRemaining == 0) {
             m_value = value;
-            Application::handleEvent(value ? EV_BUTTON_DOWN : EV_BUTTON_UP, this);
+            System::handleEvent(value ? EV_BUTTON_DOWN : EV_BUTTON_UP, this);
         }
         return;
     }

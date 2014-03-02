@@ -10,7 +10,7 @@
 		49CDD3BF18C2EFFA0040EE8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
 		49CDD3C018C2EFFA0040EE8D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
 		49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
-		49CDD3C218C2EFFA0040EE8D /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* Application.cpp */; };
+		49CDD3C218C2EFFA0040EE8D /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1A7133F92730036518B /* System.cpp */; };
 		49CDD3C318C2EFFA0040EE8D /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B73E18BDB4FC0001437D /* Button.cpp */; };
 		49CDD3C418C2EFFA0040EE8D /* Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74018BDB58C0001437D /* Network.cpp */; };
 		49CDD3C518C2EFFA0040EE8D /* NTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4994B74118BDB58C0001437D /* NTPClient.cpp */; };
@@ -73,7 +73,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4900A1A7133F92730036518B /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Application.cpp; path = library/Application.cpp; sourceTree = "<group>"; };
+		4900A1A7133F92730036518B /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = System.cpp; path = library/System.cpp; sourceTree = "<group>"; };
 		4900A1E4133F9C5B0036518B /* ADC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ADC.cpp; path = library/ADC.cpp; sourceTree = "<group>"; };
 		4900A1E6133F9C5B0036518B /* ShiftReg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShiftReg.cpp; path = library/ShiftReg.cpp; sourceTree = "<group>"; };
 		4900A1EE133F9C5B0036518B /* RTC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RTC.cpp; path = library/RTC.cpp; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 		4983118018BEA7B900751432 /* websrv_help_functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = websrv_help_functions.h; path = "library/eth_tcp_client_server-dhcp-5.1/websrv_help_functions.h"; sourceTree = "<group>"; };
 		498311D718C2839F00751432 /* ADC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADC.h; path = library/m8r/ADC.h; sourceTree = "<group>"; };
 		498311D818C2839F00751432 /* Animator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Animator.h; path = library/m8r/Animator.h; sourceTree = "<group>"; };
-		498311D918C2839F00751432 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = library/m8r/Application.h; sourceTree = "<group>"; };
+		498311D918C2839F00751432 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = System.h; path = library/m8r/System.h; sourceTree = "<group>"; };
 		498311DA18C2839F00751432 /* BlinkErrorReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlinkErrorReporter.h; path = library/m8r/BlinkErrorReporter.h; sourceTree = "<group>"; };
 		498311DB18C2839F00751432 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = library/m8r/Button.h; sourceTree = "<group>"; };
 		498311DC18C2839F00751432 /* EventListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventListener.h; path = library/m8r/EventListener.h; sourceTree = "<group>"; };
@@ -153,7 +153,6 @@
 				495F1CB3134A1F920059E738 /* main.c */,
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
 				49CF367513BDF945001EB1B8 /* Animator.cpp */,
-				4900A1A7133F92730036518B /* Application.cpp */,
 				4994B73E18BDB4FC0001437D /* Button.cpp */,
 				4994B74018BDB58C0001437D /* Network.cpp */,
 				4994B74118BDB58C0001437D /* NTPClient.cpp */,
@@ -161,6 +160,7 @@
 				4994B74218BDB58C0001437D /* SevenSegmentDisplay.cpp */,
 				4900A1E6133F9C5B0036518B /* ShiftReg.cpp */,
 				4994B74318BDB58C0001437D /* Socket.cpp */,
+				4900A1A7133F92730036518B /* System.cpp */,
 				4994B74518BDB58C0001437D /* TCPSocket.cpp */,
 				4994B74618BDB58C0001437D /* Timer0.cpp */,
 				4994B74718BDB58C0001437D /* Timer1.cpp */,
@@ -176,7 +176,6 @@
 			children = (
 				498311D718C2839F00751432 /* ADC.h */,
 				498311D818C2839F00751432 /* Animator.h */,
-				498311D918C2839F00751432 /* Application.h */,
 				498311DA18C2839F00751432 /* BlinkErrorReporter.h */,
 				498311DB18C2839F00751432 /* Button.h */,
 				498311DC18C2839F00751432 /* EventListener.h */,
@@ -189,6 +188,7 @@
 				498311E318C2839F00751432 /* ShiftReg.h */,
 				498311E418C2839F00751432 /* Socket.h */,
 				498311E518C2839F00751432 /* SPI.h */,
+				498311D918C2839F00751432 /* System.h */,
 				498311E618C2839F00751432 /* TCPSocket.h */,
 				498311E718C2839F00751432 /* Timer0.h */,
 				498311E818C2839F00751432 /* Timer1.h */,
@@ -469,7 +469,7 @@
 				49CDD3CC18C2EFFA0040EE8D /* Timer1.cpp in Sources */,
 				49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */,
 				49CDD3C918C2EFFA0040EE8D /* Socket.cpp in Sources */,
-				49CDD3C218C2EFFA0040EE8D /* Application.cpp in Sources */,
+				49CDD3C218C2EFFA0040EE8D /* System.cpp in Sources */,
 				49CDD3D018C2F0040040EE8D /* dnslkup.c in Sources */,
 				49CDD3CF18C2EFFA0040EE8D /* UDPSocket.cpp in Sources */,
 				49CDD3D318C2F0040040EE8D /* websrv_help_functions.c in Sources */,

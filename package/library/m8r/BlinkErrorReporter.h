@@ -39,7 +39,7 @@ DAMAGE.
 
 #include "m8r.h"
 
-#include "Application.h"
+#include "System.h"
 
 namespace m8r {
 
@@ -88,25 +88,25 @@ public:
     virtual void reportError(char, uint16_t code, ErrorConditionType condition)
     {
         setError(false);
-        Application::msDelay<500>();
+        System::msDelay<500>();
         for (uint8_t i = 0; condition == ErrorConditionFatal || i < 3; ++i) {
             if (condition == ErrorConditionNote) {
                 if (code > 0xff) {
                     flicker(3);
-                    Application::msDelay<25>();
+                    System::msDelay<25>();
                     flicker(3);
-                    Application::msDelay<25>();
+                    System::msDelay<25>();
                     flicker(3);
                 }
                 else
                     flicker(10);
                     
-                Application::msDelay<1000>();
+                System::msDelay<1000>();
             }
             if (code > 0xff)
                 blinkCode(code >> 8);
             blinkCode(code);
-            Application::msDelay<1000>();
+            System::msDelay<1000>();
         }
     }
 private:
@@ -114,15 +114,15 @@ private:
     {
         while (--num > 0)
             blink<50, 50>();
-        Application::msDelay<100>();
+        System::msDelay<100>();
     }
     
     template <uint16_t duration, uint16_t delay> void blink()
     {
         setError(true);
-            Application::msDelay<duration>();
+            System::msDelay<duration>();
         setError(false);
-            Application::msDelay<delay>();
+            System::msDelay<delay>();
     }
     
     void _NO_INLINE_ blinkDigit(uint8_t digit)
@@ -134,7 +134,7 @@ private:
             blink<500, 100>();
         for ( ; digit > 0; --digit)
             blink<100, 100>();
-        Application::msDelay<1000>();
+        System::msDelay<1000>();
     }
     
     void _NO_INLINE_ blinkCode(uint8_t code)

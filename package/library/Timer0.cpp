@@ -35,7 +35,6 @@ DAMAGE.
 
 #include "Timer0.h"
 
-#include "Application.h"
 #include <avr/interrupt.h>
 
 using namespace m8r;

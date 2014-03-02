@@ -34,7 +34,7 @@ DAMAGE.
 */
 
 #include "ADC.h"
-#include "Application.h"
+#include "System.h"
 
 using namespace m8r;
 
@@ -115,7 +115,7 @@ ADC::convert10Bit()
 ISR(ADC_vect)
 {
     ADC::setLastConversion(ADCW);
-    Application::fireISR(EV_ADC);
+    System::fireISR(EV_ADC);
 }
 
 

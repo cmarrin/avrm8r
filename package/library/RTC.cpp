@@ -35,7 +35,7 @@ DAMAGE.
 
 #include "RTC.h"
 
-#include "Application.h"
+#include "System.h"
 #include <avr/pgmspace.h>
 
 const uint32_t minutesPerDay = 24UL * 60UL;
@@ -119,9 +119,9 @@ RTCBase::fireISR(EventType, EventParam param)
     if (++rtc->m_seconds >= 60) {
         rtc->m_seconds = 0;
         rtc->m_minutes++;
-        Application::fireISR(EV_RTC_MINUTES);
+        System::fireISR(EV_RTC_MINUTES);
     }
     
-    Application::fireISR(EV_RTC_SECONDS);
+    System::fireISR(EV_RTC_SECONDS);
 }
 

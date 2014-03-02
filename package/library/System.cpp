@@ -1,5 +1,5 @@
 //
-//  Application.cpp
+//  System.cpp
 //
 //  Created by Chris Marrin on 3/19/2011.
 
@@ -33,7 +33,7 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "Application.h"
+#include "System.h"
 
 #include "EventListener.h"
 #include "Network.h"
@@ -42,13 +42,13 @@ DAMAGE.
 
 using namespace m8r;
 
-EventListener* Application::m_eventListenerHead = 0;
-ErrorReporter* Application::m_errorReporter = 0;
-TimerEventMgrBase* Application::m_timerEventMgr = 0;
+EventListener* System::m_eventListenerHead = 0;
+ErrorReporter* System::m_errorReporter = 0;
+TimerEventMgrBase* System::m_timerEventMgr = 0;
 
 #ifdef DEBUG
 void
-Application::handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType)
+System::handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType)
 {
     if (m_errorReporter)
         m_errorReporter->reportError(c, errorType, conditionType);
@@ -56,7 +56,7 @@ Application::handleErrorCondition(char c, uint16_t errorType, ErrorConditionType
 #endif
 
 void
-Application::run()
+System::run()
 {
     while (1) {
         handleEvent(EV_IDLE);
@@ -65,14 +65,14 @@ Application::run()
 }
 
 void
-Application::addEventListener(EventListener* listener)
+System::addEventListener(EventListener* listener)
 {
     listener->setNext(m_eventListenerHead);
     m_eventListenerHead = listener;
 }
 
 void
-Application::removeEventListener(EventListener* listener)
+System::removeEventListener(EventListener* listener)
 {
     for (EventListener *prev = 0, *current = m_eventListenerHead; current; prev = current, current = current->next())
         if (current == listener) {
@@ -84,21 +84,21 @@ Application::removeEventListener(EventListener* listener)
 }
 
 void
-Application::handleEvent(EventType type, EventParam param)
+System::handleEvent(EventType type, EventParam param)
 {
     for (EventListener* listener = m_eventListenerHead; listener; listener = listener->next())
         listener->handleEvent(type, param);
 }
 
 TimerID
-Application::startEventTimer(uint16_t count)
+System::startEventTimer(uint16_t count)
 {
     ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
     return m_timerEventMgr->start(count);
 }
 
 void
-Application::stopEventTimer(TimerID id)
+System::stopEventTimer(TimerID id)
 {
     ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
     m_timerEventMgr->stop(id);
@@ -118,14 +118,14 @@ void __cxa_pure_virtual()
 #ifdef DEBUG
 void _showErrorCondition(char c, uint16_t code, ErrorConditionType condition)
 {
-    Application::handleErrorCondition(c, code, condition);
+    System::handleErrorCondition(c, code, condition);
 }
 #endif
 
 void _main() __attribute__((noreturn));
 void _main()
 {
-    Application::run();
+    System::run();
 }
 }
 

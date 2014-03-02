@@ -74,7 +74,7 @@ public:
     {
         m_port.setBitInput(Bit);
         m_port.setPortBit(Bit);
-        m_timerID = Application::startEventTimer(debounceTimerCount);
+        m_timerID = System::startEventTimer(debounceTimerCount);
     }
     
     // EventListener override
@@ -84,7 +84,7 @@ public:
             return;
             
         _handleEvent(type, param, !m_port.isPinBit(Bit), numDebounceTests);
-        m_timerID = Application::startEventTimer(debounceTimerCount);
+        m_timerID = System::startEventTimer(debounceTimerCount);
     }
     
 private:

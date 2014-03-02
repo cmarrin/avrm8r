@@ -37,7 +37,7 @@ DAMAGE.
 
 #include "Network.h"
 
-#include "Application.h"
+#include "System.h"
 extern "C" {
 #include "enc28j60.h"
 #include "ip_arp_udp_tcp.h"
@@ -60,7 +60,7 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
     if (doubleClockRate)
         enc28j60clkout(2); // change clkout from 6.25MHz to 12.5MHz
     
-    Application::usDelay<60>();
+    System::usDelay<60>();
 
     // Magjack leds configuration, see enc28j60 datasheet, page 11
     // LEDB=yellow LEDA=green
@@ -71,7 +71,7 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
 
     init_udp_or_www_server(const_cast<uint8_t*>(macaddr), const_cast<uint8_t*>(ipaddr));
     
-    m_timerID = Application::startEventTimer(NetworkTimerInterval);
+    m_timerID = System::startEventTimer(NetworkTimerInterval);
 }
 
 void
@@ -117,7 +117,7 @@ Network::handleEvent(EventType type, EventParam param)
     if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
         return;
         
-    m_timerID = Application::startEventTimer(NetworkTimerInterval);
+    m_timerID = System::startEventTimer(NetworkTimerInterval);
 
     m_packetLength = enc28j60PacketReceive(PacketBufferSize, m_packetBuffer);
     uint16_t dataStartOffset = packetloop_arp_icmp_tcp(m_packetBuffer, m_packetLength);
