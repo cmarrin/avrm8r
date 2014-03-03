@@ -1,7 +1,9 @@
 //
-//  TimerEventMgr.cpp
+//  TimerEvent.h
 //
 //  Created by Chris Marrin on 3/19/2011.
+//
+//
 
 /*
 Copyright (c) 2009-2011 Chris Marrin (chris@marrin.com)
@@ -33,51 +35,52 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 
-#include "TimerEventMgr.h"
+#include "TimerBase.h"
 
-#include <string.h>
+#include <stdlib.h>
 
-using namespace m8r;
+#pragma once
 
-void
-TimerEventMgrBase::stop(TimerEvent* event)
+namespace m8r {
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: TimerEvent
+//
+//  A single active timer event
+//
+//////////////////////////////////////////////////////////////////////////////
+
+class TimerEvent
 {
-    TimerEvent* prev = NULL;
-    for (TimerEvent* cur = _head; cur; cur = cur->_next) {
-        if (cur == event) {
-            if (!prev) {
-                _head = cur->_next;
-            } else {
-                prev->_next = cur->_next;
-            }
-            cur->_next = NULL;
-            break;
-        }
-        prev = cur;
-    }
-}
-
-void
-TimerEventMgrBase::fireISR(EventType type, EventParam param)
-{
-    TimerEventMgrBase* mgr = (TimerEventMgrBase*) param;
+    friend class TimerEventMgrBase;
     
-    TimerEvent* prev = NULL;
-    for (TimerEvent* cur = mgr->_head; cur; ) {
-        TimerEvent* next = cur->_next;
-        if (cur->_currentCount == 0 || --cur->_currentCount == 0) {
-            System::fireISR(EV_EVENT_TIMER, reinterpret_cast<EventParam>(cur));
-            if (cur->_resetCount == 0) {
-                if (!prev) {
-                    mgr->_head = next;
-                } else {
-                    prev->_next = next;
-                }
-            } else {
-                cur->_currentCount = cur->_resetCount;
-            }
-        }
-        prev = cur;
-        cur = next;
-    }
+protected:
+    TimerEvent(uint16_t intervalCount, bool oneShot)
+        : _currentCount(intervalCount)
+        , _resetCount(oneShot ? 0 : intervalCount)
+        , _next(NULL)
+    { }
+
+private:
+    uint16_t _currentCount, _resetCount;
+    TimerEvent* _next;
+};
+
+class OneShotTimerEvent : public TimerEvent
+{
+public:
+    OneShotTimerEvent(uint16_t intervalCount)
+        : TimerEvent(intervalCount, true)
+    { }
+};
+
+class RepeatingTimerEvent : public TimerEvent
+{
+public:
+    RepeatingTimerEvent(uint16_t intervalCount)
+        : TimerEvent(intervalCount, false)
+    { }
+};
+
 }

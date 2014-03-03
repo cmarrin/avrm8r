@@ -38,6 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "TimerBase.h"
+#include "TimerEvent.h"
 
 #include "System.h"
 
@@ -47,37 +48,76 @@ namespace m8r {
 //
 //  Class: TimerEventMgr
 //
-//  Manage events which fire at given intervals
+// Manage events which fire at given intervals. The timer needs to be
+// about 1ms so system clients can give interval counts that will give
+// approximately the desired timeout. For instance the Button debounce
+// timer needs to have sufficient time to get accurate button values.
+// The prescale value is given to the timer and the compareCount is computed
+// from that and F_CPU. If the prescale value is insufficient to do a 1ms
+// timeout with the given timer, the closest approximation is used. For
+// instance, if an 8 bit timer is used and a prescale value of 1 is
+// selected with an 8MHz clock, a 30us would be the result. This is
+// probably a bad thing if you're using the Button or Network components.
+// But selecting a prescale of 64 the 8 bit timer can use a compareCount
+// of 125 to achieve a 1ms timeout. A compareCount can be provided to
+// override this behavior, as long as the consequences are known. 
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TimerEventMgrBase {
+class TimerEventMgrBase
+{
     friend class System;
     
 public:
 protected:
-	TimerEventMgrBase();
+	TimerEventMgrBase()
+        : _head(NULL)
 
-    TimerID start(uint16_t intervals);
-    void stop(TimerID);
+    {
+        System::setTimerEventMgr(this);
+    }
+
+    void start(TimerEvent* event)
+    {
+        event->_next = _head;
+        _head = event;
+    }
+    
+    void stop(TimerEvent*);
 
     static void fireISR(EventType, EventParam);
     
 private:
-    uint16_t m_timerCount[8];
+    TimerEvent* _head;
 };
 
-template <class Timer>
+template <class Timer, TimerClockMode prescaler, uint16_t compareCount = 0>
 class TimerEventMgr : public TimerEventMgrBase {
 public:
-	TimerEventMgr(TimerClockMode prescaler, uint16_t count)
+	TimerEventMgr()
         : TimerEventMgrBase()
         , m_timer(&fireISR, this)
     {
         m_timer.setTimerClockMode(prescaler);
+        uint16_t count = compareCount;
+        if (count == 0) {
+            count = F_CPU / TimerPrescaleDivisor(prescaler) / 1000;
+            if (count < 2) {
+                count = 1;
+            } else {
+                count -= 1;
+            }
+            // FIXME: Add a static const to timers to give the max compare value
+            // and use that to make sure we don't go over.
+        }
         m_timer.setOutputCompareA(count);
         m_timer.setWaveGenMode(TimerWaveGenCTC);
         m_timer.setIrptEnabled(TimerOutputCmpMatchAIrpt, true);
+    }
+    
+    void start(TimerEvent* event)
+    {
+        
     }
     
 private:

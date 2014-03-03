@@ -40,6 +40,7 @@ DAMAGE.
 #include "m8r.h"
 
 #include "EventListener.h"
+#include "TimerEvent.h"
 
 namespace m8r {
 
@@ -111,7 +112,7 @@ private:
     Network* m_next;
     Socket* m_socketHead;
     
-    TimerID m_timerID;    
+    OneShotTimerEvent _timerEvent;
 };
 
 }

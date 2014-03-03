@@ -130,6 +130,7 @@
 		4994B74718BDB58C0001437D /* Timer1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer1.cpp; path = library/Timer1.cpp; sourceTree = "<group>"; };
 		4994B74818BDB58C0001437D /* Timer2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Timer2.cpp; path = library/Timer2.cpp; sourceTree = "<group>"; };
 		4994B74918BDB58C0001437D /* UDPSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UDPSocket.cpp; path = library/UDPSocket.cpp; sourceTree = "<group>"; };
+		49CDD3D518C417060040EE8D /* TimerEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TimerEvent.h; path = library/m8r/TimerEvent.h; sourceTree = "<group>"; };
 		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Animator.cpp; path = library/Animator.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,6 +195,7 @@
 				498311E818C2839F00751432 /* Timer1.h */,
 				498311E918C2839F00751432 /* Timer2.h */,
 				498311EA18C2839F00751432 /* TimerBase.h */,
+				49CDD3D518C417060040EE8D /* TimerEvent.h */,
 				498311EB18C2839F00751432 /* TimerEventMgr.h */,
 				498311EC18C2839F00751432 /* UDPSocket.h */,
 				490EBD531348B4C800FAD91C /* m8r.h */,

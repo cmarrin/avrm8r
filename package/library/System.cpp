@@ -90,18 +90,18 @@ System::handleEvent(EventType type, EventParam param)
         listener->handleEvent(type, param);
 }
 
-TimerID
-System::startEventTimer(uint16_t count)
+void
+System::startEventTimer(TimerEvent* event)
 {
     ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
-    return m_timerEventMgr->start(count);
+    return m_timerEventMgr->start(event);
 }
 
 void
-System::stopEventTimer(TimerID id)
+System::stopEventTimer(TimerEvent* event)
 {
     ASSERT(m_timerEventMgr, AssertNoTimerEventMgr);
-    m_timerEventMgr->stop(id);
+    m_timerEventMgr->stop(event);
 }
 
 void operator delete(void * ptr) 

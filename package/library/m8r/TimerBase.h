@@ -138,6 +138,8 @@ enum TimerClockMode {
 
 const uint8_t TimerPrescaleMask = 0x07;
 
+#define TimerPrescaleDivisor(prescale) (((prescale >> 4) == 0x0f) ? 0 : (1 << (prescale >> 4)))
+
 // Compare output mode
 enum TimerCompOutputMode {
     TimerCompOutputNormal = 0x00,

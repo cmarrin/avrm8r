@@ -52,7 +52,7 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
     , m_dnsState(0)
     , m_dnsLookupCounter(0)
     , m_next(0)
-    , m_timerID()
+    , _timerEvent(NetworkTimerInterval)
 {
     memcpy(m_gwip, gwaddr, 4);
     enc28j60Init(const_cast<uint8_t*>(macaddr));
@@ -71,7 +71,7 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
 
     init_udp_or_www_server(const_cast<uint8_t*>(macaddr), const_cast<uint8_t*>(ipaddr));
     
-    m_timerID = System::startEventTimer(NetworkTimerInterval);
+    System::startEventTimer(&_timerEvent);
 }
 
 void
@@ -114,10 +114,10 @@ void Network::arpResolverResultCallback(uint8_t *ip, void* userdata, uint8_t* ma
 void
 Network::handleEvent(EventType type, EventParam param)
 {
-    if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
+    if (type != EV_EVENT_TIMER || &_timerEvent != (TimerEvent*) param)
         return;
         
-    m_timerID = System::startEventTimer(NetworkTimerInterval);
+    System::startEventTimer(&_timerEvent);
 
     m_packetLength = enc28j60PacketReceive(PacketBufferSize, m_packetBuffer);
     uint16_t dataStartOffset = packetloop_arp_icmp_tcp(m_packetBuffer, m_packetLength);

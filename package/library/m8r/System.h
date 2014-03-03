@@ -72,6 +72,7 @@ typedef void (*EventCallback)(EventType, EventParam);
 
 class ErrorReporter;
 class EventListener;
+class TimerEvent;
 class TimerEventMgrBase;
 
 class System {
@@ -95,8 +96,8 @@ public:
         m_timerEventMgr = mgr;
     }
     
-    static TimerID startEventTimer(uint16_t count);
-    static void stopEventTimer(TimerID);
+    static void startEventTimer(TimerEvent*);
+    static void stopEventTimer(TimerEvent*);
         
     static void run() __attribute__((noreturn));
     
