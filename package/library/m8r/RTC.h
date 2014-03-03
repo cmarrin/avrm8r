@@ -1,5 +1,5 @@
 //
-//  Timer1RTC.h
+//  RTC.h
 //
 //  Created by Chris Marrin on 3/19/2011.
 //
@@ -37,9 +37,10 @@ DAMAGE.
 
 #pragma once
 
-#include "TimerBase.h"
-
+#include "EventListener.h"
 #include "System.h"
+#include "TimerBase.h"
+#include "TimerEvent.h"
 
 namespace m8r {
 
@@ -62,11 +63,9 @@ struct RTCTime {
 class RTCBase
 {
 public:
-    RTCBase(uint16_t intervalsPerSecond) 
-        : m_intervalsPerSecond(intervalsPerSecond)
-        , m_minutes(0)
+    RTCBase() 
+        : m_minutes(0)
         , m_seconds(0)
-        , m_intervalCount(0)
     {
     }
     
@@ -80,21 +79,44 @@ public:
     
     static void dayString(uint8_t day, char string[4]);
 
+    void tick()
+    {
+        if (++m_seconds >= 60) {
+            m_seconds = 0;
+            m_minutes++;
+            System::fireISR(EV_RTC_MINUTES);
+        }
+        
+        System::fireISR(EV_RTC_SECONDS);
+    }
+    
+private:
+    uint32_t m_minutes;
+    uint8_t m_seconds;
+};
+
+class DedicatedRTCBase : public RTCBase
+{
+public:
+    DedicatedRTCBase(uint16_t intervalsPerSecond) 
+        : m_intervalsPerSecond(intervalsPerSecond)
+        , m_intervalCount(0)
+    {
+    }
+    
 protected:
     static void fireISR(EventType, EventParam);
     
 private:
     uint16_t m_intervalsPerSecond;
-    uint32_t m_minutes;
-    uint8_t m_seconds;
     uint16_t m_intervalCount;
 };
 
 template <class Timer>
-class RTC : public RTCBase {
+class DedicatedRTC : public DedicatedRTCBase {
 public:
-	RTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
-        : RTCBase(intervalsPerSecond)
+	DedicatedRTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
+        : DedicatedRTCBase(intervalsPerSecond)
         , m_timer(&fireISR, this)
     {
         m_timer.setTimerClockMode(prescaler);
@@ -105,6 +127,26 @@ public:
     
 private:
     Timer m_timer;
+};
+
+class SharedRTC : public RTCBase, public EventListener {
+public:
+	SharedRTC(uint16_t intervalsPerSecond = 1000)
+        : m_event(intervalsPerSecond)
+    {
+        System::startEventTimer(&m_event);
+    }
+    
+    // EventListener override
+    virtual void handleEvent(EventType type, EventParam param)
+    {
+        if (type != EV_EVENT_TIMER || &m_event != (TimerEvent*) param)
+            return;
+        tick();
+    }
+    
+private:
+    RepeatingTimerEvent m_event;
 };
 
 }

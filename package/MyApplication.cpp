@@ -26,12 +26,10 @@
 //  Shared RTC:     A RTC which shares the 1ms TimerEventMgr is created which gives event event
 //                  every second (assuming TimerEventMgr is precisely 1ms)
 
-// FIXME: Implement Shared RTC
-
-#define WaitLoop
-//#define TimerEvent
-//#define DedicatedRTC
-//#define SharedRTC
+#define WAIT_LOOP
+//#define TIMER_EVENT
+//#define DEDICATED_RTC
+//#define SHARED_RTC
 
 using namespace m8r;
 
@@ -48,13 +46,15 @@ public:
     virtual void handleEvent(EventType type, EventParam);
     
     BlinkErrorReporter<Port<LEDPort>, LEDBit, false> m_errorReporter;
-#if defined(WaitLoop)
-#elif defined(TimerEvent)
+#if defined(WAIT_LOOP)
+#elif defined(TIMER_EVENT)
     TimerEventMgr<Timer0, TimerClockDIV64> m_timerEventMgr;
     RepeatingTimerEvent _timerEvent;
-#elif defined(DedicatedRTC)
-    RTC<Timer0> m_clock;
-#elif defined(SharedRTC)
+#elif defined(DEDICATED_RTC)
+    DedicatedRTC<Timer0> m_clock;
+#elif defined(SHARED_RTC)
+    TimerEventMgr<Timer0, TimerClockDIV64> m_timerEventMgr;
+    SharedRTC m_clock;
 #endif
     OutputBit<LEDPort, LEDBit> m_LEDPort;
 };
@@ -62,21 +62,21 @@ public:
 MyApp g_app;
 
 MyApp::MyApp()
-#if defined(WaitLoop)
-#elif defined(TimerEvent)
+#if defined(WAIT_LOOP)
+#elif defined(TIMER_EVENT)
     : _timerEvent(1000)
-#elif defined(DedicatedRTC)
+#elif defined(DEDICATED_RTC)
     : m_clock(TimerClockDIV64, 249, 1000) // 1s timer
-#elif defined(SharedRTC)
+#elif defined(SHARED_RTC)
 #endif
 
 {
     sei();
-#if defined(WaitLoop)
-#elif defined(TimerEvent)
+#if defined(WAIT_LOOP)
+#elif defined(TIMER_EVENT)
     System::startEventTimer(&_timerEvent);
-#elif defined(DedicatedRTC)
-#elif defined(SharedRTC)
+#elif defined(DEDICATED_RTC)
+#elif defined(SHARED_RTC)
 #endif
 }
 
@@ -85,20 +85,19 @@ MyApp::handleEvent(EventType type, EventParam param)
 {
     switch(type)
     {
-#if defined(WaitLoop)
+#if defined(WAIT_LOOP)
         case EV_IDLE:
             System::msDelay<1000>();
             m_LEDPort = !m_LEDPort;
         break;
-#elif defined(TimerEvent)
+#elif defined(TIMER_EVENT)
         case EV_EVENT_TIMER:
             m_LEDPort = !m_LEDPort;
             break;
-#elif defined(DedicatedRTC)
+#elif defined(DEDICATED_RTC) || defined(SHARED_RTC)
         case EV_RTC_SECONDS:
             m_LEDPort = !m_LEDPort;
             break;
-#elif defined(SharedRTC)
 #endif
         default:
             break;

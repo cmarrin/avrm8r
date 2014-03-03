@@ -38,6 +38,7 @@ DAMAGE.
 #pragma once
 
 #include "EventListener.h"
+#include "TimerEvent.h"
 
 namespace m8r {
 
@@ -71,25 +72,26 @@ class Button : public ButtonBase, public EventListener {
 public:
 	Button()
         : ButtonBase()
+        , m_event(debounceTimerCount)
     {
         m_port.setBitInput(Bit);
         m_port.setPortBit(Bit);
-        m_timerID = System::startEventTimer(debounceTimerCount);
+        System::startEventTimer(&m_event);
     }
     
     // EventListener override
     virtual void handleEvent(EventType type, EventParam param)
     {
-        if (type != EV_EVENT_TIMER || m_timerID != MakeTimerID(param))
+        if (type != EV_EVENT_TIMER || &m_event != (TimerEvent*) param)
             return;
             
         _handleEvent(type, param, !m_port.isPinBit(Bit), numDebounceTests);
-        m_timerID = System::startEventTimer(debounceTimerCount);
+        System::startEventTimer(&m_event);
     }
     
 private:
     Port m_port;
-    TimerID m_timerID;
+    OneShotTimerEvent m_event;
 };
 
 }

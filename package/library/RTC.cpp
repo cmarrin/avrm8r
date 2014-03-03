@@ -107,21 +107,14 @@ RTCBase::currentTime(RTCTime& rtc)
 }
 
 void
-RTCBase::fireISR(EventType, EventParam param)
+DedicatedRTCBase::fireISR(EventType, EventParam param)
 {
-    RTCBase* rtc = (RTCBase*) param;
+    DedicatedRTCBase* rtc = (DedicatedRTCBase*) param;
     
     if (++rtc->m_intervalCount < rtc->m_intervalsPerSecond)
         return;
         
     rtc->m_intervalCount = 0;
-    
-    if (++rtc->m_seconds >= 60) {
-        rtc->m_seconds = 0;
-        rtc->m_minutes++;
-        System::fireISR(EV_RTC_MINUTES);
-    }
-    
-    System::fireISR(EV_RTC_SECONDS);
+    rtc->tick();
 }
 
