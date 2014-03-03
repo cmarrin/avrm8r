@@ -111,9 +111,9 @@
 		498311EA18C2839F00751432 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerBase.h; path = library/m8r/TimerBase.h; sourceTree = "<group>"; };
 		498311EB18C2839F00751432 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimerEventMgr.h; path = library/m8r/TimerEventMgr.h; sourceTree = "<group>"; };
 		498311EC18C2839F00751432 /* UDPSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UDPSocket.h; path = library/m8r/UDPSocket.h; sourceTree = "<group>"; };
-		498311ED18C2854200751432 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libm8r; sourceTree = BUILT_PRODUCTS_DIR; };
-		498311EE18C2854200751432 /* sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sample; sourceTree = BUILT_PRODUCTS_DIR; };
-		498311EF18C2854200751432 /* program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = program; sourceTree = BUILT_PRODUCTS_DIR; };
+		498311ED18C2854200751432 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = libm8r; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Report/libm8r; sourceTree = "<absolute>"; };
+		498311EE18C2854200751432 /* sample */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = sample; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Report/sample; sourceTree = "<absolute>"; };
+		498311EF18C2854200751432 /* program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = program; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Report/program; sourceTree = "<absolute>"; };
 		498311F018C2855E00751432 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		498311F118C2855E00751432 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		498311F218C2855E00751432 /* Report.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Report.xcconfig; sourceTree = "<group>"; };
@@ -141,9 +141,6 @@
 				498311F418C2866A00751432 /* MyApplication.cpp */,
 				498311B818C05CA100751432 /* Config */,
 				498311B918C05CD700751432 /* libm8r */,
-				498311ED18C2854200751432 /* libm8r */,
-				498311EE18C2854200751432 /* sample */,
-				498311EF18C2854200751432 /* program */,
 			);
 			name = marrinator;
 			sourceTree = "<group>";
