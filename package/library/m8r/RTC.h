@@ -112,10 +112,10 @@ private:
     uint16_t m_intervalCount;
 };
 
-template <class Timer>
+template <class Timer, TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond>
 class DedicatedRTC : public DedicatedRTCBase {
 public:
-	DedicatedRTC(TimerClockMode prescaler, uint16_t count, uint16_t intervalsPerSecond)
+	DedicatedRTC()
         : DedicatedRTCBase(intervalsPerSecond)
         , m_timer(&fireISR, this)
     {
@@ -129,10 +129,10 @@ private:
     Timer m_timer;
 };
 
+template<uint16_t intervalsPerSecond = 1000>
 class SharedRTC : public RTCBase, public EventListener {
 public:
-	SharedRTC(uint16_t intervalsPerSecond = 1000)
-        : m_event(intervalsPerSecond)
+	SharedRTC()
     {
         System::startEventTimer(&m_event);
     }
@@ -146,7 +146,7 @@ public:
     }
     
 private:
-    RepeatingTimerEvent m_event;
+    RepeatingTimerEvent<intervalsPerSecond> m_event;
 };
 
 }

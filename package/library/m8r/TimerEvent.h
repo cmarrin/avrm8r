@@ -67,20 +67,18 @@ private:
     TimerEvent* _next;
 };
 
+template <uint16_t intervalCount>
 class OneShotTimerEvent : public TimerEvent
 {
 public:
-    OneShotTimerEvent(uint16_t intervalCount)
-        : TimerEvent(intervalCount, true)
-    { }
+    OneShotTimerEvent() : TimerEvent(intervalCount, true) { }
 };
 
+template <uint16_t intervalCount>
 class RepeatingTimerEvent : public TimerEvent
 {
 public:
-    RepeatingTimerEvent(uint16_t intervalCount)
-        : TimerEvent(intervalCount, false)
-    { }
+    RepeatingTimerEvent() : TimerEvent(intervalCount, false) { }
 };
 
 }

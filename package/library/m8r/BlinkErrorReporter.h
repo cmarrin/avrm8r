@@ -69,22 +69,34 @@ class BlinkErrorReporter : public ErrorReporter {
 public:
 	_NO_INLINE_ BlinkErrorReporter()
     {
+#ifdef DEBUG
         m_errorPort.setPortBit(ErrorBit);
         m_errorPort.setBitOutput(ErrorBit);
         setError(false);
+#endif
     }
         
     void _NO_INLINE_ setError(bool error)
     {
+#ifdef DEBUG
         if (error != invert)
             m_errorPort.setPortBit(ErrorBit);
         else
             m_errorPort.clearPortBit(ErrorBit);
+#endif
     }
     
-    bool isErrorSet() const { return m_errorPort.isPortBit(ErrorBit); }
+    bool isErrorSet() const
+    {
+#ifdef DEBUG
+        return m_errorPort.isPortBit(ErrorBit);
+#else
+        return false;
+#endif
+    }
 
     // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
+#ifdef DEBUG
     virtual void reportError(char, uint16_t code, ErrorConditionType condition)
     {
         setError(false);
@@ -109,7 +121,9 @@ public:
             System::msDelay<1000>();
         }
     }
+#endif
 private:
+#ifdef DEBUG
     void _NO_INLINE_ flicker(uint8_t num)
     {
         while (--num > 0)
@@ -144,6 +158,7 @@ private:
     }
     
     ErrorPort m_errorPort;
+#endif
 };
 
 }

@@ -80,10 +80,8 @@ public:
     
     static void fireISR(EventType type, EventParam param = EventParam()) { handleEvent(type, param); }
     
-#ifdef DEBUG
     static void setErrorReporter(ErrorReporter* reporter) { m_errorReporter = reporter; }
     static void handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType);
-#endif
     
     static void addEventListener(EventListener*);
     static void removeEventListener(EventListener*);
@@ -133,13 +131,15 @@ private:
     static TimerEventMgrBase* m_timerEventMgr;
 };
 
-#ifdef DEBUG
 // Error handling
 class ErrorReporter {
 public:
-    ErrorReporter() { System::setErrorReporter(this); }
+#ifdef DEBUG
+    ErrorReporter() { System::setErrorReporter(this);
     virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
-};
+#else
+    void reportError(char, uint16_t, ErrorConditionType) { }
 #endif
+};
 
 }

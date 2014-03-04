@@ -52,7 +52,6 @@ Network::Network(const uint8_t macaddr[6], const uint8_t ipaddr[4], const uint8_
     , m_dnsState(0)
     , m_dnsLookupCounter(0)
     , m_next(0)
-    , _timerEvent(NetworkTimerInterval)
 {
     memcpy(m_gwip, gwaddr, 4);
     enc28j60Init(const_cast<uint8_t*>(macaddr));

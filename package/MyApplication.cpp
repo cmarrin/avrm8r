@@ -26,6 +26,15 @@
 //  Shared RTC:     A RTC which shares the 1ms TimerEventMgr is created which gives event event
 //                  every second (assuming TimerEventMgr is precisely 1ms)
 
+// Runtime sizes in bytes (Release)
+//
+//      Code   Data     BSS
+//      ----   ----     ---
+//       390    12       8
+//      1116    12      30
+//       946    12      29
+//      1240    18      39
+
 #define WAIT_LOOP
 //#define TIMER_EVENT
 //#define DEDICATED_RTC
@@ -44,17 +53,18 @@ public:
     
     // EventListener override
     virtual void handleEvent(EventType type, EventParam);
-    
+
     BlinkErrorReporter<Port<LEDPort>, LEDBit, false> m_errorReporter;
+
 #if defined(WAIT_LOOP)
 #elif defined(TIMER_EVENT)
     TimerEventMgr<Timer0, TimerClockDIV64> m_timerEventMgr;
-    RepeatingTimerEvent _timerEvent;
+    RepeatingTimerEvent<1000> _timerEvent;
 #elif defined(DEDICATED_RTC)
-    DedicatedRTC<Timer0> m_clock;
+    DedicatedRTC<Timer0, TimerClockDIV64, 249, 1000> m_clock; // 1s timer
 #elif defined(SHARED_RTC)
     TimerEventMgr<Timer0, TimerClockDIV64> m_timerEventMgr;
-    SharedRTC m_clock;
+    SharedRTC<> m_clock;
 #endif
     OutputBit<LEDPort, LEDBit> m_LEDPort;
 };
@@ -62,14 +72,6 @@ public:
 MyApp g_app;
 
 MyApp::MyApp()
-#if defined(WAIT_LOOP)
-#elif defined(TIMER_EVENT)
-    : _timerEvent(1000)
-#elif defined(DEDICATED_RTC)
-    : m_clock(TimerClockDIV64, 249, 1000) // 1s timer
-#elif defined(SHARED_RTC)
-#endif
-
 {
     sei();
 #if defined(WAIT_LOOP)

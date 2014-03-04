@@ -71,8 +71,6 @@ template <class Port, uint8_t Bit, uint8_t debounceTimerCount = 10, uint8_t numD
 class Button : public ButtonBase, public EventListener {
 public:
 	Button()
-        : ButtonBase()
-        , m_event(debounceTimerCount)
     {
         m_port.setBitInput(Bit);
         m_port.setPortBit(Bit);
@@ -91,7 +89,7 @@ public:
     
 private:
     Port m_port;
-    OneShotTimerEvent m_event;
+    OneShotTimerEvent<debounceTimerCount> m_event;
 };
 
 }
