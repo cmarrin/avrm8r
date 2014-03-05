@@ -44,6 +44,7 @@ DAMAGE.
 
 #include <stdint.h>
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 
 #define _INLINE_ __attribute__ ((always_inline)) 
 #define _NO_INLINE_ __attribute__ ((noinline))
@@ -60,19 +61,24 @@ enum ErrorType {
     AssertDeleteNotSupported = 0x03,
     AssertSingleApp = 0x04,
     AssertNoApp = 0x05,
+    
     AssertSingleADC = 0x10,
+    
     AssertSingleTimer0 = 0x20,
     AssertSingleTimer1 = 0x21,
     AssertSingleTimer2 = 0x22,
     AssertSingleTimerEventMgr = 0x23,
     AssertNoTimerEventMgr = 0x24,
     AssertNoEventTimers = 0x25,
+    
     AssertEthernetBadLength = 0x30,
     AssertEthernetNotInHandler = 0x31,
     AssertEthernetCannotSendData = 0x32,
     AssertEthernetNotWaitingToSendData = 0x33,
     AssertEthernetTransmitError = 0x34,
     AssertEthernetReceiveError = 0x35,
+    
+    AssertSingleUSART0 = 0x40,
     ErrorUser = 0x80,
 };
 
@@ -177,6 +183,21 @@ enum Ports {
 #ifdef ASSR
         _ASSR = 0xB6,
 #endif
+#ifdef UCSR0A
+        _UCSR0A = 0xC0,
+#endif
+#ifdef UCSR0B
+        _UCSR0B = 0xC1,
+#endif
+#ifdef UCSR0C
+        _UCSR0C = 0xC2,
+#endif
+#ifdef UBRR0
+        _UBRR0 = 0xC4,
+#endif
+#ifdef UDR0
+        _UDR0 = 0xC6,
+#endif
         _NOREG
     };
 
@@ -233,6 +254,9 @@ public:
 template <uint8_t reg>
 class Reg8 {
 public:
+    Reg8& operator=(uint8_t v) _INLINE_ { REG8(reg) = v; return *this; }
+    operator uint8_t() _INLINE_ { return REG8(reg); }
+        
     uint8_t get() const _INLINE_ { return REG8(reg); }
     void set(uint8_t v) _INLINE_ { REG8(reg) = v; }
     void setBit(uint8_t i, bool b) _INLINE_
@@ -262,6 +286,9 @@ public:
 template <uint8_t reg>
 class Reg16 {
 public:
+    Reg16& operator=(uint16_t v) _INLINE_ { REG16(reg) = v; return *this; }
+    operator uint16_t() _INLINE_ { return REG16(reg); }
+        
     uint16_t get() const _INLINE_ { return REG16(reg); }
     void set(uint16_t v) _INLINE_ { REG16(reg) = v; }
     volatile uint8_t& getAddress() _INLINE_ { return REG16(reg); }
@@ -278,6 +305,16 @@ inline uint16_t makeUInt(uint8_t c1, uint8_t c2)
     u.a[1] = c1;
     return u.uint;
 }
+
+class _FlashString
+{
+public:
+    _FlashString(const char* s) : _s(s) { }
+    const char* _s;
+};
+
+#define F(str) (_FlashString(PSTR(str)))
+
 #endif
 
 #ifdef DEBUG

@@ -135,7 +135,7 @@ private:
 class ErrorReporter {
 public:
 #ifdef DEBUG
-    ErrorReporter() { System::setErrorReporter(this);
+    ErrorReporter() { System::setErrorReporter(this); }
     virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
 #else
     void reportError(char, uint16_t, ErrorConditionType) { }
