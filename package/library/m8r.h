@@ -232,22 +232,25 @@ public:
 };
 
 // Template for 1 bit output port value
-template <uint8_t p, uint8_t bit>
-class OutputBit : Port<p> {
+template <class P, uint8_t bit>
+class OutputBit {
 public:
-    OutputBit() _INLINE_ { Port<p>::setBitOutput(bit); }
+    OutputBit() _INLINE_ { _port.setBitOutput(bit); }
     
-    OutputBit& operator=(bool b) _INLINE_ { if (b) Port<p>::setPortBit(bit); else Port<p>::clearPortBit(bit); return *this; }
-    operator bool() _INLINE_ { return Port<p>::isPortBit(bit); }
+    OutputBit& operator=(bool b) _INLINE_ { if (b) _port.setPortBit(bit); else _port.clearPortBit(bit); return *this; }
+    operator bool() _INLINE_ { return _port.isPortBit(bit); }
+
+private:
+    P _port;
 };
     
 // Template for 1 bit input port value
-template <uint8_t p, uint8_t bit>
-class InputBit : Port<p> {
+template <class port, uint8_t bit>
+class InputBit {
 public:
-    InputBit() _INLINE_ { Port<p>::setBitInput<p>(bit); }
+    InputBit() _INLINE_ { port::setBitInput(bit); }
     
-    operator bool() _INLINE_ { return Port<p>::isPinBit<p>(bit); }
+    operator bool() _INLINE_ { return port::isPinBit(bit); }
 };
     
 // Template for 8 bit registers
@@ -255,32 +258,19 @@ template <uint8_t reg>
 class Reg8 {
 public:
     Reg8& operator=(uint8_t v) _INLINE_ { REG8(reg) = v; return *this; }
+    Reg8& operator|=(uint8_t v) _INLINE_ { REG8(reg) |= v; return *this; }
+    Reg8& operator&=(uint8_t v) _INLINE_ { REG8(reg) &= v; return *this; }
     operator uint8_t() _INLINE_ { return REG8(reg); }
         
-    uint8_t get() const _INLINE_ { return REG8(reg); }
-    void set(uint8_t v) _INLINE_ { REG8(reg) = v; }
-    void setBit(uint8_t i, bool b) _INLINE_
-    {
-        if (b)
-            setBit(i);
-        else
-            clearBit(i);
-    }
-    void setBit(uint8_t i) _INLINE_ { REG8(reg) |= _BV(i); }
-    void clearBit(uint8_t i) _INLINE_ { REG8(reg) &= ~_BV(i); }
-    bool isBitSet(uint8_t i) const _INLINE_ { return (REG8(reg) & _BV(i)) != 0; }
     void setBitMask(uint8_t m, bool b) _INLINE_
     {
         if (b)
-            setBitMask(m);
+            REG8(reg) |= m;
         else
-            clearBitMask(m);
+            REG8(reg) &= ~m;
     }
-    void setBitMask(uint8_t m) _INLINE_ { REG8(reg) |= m; }
-    void clearBitMask(uint8_t m) _INLINE_ { REG8(reg) &= ~m; }
     bool isBitMaskSet(uint8_t m) const _INLINE_ { return (REG8(reg) & m) != 0; }
     void setMaskedBits(uint8_t v, uint8_t m) _INLINE_ { REG8(reg) &= ~m; REG8(reg) |= v & m; }
-    volatile uint8_t& getAddress() _INLINE_ { return REG8(reg); }
 };
 
 template <uint8_t reg>
@@ -288,10 +278,6 @@ class Reg16 {
 public:
     Reg16& operator=(uint16_t v) _INLINE_ { REG16(reg) = v; return *this; }
     operator uint16_t() _INLINE_ { return REG16(reg); }
-        
-    uint16_t get() const _INLINE_ { return REG16(reg); }
-    void set(uint16_t v) _INLINE_ { REG16(reg) = v; }
-    volatile uint8_t& getAddress() _INLINE_ { return REG16(reg); }
 };
 
 inline uint16_t makeUInt(uint8_t c1, uint8_t c2)

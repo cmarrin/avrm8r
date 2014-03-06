@@ -86,7 +86,7 @@ public:
 
     void setPrescaleReset(bool e) { m_genTCCtrlPort.setBitMask(TimerPrescalerReset, e); }
     
-    void setInputCap(uint16_t v) { m_inputCapPort.set(v); }
+    void setInputCap(uint16_t v) { m_inputCapPort = v; }
 
     static EventCallback m_isrCallback;
     static EventParam m_param;

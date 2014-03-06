@@ -57,7 +57,6 @@ static inline uint16_t longCountFromMS(uint16_t ms) { return (uint16_t)((longDel
 
 // Event management
 typedef void* EventParam;
-inline uint16_t MakeUint16(EventParam param) { return (uint16_t) (uint32_t) param; }
         
 typedef void (*EventCallback)(EventType, EventParam);
 

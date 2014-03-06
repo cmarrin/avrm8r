@@ -14,7 +14,7 @@ namespace m8r {
     class Serial
     {
     public:
-        Serial& operator<<(int8_t v) _INLINE_ { write(v, true); return *this; }
+        Serial& operator<<(char v) _INLINE_ { _usart.write(v); return *this; }
         Serial& operator<<(uint8_t v) _INLINE_ { write(v, false); return *this; }
         Serial& operator<<(int16_t v) _INLINE_ { write(v, true); return *this; }
         Serial& operator<<(uint16_t v) _INLINE_ { write(v, false); return *this; }
@@ -23,10 +23,16 @@ namespace m8r {
         Serial& operator<<(const char* s) _INLINE_ { write(s); return *this; }
         Serial& operator<<(const _FlashString s) _INLINE_ { write(s); return *this; }
         
-    private:
-        void write(int32_t v, bool isSigned)
+        char get()
         {
-            if (isSigned && v < 0) {
+            return _usart.read();
+        }
+        bool bytesAvailable() const { return _usart.bytesAvailable(); }
+        
+    private:
+        void write(uint32_t v, bool isSigned)
+        {
+            if (isSigned && ((int32_t) v < 0)) {
                 _usart.write('-');
                 v = -v;
             }

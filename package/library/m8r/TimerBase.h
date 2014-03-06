@@ -240,7 +240,7 @@ public:
     {
     }
     
-    void setOutputCompareA(CountSize v) { m_compareAPort.set(v); }
+    void setOutputCompareA(CountSize v) { m_compareAPort = v; }
     CountSize outputCompareA() const { return m_compareAPort.get(); }
     
     void setOutputCompareB(CountSize v) { m_compareBPort.set(v); }

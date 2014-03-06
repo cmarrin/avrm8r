@@ -69,7 +69,7 @@ public:
     TimerEventMgr<Timer0, TimerClockDIV64> m_timerEventMgr;
     SharedRTC<> m_clock;
 #endif
-    OutputBit<LEDPort, LEDBit> m_LEDPort;
+    OutputBit<Port<LEDPort>, LEDBit> m_LEDPort;
 };
 
 MyApp g_app;
