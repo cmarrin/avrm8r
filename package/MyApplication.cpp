@@ -38,9 +38,9 @@
 //      1240    18      39
 
 //#define WAIT_LOOP
-//#define TIMER_EVENT
+#define TIMER_EVENT
 //#define DEDICATED_RTC
-#define SHARED_RTC
+//#define SHARED_RTC
 
 using namespace m8r;
 
@@ -84,7 +84,7 @@ MyApp::MyApp()
 #elif defined(SHARED_RTC)
 #endif
 
-    uint8_t n = 37;
+    uint8_t n = 36;
     _serial << F("The number ") << n << F(" is the answer\n");
 }
 
@@ -94,9 +94,9 @@ MyApp::handleEvent(EventType type, EventParam param)
     switch(type)
     {
         case EV_IDLE:
-//            if (_serial.bytesAvailable()) {
-//                _serial.write(_serial.read());
-//            }
+            if (_serial.bytesAvailable()) {
+                _serial << _serial.get();
+            }
 #if defined(WAIT_LOOP)
             System::msDelay<1000>();
             m_LEDPort = !m_LEDPort;
