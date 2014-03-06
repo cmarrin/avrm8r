@@ -73,7 +73,7 @@ public:
         return b;
     }
     
-    uint8_t bytesAvailable() { return (RX_BUFFER_SIZE + _rxBufferHead - _rxBufferTail) % RX_BUFFER_SIZE; }
+    uint8_t bytesAvailable() const { return (RX_BUFFER_SIZE + _rxBufferHead - _rxBufferTail) % RX_BUFFER_SIZE; }
 
 private:
     UDRPort _UDRPort;
