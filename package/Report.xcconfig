@@ -6,6 +6,7 @@
 //
 //
 
+#include "Device.xcconfig"
 #include "Shared.xcconfig"
 
 CDEFS = -DDEBUG -O$(OPT)

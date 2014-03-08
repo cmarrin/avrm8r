@@ -37,8 +37,8 @@
 //       946    12      29
 //      1240    18      39
 
-//#define WAIT_LOOP
-#define TIMER_EVENT
+#define WAIT_LOOP
+//#define TIMER_EVENT
 //#define DEDICATED_RTC
 //#define SHARED_RTC
 

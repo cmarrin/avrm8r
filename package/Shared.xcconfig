@@ -1,22 +1,28 @@
 //
-//  Config.xcconfig
+//  Shared.xcconfig
 //  libm8r
 //
 //  Created by Chris Marrin on 2/27/14.
 //
 //
 
-FREQUENCY = 16000000
-MCU = atmega328p
-AVRDUDE_DEVICE = DRAGON
-
+// Look up the Arduino serial port in /dev. It should be tty.usbserial-xxx.
 AVRDUDE_PORT_DRAGON = usb
 AVRDUDE_PORT_STK500 = /dev/cu.usbserial
+AVRDUDE_PORT_ARDUINO = /dev/tty.usbserial-AD02CUJ5
+
 AVRDUDE_PROGRAMMER_DRAGON = dragon_isp
 AVRDUDE_PROGRAMMER_STK500 = stk500v1
+AVRDUDE_PROGRAMMER_ARDUINO = arduino
+
+// Dragon uses usb directly, so doesn't need a baud rate, not sure about STK500
+AVRDUDE_BAUD_RATE_DRAGON = 0
+AVRDUDE_BAUD_RATE_STK500 = 0
+AVRDUDE_BAUD_RATE_ARDUINO = 115200
 
 AVRDUDE_PORT = $(AVRDUDE_PORT_$AVRDUDE_DEVICE)
 AVRDUDE_PROGRAMMER = $(AVRDUDE_PROGRAMMER_$AVRDUDE_DEVICE)
+AVRDUDE_BAUD_RATE = $(AVRDUDE_BAUD_RATE_$AVRDUDE_DEVICE)
 
 CFLAGS = -Wa,-alh -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffreestanding -mcall-prologues -Wall
 M8R_SRC_DIR = $(PROJECT_DIR)/library
