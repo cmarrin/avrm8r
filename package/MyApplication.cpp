@@ -8,7 +8,7 @@
 #include "System.h"
 #include "EventListener.h"
 #include "RTC.h"
-#include "Serial.h"
+#include "Console.h"
 #include "Timer0.h"
 #include "TimerEventMgr.h"
 #include "USART.h"
@@ -42,6 +42,8 @@
 //#define DEDICATED_RTC
 //#define SHARED_RTC
 
+//#define SHOW_CONSOLE
+
 using namespace m8r;
 
 #define LEDPort B
@@ -57,7 +59,9 @@ public:
     virtual void handleEvent(EventType type, EventParam);
     
     BlinkErrorReporter<Port<LEDPort>, LEDBit, false> m_errorReporter;
-    Serial<USART0<19200> > _serial;
+#ifdef SHOW_CONSOLE
+    Console<USART0<19200> > _console;
+#endif
 
 #if defined(WAIT_LOOP)
 #elif defined(TIMER_EVENT)
@@ -84,8 +88,10 @@ MyApp::MyApp()
 #elif defined(SHARED_RTC)
 #endif
 
+#ifdef SHOW_CONSOLE
     uint8_t n = 36;
-    _serial << F("The number ") << n << F(" is the answer\n");
+    _console << FS("The number ") << n << FS(" is the answer\n");
+#endif
 }
 
 void
@@ -94,9 +100,11 @@ MyApp::handleEvent(EventType type, EventParam param)
     switch(type)
     {
         case EV_IDLE:
-            if (_serial.bytesAvailable()) {
-                _serial << _serial.get();
+#ifdef SHOW_CONSOLE
+            if (_console.bytesAvailable()) {
+                _console << _console.get();
             }
+#endif
 #if defined(WAIT_LOOP)
             System::msDelay<1000>();
             m_LEDPort = !m_LEDPort;

@@ -9,4 +9,4 @@
 // These are the values you are likely to have to change for your project
 FREQUENCY = 16000000
 MCU = atmega328p
-AVRDUDE_DEVICE = ARDUINO
+AVRDUDE_DEVICE = DRAGON

@@ -1,5 +1,5 @@
 //
-//  Serial.h
+//  Console.h
 //  marrinator
 //
 //  Created by Chris Marrin on 3/4/14.
@@ -11,17 +11,17 @@
 namespace m8r {
 
     template<class USART>
-    class Serial
+    class Console
     {
     public:
-        Serial& operator<<(char v) _INLINE_ { _usart.write(v); return *this; }
-        Serial& operator<<(uint8_t v) _INLINE_ { write(v, false); return *this; }
-        Serial& operator<<(int16_t v) _INLINE_ { write(v, true); return *this; }
-        Serial& operator<<(uint16_t v) _INLINE_ { write(v, false); return *this; }
-        Serial& operator<<(int32_t v) _INLINE_ { write(v, true); return *this; }
-        Serial& operator<<(uint32_t v) _INLINE_ { write(v, false); return *this; }
-        Serial& operator<<(const char* s) _INLINE_ { write(s); return *this; }
-        Serial& operator<<(const _FlashString s) _INLINE_ { write(s); return *this; }
+        Console& operator<<(char v) _INLINE_ { _usart.write(v); return *this; }
+        Console& operator<<(uint8_t v) _INLINE_ { write(v, false); return *this; }
+        Console& operator<<(int16_t v) _INLINE_ { write(v, true); return *this; }
+        Console& operator<<(uint16_t v) _INLINE_ { write(v, false); return *this; }
+        Console& operator<<(int32_t v) _INLINE_ { write(v, true); return *this; }
+        Console& operator<<(uint32_t v) _INLINE_ { write(v, false); return *this; }
+        Console& operator<<(const char* s) _INLINE_ { write(s); return *this; }
+        Console& operator<<(const _FlashString s) _INLINE_ { write(s); return *this; }
         
         char get()
         {
