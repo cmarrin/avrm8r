@@ -210,7 +210,8 @@ enum Ports {
 
 // Template for Port classes
 template <uint8_t p>
-class Port {
+class Port
+{
 public:
     uint8_t getDDR() const _INLINE_ { return DDR(p); }
     void setDDR(uint8_t v) _INLINE_ { DDR(p) = v; }
@@ -231,9 +232,32 @@ public:
     volatile uint8_t& getPinAddress() _INLINE_ { return PIN(p); }
 };
 
+class NullPort : Port<0>
+{
+public:
+    uint8_t getDDR() const _INLINE_ { return 0; }
+    void setDDR(uint8_t v) _INLINE_ { }
+    void setBitOutput(uint8_t i) _INLINE_ { }
+    void setBitInput(uint8_t i) _INLINE_ { }
+    bool isBitOutput(uint8_t i) const _INLINE_ { return 0; }
+    uint8_t getDDRAddress() _INLINE_ { return 0; }
+    
+    uint8_t port() const _INLINE_ { return 0; }
+    void setPort(uint8_t v) _INLINE_ { }
+    bool isPortBit(uint8_t i) const _INLINE_ { return false; }
+    void setPortBit(uint8_t i) _INLINE_ { }
+    void clearPortBit(uint8_t i) _INLINE_ { }
+    uint8_t getPortAddress() _INLINE_ { return 0; }
+
+    uint8_t pin() const _INLINE_ { return 0; }
+    bool isPinBit(uint8_t i) const _INLINE_ { return false; }
+    uint8_t getPinAddress() _INLINE_ { return 0; }
+};
+
 // Template for 1 bit output port value
 template <class P, uint8_t bit>
-class OutputBit {
+class OutputBit
+{
 public:
     OutputBit() _INLINE_ { _port.setBitOutput(bit); }
     
@@ -244,18 +268,37 @@ private:
     P _port;
 };
     
+class NullOutputBit
+{
+public:
+    NullOutputBit() _INLINE_ { }
+    
+    NullOutputBit& operator=(bool b) _INLINE_ { return *this; }
+    operator bool() _INLINE_ { return false; }
+};
+    
 // Template for 1 bit input port value
 template <class port, uint8_t bit>
-class InputBit {
+class InputBit
+{
 public:
     InputBit() _INLINE_ { port::setBitInput(bit); }
     
     operator bool() _INLINE_ { return port::isPinBit(bit); }
 };
     
+class NullInputBit
+{
+public:
+    NullInputBit() _INLINE_ {  }
+    
+    operator bool() _INLINE_ { return false; }
+};
+    
 // Template for 8 bit registers
 template <uint8_t reg>
-class Reg8 {
+class Reg8
+{
 public:
     Reg8& operator=(uint8_t v) _INLINE_ { REG8(reg) = v; return *this; }
     Reg8& operator|=(uint8_t v) _INLINE_ { REG8(reg) |= v; return *this; }
@@ -273,11 +316,32 @@ public:
     void setMaskedBits(uint8_t v, uint8_t m) _INLINE_ { REG8(reg) &= ~m; REG8(reg) |= v & m; }
 };
 
+class NullReg8 : Reg8<0>
+{
+public:
+    Reg8& operator=(uint8_t) _INLINE_ { return *this; }
+    Reg8& operator|=(uint8_t) _INLINE_ { return *this; }
+    Reg8& operator&=(uint8_t) _INLINE_ { return *this; }
+    operator uint8_t() _INLINE_ { return 0; }
+        
+    void setBitMask(uint8_t m, bool b) _INLINE_ { }
+    bool isBitMaskSet(uint8_t m) const _INLINE_ { return false; }
+    void setMaskedBits(uint8_t v, uint8_t m) _INLINE_ { }
+};
+
 template <uint8_t reg>
-class Reg16 {
+class Reg16
+{
 public:
     Reg16& operator=(uint16_t v) _INLINE_ { REG16(reg) = v; return *this; }
     operator uint16_t() _INLINE_ { return REG16(reg); }
+};
+
+class NullReg16 : Reg16<0>
+{
+public:
+    Reg16& operator=(uint16_t v) _INLINE_ { return *this; }
+    operator uint16_t() _INLINE_ { return 0; }
 };
 
 inline uint16_t makeUInt(uint8_t c1, uint8_t c2)
@@ -299,7 +363,7 @@ public:
     const char* _s;
 };
 
-#define F(str) (_FlashString(PSTR(str)))
+#define FS(str) (_FlashString(PSTR(str)))
 
 #endif
 

@@ -24,12 +24,38 @@ AVRDUDE_PORT = $(AVRDUDE_PORT_$AVRDUDE_DEVICE)
 AVRDUDE_PROGRAMMER = $(AVRDUDE_PROGRAMMER_$AVRDUDE_DEVICE)
 AVRDUDE_BAUD_RATE = $(AVRDUDE_BAUD_RATE_$AVRDUDE_DEVICE)
 
-CFLAGS = -Wa,-alh -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffreestanding -mcall-prologues -Wall
+GCC_FLAGS = -Wa,-alh -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffreestanding -mcall-prologues -Wall
+AVR_FLAGS = -DF_CPU=$FREQUENCY -DMCU=$MCU -mmcu=$MCU 
+LINK_FLAGS = -Wa,-adhlns=$SHARED_DERIVED_FILE_DIR/$INPUT_FILE_BASE.lst,-gstabs 
+
 M8R_SRC_DIR = $(PROJECT_DIR)/library
 M8R_HDR_DIR = $(M8R_SRC_DIR)/m8r
 TOOLS_DIR = /usr/local/CrossPack-AVR
 TUXGRAPHICS_DIR = $(M8R_SRC_DIR)/eth_tcp_client_server-dhcp-5.1
-CINCLUDE = -I. -I$M8R_SRC_DIR -I$M8R_HDR_DIR -I$TUXGRAPHICS_DIR
+
+// This determines which Arduino board pinouts you are using. Possible values are:
+//
+//  standard
+//  mega
+//  micro
+//  leonardo
+//  ethernet
+//  eightanaloginputs
+//  robot_control
+//  robot_motor
+ARDUINO_VARIANT = standard
+
+ARDUINO = 100
+ARDUINO_FLAGS = -DARDUINO=$ARDUINO -fno-strict-aliasing
+ARDUINO_DIR = $M8R_SRC_DIR/arduino
+ARDUINO_CORE_DIR = $ARDUINO_DIR/hardware/arduino/cores/arduino
+ARDUINO_LIB_DIR = $ARDUINO_DIR/libraries
+ARDUINO_VAR_DIR = $ARDUINO_DIR/hardware/arduino/variants/$ARDUINO_VARIANT
+ARDUINO_LIB_INCLUDES = -I$ARDUINO_LIB_DIR/Wire/utility
+ARDUINO_INCLUDES = -include Arduino.h -I$ARDUINO_CORE_DIR -I$ARDUINO_LIB_DIR -I$ARDUINO_VAR_DIR $ARDUINO_LIB_INCLUDES
+
+CINCLUDE = -I. -I$M8R_SRC_DIR -I$M8R_HDR_DIR -I$TUXGRAPHICS_DIR $ARDUINO_INCLUDES
+CFLAGS = $GCC_FLAGS $AVR_FLAGS $ARDUINO_FLAGS $LINK_FLAGS
 
 // Optimization level, can be [0, 1, 2, 3, s]. 
 //     0 = turn off optimization. s = optimize for size.
