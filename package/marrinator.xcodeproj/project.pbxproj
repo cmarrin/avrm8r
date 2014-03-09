@@ -423,6 +423,7 @@
 		49CDD51018CB9DCD0040EE8D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		49CDD51218CB9DCD0040EE8D /* Bootloader.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Bootloader.1; sourceTree = "<group>"; };
 		49CDD51B18CBA91E0040EE8D /* Device.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Device.xcconfig; sourceTree = "<group>"; };
+		49CDD55718CBF8BC0040EE8D /* TextLCD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextLCD.h; path = library/m8r/TextLCD.h; sourceTree = "<group>"; };
 		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Animator.cpp; path = library/Animator.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -489,6 +490,7 @@
 				498311E518C2839F00751432 /* SPI.h */,
 				498311D918C2839F00751432 /* System.h */,
 				498311E618C2839F00751432 /* TCPSocket.h */,
+				49CDD55718CBF8BC0040EE8D /* TextLCD.h */,
 				498311E718C2839F00751432 /* Timer0.h */,
 				498311E818C2839F00751432 /* Timer1.h */,
 				498311E918C2839F00751432 /* Timer2.h */,
