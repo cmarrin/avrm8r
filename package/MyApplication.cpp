@@ -8,7 +8,7 @@
 #include "System.h"
 #include "EventListener.h"
 #include "RTC.h"
-#include "Console.h"
+#include "DeviceStream.h"
 #include "Timer0.h"
 #include "TimerEventMgr.h"
 #include "USART.h"
@@ -37,12 +37,12 @@
 //       946    12      29
 //      1240    18      39
 
-#define WAIT_LOOP
-//#define TIMER_EVENT
+//#define WAIT_LOOP
+#define TIMER_EVENT
 //#define DEDICATED_RTC
 //#define SHARED_RTC
 
-//#define SHOW_CONSOLE
+#define SHOW_CONSOLE
 
 using namespace m8r;
 
@@ -60,7 +60,7 @@ public:
     
     BlinkErrorReporter<Port<LEDPort>, LEDBit, false> m_errorReporter;
 #ifdef SHOW_CONSOLE
-    Console<USART0<19200> > _console;
+    DeviceStream<USART0<19200> > _console;
 #endif
 
 #if defined(WAIT_LOOP)

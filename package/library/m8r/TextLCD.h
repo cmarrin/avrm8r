@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "m8r.h"
 #include "System.h"
 
 #define LCD_CLEARDISPLAY 0x01
@@ -46,6 +47,7 @@
 #define LCD_1LINE 0x00
 #define LCD_5x10DOTS 0x04
 #define LCD_5x8DOTS 0x00
+#define LCD_DEFAULT 0x00    // Use this to for default DOTS
 
 namespace m8r {
 
@@ -70,7 +72,7 @@ protected:
     uint8_t _numlines, _currline;
 };
 
-template <bool fourBit, class RSPin, class RWPin, class EnablePin,
+template <uint8_t cols, uint8_t lines, uint8_t dotsize, class RSPin, class RWPin, class EnablePin,
             class D0Pin, class D1Pin, class D2Pin, class D3Pin, 
             class D4Pin, class D5Pin, class D6Pin, class D7Pin>
 class TextLCDCommon : TextLCDBase
@@ -78,15 +80,11 @@ class TextLCDCommon : TextLCDBase
 public:
     TextLCDCommon()
     {
-        if (fourBit)
+        if (_d4Pin.isNull())
             _displayFunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
         else 
             _displayFunction = LCD_8BITMODE | LCD_1LINE | LCD_5x8DOTS;
-  
-        begin(16, 1);  
-    }
 
-    void begin(uint8_t cols, uint8_t lines, uint8_t dotsize = LCD_5x8DOTS) {
         if (lines > 1) {
             _displayFunction |= LCD_2LINE;
         }
@@ -96,71 +94,76 @@ public:
         // for some 1 line displays you can select a 10 pixel high font
         if ((dotsize != 0) && (lines == 1)) {
             _displayFunction |= LCD_5x10DOTS;
+        }
+
+        // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
+        // according to datasheet, we need at least 40ms after power rises above 2.7V
+        // before sending commands.
+        System::msDelay<50>();
+        
+        // Now we pull both RS and R/W low to begin commands
+        _rsPin = false;
+        _enablePin = false;
+        if(!_rwPin) { 
+            _rwPin = false;
+        }
+      
+        //put the LCD into 4 bit or 8 bit mode
+        if (!(_displayFunction & LCD_8BITMODE)) {
+            // this is according to the hitachi HD44780 datasheet
+            // figure 24, pg 46
+
+            // we start in 8bit mode, try to set 4 bit mode
+            write4bits(0x03);
+            System::usDelay<4500>(); // wait min 4.1ms
+
+            // second try
+            write4bits(0x03);
+            System::usDelay<4500>(); // wait min 4.1ms
+
+            // third go!
+            write4bits(0x03); 
+            System::usDelay<150>();
+
+            // finally, set to 4-bit interface
+            write4bits(0x02); 
+        } else {
+            // this is according to the hitachi HD44780 datasheet
+            // page 45 figure 23
+
+            // Send function set command sequence
+            command(LCD_FUNCTIONSET | _displayFunction);
+            System::usDelay<4500>(); // wait min 4.1ms
+
+            // second try
+            command(LCD_FUNCTIONSET | _displayFunction);
+            System::usDelay<150>();
+
+            // third go
+            command(LCD_FUNCTIONSET | _displayFunction);
+        }
+
+        // finally, set # lines, font size, etc.
+        command(LCD_FUNCTIONSET | _displayFunction);  
+
+        // turn the display on with no cursor or blinking default
+        _displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;  
+        setDisplay(true);
+
+        // clear it off
+        clear();
+
+        // Initialize to default text direction (for romance languages)
+        _displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
+
+        // set the entry mode
+        command(LCD_ENTRYMODESET | _displayMode);
     }
 
-    // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-    // according to datasheet, we need at least 40ms after power rises above 2.7V
-    // before sending commands.
-    System::msDelay<50>();
-    
-    // Now we pull both RS and R/W low to begin commands
-    _rsPin = false;
-    _enablePin = false;
-    if(!_rwPin) { 
-        _rwPin = false;
-    }
-  
-    //put the LCD into 4 bit or 8 bit mode
-    if (!(_displayFunction & LCD_8BITMODE)) {
-        // this is according to the hitachi HD44780 datasheet
-        // figure 24, pg 46
-
-        // we start in 8bit mode, try to set 4 bit mode
-        write4bits(0x03);
-        System::usDelay<4500>(); // wait min 4.1ms
-
-        // second try
-        write4bits(0x03);
-        System::usDelay<4500>(); // wait min 4.1ms
-
-        // third go!
-        write4bits(0x03); 
-        System::usDelay<150>();
-
-        // finally, set to 4-bit interface
-        write4bits(0x02); 
-    } else {
-        // this is according to the hitachi HD44780 datasheet
-        // page 45 figure 23
-
-        // Send function set command sequence
-        command(LCD_FUNCTIONSET | _displayFunction);
-        System::usDelay<4500>(); // wait min 4.1ms
-
-        // second try
-        command(LCD_FUNCTIONSET | _displayFunction);
-        System::usDelay<150>();
-
-        // third go
-        command(LCD_FUNCTIONSET | _displayFunction);
-    }
-
-    // finally, set # lines, font size, etc.
-    command(LCD_FUNCTIONSET | _displayFunction);  
-
-    // turn the display on with no cursor or blinking default
-    _displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;  
-    setDisplay(true);
-
-    // clear it off
-    clear();
-
-    // Initialize to default text direction (for romance languages)
-    _displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-
-    // set the entry mode
-    command(LCD_ENTRYMODESET | _displayMode);
-}
+    void write(uint8_t value) { send(value, true); }
+    void flush() { }
+    int16_t read() { return -1; }
+    uint8_t bytesAvailable() const { return 0; }
 
     void clear()
     {
@@ -255,7 +258,6 @@ public:
     private:
     inline void command(uint8_t value) { send(value, false); }
 
-    inline size_t write(uint8_t value) { send(value, true); return 1; }
 
     // write either command or data, with automatic 4/8-bit selection
     void send(uint8_t value, bool mode)
@@ -319,10 +321,11 @@ private:
     D7Pin _d7Pin;
 };
 
-template <class RSPin, class RWPin, class EnablePin,
-            class D0Pin, class D1Pin, class D2Pin, class D3Pin, 
-            class D4Pin, class D5Pin, class D6Pin, class D7Pin>
-class TextLCD : public TextLCDCommon<false, RSPin, RWPin, EnablePin, D0Pin, D1Pin, D2Pin, D3Pin, D4Pin, D5Pin, D6Pin, D7Pin>
+template <uint8_t cols, uint8_t lines, uint8_t dotsize, class RSPin, class RWPin, class EnablePin,
+          class D0Pin, class D1Pin, class D2Pin, class D3Pin, 
+          class D4Pin = NullOutputBit, class D5Pin = NullOutputBit, class D6Pin = NullOutputBit, class D7Pin = NullOutputBit>
+class TextLCD : public TextLCDCommon<cols, lines, dotsize, RSPin, RWPin, EnablePin, 
+                                     D0Pin, D1Pin, D2Pin, D3Pin, D4Pin, D5Pin, D6Pin, D7Pin>
 {
 };
 

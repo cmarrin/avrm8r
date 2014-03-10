@@ -275,6 +275,8 @@ public:
     
     NullOutputBit& operator=(bool b) _INLINE_ { return *this; }
     operator bool() _INLINE_ { return false; }
+    
+    bool isNull() const { return true; }
 };
     
 // Template for 1 bit input port value

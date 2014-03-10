@@ -497,7 +497,6 @@
 		49CDD4F818C6241F0040EE8D /* program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = program; sourceTree = BUILT_PRODUCTS_DIR; };
 		49CDD4F918C6244D0040EE8D /* USART.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = USART.h; path = library/m8r/USART.h; sourceTree = "<group>"; };
 		49CDD4FA18C6D5E70040EE8D /* USART.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = USART.cpp; path = library/USART.cpp; sourceTree = "<group>"; };
-		49CDD4FD18C6F20D0040EE8D /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Console.h; path = library/m8r/Console.h; sourceTree = "<group>"; };
 		49CDD50E18CB9DCD0040EE8D /* Bootloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bootloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		49CDD51018CB9DCD0040EE8D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		49CDD51218CB9DCD0040EE8D /* Bootloader.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Bootloader.1; sourceTree = "<group>"; };
@@ -772,7 +771,6 @@
 				498311D818C2839F00751432 /* Animator.h */,
 				498311DA18C2839F00751432 /* BlinkErrorReporter.h */,
 				498311DB18C2839F00751432 /* Button.h */,
-				49CDD4FD18C6F20D0040EE8D /* Console.h */,
 				498311DC18C2839F00751432 /* EventListener.h */,
 				498311DD18C2839F00751432 /* EventSourceEnums.h */,
 				498311DE18C2839F00751432 /* MAX6969.h */,
