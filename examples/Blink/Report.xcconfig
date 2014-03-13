@@ -1,0 +1,12 @@
+//
+//  Report.xcconfig
+//  libm8r
+//
+//  Created by Chris Marrin on 2/27/14.
+//
+//
+
+#include "Device.xcconfig"
+#include "Shared.xcconfig"
+
+CDEFS = -DDEBUG -O$(OPT)

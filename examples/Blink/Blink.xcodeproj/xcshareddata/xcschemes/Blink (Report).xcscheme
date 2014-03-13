@@ -14,10 +14,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "498311C918C267BC00751432"
-               BuildableName = "program"
-               BlueprintName = "program"
-               ReferencedContainer = "container:marrinator.xcodeproj">
+               BlueprintIdentifier = "49AEC36A18CF4DCC00C010A1"
+               BuildableName = "Blink"
+               BlueprintName = "Blink"
+               ReferencedContainer = "container:Blink.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
+               BuildableName = "libm8r"
+               BlueprintName = "libm8r"
+               ReferencedContainer = "container:../../../../../../Library/Marrinator/marrinator.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -26,16 +40,16 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      buildConfiguration = "Report">
       <Testables>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
-            ReferencedContainer = "container:marrinator.xcodeproj">
+            BlueprintIdentifier = "49AEC36A18CF4DCC00C010A1"
+            BuildableName = "Blink"
+            BlueprintName = "Blink"
+            ReferencedContainer = "container:Blink.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -44,17 +58,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Report"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
-            ReferencedContainer = "container:marrinator.xcodeproj">
+            BlueprintIdentifier = "49AEC36A18CF4DCC00C010A1"
+            BuildableName = "Blink"
+            BlueprintName = "Blink"
+            ReferencedContainer = "container:Blink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -69,15 +83,15 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
-            ReferencedContainer = "container:marrinator.xcodeproj">
+            BlueprintIdentifier = "49AEC36A18CF4DCC00C010A1"
+            BuildableName = "Blink"
+            BlueprintName = "Blink"
+            ReferencedContainer = "container:Blink.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Report">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"

@@ -62,5 +62,5 @@ CFLAGS = $GCC_FLAGS $ARDUINO_FLAGS $LINK_FLAGS
 //     (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
 OPT = s
 
-LDFLAGS = -L$(INSTALL_DIR) -lm8r -Wl,-gc-sections -Wl,--relax -Wl,-Map=$(BUILT_PRODUCTS_DIR)/$(TARGET_NAME).map,--cref -mmcu=`cat /tmp/mcu`
+LDFLAGS = -L$(INSTALL_DIR) -lm8r -Wl,-gc-sections -Wl,--relax -Wl,-Map=$(BUILT_PRODUCTS_DIR)/$(TARGET_NAME).map,--cref
 

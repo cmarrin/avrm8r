@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49AEC38F18D0858F00C010A1 /* Blink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49AEC38E18D0858F00C010A1 /* Blink.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		49AEC37718CF4E3100C010A1 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.c;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).o",
+			);
+			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=`cat /tmp/frequency` -DMCU=`cat /tmp/mcu` -mmcu=`cat /tmp/mcu` $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o\necho $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o >> $DERIVED_FILE_DIR/fileList.txt";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		496121FD18D1F32A001A58D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49AEC36318CF4DCC00C010A1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 49AEC36A18CF4DCC00C010A1;
+			remoteInfo = Blink;
+		};
+		49627D6A18D1F78C00578A8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49627D6218D1F78C00578A8A;
+			remoteInfo = libm8r;
+		};
+		49627D6C18D1F78C00578A8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49627D6318D1F78C00578A8A;
+			remoteInfo = Bootloader;
+		};
+		49627D6E18D1F78C00578A8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 49627D6418D1F78C00578A8A;
+			remoteInfo = install;
+		};
+		49627D7518D1F7AA00578A8A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4994B75C18BDBB6F0001437D;
+			remoteInfo = libm8r;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		496121F418D1F30C001A58D3 /* Program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Program; sourceTree = BUILT_PRODUCTS_DIR; };
+		496121F618D1F30C001A58D3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		496121F818D1F30C001A58D3 /* Program.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Program.1; sourceTree = "<group>"; };
+		49627D6018D1F76E00578A8A /* marrinator.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = marrinator.xcodeproj; path = ../../../../../../Library/Marrinator/marrinator.xcodeproj; sourceTree = "<group>"; };
+		49AEC36B18CF4DCC00C010A1 /* Blink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Blink; sourceTree = BUILT_PRODUCTS_DIR; };
+		49AEC38A18D0843300C010A1 /* Device.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Device.xcconfig; sourceTree = "<group>"; };
+		49AEC38B18D084FD00C010A1 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/Release.xcconfig; sourceTree = "<absolute>"; };
+		49AEC38C18D084FD00C010A1 /* Report.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Report.xcconfig; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/Report.xcconfig; sourceTree = "<absolute>"; };
+		49AEC38D18D084FD00C010A1 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Shared.xcconfig; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/Shared.xcconfig; sourceTree = "<absolute>"; };
+		49AEC38E18D0858F00C010A1 /* Blink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blink.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		496121F518D1F30C001A58D3 /* Program */ = {
+			isa = PBXGroup;
+			children = (
+				496121F618D1F30C001A58D3 /* main.cpp */,
+				496121F818D1F30C001A58D3 /* Program.1 */,
+			);
+			path = Program;
+			sourceTree = "<group>";
+		};
+		49627D6518D1F78C00578A8A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49627D6B18D1F78C00578A8A /* libm8r */,
+				49627D6D18D1F78C00578A8A /* Bootloader */,
+				49627D6F18D1F78C00578A8A /* install */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		49AEC36218CF4DCC00C010A1 = {
+			isa = PBXGroup;
+			children = (
+				49627D6018D1F76E00578A8A /* marrinator.xcodeproj */,
+				49AEC38E18D0858F00C010A1 /* Blink.cpp */,
+				49AEC38918D0840600C010A1 /* Config */,
+				496121F518D1F30C001A58D3 /* Program */,
+				49AEC36C18CF4DCC00C010A1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		49AEC36C18CF4DCC00C010A1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				49AEC36B18CF4DCC00C010A1 /* Blink */,
+				496121F418D1F30C001A58D3 /* Program */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		49AEC38918D0840600C010A1 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				49AEC38B18D084FD00C010A1 /* Release.xcconfig */,
+				49AEC38C18D084FD00C010A1 /* Report.xcconfig */,
+				49AEC38D18D084FD00C010A1 /* Shared.xcconfig */,
+				49AEC38A18D0843300C010A1 /* Device.xcconfig */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		496121F318D1F30C001A58D3 /* Program */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496121FA18D1F30C001A58D3 /* Build configuration list for PBXNativeTarget "Program" */;
+			buildPhases = (
+				496121FF18D1F333001A58D3 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496121FE18D1F32A001A58D3 /* PBXTargetDependency */,
+			);
+			name = Program;
+			productName = Program;
+			productReference = 496121F418D1F30C001A58D3 /* Program */;
+			productType = "com.apple.product-type.tool";
+		};
+		49AEC36A18CF4DCC00C010A1 /* Blink */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 49AEC37418CF4DCC00C010A1 /* Build configuration list for PBXNativeTarget "Blink" */;
+			buildPhases = (
+				49EBBA9118D0F2C2001990AA /* Prepare */,
+				49AEC36718CF4DCC00C010A1 /* Sources */,
+				49B7F24218D0F64300122BB2 /* Link Elf */,
+				496121ED18D1EE4E001A58D3 /* .elf Size */,
+				496121EE18D1EE53001A58D3 /* Generate .hex File */,
+				496121EF18D1EE57001A58D3 /* Generate .lss File */,
+			);
+			buildRules = (
+				49AEC37718CF4E3100C010A1 /* PBXBuildRule */,
+			);
+			dependencies = (
+				49627D7618D1F7AA00578A8A /* PBXTargetDependency */,
+			);
+			name = Blink;
+			productName = Blink;
+			productReference = 49AEC36B18CF4DCC00C010A1 /* Blink */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		49AEC36318CF4DCC00C010A1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Chris Marrin";
+			};
+			buildConfigurationList = 49AEC36618CF4DCC00C010A1 /* Build configuration list for PBXProject "Blink" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 49AEC36218CF4DCC00C010A1;
+			productRefGroup = 49AEC36C18CF4DCC00C010A1 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 49627D6518D1F78C00578A8A /* Products */;
+					ProjectRef = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				49AEC36A18CF4DCC00C010A1 /* Blink */,
+				496121F318D1F30C001A58D3 /* Program */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		49627D6B18D1F78C00578A8A /* libm8r */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = libm8r;
+			remoteRef = 49627D6A18D1F78C00578A8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49627D6D18D1F78C00578A8A /* Bootloader */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = Bootloader;
+			remoteRef = 49627D6C18D1F78C00578A8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		49627D6F18D1F78C00578A8A /* install */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = install;
+			remoteRef = 49627D6E18D1F78C00578A8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		496121ED18D1EE4E001A58D3 /* .elf Size */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = ".elf Size";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/bash $M8R_SRC_DIR/section_sizes ${TOOLS_DIR}/bin/avr-size $DERIVED_FILE_DIR/$PROJECT_NAME.elf";
+		};
+		496121EE18D1EE53001A58D3 /* Generate .hex File */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = "Generate .hex File";
+			outputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-objcopy -O ihex $DERIVED_FILE_DIR/$PROJECT_NAME.elf $BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex ";
+		};
+		496121EF18D1EE57001A58D3 /* Generate .lss File */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			name = "Generate .lss File";
+			outputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.lss,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-objdump -lhS --demangle $DERIVED_FILE_DIR/$PROJECT_NAME.elf > $BUILT_PRODUCTS_DIR/$PROJECT_NAME.lss";
+		};
+		496121FF18D1F333001A58D3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex,
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avrdude -c $AVRDUDE_PROGRAMMER -P $AVRDUDE_PORT -p $MCU -U flash:w:$BUILT_PRODUCTS_DIR/$PROJECT_NAME.hex:i";
+		};
+		49B7F24218D0F64300122BB2 /* Link Elf */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Link Elf";
+			outputPaths = (
+				$DERIVED_FILE_DIR/$PROJECT_NAME.elf,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${TOOLS_DIR}/bin/avr-gcc  -mmcu=`cat /tmp/mcu` `cat ${OBJECT_FILE_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}/Blink.LinkFileList` $LDFLAGS -o $DERIVED_FILE_DIR/$PROJECT_NAME.elf";
+		};
+		49EBBA9118D0F2C2001990AA /* Prepare */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Prepare;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"$MCU\" > /tmp/mcu\necho \"$FREQUENCY\" > /tmp/frequency\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		49AEC36718CF4DCC00C010A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49AEC38F18D0858F00C010A1 /* Blink.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		496121FE18D1F32A001A58D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 49AEC36A18CF4DCC00C010A1 /* Blink */;
+			targetProxy = 496121FD18D1F32A001A58D3 /* PBXContainerItemProxy */;
+		};
+		49627D7618D1F7AA00578A8A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libm8r;
+			targetProxy = 49627D7518D1F7AA00578A8A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		496121FB18D1F30C001A58D3 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Report;
+		};
+		496121FC18D1F30C001A58D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		49AEC37218CF4DCC00C010A1 /* Report */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49AEC38C18D084FD00C010A1 /* Report.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_LDFLAGS = (
+					"-E",
+					"-w",
+				);
+				PRODUCT_NAME = Blink;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Report;
+		};
+		49AEC37318CF4DCC00C010A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49AEC38B18D084FD00C010A1 /* Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				INFOPLIST_EXPAND_BUILD_SETTINGS = NO;
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACOSX_DEPLOYMENT_TARGET = "";
+				OTHER_LDFLAGS = (
+					"-E",
+					"-w",
+				);
+				PRODUCT_NAME = Blink;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		49AEC37518CF4DCC00C010A1 /* Report */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
+			};
+			name = Report;
+		};
+		49AEC37618CF4DCC00C010A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		496121FA18D1F30C001A58D3 /* Build configuration list for PBXNativeTarget "Program" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496121FB18D1F30C001A58D3 /* Report */,
+				496121FC18D1F30C001A58D3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49AEC36618CF4DCC00C010A1 /* Build configuration list for PBXProject "Blink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49AEC37218CF4DCC00C010A1 /* Report */,
+				49AEC37318CF4DCC00C010A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		49AEC37418CF4DCC00C010A1 /* Build configuration list for PBXNativeTarget "Blink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				49AEC37518CF4DCC00C010A1 /* Report */,
+				49AEC37618CF4DCC00C010A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 49AEC36318CF4DCC00C010A1 /* Project object */;
+}

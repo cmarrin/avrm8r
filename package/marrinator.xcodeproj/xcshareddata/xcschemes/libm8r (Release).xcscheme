@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "498311C918C267BC00751432"
-               BuildableName = "program"
-               BlueprintName = "program"
+               BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
+               BuildableName = "libm8r"
+               BlueprintName = "libm8r"
                ReferencedContainer = "container:marrinator.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
+            BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
+            BuildableName = "libm8r"
+            BlueprintName = "libm8r"
             ReferencedContainer = "container:marrinator.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -44,16 +44,16 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Report"
+      buildConfiguration = "Release"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
+            BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
+            BuildableName = "libm8r"
+            BlueprintName = "libm8r"
             ReferencedContainer = "container:marrinator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,9 +69,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "498311C918C267BC00751432"
-            BuildableName = "program"
-            BlueprintName = "program"
+            BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
+            BuildableName = "libm8r"
+            BlueprintName = "libm8r"
             ReferencedContainer = "container:marrinator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

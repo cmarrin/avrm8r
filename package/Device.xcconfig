@@ -1,12 +1,9 @@
 //
-//  Device.xcconfig
-//  libm8r
+//  Config.xcconfig
+//  marrinator
 //
-//  Created by Chris Marrin on 2/27/14.
+//  Created by Chris Marrin on 3/12/14.
 //
 //
 
-// These are the values you are likely to have to change for your project
-FREQUENCY = 16000000
-MCU = atmega328p
-AVRDUDE_DEVICE = DRAGON
+M8R_DIR = $(PROJECT_DIR)

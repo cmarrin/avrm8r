@@ -1,0 +1,14 @@
+//
+//  Device.xcconfig
+//  libm8r
+//
+//  Created by Chris Marrin on 2/27/14.
+//
+//
+
+// These are the values you are likely to have to change for your project
+FREQUENCY = 16000000
+MCU = atmega328p
+AVRDUDE_DEVICE = DRAGON
+
+M8R_DIR = $(INSTALL_DIR)
