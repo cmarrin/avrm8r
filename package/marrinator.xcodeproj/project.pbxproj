@@ -131,9 +131,7 @@
 		4901FB2B18CC1AD10010EFDC /* Wire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wire.h; sourceTree = "<group>"; };
 		49052A6F18BEEEAE008B41D8 /* dnslkup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dnslkup.c; sourceTree = "<group>"; };
 		49052A7018BEEEAE008B41D8 /* dnslkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dnslkup.h; sourceTree = "<group>"; };
-		4906BC2F18D09DBB0087651B /* install */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = install; sourceTree = BUILT_PRODUCTS_DIR; };
-		4906BC3118D09DBB0087651B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4906BC3318D09DBB0087651B /* install.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = install.1; sourceTree = "<group>"; };
+		4906BC2F18D09DBB0087651B /* install */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = install; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Debug/install; sourceTree = "<absolute>"; };
 		4906BC3C18D09E520087651B /* marrinator.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = marrinator.xcodeproj; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = m8r.h; path = include/m8r.h; sourceTree = SOURCE_ROOT; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -167,7 +165,6 @@
 		498311EA18C2839F00751432 /* TimerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerBase.h; sourceTree = "<group>"; };
 		498311EB18C2839F00751432 /* TimerEventMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerEventMgr.h; sourceTree = "<group>"; };
 		498311EC18C2839F00751432 /* UDPSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPSocket.h; sourceTree = "<group>"; };
-		498311F018C2855E00751432 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		498311F118C2855E00751432 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		498311F218C2855E00751432 /* Report.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Report.xcconfig; sourceTree = "<group>"; };
 		498311F318C2855E00751432 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
@@ -194,11 +191,9 @@
 		49AEC38118CF4F8900C010A1 /* optiboot_sanguino.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = optiboot_sanguino.hex; path = bootloaders/optiboot_sanguino.hex; sourceTree = "<group>"; };
 		49AEC38218CF4F8900C010A1 /* optiboot_lilypad.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = optiboot_lilypad.hex; path = bootloaders/optiboot_lilypad.hex; sourceTree = "<group>"; };
 		49AEC38318CF4F8900C010A1 /* optiboot_pro_8MHz.hex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = optiboot_pro_8MHz.hex; path = bootloaders/optiboot_pro_8MHz.hex; sourceTree = "<group>"; };
-		49AEC38418CF52CE00C010A1 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libm8r; sourceTree = BUILT_PRODUCTS_DIR; };
-		49AEC38718CF52CE00C010A1 /* Bootloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bootloader; sourceTree = BUILT_PRODUCTS_DIR; };
+		49AEC38418CF52CE00C010A1 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = libm8r; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Release/libm8r; sourceTree = "<absolute>"; };
+		49AEC38718CF52CE00C010A1 /* Bootloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = Bootloader; path = /Users/cmarrin/Personal/Projects/git/marrinator/package/build/Debug/Bootloader; sourceTree = "<absolute>"; };
 		49B7F24318D0F9E700122BB2 /* Device.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Device.xcconfig; sourceTree = "<group>"; };
-		49BF4FCD18D0987200CFF6B9 /* libm8r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libm8r.a; path = DerivedData/marrinator/Build/Products/Release/libm8r.a; sourceTree = "<group>"; };
-		49BF4FCF18D09A3C00CFF6B9 /* libm8r_r.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libm8r_r.a; path = DerivedData/marrinator/Build/Products/Report/libm8r_r.a; sourceTree = "<group>"; };
 		49CDD3D518C417060040EE8D /* TimerEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimerEvent.h; sourceTree = "<group>"; };
 		49CDD3D718C622DC0040EE8D /* alloca.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = alloca.h; path = "../../../../../../../usr/local/CrossPack-AVR-20130212/avr/include/alloca.h"; sourceTree = "<group>"; };
 		49CDD3D818C622DC0040EE8D /* assert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = assert.h; path = "../../../../../../../usr/local/CrossPack-AVR-20130212/avr/include/assert.h"; sourceTree = "<group>"; };
@@ -495,16 +490,10 @@
 			isa = PBXGroup;
 			children = (
 				4906BC3C18D09E520087651B /* marrinator.xcodeproj */,
-				49BF4FCF18D09A3C00CFF6B9 /* libm8r_r.a */,
-				49BF4FCD18D0987200CFF6B9 /* libm8r.a */,
 				49CDD51918CB9E170040EE8D /* bootloaders */,
 				49CDD3D618C6229F0040EE8D /* avr */,
 				498311B818C05CA100751432 /* Config */,
 				498311B918C05CD700751432 /* libm8r */,
-				49AEC38418CF52CE00C010A1 /* libm8r */,
-				49AEC38718CF52CE00C010A1 /* Bootloader */,
-				4906BC2F18D09DBB0087651B /* install */,
-				4906BC3018D09DBB0087651B /* install */,
 			);
 			name = marrinator;
 			sourceTree = "<group>";
@@ -799,15 +788,6 @@
 			path = "eth_tcp_client_server-dhcp-5.1";
 			sourceTree = "<group>";
 		};
-		4906BC3018D09DBB0087651B /* install */ = {
-			isa = PBXGroup;
-			children = (
-				4906BC3118D09DBB0087651B /* main.cpp */,
-				4906BC3318D09DBB0087651B /* install.1 */,
-			);
-			path = install;
-			sourceTree = "<group>";
-		};
 		4906BC3D18D09E520087651B /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
@@ -817,7 +797,6 @@
 			isa = PBXGroup;
 			children = (
 				49B7F24318D0F9E700122BB2 /* Device.xcconfig */,
-				498311F018C2855E00751432 /* Debug.xcconfig */,
 				498311F118C2855E00751432 /* Release.xcconfig */,
 				498311F218C2855E00751432 /* Report.xcconfig */,
 				498311F318C2855E00751432 /* Shared.xcconfig */,
@@ -1523,7 +1502,6 @@
 		};
 		49A5D67613A7F6D300E4C97D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 498311F018C2855E00751432 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				BUILD_TYPE = debug;

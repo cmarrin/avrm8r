@@ -31,41 +31,12 @@
 			remoteGlobalIDString = 49AEC36A18CF4DCC00C010A1;
 			remoteInfo = Blink;
 		};
-		49627D6A18D1F78C00578A8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49627D6218D1F78C00578A8A;
-			remoteInfo = libm8r;
-		};
-		49627D6C18D1F78C00578A8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49627D6318D1F78C00578A8A;
-			remoteInfo = Bootloader;
-		};
-		49627D6E18D1F78C00578A8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 49627D6418D1F78C00578A8A;
-			remoteInfo = install;
-		};
-		49627D7518D1F7AA00578A8A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4994B75C18BDBB6F0001437D;
-			remoteInfo = libm8r;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		496121F418D1F30C001A58D3 /* Program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Program; sourceTree = BUILT_PRODUCTS_DIR; };
 		496121F618D1F30C001A58D3 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		496121F818D1F30C001A58D3 /* Program.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Program.1; sourceTree = "<group>"; };
-		49627D6018D1F76E00578A8A /* marrinator.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = marrinator.xcodeproj; path = ../../../../../../Library/Marrinator/marrinator.xcodeproj; sourceTree = "<group>"; };
 		49AEC36B18CF4DCC00C010A1 /* Blink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Blink; sourceTree = BUILT_PRODUCTS_DIR; };
 		49AEC38A18D0843300C010A1 /* Device.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Device.xcconfig; sourceTree = "<group>"; };
 		49AEC38B18D084FD00C010A1 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/Release.xcconfig; sourceTree = "<absolute>"; };
@@ -84,20 +55,9 @@
 			path = Program;
 			sourceTree = "<group>";
 		};
-		49627D6518D1F78C00578A8A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				49627D6B18D1F78C00578A8A /* libm8r */,
-				49627D6D18D1F78C00578A8A /* Bootloader */,
-				49627D6F18D1F78C00578A8A /* install */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		49AEC36218CF4DCC00C010A1 = {
 			isa = PBXGroup;
 			children = (
-				49627D6018D1F76E00578A8A /* marrinator.xcodeproj */,
 				49AEC38E18D0858F00C010A1 /* Blink.cpp */,
 				49AEC38918D0840600C010A1 /* Config */,
 				496121F518D1F30C001A58D3 /* Program */,
@@ -159,7 +119,6 @@
 				49AEC37718CF4E3100C010A1 /* PBXBuildRule */,
 			);
 			dependencies = (
-				49627D7618D1F7AA00578A8A /* PBXTargetDependency */,
 			);
 			name = Blink;
 			productName = Blink;
@@ -185,12 +144,6 @@
 			mainGroup = 49AEC36218CF4DCC00C010A1;
 			productRefGroup = 49AEC36C18CF4DCC00C010A1 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 49627D6518D1F78C00578A8A /* Products */;
-					ProjectRef = 49627D6018D1F76E00578A8A /* marrinator.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				49AEC36A18CF4DCC00C010A1 /* Blink */,
@@ -198,30 +151,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		49627D6B18D1F78C00578A8A /* libm8r */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = libm8r;
-			remoteRef = 49627D6A18D1F78C00578A8A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		49627D6D18D1F78C00578A8A /* Bootloader */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = Bootloader;
-			remoteRef = 49627D6C18D1F78C00578A8A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		49627D6F18D1F78C00578A8A /* install */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = install;
-			remoteRef = 49627D6E18D1F78C00578A8A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		496121ED18D1EE4E001A58D3 /* .elf Size */ = {
@@ -332,11 +261,6 @@
 			isa = PBXTargetDependency;
 			target = 49AEC36A18CF4DCC00C010A1 /* Blink */;
 			targetProxy = 496121FD18D1F32A001A58D3 /* PBXContainerItemProxy */;
-		};
-		49627D7618D1F7AA00578A8A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libm8r;
-			targetProxy = 49627D7518D1F7AA00578A8A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

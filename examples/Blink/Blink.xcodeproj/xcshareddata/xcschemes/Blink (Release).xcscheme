@@ -3,7 +3,7 @@
    LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
-      parallelizeBuildables = "YES"
+      parallelizeBuildables = "NO"
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
@@ -18,20 +18,6 @@
                BuildableName = "Blink"
                BlueprintName = "Blink"
                ReferencedContainer = "container:Blink.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4994B75C18BDBB6F0001437D"
-               BuildableName = "libm8r"
-               BlueprintName = "libm8r"
-               ReferencedContainer = "container:../../../../../../Library/Marrinator/marrinator.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
