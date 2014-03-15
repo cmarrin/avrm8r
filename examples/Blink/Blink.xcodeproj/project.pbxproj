@@ -34,13 +34,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		496121F418D1F30C001A58D3 /* Program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = Program; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/build/Report/Program; sourceTree = "<absolute>"; };
-		49AEC36B18CF4DCC00C010A1 /* Blink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = Blink; path = /Users/cmarrin/Personal/Projects/git/marrinator/examples/Blink/build/Release/Blink; sourceTree = "<absolute>"; };
 		49AEC38A18D0843300C010A1 /* Device.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Device.xcconfig; sourceTree = "<group>"; };
 		49AEC38B18D084FD00C010A1 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = SOURCE_ROOT; };
 		49AEC38C18D084FD00C010A1 /* Report.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Report.xcconfig; sourceTree = SOURCE_ROOT; };
 		49AEC38D18D084FD00C010A1 /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = SOURCE_ROOT; };
 		49AEC38E18D0858F00C010A1 /* Blink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Blink.cpp; sourceTree = "<group>"; };
+		49E582AA18D4C060009A0C6E /* Blink */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Blink; sourceTree = BUILT_PRODUCTS_DIR; };
+		49E582AB18D4C060009A0C6E /* Program */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Program; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -49,6 +49,8 @@
 			children = (
 				49AEC38E18D0858F00C010A1 /* Blink.cpp */,
 				49AEC38918D0840600C010A1 /* Config */,
+				49E582AA18D4C060009A0C6E /* Blink */,
+				49E582AB18D4C060009A0C6E /* Program */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,7 +81,7 @@
 			);
 			name = Program;
 			productName = Program;
-			productReference = 496121F418D1F30C001A58D3 /* Program */;
+			productReference = 49E582AB18D4C060009A0C6E /* Program */;
 			productType = "com.apple.product-type.tool";
 		};
 		49AEC36A18CF4DCC00C010A1 /* Blink */ = {
@@ -100,7 +102,7 @@
 			);
 			name = Blink;
 			productName = Blink;
-			productReference = 49AEC36B18CF4DCC00C010A1 /* Blink */;
+			productReference = 49E582AA18D4C060009A0C6E /* Blink */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -205,7 +207,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${TOOLS_DIR}/bin/avr-gcc  -mmcu=`cat /tmp/mcu` `cat ${OBJECT_FILE_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}/Blink.LinkFileList` $LDFLAGS -o $DERIVED_FILE_DIR/$PROJECT_NAME.elf";
+			shellScript = "${TOOLS_DIR}/bin/avr-gcc  -mmcu=`cat /tmp/mcu` `cat ${OBJECT_FILE_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}/$PRODUCT_NAME.LinkFileList` $LDFLAGS -o $DERIVED_FILE_DIR/$PROJECT_NAME.elf";
 		};
 		49EBBA9118D0F2C2001990AA /* Prepare */ = {
 			isa = PBXShellScriptBuildPhase;
