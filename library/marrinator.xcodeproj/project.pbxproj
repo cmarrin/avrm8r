@@ -28,8 +28,6 @@
 		4901FB3F18CC1AD10010EFDC /* WString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901F8C818CC1AD10010EFDC /* WString.cpp */; };
 		4901FB5218CC1AD10010EFDC /* EEPROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901F90218CC1AD10010EFDC /* EEPROM.cpp */; };
 		4901FBA318CC1AD10010EFDC /* SPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901FAA918CC1AD10010EFDC /* SPI.cpp */; };
-		4901FBB118CC1AD10010EFDC /* twi.c in Sources */ = {isa = PBXBuildFile; fileRef = 4901FB2818CC1AD10010EFDC /* twi.c */; };
-		4901FBB218CC1AD10010EFDC /* Wire.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901FB2A18CC1AD10010EFDC /* Wire.cpp */; };
 		49CDD3BF18C2EFFA0040EE8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
 		49CDD3C018C2EFFA0040EE8D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
 		49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
@@ -52,6 +50,8 @@
 		49CDD3D218C2F0040040EE8D /* ip_arp_udp_tcp.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117B18BEA7B900751432 /* ip_arp_udp_tcp.c */; };
 		49CDD3D318C2F0040040EE8D /* websrv_help_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 4983117F18BEA7B900751432 /* websrv_help_functions.c */; };
 		49CDD4FB18C6D5E70040EE8D /* USART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CDD4FA18C6D5E70040EE8D /* USART.cpp */; };
+		49E582BF18D53D8A009A0C6E /* twi.c in Sources */ = {isa = PBXBuildFile; fileRef = 49E582BE18D53D8A009A0C6E /* twi.c */; };
+		49E582C318D5631F009A0C6E /* INA219.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49E582C118D5631F009A0C6E /* INA219.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -64,7 +64,7 @@
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=`cat /tmp/frequency` -DMCU=`cat /tmp/mcu` -mmcu=`cat /tmp/mcu` $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o\necho $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o >> $DERIVED_FILE_DIR/fileList.txt";
+			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=`cat /tmp/frequency` -DMCU=`cat /tmp/mcu` -mmcu=`cat /tmp/mcu` $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o";
 		};
 /* End PBXBuildRule section */
 
@@ -125,10 +125,6 @@
 		4901F90318CC1AD10010EFDC /* EEPROM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EEPROM.h; sourceTree = "<group>"; };
 		4901FAA918CC1AD10010EFDC /* SPI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SPI.cpp; sourceTree = "<group>"; };
 		4901FAAA18CC1AD10010EFDC /* SPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPI.h; sourceTree = "<group>"; };
-		4901FB2818CC1AD10010EFDC /* twi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = twi.c; sourceTree = "<group>"; };
-		4901FB2918CC1AD10010EFDC /* twi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = twi.h; sourceTree = "<group>"; };
-		4901FB2A18CC1AD10010EFDC /* Wire.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Wire.cpp; sourceTree = "<group>"; };
-		4901FB2B18CC1AD10010EFDC /* Wire.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wire.h; sourceTree = "<group>"; };
 		49052A6F18BEEEAE008B41D8 /* dnslkup.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dnslkup.c; sourceTree = "<group>"; };
 		49052A7018BEEEAE008B41D8 /* dnslkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dnslkup.h; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = m8r.h; path = include/m8r.h; sourceTree = SOURCE_ROOT; };
@@ -481,6 +477,10 @@
 		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Animator.cpp; sourceTree = "<group>"; };
 		49E582B818D4C82E009A0C6E /* I2C.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = I2C.h; sourceTree = "<group>"; };
 		49E582BC18D4D03E009A0C6E /* DeviceStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceStream.h; sourceTree = "<group>"; };
+		49E582BD18D53D75009A0C6E /* twi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = twi.h; sourceTree = "<group>"; };
+		49E582BE18D53D8A009A0C6E /* twi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = twi.c; sourceTree = "<group>"; };
+		49E582C018D55E90009A0C6E /* INA219.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = INA219.h; sourceTree = "<group>"; };
+		49E582C118D5631F009A0C6E /* INA219.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = INA219.cpp; sourceTree = "<group>"; };
 		49FBC8FE18D3372500B80F39 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libm8r; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FBC8FF18D3372500B80F39 /* Bootloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bootloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FBC90018D3372500B80F39 /* install */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = install; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -508,6 +508,7 @@
 				4900A1E4133F9C5B0036518B /* ADC.cpp */,
 				49CF367513BDF945001EB1B8 /* Animator.cpp */,
 				4994B73E18BDB4FC0001437D /* Button.cpp */,
+				49E582C118D5631F009A0C6E /* INA219.cpp */,
 				4994B74018BDB58C0001437D /* Network.cpp */,
 				4994B74118BDB58C0001437D /* NTPClient.cpp */,
 				4900A1EE133F9C5B0036518B /* RTC.cpp */,
@@ -520,6 +521,7 @@
 				4994B74718BDB58C0001437D /* Timer1.cpp */,
 				4994B74818BDB58C0001437D /* Timer2.cpp */,
 				4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */,
+				49E582BE18D53D8A009A0C6E /* twi.c */,
 				4994B74918BDB58C0001437D /* UDPSocket.cpp */,
 				49CDD4FA18C6D5E70040EE8D /* USART.cpp */,
 			);
@@ -699,7 +701,6 @@
 			children = (
 				4901F90118CC1AD10010EFDC /* EEPROM */,
 				4901FAA018CC1AD10010EFDC /* SPI */,
-				4901FB1818CC1AD10010EFDC /* Wire */,
 			);
 			path = libraries;
 			sourceTree = "<group>";
@@ -722,25 +723,6 @@
 			path = SPI;
 			sourceTree = "<group>";
 		};
-		4901FB1818CC1AD10010EFDC /* Wire */ = {
-			isa = PBXGroup;
-			children = (
-				4901FB2718CC1AD10010EFDC /* utility */,
-				4901FB2A18CC1AD10010EFDC /* Wire.cpp */,
-				4901FB2B18CC1AD10010EFDC /* Wire.h */,
-			);
-			path = Wire;
-			sourceTree = "<group>";
-		};
-		4901FB2718CC1AD10010EFDC /* utility */ = {
-			isa = PBXGroup;
-			children = (
-				4901FB2818CC1AD10010EFDC /* twi.c */,
-				4901FB2918CC1AD10010EFDC /* twi.h */,
-			);
-			path = utility;
-			sourceTree = "<group>";
-		};
 		49052A6D18BEA5BF008B41D8 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -754,6 +736,7 @@
 				498311DC18C2839F00751432 /* EventListener.h */,
 				498311DD18C2839F00751432 /* EventSourceEnums.h */,
 				49E582B818D4C82E009A0C6E /* I2C.h */,
+				49E582C018D55E90009A0C6E /* INA219.h */,
 				498311DE18C2839F00751432 /* MAX6969.h */,
 				498311DF18C2839F00751432 /* Network.h */,
 				498311E018C2839F00751432 /* NTPClient.h */,
@@ -771,6 +754,7 @@
 				498311EA18C2839F00751432 /* TimerBase.h */,
 				49CDD3D518C417060040EE8D /* TimerEvent.h */,
 				498311EB18C2839F00751432 /* TimerEventMgr.h */,
+				49E582BD18D53D75009A0C6E /* twi.h */,
 				498311EC18C2839F00751432 /* UDPSocket.h */,
 				49CDD4F918C6244D0040EE8D /* USART.h */,
 			);
@@ -1260,8 +1244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p $INSTALL_DIR\n${TOOLS_DIR}/bin/avr-ar rcs $INSTALL_DIR/libm8r.a `cat $DERIVED_FILE_DIR/fileList.txt`\nrm -f `cat $DERIVED_FILE_DIR/fileList.txt`";
-			showEnvVarsInLog = 0;
+			shellScript = "mkdir -p $INSTALL_DIR\n${TOOLS_DIR}/bin/avr-ar rcs $INSTALL_DIR/libm8r.a `cat ${OBJECT_FILE_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}/$PRODUCT_NAME.LinkFileList`\nrm `cat ${OBJECT_FILE_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}/$PRODUCT_NAME.LinkFileList`";
 		};
 		4983116B18BE9C6500751432 /* Prepare */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1275,7 +1258,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -f $DERIVED_FILE_DIR/fileList.txt $DERIVED_FILE_DIR/*.o\nif [ ! -f /tmp/mcu ]; then\n    echo \"atmega328p\" >> /tmp/mcu\nfi\nif [ ! -f /tmp/frequency ]; then\n    echo \"8000000\" >> /tmp/frequency\nfi";
+			shellScript = "if [ ! -f /tmp/mcu ]; then\n    echo \"atmega328p\" >> /tmp/mcu\nfi\nif [ ! -f /tmp/frequency ]; then\n    echo \"8000000\" >> /tmp/frequency\nfi";
 		};
 		49CDD51818CB9DF80040EE8D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1306,6 +1289,7 @@
 				49CDD4FB18C6D5E70040EE8D /* USART.cpp in Sources */,
 				4901FB2E18CC1AD10010EFDC /* CDC.cpp in Sources */,
 				4901FB3418CC1AD10010EFDC /* Print.cpp in Sources */,
+				49E582C318D5631F009A0C6E /* INA219.cpp in Sources */,
 				49CDD3C918C2EFFA0040EE8D /* Socket.cpp in Sources */,
 				4901FB3E18CC1AD10010EFDC /* WMath.cpp in Sources */,
 				49CDD3C218C2EFFA0040EE8D /* System.cpp in Sources */,
@@ -1319,6 +1303,7 @@
 				4901FB3A18CC1AD10010EFDC /* wiring_analog.c in Sources */,
 				4901FB3618CC1AD10010EFDC /* Tone.cpp in Sources */,
 				4901FB3D18CC1AD10010EFDC /* wiring_shift.c in Sources */,
+				49E582BF18D53D8A009A0C6E /* twi.c in Sources */,
 				49CDD3D118C2F0040040EE8D /* enc28j60.c in Sources */,
 				49CDD3CD18C2EFFA0040EE8D /* Timer2.cpp in Sources */,
 				49CDD3C718C2EFFA0040EE8D /* SevenSegmentDisplay.cpp in Sources */,
@@ -1335,8 +1320,6 @@
 				4901FB3318CC1AD10010EFDC /* new.cpp in Sources */,
 				4901FB3718CC1AD10010EFDC /* USBCore.cpp in Sources */,
 				49CDD3C418C2EFFA0040EE8D /* Network.cpp in Sources */,
-				4901FBB218CC1AD10010EFDC /* Wire.cpp in Sources */,
-				4901FBB118CC1AD10010EFDC /* twi.c in Sources */,
 				49CDD3CA18C2EFFA0040EE8D /* TCPSocket.cpp in Sources */,
 				4901FB3918CC1AD10010EFDC /* wiring.c in Sources */,
 				4901FB3818CC1AD10010EFDC /* WInterrupts.c in Sources */,

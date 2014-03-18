@@ -19,23 +19,18 @@
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
 */
 
+#include "m8r.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <compat/twi.h>
-#include "Arduino.h" // for digitalWrite
 
-#ifndef cbi
-#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
-#endif
+#undef cbi
+#undef sbi
 
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
-#endif
-
-#include "pins_arduino.h"
 #include "twi.h"
 
 static volatile uint8_t twi_state;
@@ -73,12 +68,13 @@ void twi_init(void)
   twi_inRepStart = false;
   
   // activate internal pullups for twi.
-  digitalWrite(SDA, 1);
-  digitalWrite(SCL, 1);
+  // Hardcode SDA to Port C4 and SCL to Port C5
+  PORTC |= _BV(4);
+  PORTC |= _BV(5);
 
   // initialize twi prescaler and bit rate
-  cbi(TWSR, TWPS0);
-  cbi(TWSR, TWPS1);
+  TWSR &= ~_BV(TWPS0);
+  TWSR &= ~_BV(TWPS1);
   TWBR = ((F_CPU / TWI_FREQ) - 16) / 2;
 
   /* twi bit rate formula from atmega128 manual pg 204

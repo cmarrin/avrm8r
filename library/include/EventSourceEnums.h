@@ -448,6 +448,7 @@ enum EventType {
     EV_ANIMATOR_TICK,
     EV_BUTTON_UP,
     EV_BUTTON_DOWN,
+    EV_I2C_SLAVE_RECEIVE,
     EV_USER0,
     EV_USER1,
     EV_USER2,

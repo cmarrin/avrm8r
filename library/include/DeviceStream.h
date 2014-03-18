@@ -11,11 +11,17 @@
 #include "m8r.h"
 
 namespace m8r {
+    struct DeviceControl
+    {
+        DeviceControl(int16_t t) : type(t) { }
+        int16_t type;
+    };
 
     // Device must implement:
     //
     // void write(uint8_t b);
     // void flush();
+    // void control(int16_t ctl);
     // int16_t read(); // Must return -1 if no chars
     // uint8_t bytesAvailable() const;
     //
@@ -23,6 +29,8 @@ namespace m8r {
     class DeviceStream
     {
     public:
+        Device& device() { return _device; }
+        
         DeviceStream& operator<<(char v) _INLINE_ { _device.write(v); return *this; }
         DeviceStream& operator<<(uint8_t v) _INLINE_ { write(v, false); return *this; }
         DeviceStream& operator<<(int16_t v) _INLINE_ { write(v, true); return *this; }
@@ -31,6 +39,7 @@ namespace m8r {
         DeviceStream& operator<<(uint32_t v) _INLINE_ { write(v, false); return *this; }
         DeviceStream& operator<<(const char* s) _INLINE_ { write(s); return *this; }
         DeviceStream& operator<<(const _FlashString s) _INLINE_ { write(s); return *this; }
+        DeviceStream& operator<<(const DeviceControl& ctl) _INLINE_ { _device.control(ctl.type); return *this; }
         
         ~DeviceStream() { flush(); }
 
@@ -41,6 +50,10 @@ namespace m8r {
     private:
         void write(uint32_t v, bool isSigned)
         {
+            if (!v) {
+                _device.write('0');
+                return;
+            }
             if (isSigned && ((int32_t) v < 0)) {
                 _device.write('-');
                 v = -v;

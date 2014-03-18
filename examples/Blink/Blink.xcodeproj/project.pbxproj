@@ -19,7 +19,7 @@
 			outputFiles = (
 				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).o",
 			);
-			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=`cat /tmp/frequency` -DMCU=`cat /tmp/mcu` -mmcu=`cat /tmp/mcu` $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o\necho $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o >> $DERIVED_FILE_DIR/fileList.txt";
+			script = "${TOOLS_DIR}/bin/avr-gcc -DF_CPU=`cat /tmp/frequency` -DMCU=`cat /tmp/mcu` -mmcu=`cat /tmp/mcu` $CDEFS $CFLAGS $CINCLUDE -c $INPUT_FILE_PATH -o $DERIVED_FILE_DIR/$INPUT_FILE_BASE.o";
 		};
 /* End PBXBuildRule section */
 

@@ -78,6 +78,13 @@ enum ErrorType {
     AssertEthernetTransmitError = 0x34,
     AssertEthernetReceiveError = 0x35,
     
+    AssertI2CReceiveNoBytes = 0x40,
+    AssertI2CReceiveWrongSize = 0x41,
+    AssertI2CSendBufferTooBig = 0x48,
+    AssertI2CSendNoAckOnAddress = 0x49,
+    AssertI2CSendNoAckOnData = 0x4A,
+    AssertI2CSendError = 0x4B,
+    
     AssertSingleUSART0 = 0x40,
     ErrorUser = 0x80,
 };
