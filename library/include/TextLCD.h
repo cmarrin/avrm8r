@@ -51,6 +51,9 @@
 
 namespace m8r {
 
+enum TextLCDControlType { TextLCDControlHome };
+static inline DeviceControl TextLCDHome() { return DeviceControl(static_cast<int16_t>(TextLCDControlHome)); }
+
 // Hitachi HD44780 based LCD driver
 class TextLCDBase
 {
@@ -160,7 +163,14 @@ public:
         command(LCD_ENTRYMODESET | _displayMode);
     }
 
-    void write(uint8_t value) { send(value, true); }
+    void control(const DeviceControl& ctl)
+    {
+        switch(ctl.type) {
+            case TextLCDControlHome: home(); break;
+        }
+    }
+
+    void write(uint8_t value) { if (value == '\n') setCursorPosition(0, 1); else send(value, true); }
     void flush() { }
     int16_t read() { return -1; }
     uint8_t bytesAvailable() const { return 0; }
@@ -177,7 +187,7 @@ public:
         System::usDelay<2000>();  // this command takes a long time!
     }
 
-    void setCursor(uint8_t col, uint8_t row)
+    void setCursorPosition(uint8_t col, uint8_t row)
     {
         int rowOffsets[] = { 0x00, 0x40, 0x14, 0x54 };
         if ( row >= _numlines ) {
@@ -223,7 +233,6 @@ public:
         command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | ((dir == ScrollLeft) ? LCD_MOVELEFT : LCD_MOVERIGHT));
     }
 
-    // This is for text that flows Left to Right
     void setScrollDirection(ScrollDirection dir)
     {
         if (dir == ScrollLeft) {

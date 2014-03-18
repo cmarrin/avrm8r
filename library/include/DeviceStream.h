@@ -13,15 +13,16 @@
 namespace m8r {
     struct DeviceControl
     {
-        DeviceControl(int16_t t) : type(t) { }
-        int16_t type;
+        DeviceControl(uint8_t t = 0, uint8_t p = 0) : type(t), param(p) { }
+        uint8_t type;
+        uint8_t param;
     };
 
     // Device must implement:
     //
     // void write(uint8_t b);
     // void flush();
-    // void control(int16_t ctl);
+    // void control(const DeviceControl& ctl);
     // int16_t read(); // Must return -1 if no chars
     // uint8_t bytesAvailable() const;
     //
@@ -39,7 +40,7 @@ namespace m8r {
         DeviceStream& operator<<(uint32_t v) _INLINE_ { write(v, false); return *this; }
         DeviceStream& operator<<(const char* s) _INLINE_ { write(s); return *this; }
         DeviceStream& operator<<(const _FlashString s) _INLINE_ { write(s); return *this; }
-        DeviceStream& operator<<(const DeviceControl& ctl) _INLINE_ { _device.control(ctl.type); return *this; }
+        DeviceStream& operator<<(const DeviceControl& ctl) _INLINE_ { _device.control(ctl); return *this; }
         
         ~DeviceStream() { flush(); }
 

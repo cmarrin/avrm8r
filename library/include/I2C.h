@@ -14,13 +14,15 @@
 
 namespace m8r {
 
+enum I2CControlType { I2CControlAddress, I2CControlStop };
+static inline DeviceControl I2CAddress(uint8_t a) { return DeviceControl(static_cast<uint8_t>(I2CControlAddress), static_cast<uint8_t>(a)); }
+static inline DeviceControl I2CStop() { return DeviceControl(static_cast<uint8_t>(I2CControlStop)); }
+
+
 class I2CMaster
 {
 public:
-    static const int16_t I2CStop = 256;
-    static inline DeviceControl address(uint8_t a) { return DeviceControl(static_cast<int16_t>(a)); }
-    static inline DeviceControl stop() { return DeviceControl(I2CStop); }
-
+    
 	I2CMaster()
         : _address(-1)
     {
@@ -44,12 +46,11 @@ public:
         ASSERT(result == 0, AssertI2CSendError);
     }
      
-    void control(int16_t ctl)
+    void control(const DeviceControl& ctl)
     {
-        if (ctl >= 0 && ctl <=255) {
-            _address = ctl;
-        } else if (ctl == I2CStop) {
-            twi_stop();
+        switch(ctl.type) {
+            case I2CControlAddress: _address = ctl.param; break;
+            case I2CControlStop: twi_stop(); break;
         }
     }
 
