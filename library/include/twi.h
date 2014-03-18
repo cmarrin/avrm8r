@@ -20,6 +20,10 @@
 #ifndef twi_h
 #define twi_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
   #include <inttypes.h>
 
   //#define ATMEGA8
@@ -48,6 +52,10 @@
   void twi_reply(uint8_t);
   void twi_stop(void);
   void twi_releaseBus(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

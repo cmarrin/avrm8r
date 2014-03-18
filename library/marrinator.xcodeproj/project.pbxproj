@@ -479,6 +479,8 @@
 		49CDD4FA18C6D5E70040EE8D /* USART.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = USART.cpp; sourceTree = "<group>"; };
 		49CDD55718CBF8BC0040EE8D /* TextLCD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextLCD.h; sourceTree = "<group>"; };
 		49CF367513BDF945001EB1B8 /* Animator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Animator.cpp; sourceTree = "<group>"; };
+		49E582B818D4C82E009A0C6E /* I2C.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = I2C.h; sourceTree = "<group>"; };
+		49E582BC18D4D03E009A0C6E /* DeviceStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceStream.h; sourceTree = "<group>"; };
 		49FBC8FE18D3372500B80F39 /* libm8r */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = libm8r; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FBC8FF18D3372500B80F39 /* Bootloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bootloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		49FBC90018D3372500B80F39 /* install */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = install; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -748,8 +750,10 @@
 				498311D818C2839F00751432 /* Animator.h */,
 				498311DA18C2839F00751432 /* BlinkErrorReporter.h */,
 				498311DB18C2839F00751432 /* Button.h */,
+				49E582BC18D4D03E009A0C6E /* DeviceStream.h */,
 				498311DC18C2839F00751432 /* EventListener.h */,
 				498311DD18C2839F00751432 /* EventSourceEnums.h */,
+				49E582B818D4C82E009A0C6E /* I2C.h */,
 				498311DE18C2839F00751432 /* MAX6969.h */,
 				498311DF18C2839F00751432 /* Network.h */,
 				498311E018C2839F00751432 /* NTPClient.h */,
