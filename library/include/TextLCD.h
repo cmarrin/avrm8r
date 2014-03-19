@@ -51,8 +51,9 @@
 
 namespace m8r {
 
-enum TextLCDControlType { TextLCDControlHome };
+enum TextLCDControlType { TextLCDControlHome, TextLCDControlClear };
 static inline DeviceControl TextLCDHome() { return DeviceControl(static_cast<int16_t>(TextLCDControlHome)); }
+static inline DeviceControl TextLCDClear() { return DeviceControl(static_cast<int16_t>(TextLCDControlClear)); }
 
 // Hitachi HD44780 based LCD driver
 class TextLCDBase
@@ -167,6 +168,7 @@ public:
     {
         switch(ctl.type) {
             case TextLCDControlHome: home(); break;
+            case TextLCDControlClear: clear(); break;
         }
     }
 

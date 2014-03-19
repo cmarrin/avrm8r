@@ -9,6 +9,7 @@
 #pragma once
 
 #include "m8r.h"
+#include "FixedPoint.h"
 
 namespace m8r {
     struct DeviceControl
@@ -51,22 +52,9 @@ namespace m8r {
     private:
         void write(uint32_t v, bool isSigned)
         {
-            if (!v) {
-                _device.write('0');
-                return;
-            }
-            if (isSigned && ((int32_t) v < 0)) {
-                _device.write('-');
-                v = -v;
-            }
-            char buf[11];
-            char* p = buf + 11;
-            *--p = '\0';
-            while (v) {
-                *--p = (v % 10) + '0';
-                v /= 10;
-            }
-            write(p);
+            char buf[12];
+            buf[11] = '\0';
+            write(FixedPoint::toString(v, isSigned, buf, 11));
         }
         
         void write(const char* s)

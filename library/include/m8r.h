@@ -85,6 +85,8 @@ enum ErrorType {
     AssertI2CSendNoAckOnData = 0x4A,
     AssertI2CSendError = 0x4B,
     
+    AssertFixedPointBufferTooSmall = 0x50,
+    
     AssertSingleUSART0 = 0x40,
     ErrorUser = 0x80,
 };
