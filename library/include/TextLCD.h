@@ -51,9 +51,10 @@
 
 namespace m8r {
 
-enum TextLCDControlType { TextLCDControlHome, TextLCDControlClear };
-static inline DeviceControl TextLCDHome() { return DeviceControl(static_cast<int16_t>(TextLCDControlHome)); }
-static inline DeviceControl TextLCDClear() { return DeviceControl(static_cast<int16_t>(TextLCDControlClear)); }
+enum TextLCDControlType { TextLCDControlHome, TextLCDControlClear, TextLCDControlSetLine };
+static inline DeviceControl TextLCDHome() { return DeviceControl(static_cast<int8_t>(TextLCDControlHome)); }
+static inline DeviceControl TextLCDClear() { return DeviceControl(static_cast<int8_t>(TextLCDControlClear)); }
+static inline DeviceControl TextLCDSetLine(uint8_t line) { return DeviceControl(static_cast<int8_t>(TextLCDControlSetLine), line); }
 
 // Hitachi HD44780 based LCD driver
 class TextLCDBase
@@ -169,10 +170,18 @@ public:
         switch(ctl.type) {
             case TextLCDControlHome: home(); break;
             case TextLCDControlClear: clear(); break;
+            case TextLCDControlSetLine: setCursorPosition(0, ctl.param);
         }
     }
 
-    void write(uint8_t value) { if (value == '\n') setCursorPosition(0, 1); else send(value, true); }
+    void write(uint8_t value)
+    {
+        if (value == '\n') {
+            setCursorPosition(0, 1);
+        } else {
+            send(value, true);
+        }
+    }
     void flush() { }
     int16_t read() { return -1; }
     uint8_t bytesAvailable() const { return 0; }
