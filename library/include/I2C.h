@@ -39,7 +39,10 @@ public:
     
     void write(uint8_t address, uint8_t* buf, uint8_t size, bool stop = true)
     {
-        uint8_t result = twi_writeTo(address, buf, size, false, stop);
+#ifdef DEBUG
+        uint8_t result = 
+#endif
+        twi_writeTo(address, buf, size, false, stop);
         ASSERT(result != 1, AssertI2CSendBufferTooBig);
         ASSERT(result != 2, AssertI2CSendNoAckOnAddress);
         ASSERT(result != 3, AssertI2CSendNoAckOnData);
