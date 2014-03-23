@@ -67,29 +67,27 @@ private:
     bool m_value;
 };
 
-template <class Port, uint8_t Bit, uint8_t debounceTimerCount = 10, uint8_t numDebounceTests = 5>
+template <class Bit, uint8_t debounceTimerCount = 10, uint8_t numDebounceTests = 5>
 class Button : public ButtonBase, public EventListener {
 public:
 	Button()
     {
-        m_port.setBitInput(Bit);
-        m_port.setPortBit(Bit);
-        System::startEventTimer(&m_event);
+        _bit = true; // Activate pullup
+        System::startEventTimer(&_event);
     }
     
     // EventListener override
     virtual void handleEvent(EventType type, EventParam param)
     {
-        if (type != EV_EVENT_TIMER || &m_event != (TimerEvent*) param)
+        if (type != EV_EVENT_TIMER || &_event != (TimerEvent*) param)
             return;
             
-        _handleEvent(type, param, !m_port.isPinBit(Bit), numDebounceTests);
-        System::startEventTimer(&m_event);
+        _handleEvent(type, param, !_bit, numDebounceTests);
     }
     
 private:
-    Port m_port;
-    OneShotTimerEvent<debounceTimerCount> m_event;
+    Bit _bit;
+    RepeatingTimerEvent<debounceTimerCount> _event;
 };
 
 }
