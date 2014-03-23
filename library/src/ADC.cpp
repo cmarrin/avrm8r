@@ -42,17 +42,9 @@ uint16_t ADC::m_lastConversion = 0;
 
 ADC::ADC(uint8_t channel, uint8_t prescale, uint8_t reference)
 {
-    // Set prescaler
-    ADCSRA &= ~ADC_PS_MASK;
-    ADCSRA |= prescale;
-    
-    // Set reference
-    ADMUX &= ~ADC_REF_MASK;
-    ADMUX |= reference;
-
-    // Set channel
-    ADMUX &= ~ADC_CH_MASK;
-    ADMUX |= channel;
+    setPrescaler(prescale);
+    setReference(reference);
+    setChannel(channel);
 }
 
 void
@@ -71,7 +63,7 @@ ADC::setEnabled(bool e)
 void
 ADC::setPrescaler(uint8_t prescale)
 {
-    if (prescale & ADC_PS_MASK)
+    if (prescale & ~ADC_PS_MASK)
         prescale = ADC_PS_DIV128;
     
     ADCSRA &= ~ADC_PS_MASK;
@@ -81,7 +73,7 @@ ADC::setPrescaler(uint8_t prescale)
 void
 ADC::setReference(uint8_t ref)
 {
-    if (ref & ADC_REF_MASK)
+    if (ref & ~ADC_REF_MASK)
         ref = ADC_REF_AVCC;
 
     ADMUX &= ~ADC_REF_MASK;
@@ -91,7 +83,7 @@ ADC::setReference(uint8_t ref)
 void
 ADC::setChannel(uint8_t channel)
 {
-    if (channel & ADC_CH_MASK)
+    if (channel & ~ADC_CH_MASK)
         channel = ADC_CH_ADC0;
     
     ADMUX &= ~ADC_CH_MASK;
@@ -101,9 +93,6 @@ ADC::setChannel(uint8_t channel)
 uint16_t
 ADC::convert10Bit()
 {
-    ADCSRA |= _BV(ADIF);                     // clear hardware "conversion complete" flag 
-    ADCSRA |= _BV(ADSC);                     // start conversion
-    
     // wait for completion
     while(!isConversionComplete())
         ;

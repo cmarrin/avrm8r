@@ -62,7 +62,7 @@ namespace m8r {
 // This code assumes REFS0 and REFS1 are 6 and 7, which is true for all chips that have 2 ref bits
 #define ADC_REF_AREF		0x00	///< 0x00 -> AREF pin, internal VREF turned off
 #define ADC_REF_AVCC		0x40	///< 0x01 -> AVCC pin, internal VREF turned off
-#define ADC_REF_256V		0xC0	///< 0x03 -> Internal 2.56V VREF
+#define ADC_REF_1_1V		0xC0	///< 0x03 -> Internal 1.1V VREF
 #define ADC_REF_MASK        0xC0
 	
 // bit mask for A2D channel multiplexer
@@ -78,7 +78,8 @@ namespace m8r {
 #define ADC_CH_ADC5			0x05
 #define ADC_CH_ADC6			0x06
 #define ADC_CH_ADC7			0x07
-#define ADC_CH_122V			0x0e	///< 1.22V voltage reference
+#define ADC_CH_TEMP			0x08
+#define ADC_CH_1_1V			0x0e	///< 1.1V voltage reference
 #define ADC_CH_AGND			0x0f	///< AGND
 #define ADC_CH_MASK         0x0f
 	
