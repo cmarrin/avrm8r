@@ -27,7 +27,7 @@ namespace m8r {
     // int16_t read(); // Must return -1 if no chars
     // uint8_t bytesAvailable() const;
     //
-    template<class Device>
+    template<class Device, bool sendCR = false>
     class DeviceStream
     {
     public:
@@ -75,7 +75,7 @@ namespace m8r {
                 if (c == '\0') {
                     return;
                 }
-                if (c == '\n') {
+                if (sendCR && c == '\n') {
                     _device.write('\r');
                 }
                 _device.write(c);
