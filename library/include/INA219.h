@@ -125,9 +125,9 @@ class INA219
 public:
     enum VoltageRange { Range16V, Range32V };
 
-	INA219(uint8_t address) : _address(address)
-    {
-    }
+	INA219() : _address(0) { }
+    
+    void setAddress(uint8_t address) { _address = address; }
     
     // lsbMicroamps should be a number that 1000 can be evenly divided by to provide maximum
     // computational accuracy. It must also be between the maximum expected current divided 
@@ -135,15 +135,24 @@ public:
     // must be less than the voltage range times the shunt resistance.
     void setCalibration(VoltageRange range, uint16_t lsbMicroamps, uint16_t shuntMilliohms)
     {
-        updateCalibration(range, lsbMicroamps, shuntMilliohms);
+        setConfiguration(range);
+        updateCalibration(lsbMicroamps, shuntMilliohms);
         writeRegister(INA219_REG_CALIBRATION, _calibrationValue);
+    }
+    
+    void setConfiguration(VoltageRange range)
+    {
+        updateConfiguration(range);
         writeRegister(INA219_REG_CONFIG, _configValue);
     }
+    
+    void trigger() { writeRegister(INA219_REG_CONFIG, _configValue); }
+    
     uint16_t configuration() { return readRegister(INA219_REG_CONFIG); }
     uint16_t calibration() { return readRegister(INA219_REG_CALIBRATION); }
     
     int16_t busMilliVolts() { return static_cast<int16_t>((readRegister(INA219_REG_BUSVOLTAGE) >> 3) * 4); }
-    int16_t shuntMilliVolts() { return static_cast<int16_t>(readRegister(INA219_REG_SHUNTVOLTAGE)) * 10; }
+    int16_t shuntMilliVolts() { return static_cast<int16_t>(readRegister(INA219_REG_SHUNTVOLTAGE)); }
     int32_t shuntMicroAmps()
     {
         // Sometimes a sharp load will reset the INA219, which will
@@ -169,8 +178,8 @@ private:
         return (static_cast<uint16_t>(buf[0]) << 8) | static_cast<uint16_t>(buf[1]);
     }
     
-    // Update the value of _calibrationValue and return the value for the config register
-    void updateCalibration(VoltageRange, uint16_t maxMillamps, uint16_t maxMilliohms);
+    void updateCalibration(uint16_t maxMillamps, uint16_t maxMilliohms);
+    void updateConfiguration(VoltageRange);
     
     static I2CMaster _i2c;
 
