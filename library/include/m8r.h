@@ -264,7 +264,7 @@ public:
 };
 
 // Template for 1 bit output port value
-template <class P, uint8_t bit>
+template <class port, uint8_t bit>
 class OutputBit
 {
 public:
@@ -274,7 +274,7 @@ public:
     operator bool() _INLINE_ { return _port.isPortBit(bit); }
 
 private:
-    P _port;
+    port _port;
 };
     
 class NullOutputBit
@@ -293,9 +293,13 @@ template <class port, uint8_t bit>
 class InputBit
 {
 public:
-    InputBit() _INLINE_ { port::setBitInput(bit); }
+    InputBit() _INLINE_ { _port.setBitInput(bit); }
     
-    operator bool() _INLINE_ { return port::isPinBit(bit); }
+    InputBit& operator=(bool b) _INLINE_ { if (b) _port.setPortBit(bit); else _port.clearPortBit(bit); return *this; }
+    operator bool() _INLINE_ { return _port.isPinBit(bit); }
+
+private:
+    port _port;
 };
     
 class NullInputBit
