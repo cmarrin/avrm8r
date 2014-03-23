@@ -16,7 +16,7 @@ namespace m8r {
     {
     public:
         // s must contain space for at least 3 characters
-        static const char* toString(uint32_t v, bool isSigned, char* s, uint8_t size)
+        static char* toString(uint32_t v, bool isSigned, char* s, uint8_t size)
         {
             ASSERT(size >= 3, AssertFixedPointBufferTooSmall);
             if (isSigned && ((int32_t) v < 0)) {
@@ -40,73 +40,63 @@ namespace m8r {
         }
 
     protected:
-        const char* toString(uint8_t integer, uint8_t fraction, bool isSigned, uint8_t maxFractionDigits, char* buf, uint8_t size)
+        const char* toString(int16_t value, uint8_t maxFractionDigits, char* buf, uint8_t size)
         {
-            if (fraction) {
-                // Output fraction
-                uint32_t multiplier = 10;
-                char* p = &buf[4];
-                *p++ = '.';
-                uint32_t f = fraction;
-                while (f && maxFractionDigits--) {
-                    uint32_t digit = f * multiplier / 256;
-                    *p++ = digit + '0';
-                    f -= digit * 256 / multiplier;
-                    multiplier *= 10;
-                }
-                *p = '\0';
-                
-                // Output integer
-                return FixedPoint::toString(integer, isSigned, buf, 4);
-            } else {
-                buf[7] = '\0';
-                return FixedPoint::toString(integer, isSigned, buf, 7);
-            }
-        }
-
-        void convert(uint16_t value, uint16_t radix, bool isSigned, uint8_t& integer, uint8_t& fraction)
-        {
-            if (isSigned && value & 0x8000) {
+            bool negative = false;
+            if (value < 0) {
+                negative = true;
                 value = -value;
+            }
+            int32_t multiplier = 1;
+            for (uint8_t i = maxFractionDigits; i; --i) {
+                multiplier *= 10;
+            }
+            uint32_t ivalue = (static_cast<int32_t>(value) * multiplier + 128) / 256;
+            buf[size - 1] = '\0';
+            char* p = toString(ivalue, true, buf, size - 1);
+            
+            // Insert decimal
+            int8_t integerDigits = buf + size - p - maxFractionDigits - 1;
+            if (integerDigits <= 0) {
+                // No integer digits, pad and return 0.xxx
+                while (integerDigits++ < 0) {
+                    *--p = '0';
+                }
+                *--p = '.';
+                *--p = '0';
             } else {
-                isSigned = false;
+                --p;
+                for (uint8_t i = 0; i < integerDigits; ++i) {
+                    p[i] = p[i+1];
+                }
+                p[integerDigits] = '.';
             }
-            integer = value / radix;
-            value -= integer * radix;
-            if (isSigned) {
-                integer = -integer;
+            if (negative) {
+                *--p = '-';
             }
-            fraction = (static_cast<uint32_t>(value) * 256 + 128) / radix;
+            return p;
+        }
+
+        int16_t convert(int16_t inputValue, uint16_t scale)
+        {
+            return (static_cast<int32_t>(inputValue) * 256 + (scale >> 1)) / scale;
         }
     };
     
-    class FixedPointU8_8 : public FixedPoint
+    class FixedPoint8_8 : public FixedPoint
     {
     public:
-        FixedPointU8_8(uint16_t value, uint8_t radix) { FixedPoint::convert(value, radix, false, _integer, _fraction); }
-
-        // Buffer must be at least 9 characters
-        const char* toString(char* buf) { return FixedPoint::toString(_integer, _fraction, false, 2, buf, 9); }
+        FixedPoint8_8() : _value(0) { }
+        FixedPoint8_8(int16_t value, uint16_t scale) : _value(FixedPoint::convert(value, scale)) { }
         
-        uint8_t integer() const { return _integer; }
-        uint8_t fraction() const { return _fraction; }
-
-    private:
-        uint8_t _integer, _fraction;
-    };
-    
-    class FixedPointS8_8 : public FixedPoint
-    {
-    public:
-        FixedPointS8_8(int16_t value, uint16_t radix) { convert(value, radix, true, _integer, _fraction); }
+        void setValue(int16_t value, uint16_t scale) { _value = FixedPoint::convert(value, scale); }
 
         // Buffer must be at least 9 characters
-        const char* toString(char* buf) { return FixedPoint::toString(_integer, _fraction, true, 2, buf, 9); }
-
-        uint8_t integer() const { return _integer; }
-        uint8_t fraction() const { return _fraction; }
+        const char* toString(char* buf, uint8_t fractionDigits) { return FixedPoint::toString(_value, fractionDigits, buf, 9); }
+        
+        int16_t value() const { return _value; }
 
     private:
-        uint8_t _integer, _fraction;
+        int16_t _value;
     };
 }
