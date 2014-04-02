@@ -63,6 +63,8 @@ enum ErrorType {
     AssertNoApp = 0x05,
     
     AssertSingleADC = 0x10,
+    AssertSingleUSART0 = 0x11,
+    AssertFixedPointBufferTooSmall = 0x12,
     
     AssertSingleTimer0 = 0x20,
     AssertSingleTimer1 = 0x21,
@@ -85,9 +87,9 @@ enum ErrorType {
     AssertI2CSendNoAckOnData = 0x4A,
     AssertI2CSendError = 0x4B,
     
-    AssertFixedPointBufferTooSmall = 0x50,
+    AssertButtonTooMany = 0x50,
+    AssertButtonOutOfRange = 0x51,
     
-    AssertSingleUSART0 = 0x40,
     ErrorUser = 0x80,
 };
 

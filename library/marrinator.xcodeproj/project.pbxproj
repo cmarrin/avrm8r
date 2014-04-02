@@ -28,6 +28,7 @@
 		4901FB3F18CC1AD10010EFDC /* WString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901F8C818CC1AD10010EFDC /* WString.cpp */; };
 		4901FB5218CC1AD10010EFDC /* EEPROM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901F90218CC1AD10010EFDC /* EEPROM.cpp */; };
 		4901FBA318CC1AD10010EFDC /* SPI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4901FAA918CC1AD10010EFDC /* SPI.cpp */; };
+		49727C0E18EC484400DEB87E /* Menu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49727C0C18EC484400DEB87E /* Menu.cpp */; };
 		49CDD3BF18C2EFFA0040EE8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 495F1CB3134A1F920059E738 /* main.c */; };
 		49CDD3C018C2EFFA0040EE8D /* ADC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4900A1E4133F9C5B0036518B /* ADC.cpp */; };
 		49CDD3C118C2EFFA0040EE8D /* Animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49CF367513BDF945001EB1B8 /* Animator.cpp */; };
@@ -129,6 +130,8 @@
 		49052A7018BEEEAE008B41D8 /* dnslkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dnslkup.h; sourceTree = "<group>"; };
 		490EBD531348B4C800FAD91C /* m8r.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = m8r.h; path = include/m8r.h; sourceTree = SOURCE_ROOT; };
 		495F1CB3134A1F920059E738 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		49727C0C18EC484400DEB87E /* Menu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Menu.cpp; sourceTree = "<group>"; };
+		49727C0F18EC48B000DEB87E /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Menu.h; sourceTree = "<group>"; };
 		4972DBAA13A6D8190085ECC6 /* TimerEventMgr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TimerEventMgr.cpp; sourceTree = "<group>"; };
 		4983117918BEA7B900751432 /* enc28j60.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = enc28j60.c; sourceTree = "<group>"; };
 		4983117A18BEA7B900751432 /* enc28j60.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enc28j60.h; sourceTree = "<group>"; };
@@ -510,6 +513,7 @@
 				49CF367513BDF945001EB1B8 /* Animator.cpp */,
 				4994B73E18BDB4FC0001437D /* Button.cpp */,
 				49E582C118D5631F009A0C6E /* INA219.cpp */,
+				49727C0C18EC484400DEB87E /* Menu.cpp */,
 				4994B74018BDB58C0001437D /* Network.cpp */,
 				4994B74118BDB58C0001437D /* NTPClient.cpp */,
 				4900A1EE133F9C5B0036518B /* RTC.cpp */,
@@ -739,6 +743,7 @@
 				49E582C418D92B76009A0C6E /* FixedPoint.h */,
 				49E582B818D4C82E009A0C6E /* I2C.h */,
 				49E582C018D55E90009A0C6E /* INA219.h */,
+				49727C0F18EC48B000DEB87E /* Menu.h */,
 				498311DE18C2839F00751432 /* MAX6969.h */,
 				498311DF18C2839F00751432 /* Network.h */,
 				498311E018C2839F00751432 /* NTPClient.h */,
@@ -1298,6 +1303,7 @@
 				49CDD3D018C2F0040040EE8D /* dnslkup.c in Sources */,
 				49CDD3CF18C2EFFA0040EE8D /* UDPSocket.cpp in Sources */,
 				4901FB3118CC1AD10010EFDC /* IPAddress.cpp in Sources */,
+				49727C0E18EC484400DEB87E /* Menu.cpp in Sources */,
 				49CDD3D318C2F0040040EE8D /* websrv_help_functions.c in Sources */,
 				4901FB3C18CC1AD10010EFDC /* wiring_pulse.c in Sources */,
 				4901FB3518CC1AD10010EFDC /* Stream.cpp in Sources */,

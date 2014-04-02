@@ -90,4 +90,77 @@ private:
     RepeatingTimerEvent<debounceTimerCount> _event;
 };
 
+class ButtonSetBase
+{
+public:
+    virtual void handleEvent(EventType, EventParam) = 0;
+    virtual bool state(uint8_t b) const = 0;
+};
+
+template<uint8_t ButtonCount>
+class ButtonSet : public ButtonSetBase
+{
+public:
+    ButtonSet(ButtonBase* button, ...)
+    {
+        memset(_state, 0, (ButtonCount + 7) / 8);
+        va_list ap;
+        va_start(ap, button);
+        while (button) {
+            addButton(button);
+            button = va_arg(ap, ButtonBase*);
+        }
+        va_end(ap);
+    }
+
+    virtual void handleEvent(EventType type, EventParam param)
+    {
+        switch(type) {
+            case EV_BUTTON_UP:
+            case EV_BUTTON_DOWN: {
+                ButtonBase* button = reinterpret_cast<ButtonBase*>(param);
+                for (uint8_t i = 0; i < _count; ++i) {
+                    if (_buttons[i] == button) {
+                        setState(i, type == EV_BUTTON_DOWN);
+                        break;
+                    }
+                }
+                break;
+            }
+            default: break;
+        }
+    }
+    
+    virtual bool state(uint8_t b) const
+    {
+        ASSERT(b < _count, AssertButtonOutOfRange);
+        return _state[b / 8] & (1 << (b % 8));
+    }
+    
+private:
+    void addButton(ButtonBase* button)
+    {
+        ASSERT(_count >= ButtonCount, AssertButtonTooMany);
+        _buttons[_count++] = button;
+    }
+    
+    void setState(uint8_t i, bool state)
+    {
+        if (state) {
+            _state[i / 8] |= 1 << (i % 8);
+        } else {
+            _state[i / 8] &= ~(1 << (i % 8));
+        }
+    }
+    
+    ButtonBase* _buttons[ButtonCount];
+    uint8_t _state[(ButtonCount + 7) / 8];
+    uint8_t _count;
+};
+
+template<uint8_t rows, uint8_t cols>
+class ButtonMatrix : public ButtonSetBase
+{
+};
+
 }
