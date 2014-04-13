@@ -91,6 +91,7 @@ private:
     TimerEvent* _head;
 };
 
+// Default is to create a 1ms timer
 template <class Timer, TimerClockMode prescaler, uint16_t compareCount = 0>
 class TimerEventMgr : public TimerEventMgrBase {
 public:

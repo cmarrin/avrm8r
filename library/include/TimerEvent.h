@@ -54,6 +54,15 @@ namespace m8r {
 class TimerEvent
 {
     friend class TimerEventMgrBase;
+
+public:    
+    void setIntervalCount(uint16_t count)
+    {
+        _currentCount = count;
+        if (_resetCount != 0) {
+            _resetCount = count;
+        }
+    }
     
 protected:
     TimerEvent(uint16_t intervalCount, bool oneShot)
@@ -67,18 +76,16 @@ private:
     TimerEvent* _next;
 };
 
-template <uint16_t intervalCount>
 class OneShotTimerEvent : public TimerEvent
 {
 public:
-    OneShotTimerEvent() : TimerEvent(intervalCount, true) { }
+    OneShotTimerEvent(uint16_t intervalCount = 1000) : TimerEvent(intervalCount, true) { }
 };
 
-template <uint16_t intervalCount>
 class RepeatingTimerEvent : public TimerEvent
 {
 public:
-    RepeatingTimerEvent() : TimerEvent(intervalCount, false) { }
+    RepeatingTimerEvent(uint16_t intervalCount = 1000) : TimerEvent(intervalCount, false) { }
 };
 
 }

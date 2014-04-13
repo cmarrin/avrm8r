@@ -112,7 +112,7 @@ private:
     Network* m_next;
     Socket* m_socketHead;
     
-    OneShotTimerEvent<NetworkTimerInterval> _timerEvent;
+    OneShotTimerEvent _timerEvent;
 };
 
 }
