@@ -48,7 +48,7 @@ TimerEventMgrBase* System::m_timerEventMgr = 0;
 
 #ifdef DEBUG
 void
-System::handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType)
+System::handleErrorCondition(char c, uint32_t errorType, ErrorConditionType conditionType)
 {
     if (m_errorReporter)
         m_errorReporter->reportError(c, errorType, conditionType);
@@ -116,7 +116,7 @@ void __cxa_pure_virtual()
 }
 
 #ifdef DEBUG
-void _showErrorCondition(char c, uint16_t code, ErrorConditionType condition)
+void _showErrorCondition(char c, uint32_t code, ErrorConditionType condition)
 {
     System::handleErrorCondition(c, code, condition);
 }

@@ -80,7 +80,7 @@ public:
     static void fireISR(EventType type, EventParam param = EventParam()) { handleEvent(type, param); }
     
     static void setErrorReporter(ErrorReporter* reporter) { m_errorReporter = reporter; }
-    static void handleErrorCondition(char c, uint16_t errorType, ErrorConditionType conditionType);
+    static void handleErrorCondition(char c, uint32_t errorType, ErrorConditionType conditionType);
     
     static void addEventListener(EventListener*);
     static void removeEventListener(EventListener*);
@@ -135,7 +135,7 @@ class ErrorReporter {
 public:
 #ifdef DEBUG
     ErrorReporter() { System::setErrorReporter(this); }
-    virtual void reportError(char, uint16_t, ErrorConditionType) = 0;
+    virtual void reportError(char, uint32_t, ErrorConditionType) = 0;
 #else
     void reportError(char, uint16_t, ErrorConditionType) { }
 #endif
