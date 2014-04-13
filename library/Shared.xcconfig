@@ -24,6 +24,7 @@ AVRDUDE_PORT = $(AVRDUDE_PORT_$AVRDUDE_DEVICE)
 AVRDUDE_PROGRAMMER = $(AVRDUDE_PROGRAMMER_$AVRDUDE_DEVICE)
 AVRDUDE_BAUD_RATE = $(AVRDUDE_BAUD_RATE_$AVRDUDE_DEVICE)
 
+CPPFLAGS = -std=c++11 
 GCC_FLAGS = -Wa,-alh -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -finline-limit=10 -fno-inline-small-functions -ffreestanding -mcall-prologues -Wall
 LINK_FLAGS = -Wa,-adhlns=$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).lst,-gstabs 
 
