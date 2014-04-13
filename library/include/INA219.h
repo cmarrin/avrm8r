@@ -167,7 +167,7 @@ public:
 private:
     void writeRegister(uint8_t reg, uint16_t value)
     {
-        uint8_t buf[3] = { reg, (value >> 8) & 0xff, value & 0xff };
+        uint8_t buf[3] = { reg, static_cast<uint8_t>(value >> 8), static_cast<uint8_t>(value) };
         _i2c.write(_address, buf, 3);
     }
     uint16_t readRegister(uint8_t reg)
