@@ -97,7 +97,7 @@ public:
 
     // Blink out the code 3 times then repeat if condition == ErrorConditionFatal, otherwise return
 #ifdef DEBUG
-    virtual void reportError(char, uint16_t code, ErrorConditionType condition)
+    virtual void reportError(char, uint32_t code, ErrorConditionType condition)
     {
         setError(false);
         System::msDelay<500>();
