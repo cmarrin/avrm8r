@@ -51,10 +51,11 @@
 
 namespace m8r {
 
-enum TextLCDControlType { TextLCDControlHome, TextLCDControlClear, TextLCDControlSetLine };
+enum TextLCDControlType { TextLCDControlHome, TextLCDControlClear, TextLCDControlSetLine, TextLCDControlClearLine };
 static inline DeviceControl TextLCDHome() { return DeviceControl(static_cast<int8_t>(TextLCDControlHome)); }
 static inline DeviceControl TextLCDClear() { return DeviceControl(static_cast<int8_t>(TextLCDControlClear)); }
 static inline DeviceControl TextLCDSetLine(uint8_t line) { return DeviceControl(static_cast<int8_t>(TextLCDControlSetLine), line); }
+static inline DeviceControl TextLCDClearLine(uint8_t line) { return DeviceControl(static_cast<int8_t>(TextLCDControlClearLine), line); }
 
 // Hitachi HD44780 based LCD driver
 class TextLCDBase
@@ -171,6 +172,13 @@ public:
             case TextLCDControlHome: home(); break;
             case TextLCDControlClear: clear(); break;
             case TextLCDControlSetLine: setCursorPosition(0, ctl.param);
+            case TextLCDControlClearLine:
+                setCursorPosition(0, ctl.param);
+                for (uint8_t i = 0; i < cols; ++i) {
+                    write(' ');
+                }
+                setCursorPosition(0, ctl.param);
+                break;
         }
     }
 
@@ -190,6 +198,7 @@ public:
     {
         command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
         System::usDelay<2000>();  // this command takes a long time!
+        home();
     }
 
     void home()
