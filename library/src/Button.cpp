@@ -39,8 +39,7 @@ DAMAGE.
 
 using namespace m8r;
 
-void
-ButtonBase::_handleEvent(EventType type, EventParam param, bool value, uint8_t numDebounceTests)
+void ButtonBase::_handleEvent(bool value, uint8_t numDebounceTests)
 {
     if (value == m_value) {
         m_debounceValue = value;
@@ -57,4 +56,24 @@ ButtonBase::_handleEvent(EventType type, EventParam param, bool value, uint8_t n
 
     m_debounceTestsRemaining = numDebounceTests;
     m_debounceValue = value;
+}
+
+bool ButtonSetBase::_handleEvent(bool newValue, bool& currentValue, bool& debounceValue, uint8_t& debounceTestsRemaining, uint8_t numDebounceTests)
+{
+    if (newValue == currentValue) {
+        debounceValue = newValue;
+        return false;
+    }
+    
+    if (debounceValue == newValue) {
+        if (--debounceTestsRemaining == 0) {
+            currentValue = newValue;
+            return true;
+        }
+        return false;
+    }
+
+    debounceTestsRemaining = numDebounceTests;
+    debounceValue = newValue;
+    return false;
 }

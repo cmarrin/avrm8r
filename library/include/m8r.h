@@ -89,6 +89,7 @@ enum ErrorType {
     
     AssertButtonTooMany = 0x50,
     AssertButtonOutOfRange = 0x51,
+    AssertMenuHitEnd = 0x52,
     
     ErrorUser = 0x80,
 };
@@ -311,7 +312,33 @@ public:
     
     operator bool() _INLINE_ { return false; }
 };
+
+class DynamicInputBitBase
+{
+public:
+    DynamicInputBitBase() _INLINE_ : _port(0), _bit(0) { }
+    DynamicInputBitBase(uint8_t Port, uint8_t Bit) _INLINE_ : _port(Port), _bit(Bit) { DDR(_port) &= ~_BV(_bit); }
+    DynamicInputBitBase(const DynamicInputBitBase& o) { *this = o; }
     
+    DynamicInputBitBase& operator=(const DynamicInputBitBase& o) { _port = o._port; _bit = o._bit; return *this; }
+    DynamicInputBitBase& operator=(bool b) _INLINE_ { if (b) PORT(_port) |= _BV(_bit); else PORT(_port) &= ~_BV(_bit); return *this; }
+    operator bool() _INLINE_ { return PIN(_port) & _BV(_bit); }
+
+    uint8_t port() const { return _port; }
+    uint8_t pin() const { return _bit; }
+    
+private:
+    uint8_t _port;
+    uint8_t _bit;
+};
+
+template <uint8_t Port, uint8_t Bit>
+class DynamicInputBit : public DynamicInputBitBase
+{
+public:
+    DynamicInputBit() : DynamicInputBitBase(Port, Bit) { }
+};
+
 // Template for 8 bit registers
 template <uint8_t reg>
 class Reg8
@@ -376,7 +403,8 @@ inline uint16_t makeUInt(uint8_t c1, uint8_t c2)
 class _FlashString
 {
 public:
-    _FlashString(const char* s) : _s(s) { }
+    constexpr _FlashString(const char* s) : _s(s) { }
+    constexpr _FlashString(const _FlashString& o) : _s(o._s) { }
     const char* _s;
 };
 
@@ -388,7 +416,7 @@ public:
 #ifdef __cplusplus
 extern "C" {
 #endif
-    void _showErrorCondition(char c, uint16_t code, enum ErrorConditionType type);
+    void _showErrorCondition(char c, uint32_t code, enum ErrorConditionType type);
 #ifdef __cplusplus
 }
 #endif

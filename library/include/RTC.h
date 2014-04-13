@@ -132,21 +132,21 @@ private:
 template<uint16_t intervalsPerSecond = 1000>
 class SharedRTC : public RTCBase, public EventListener {
 public:
-	SharedRTC()
+	SharedRTC() : _event(intervalsPerSecond)
     {
-        System::startEventTimer(&m_event);
+        System::startEventTimer(&_event);
     }
     
     // EventListener override
     virtual void handleEvent(EventType type, EventParam param)
     {
-        if (type != EV_EVENT_TIMER || &m_event != (TimerEvent*) param)
+        if (type != EV_EVENT_TIMER || &_event != (TimerEvent*) param)
             return;
         tick();
     }
     
 private:
-    RepeatingTimerEvent<intervalsPerSecond> m_event;
+    RepeatingTimerEvent _event;
 };
 
 }

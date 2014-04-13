@@ -50,6 +50,8 @@ namespace m8r {
 //
 //////////////////////////////////////////////////////////////////////////////
 
+const uint8_t NoButton = 0xff;
+
 class ButtonBase
 {
 public:
@@ -60,7 +62,8 @@ public:
     {
     }
     
-    void _handleEvent(EventType, EventParam, bool value, uint8_t numDebounceTests);
+    void _handleEvent(bool value, uint8_t numDebounceTests);
+    
 private:
     uint8_t m_debounceTestsRemaining;
     bool m_debounceValue;
@@ -70,7 +73,7 @@ private:
 template <class Bit, uint8_t debounceTimerCount = 10, uint8_t numDebounceTests = 5>
 class Button : public ButtonBase, public EventListener {
 public:
-	Button()
+	Button() : _event(debounceTimerCount)
     {
         _bit = true; // Activate pullup
         System::startEventTimer(&_event);
@@ -82,12 +85,12 @@ public:
         if (type != EV_EVENT_TIMER || &_event != (TimerEvent*) param)
             return;
             
-        _handleEvent(type, param, !_bit, numDebounceTests);
+        _handleEvent(!_bit, numDebounceTests);
     }
     
 private:
     Bit _bit;
-    RepeatingTimerEvent<debounceTimerCount> _event;
+    RepeatingTimerEvent _event;
 };
 
 class ButtonSetBase
@@ -95,53 +98,84 @@ class ButtonSetBase
 public:
     virtual void handleEvent(EventType, EventParam) = 0;
     virtual bool state(uint8_t b) const = 0;
+    virtual uint8_t readButton(bool peek = false) = 0;
+
+protected:
+    static bool _handleEvent(bool newValue, bool& currentValue, bool& debounceValue, uint8_t& debounceTestsRemaining, uint8_t numDebounceTests);
 };
 
-template<uint8_t ButtonCount>
-class ButtonSet : public ButtonSetBase
+template<class... Bits>
+class ButtonSet : public ButtonSetBase, public EventListener
 {
+    static const uint8_t _numButtons = sizeof...(Bits);
+    static const uint8_t _debounceTimerCount = 10;
+    static const uint8_t _numDebounceTests = 5;
+    
 public:
-    ButtonSet(ButtonBase* button, ...)
+    ButtonSet() : _event(_debounceTimerCount)
     {
-        memset(_state, 0, (ButtonCount + 7) / 8);
-        va_list ap;
-        va_start(ap, button);
-        while (button) {
-            addButton(button);
-            button = va_arg(ap, ButtonBase*);
-        }
-        va_end(ap);
+        memset(_state, 0, (_numButtons + 7) / 8);
+        addButton<0, Bits...>();
+        System::startEventTimer(&_event);
+    }
+    
+    uint8_t numButtons() const { return _numButtons; }
+    uint8_t port(uint8_t i) const
+    {
+        ASSERT(i < _numButtons, AssertButtonOutOfRange);
+        return _bits[i].port();
+    }
+    uint8_t pin(uint8_t i) const
+    {
+        ASSERT(i < _numButtons, AssertButtonOutOfRange);
+        return _bits[i].pin();
     }
 
-    virtual void handleEvent(EventType type, EventParam param)
+    virtual void handleEvent(EventType type, EventParam param) override
     {
         switch(type) {
-            case EV_BUTTON_UP:
-            case EV_BUTTON_DOWN: {
-                ButtonBase* button = reinterpret_cast<ButtonBase*>(param);
-                for (uint8_t i = 0; i < _count; ++i) {
-                    if (_buttons[i] == button) {
-                        setState(i, type == EV_BUTTON_DOWN);
-                        break;
+            case EV_EVENT_TIMER:
+                if (&_event != (TimerEvent*) param) {
+                    return;
+                }
+                for (uint8_t i = 0; i < _numButtons; ++i) {
+                    if (_handleEvent(!_bits[i], _value[i], _debounceValue[i], _debounceTestsRemaining[i], _numDebounceTests)) {
+                        System::handleEvent(_value[i] ? EV_BUTTON_DOWN : EV_BUTTON_UP, this);
+                        setState(i, _value[i]);
+                        _lastButton = i;
                     }
                 }
                 break;
-            }
             default: break;
         }
     }
     
-    virtual bool state(uint8_t b) const
+    virtual bool state(uint8_t b) const override
     {
-        ASSERT(b < _count, AssertButtonOutOfRange);
+        ASSERT(b < _numButtons, AssertButtonOutOfRange);
         return _state[b / 8] & (1 << (b % 8));
     }
     
-private:
-    void addButton(ButtonBase* button)
+    virtual uint8_t readButton(bool peek = false) override
     {
-        ASSERT(_count >= ButtonCount, AssertButtonTooMany);
-        _buttons[_count++] = button;
+        uint8_t retval = _lastButton;
+        if (!peek) {
+            _lastButton = NoButton;
+        }
+        return retval;
+    }
+
+private:
+    template<uint8_t n, class AddBit, class... AddBits>
+    void addButton()
+    {
+        ASSERT(n < _numButtons, AssertButtonTooMany);
+        _bits[n] = AddBit();
+        _bits[n] = true; // Activate pullup
+        _debounceTestsRemaining[n] = 0;
+        _debounceValue[n] = false;
+        _value[n] = false;
+        addButton<n + 1, AddBits...>();
     }
     
     void setState(uint8_t i, bool state)
@@ -153,9 +187,17 @@ private:
         }
     }
     
-    ButtonBase* _buttons[ButtonCount];
-    uint8_t _state[(ButtonCount + 7) / 8];
-    uint8_t _count;
+    template<uint8_t n> void addButton() { }
+    
+    RepeatingTimerEvent _event;
+
+    uint8_t _state[(_numButtons + 7) / 8];
+    DynamicInputBitBase _bits[_numButtons];
+    uint8_t _debounceTestsRemaining[_numButtons];
+    bool _debounceValue[_numButtons];
+    bool _value[_numButtons];
+
+    uint8_t _lastButton = NoButton;
 };
 
 template<uint8_t rows, uint8_t cols>
